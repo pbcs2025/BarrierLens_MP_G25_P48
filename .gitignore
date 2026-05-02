@@ -1,0 +1,33 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+
+# Project-large artifacts (local only)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+saved_models/stage1/*
+!saved_models/stage1/.gitkeep
+saved_models/stage2/*
+!saved_models/stage2/.gitkeep
+
+outputs/stage1_results/*
+!outputs/stage1_results/.gitkeep
+outputs/stage2_results/*
+!outputs/stage2_results/.gitkeep

@@ -1,0 +1,30 @@
+# Core data science
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+openpyxl>=3.1.0
+
+# Boosting
+xgboost>=1.7.0
+
+# Explainability
+shap>=0.43.0
+
+# Visualisation
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Notebook
+jupyter>=1.0.0
+ipykernel>=6.0.0
+
+# Model persistence
+joblib>=1.3.0
+
+# Platform (later stages)
+streamlit>=1.30.0
+reportlab>=4.0.0
+
+# API (Stage 3 pending)
+anthropic>=0.20.0
