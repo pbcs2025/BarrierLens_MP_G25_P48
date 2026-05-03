@@ -31,3 +31,7 @@ outputs/stage1_results/*
 !outputs/stage1_results/.gitkeep
 outputs/stage2_results/*
 !outputs/stage2_results/.gitkeep
+
+# Ignore notebook-generated files
+notebooks/saved_models/
+notebooks/*.png
