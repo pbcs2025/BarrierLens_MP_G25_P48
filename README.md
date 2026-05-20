@@ -1,6 +1,6 @@
 # BarrierLens Project (P48)
 
-Stage 1 of the Women's Healthcare Access Research Project. This repository implements district-level barrier classification using the NFHS-5 India dataset.
+Stage 1 of the Women's Healthcare Access Research Project. This repository implements **individual-level** barrier classification using the NFHS-5 India women's recode (`NFHS5_Individual.csv`, ~724k rows).
 
 ## Stage 1 Scope
 - Dataset exploration and preprocessing
@@ -15,7 +15,7 @@ This project root is `BarrierLens_MP_G25_P48` (updated from the earlier `barrier
 1. Install dependencies:
    - `pip install -r requirements.txt`
 2. Place dataset at:
-   - `data/raw/NFHS5_Women.csv`
+   - `data/raw/NFHS5_Individual.csv`
 3. Run notebooks in order:
    - `notebooks/00_data_exploration.ipynb`
    - `notebooks/01_preprocessing.ipynb`

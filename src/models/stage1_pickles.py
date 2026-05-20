@@ -56,8 +56,9 @@ def build_all_stage1_models(project_root: Path | str) -> None:
         train_decision_tree(X_train, y_train, feature_names, key)
 
         rf = RandomForestClassifier(
-            n_estimators=200,
-            max_depth=10,
+            n_estimators=100,
+            max_depth=12,
+            min_samples_leaf=20,
             random_state=42,
             n_jobs=-1,
         )
@@ -65,7 +66,7 @@ def build_all_stage1_models(project_root: Path | str) -> None:
         joblib.dump(rf, model_dir / f"random_forest_{key}.pkl")
 
         xgb = XGBClassifier(
-            n_estimators=200,
+            n_estimators=100,
             max_depth=6,
             learning_rate=0.1,
             subsample=0.8,

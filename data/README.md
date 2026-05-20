@@ -1,12 +1,20 @@
 # NFHS-5 Data Setup
 
-Download the NFHS-5 dataset from Kaggle:
-- https://www.kaggle.com/datasets/bhanupratapbiswas/national-family-health-survey-nfhs-2019-21
+Stage 1 uses the **individual-level** women's recode file:
 
-After download:
-1. Rename the file to `NFHS5_Women.csv` (if needed).
-2. Place it at `data/raw/NFHS5_Women.csv`.
+- `data/raw/NFHS5_Individual.csv` (~724,115 rows × 32 columns)
 
-Expected sanity check:
-- Approx. 700+ rows
-- First columns include `District Names` and `State/UT`
+## Column groups (Stage 1)
+
+| Group | Columns | Role in Stage 1 |
+|-------|---------|-------------------|
+| 1 Identifiers | caseid, v001, v002, v021, v024, v025 | Not model features |
+| 2 Background | v012–v013, v106, v130, v131, v501, v717 | Features |
+| 3 Household | v190, v169a, v170, v481 | Features |
+| 4 Media | v157, v158, v159 | Features |
+| 5 Autonomy | v743f (v466 empty in this file) | Features |
+| 6 Barriers | v467b–v467h | Binarized targets |
+| 7 Stage 2 | v626a | Reference only |
+| 8 Bonus | s245a, s245b, s245h | Validation only |
+
+Run preprocessing: `notebooks/01_preprocessing.ipynb` or `python scripts/run_stage1_pipeline.py`.
