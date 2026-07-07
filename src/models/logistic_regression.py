@@ -14,7 +14,8 @@ def train_logistic(
 ):
     """Train Logistic Regression with C tuning and save model."""
     param_grid = {"C": [0.01, 0.1, 1.0, 10.0]}
-    base = LogisticRegression(solver="lbfgs", max_iter=500, random_state=42)
+    base = LogisticRegression(solver="saga", max_iter=3000, 
+                          class_weight="balanced", random_state=42, n_jobs=-1)
     grid = GridSearchCV(base, param_grid, cv=5, scoring="roc_auc")
     grid.fit(X_train, y_train)
 
