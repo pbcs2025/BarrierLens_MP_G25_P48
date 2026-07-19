@@ -44,15 +44,14 @@ def run_preprocessing() -> pd.DataFrame:
     processed_dir.mkdir(parents=True, exist_ok=True)
 
     target_cols = [c for c in df.columns if c.startswith("target_")]
-    X_full = encoded.copy()
-    X_full.to_csv(processed_dir / "X_features.csv", index=False)
+    encoded.to_csv(processed_dir / "X_features.csv", index=False)
     for t in target_cols:
         df[t].to_csv(processed_dir / f"y_{t.replace('target_', '')}.csv", index=False)
 
     print("Saved processed files to:", processed_dir)
-    print("X_features shape:", X_full.shape)
-    print("Feature columns (first 10):", list(X_full.columns[:10]), "...")
-    return pd.concat([X_full, df[target_cols]], axis=1)
+    print("X_features shape:", encoded.shape)
+    print("Feature columns (first 10):", list(encoded.columns[:10]), "...")
+    return pd.concat([encoded, df[target_cols]], axis=1)
 
 
 def train_all_models(df: pd.DataFrame) -> pd.DataFrame:

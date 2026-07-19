@@ -35,3 +35,6 @@ outputs/stage2_results/*
 # Ignore notebook-generated files
 notebooks/saved_models/
 notebooks/*.png
+
+#Ignore implementation docs
+docs/

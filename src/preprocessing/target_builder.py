@@ -1,36 +1,48 @@
+import warnings
+
 import pandas as pd
 
-from src.preprocessing.load_data import BARRIER_SOURCE_COLS
+BARRIER_COLS = {
+    "household": ["v467b", "v467c", "v467f"],
+    "logistic": ["v467d", "v467e"],
+    "facility": ["v467g", "v467h", "v467i"],
+}
 
 
 def _is_big_problem(series: pd.Series) -> pd.Series:
     normalized = series.astype(str).str.strip().str.lower()
-    return (normalized == "big problem").astype(int)
+    return normalized.eq("big problem")
 
 
 def build_targets(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Build three binary barrier targets from v467* items.
-    Household: v467b OR v467c; Logistic: v467d OR v467e; Facility: v467g OR v467h.
-    Label 1 = 'big problem' on at least one item in the pair.
+    Build three binary barrier targets from v467* items using OR logic.
+    Label 1 = 'big problem' on at least one item in the category.
     """
     out = df.copy()
-    missing = [c for c in BARRIER_SOURCE_COLS if c not in out.columns]
-    if missing:
-        raise KeyError(f"Barrier columns not found: {missing}")
 
-    out["target_household"] = (
-        _is_big_problem(out["v467b"]) | _is_big_problem(out["v467c"])
-    ).astype(int)
-    out["target_logistic"] = (
-        _is_big_problem(out["v467d"]) | _is_big_problem(out["v467e"])
-    ).astype(int)
-    out["target_facility"] = (
-        _is_big_problem(out["v467g"]) | _is_big_problem(out["v467h"])
-    ).astype(int)
+    for barrier_type, cols in BARRIER_COLS.items():
+        present = [c for c in cols if c in out.columns]
+        missing = [c for c in cols if c not in out.columns]
+        if missing:
+            warnings.warn(
+                f"target_{barrier_type}: missing barrier columns {missing}; "
+                "building from available columns only."
+            )
+        if not present:
+            raise KeyError(f"No barrier columns available for target_{barrier_type}")
 
-    out = out.drop(columns=BARRIER_SOURCE_COLS)
-    for t in ["target_household", "target_logistic", "target_facility"]:
-        rate = out[t].mean()
-        print(f"{t}: positive rate = {rate:.4f} | counts = {out[t].value_counts().to_dict()}")
-    return out
+        target = pd.Series(0, index=out.index, dtype=int)
+        for col in present:
+            target = target | _is_big_problem(out[col]).astype(int)
+
+        out[f"target_{barrier_type}"] = target.astype(int)
+        rate = out[f"target_{barrier_type}"].mean()
+        print(
+            f"target_{barrier_type}: positive rate = {rate:.4f} "
+            f"({rate * 100:.1f}%) | built from {present} | "
+            f"counts = {out[f'target_{barrier_type}'].value_counts().to_dict()}"
+        )
+
+    drop_cols = [c for c in sum(BARRIER_COLS.values(), []) if c in out.columns]
+    return out.drop(columns=drop_cols)
