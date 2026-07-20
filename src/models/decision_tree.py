@@ -10,11 +10,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def train_decision_tree(X_train, y_train, feature_names, target_name):
+    # v5 (724,115 rows) — tuned up from v4's 707-row grid.
+    # More data supports deeper trees; larger min_samples_split/leaf keep
+    # splits meaningful at this scale instead of fitting to noise.
     param_grid = {
-        'max_depth': [2, 3, 4, 5],
-        'min_samples_leaf': [5, 10, 15]
+        'max_depth': [6, 7, 8, 9, 10],
+        'min_samples_split': [500, 750, 1000],
+        'min_samples_leaf': [200, 350, 500]
     }
-    base = DecisionTreeClassifier(criterion='gini', random_state=42)
+    # class_weight='balanced' restores handling for the real barrier-question
+    # imbalance (14%-42% prevalence) now that we're not on the artificially
+    # 50/50 district-level targets from v4.
+    base = DecisionTreeClassifier(
+        criterion='gini', class_weight='balanced', random_state=42)
     grid = GridSearchCV(base, param_grid, cv=5, scoring='roc_auc')
     grid.fit(X_train, y_train)
     model = grid.best_estimator_
@@ -28,4 +36,3 @@ def train_decision_tree(X_train, y_train, feature_names, target_name):
     print(f'\n--- Decision Rules for {target_name} barrier ---')
     print(rules)
     return model
-
