@@ -1,0 +1,4 @@
+Model,Target,Accuracy,Precision,Recall,F1-Score,ROC-AUC
+XGBoost,household,0.6015,0.3679,0.6507,0.4701,0.6619
+XGBoost,logistic,0.6055,0.422,0.6718,0.5184,0.6696
+XGBoost,facility,0.5803,0.5385,0.6136,0.5736,0.6185
