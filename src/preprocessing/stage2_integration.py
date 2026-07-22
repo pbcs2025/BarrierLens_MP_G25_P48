@@ -71,8 +71,30 @@ def build_stage2_targets(df: pd.DataFrame) -> pd.DataFrame:
 # Step 4: out-of-fold Stage 1 barrier probabilities. Mandatory cross_val_predict
 # to avoid leakage — the fitted Stage 1 models saw 80% of these rows already.
 # ---------------------------------------------------------------------------
+def _sanitize_feature_names(X: pd.DataFrame) -> pd.DataFrame:
+    """
+    XGBoost rejects feature names containing [, ], or < (it uses them
+    internally in its own tree format). PBC's one-hot encoding produced at
+    least one category label with brackets, e.g.
+    'v501_never in union  [includes: married gauna not performed]'.
+    This renames columns only for the XGBoost call — it does not touch the
+    saved CSV or any other model's view of the data.
+    """
+    clean_cols = (
+        X.columns.astype(str)
+        .str.replace(r'[\[\]<]', '', regex=True)
+    )
+    if clean_cols.duplicated().any():
+        # extremely unlikely, but guard against two columns colliding after
+        # stripping characters
+        dupes = clean_cols[clean_cols.duplicated()].tolist()
+        raise ValueError(f"Column name collision after sanitizing: {dupes}")
+    return X.set_axis(clean_cols, axis=1)
+
+
 def build_oof_barrier_probabilities(X, y_household, y_logistic, y_facility,
                                      n_splits=3, random_state=42, checkpoint=True):
+    X = _sanitize_feature_names(X)
     kf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
     base_kwargs = dict(max_depth=6, n_estimators=300, learning_rate=0.08,
                         subsample=0.8, colsample_bytree=0.8, tree_method='hist',
