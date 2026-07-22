@@ -75,9 +75,10 @@ def train_random_forests(df: pd.DataFrame) -> pd.DataFrame:
         X_train, X_test, y_train, y_test, _ = split_and_scale(combo, col, apply_scaling=True)
 
         model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=12,
-            min_samples_leaf=20,
+            n_estimators=400,
+            max_depth=15,
+            min_samples_leaf=75,
+            class_weight="balanced",
             random_state=42,
             n_jobs=-1,
         )

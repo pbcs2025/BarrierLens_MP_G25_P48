@@ -77,9 +77,10 @@ def train_all_models(df: pd.DataFrame) -> pd.DataFrame:
         models["Decision Tree"] = dt
 
         rf = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=12,
-            min_samples_leaf=20,
+            n_estimators=400,
+            max_depth=15,
+            min_samples_leaf=75,
+            class_weight="balanced",
             random_state=42,
             n_jobs=-1,
         )
