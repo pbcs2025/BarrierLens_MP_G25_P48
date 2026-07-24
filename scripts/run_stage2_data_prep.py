@@ -13,17 +13,16 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import joblib
-import numpy as np
 import pandas as pd
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.metrics import silhouette_score
-from sklearn.preprocessing import StandardScaler
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.clustering.kmeans_cluster import (  # noqa: E402
+    build_cluster_profiles,
+    fit_clusters,
+)
 from src.preprocessing.stage2_integration import (  # noqa: E402
     STAGE2_DIR,
     build_composite_score,
@@ -38,35 +37,6 @@ MODELS_DIR = PROJECT_ROOT / "saved_models" / "stage2"
 
 LEAKAGE_COLS = {"s245a", "s245b", "s245h"}
 
-CLUSTER_FEATURES = [
-    "media_exposure_index",
-    "digital_inclusion_index",
-    "vulnerability_score",
-    "household_barrier_prob",
-    "logistic_barrier_prob",
-    "facility_barrier_prob",
-]
-
-
-def build_anc_gap_target(df: pd.DataFrame) -> pd.Series:
-    """target_anc_gap = 1 if m14 < 4 else 0; NaN where m14 is structurally missing."""
-    if "m14" not in df.columns:
-        print("WARNING: m14 not in raw extract — target_anc_gap will be all-NaN.")
-        return pd.Series(np.nan, index=df.index, name="target_anc_gap")
-
-    y = pd.Series(np.nan, index=df.index, name="target_anc_gap")
-    mask = df["m14"].notna()
-    y.loc[mask] = (df.loc[mask, "m14"] < 4).astype(int)
-    print(f"target_anc_gap restricted N: {mask.sum():,} / {len(df):,}")
-    return y
-
-
-def build_all_targets(raw_df: pd.DataFrame) -> pd.DataFrame:
-    """Combine RBM's unmet-fp builder with optional ANC-gap when m14 is present."""
-    y = build_stage2_targets(raw_df)
-    y["target_anc_gap"] = build_anc_gap_target(raw_df)
-    return y
-
 
 def build_preclustering_matrix(X_features: pd.DataFrame, oof_df: pd.DataFrame) -> pd.DataFrame:
     """Socioeconomic + engineered features + OOF barrier probabilities (no cluster dummies)."""
@@ -76,40 +46,6 @@ def build_preclustering_matrix(X_features: pd.DataFrame, oof_df: pd.DataFrame) -
 
     X_stage2 = pd.concat([X_features.reset_index(drop=True), oof_df.reset_index(drop=True)], axis=1)
     return X_stage2
-
-
-def find_best_k(X_scaled: np.ndarray, k_range=range(2, 11), sample_size=20000, random_state=42):
-    rng = np.random.RandomState(random_state)
-    idx = rng.choice(len(X_scaled), size=min(sample_size, len(X_scaled)), replace=False)
-    sample = X_scaled[idx]
-    scores = {}
-    for k in k_range:
-        labels = MiniBatchKMeans(n_clusters=k, random_state=random_state, n_init=10).fit_predict(sample)
-        scores[k] = silhouette_score(sample, labels)
-        print(f"k={k}: silhouette={scores[k]:.4f} (on {len(sample):,}-row subsample)")
-    best_k = max(scores, key=scores.get)
-    print(f"Best k: {best_k} (silhouette={scores[best_k]:.4f})")
-    return best_k, scores
-
-
-def fit_clusters(X_stage2: pd.DataFrame) -> tuple[pd.Series, MiniBatchKMeans, StandardScaler]:
-    missing = [c for c in CLUSTER_FEATURES if c not in X_stage2.columns]
-    if missing:
-        raise KeyError(f"Clustering features missing from X_stage2: {missing}")
-
-    X_cluster = X_stage2[CLUSTER_FEATURES]
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X_cluster)
-
-    best_k, _ = find_best_k(X_scaled)
-    model = MiniBatchKMeans(n_clusters=best_k, random_state=42, n_init=10, batch_size=4096)
-    labels = model.fit_predict(X_scaled)
-
-    MODELS_DIR.mkdir(parents=True, exist_ok=True)
-    joblib.dump(model, MODELS_DIR / "kmeans_model.pkl")
-    joblib.dump(scaler, MODELS_DIR / "kmeans_scaler.pkl")
-
-    return pd.Series(labels, name="cluster"), model, scaler
 
 
 def main() -> None:
@@ -137,7 +73,7 @@ def main() -> None:
     print("Building Stage 2 targets from raw extract...")
     raw_df = pd.read_csv(RAW_CSV, low_memory=False)
     raw_df.columns = raw_df.columns.str.strip()
-    y_targets = build_all_targets(raw_df)
+    y_targets = build_stage2_targets(raw_df)
     y_targets.to_csv(STAGE2_DIR / "y_stage2_targets.csv", index=False)
     print(f"Saved targets -> {STAGE2_DIR / 'y_stage2_targets.csv'}")
 
@@ -147,11 +83,14 @@ def main() -> None:
     print(f"Saved preclustering matrix {X_pre.shape} -> {STAGE2_DIR / 'X_stage2_preclustering.csv'}")
 
     print("Fitting MiniBatchKMeans clusters...")
-    cluster_labels, _, _ = fit_clusters(X_pre)
+    cluster_labels, _, _, k_meta = fit_clusters(X_pre, models_dir=MODELS_DIR)
     OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
     cluster_path = OUTPUTS_DIR / "cluster_assignments.csv"
     cluster_labels.to_csv(cluster_path, index=False)
     print(f"Saved cluster assignments -> {cluster_path}")
+
+    k_meta.to_csv(OUTPUTS_DIR / "cluster_k_selection.csv", index=False)
+    build_cluster_profiles(X_pre, cluster_labels, outputs_dir=OUTPUTS_DIR)
     print("Stage 2 data prep complete.")
 
 

@@ -1,6 +1,6 @@
 import warnings
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Set, Tuple, Union
 
 import pandas as pd
 
@@ -41,6 +41,9 @@ BARRIER_SOURCE_COLS = [
 # Group 7 — Stage 2 (loaded for reference only, not used in Stage 1)
 STAGE2_COLS = ["v626a", "m14"]
 
+# NFHS India DTA stores latest-birth ANC visits as m14_1; downstream code uses m14.
+STATA_COL_ALIASES = {"m14": "m14_1"}
+
 # Group 8 — bonus validation columns (not used in Stage 1)
 BONUS_COLS = ["s245a", "s245b", "s245h"]
 
@@ -71,18 +74,39 @@ def _resolve_raw_path(path: Optional[Union[str, Path]]) -> Path:
     )
 
 
-def _load_from_stata(path: Path) -> pd.DataFrame:
-    reader = pd.read_stata(path, iterator=True)
-    available = set(reader.variable_labels().keys())
-    reader.close()
+def _resolve_stata_columns(available: Set[str]) -> Tuple[List[str], List[str]]:
+    """Map logical column names to DTA variable names (e.g. m14 -> m14_1)."""
+    cols_to_load: List[str] = []
+    missing: List[str] = []
+    for col in STAGE1_RAW_COLS:
+        if col in available:
+            cols_to_load.append(col)
+        elif col in STATA_COL_ALIASES and STATA_COL_ALIASES[col] in available:
+            cols_to_load.append(STATA_COL_ALIASES[col])
+        else:
+            missing.append(col)
+    return cols_to_load, missing
 
-    cols_to_load = [c for c in STAGE1_RAW_COLS if c in available]
-    missing = [c for c in STAGE1_RAW_COLS if c not in available]
+
+def _load_from_stata(path: Path) -> pd.DataFrame:
+    with pd.read_stata(path, iterator=True) as reader:
+        available = set(reader.variable_labels().keys())
+
+    cols_to_load, missing = _resolve_stata_columns(available)
     if missing:
         warnings.warn(f"Columns not found in DTA and skipped: {missing}")
 
-    df = pd.read_stata(path, columns=cols_to_load)
+    with pd.read_stata(path, columns=cols_to_load, iterator=True) as reader:
+        df = reader.read()
     df.columns = df.columns.str.strip()
+
+    rename_map = {src: dst for dst, src in STATA_COL_ALIASES.items() if src in df.columns}
+    if rename_map:
+        df = df.rename(columns=rename_map)
+
+    if "m14" in df.columns:
+        df["m14"] = pd.to_numeric(df["m14"], errors="coerce")
+
     print(f"Loaded Stata file: {path.name} -> {df.shape}")
     return df
 
@@ -97,6 +121,8 @@ def _load_from_csv(path: Path) -> pd.DataFrame:
 
     cols_present = [c for c in STAGE1_RAW_COLS if c in df.columns]
     selected = df[cols_present].copy()
+    if "m14" in selected.columns:
+        selected["m14"] = pd.to_numeric(selected["m14"], errors="coerce")
     print(f"Loaded CSV file: {path.name} -> {selected.shape}")
     return selected
 

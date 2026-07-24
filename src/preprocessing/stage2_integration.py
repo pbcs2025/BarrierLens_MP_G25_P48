@@ -36,12 +36,7 @@ def discover_targets(df: pd.DataFrame) -> None:
 # NOT imputed — each target keeps its own mask.
 # ---------------------------------------------------------------------------
 def build_stage2_targets(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    NOTE: target_anc_gap (based on m14) has been dropped per team decision —
-    m14 is not present in NFHS5_Individual.csv and the team is proceeding
-    without it for now. Only target_unmet_fp is built here. If m14 becomes
-    available later, re-add the anc_gap block (see git history / ask RBM).
-    """
+    """Build both Stage 2 targets on their restricted samples (Guide Section 2.2)."""
     y = pd.DataFrame(index=df.index)
 
     # v626a is NOT just NaN-vs-not for non-applicable women — DHS gives them
@@ -63,6 +58,14 @@ def build_stage2_targets(df: pd.DataFrame) -> pd.DataFrame:
 
     n_fp = y['target_unmet_fp'].notna().sum()
     print(f"target_unmet_fp restricted N: {n_fp} / {len(df)}")
+
+    # target_anc_gap: 1 if m14 < 4 ANC visits, else 0; NaN where m14 is missing
+    if "m14" in df.columns:
+        mask_anc = df["m14"].notna()
+        y.loc[mask_anc, "target_anc_gap"] = (df.loc[mask_anc, "m14"] < 4).astype(int)
+        print(f"target_anc_gap restricted N: {mask_anc.sum():,} / {len(df):,}")
+    else:
+        print("WARNING: m14 not in raw extract — target_anc_gap will be all-NaN.")
 
     return y
 
