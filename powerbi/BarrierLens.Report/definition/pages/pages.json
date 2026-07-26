@@ -1,0 +1,41 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "activePageName": "NationalOverview",
+  "pages": [
+    {
+      "name": "NationalOverview",
+      "displayName": "1. National Overview",
+      "ordinal": 0
+    },
+    {
+      "name": "BasePaperComparison",
+      "displayName": "2. Base Paper Comparison",
+      "ordinal": 1
+    },
+    {
+      "name": "StateBarrierAnalysis",
+      "displayName": "3. State-wise Barrier Analysis",
+      "ordinal": 2
+    },
+    {
+      "name": "DemographicAnalysis",
+      "displayName": "4. Demographic & Socioeconomic",
+      "ordinal": 3
+    },
+    {
+      "name": "RiskArchetypes",
+      "displayName": "5. Risk Archetypes",
+      "ordinal": 4
+    },
+    {
+      "name": "Stage2OutcomeImpact",
+      "displayName": "6. Stage 2 Health Outcome Impact",
+      "ordinal": 5
+    },
+    {
+      "name": "ExplainabilityValidation",
+      "displayName": "7. Model Explainability & Validation",
+      "ordinal": 6
+    }
+  ]
+}

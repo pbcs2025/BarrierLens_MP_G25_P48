@@ -1,0 +1,17 @@
+{
+  "name": "BarrierLens Theme",
+  "dataColors": [
+    "#1D3557",
+    "#E63946",
+    "#457B9D",
+    "#2A9D8F",
+    "#F4A261",
+    "#A8DADC"
+  ],
+  "background": "#F8FAFC",
+  "foreground": "#1D3557",
+  "tableAccent": "#457B9D",
+  "good": "#2A9D8F",
+  "bad": "#E63946",
+  "neutral": "#457B9D"
+}

@@ -1,0 +1,96 @@
+table stage2_xgboost_results
+	lineageTag: 3702ab47-a55b-4c84-a102-34cffd38eacd
+
+	column Model
+		dataType: string
+		sourceColumn: Model
+		summarizeBy: none
+
+	column Target
+		dataType: string
+		sourceColumn: Target
+		summarizeBy: none
+
+	column Accuracy
+		dataType: double
+		sourceColumn: Accuracy
+		summarizeBy: none
+
+	column 'ROC-AUC'
+		dataType: double
+		sourceColumn: 'ROC-AUC'
+		summarizeBy: none
+
+	column Precision
+		dataType: double
+		sourceColumn: Precision
+		summarizeBy: none
+
+	column Recall
+		dataType: double
+		sourceColumn: Recall
+		summarizeBy: none
+
+	column 'F1-Score'
+		dataType: double
+		sourceColumn: 'F1-Score'
+		summarizeBy: none
+
+	column TrainSize
+		dataType: int64
+		sourceColumn: TrainSize
+		summarizeBy: none
+
+	column TestSize
+		dataType: int64
+		sourceColumn: TestSize
+		summarizeBy: none
+
+	column PositiveRate
+		dataType: double
+		sourceColumn: PositiveRate
+		summarizeBy: none
+
+	column param_max_depth
+		dataType: int64
+		sourceColumn: param_max_depth
+		summarizeBy: none
+
+	column param_n_estimators
+		dataType: int64
+		sourceColumn: param_n_estimators
+		summarizeBy: none
+
+	column 'CV_ROC-AUC'
+		dataType: double
+		sourceColumn: 'CV_ROC-AUC'
+		summarizeBy: none
+
+	column 'Baseline_ROC-AUC'
+		dataType: double
+		sourceColumn: 'Baseline_ROC-AUC'
+		summarizeBy: none
+
+	column 'Full_ROC-AUC'
+		dataType: double
+		sourceColumn: 'Full_ROC-AUC'
+		summarizeBy: none
+
+	column Barrier_Uplift
+		dataType: double
+		sourceColumn: Barrier_Uplift
+		summarizeBy: none
+
+	partition stage2_xgboost_results = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(
+					File.Contents(DashboardDataPath & "/stage2_xgboost_results.csv"),
+					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
+				),
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Model", type text}, {"Target", type text}, {"Accuracy", type number}, {#"ROC-AUC", type number}, {"Precision", type number}, {"Recall", type number}, {#"F1-Score", type number}, {"TrainSize", Int64.Type}, {"TestSize", Int64.Type}, {"PositiveRate", type number}, {"param_max_depth", Int64.Type}, {"param_n_estimators", Int64.Type}, {#"CV_ROC-AUC", type number}, {#"Baseline_ROC-AUC", type number}, {#"Full_ROC-AUC", type number}, {"Barrier_Uplift", type number}})
+			in
+				#"Changed Type"
+

@@ -1,0 +1,333 @@
+WOMEN'S HEALTHCARE ACCESS RESEARCH PROJECT
+Project ID: P48  |  Machine Learning | Deep Learning | NLP
+Stage 2 — Health Outcome Modelling & Risk Clustering (v2 — Individual-Level Rebuild)
+Companion to Stage1_Implementation_Guide_v5.docx — rebuilds v1's district-level Stage 2 pipeline for individual-level data
+Dataset: NFHS5_Individual.csv (724,115 women)  ·  July 2026
+PBC
+Clustering (K-Means) + Multi-Output Logistic Regression
+RBM
+Stage 1→2 Data Integration + Shared Evaluation Utilities
+Parvati
+Random Forest + SHAP Analysis
+Sharmila
+XGBoost + Results & Reporting
+SECTION 0  —  WHY v2 EXISTS — READ THIS FIRST
+0. What Changed Since Stage2_Implementation_Guide_v1
+v1 was built entirely on the district-level Kaggle factsheet (~707 districts, 115 percentage-indicator columns). PBC has since confirmed Stage 1 is rebuilt on the real individual-level DHS file (724,115 women, NFHS5_Individual.csv — a 32-column extract of IAIR7EFL.DTA), with real v467-based barrier targets at 27% / 32% / 46% prevalence. Every district-level assumption in v1 — OOF probabilities keyed to districts, clustering on district percentages, Stage 2 targets built from district-level NCD/cancer-screening/nutrition columns — no longer applies. This document rebuilds Stage 2 end-to-end on the individual-level data, following the same v1 structure so the team doesn't have to relearn conventions.
+CONFIRMED WITH PBC — CARRIED FORWARD FROM STAGE 1 v5:
+v467f and v467i are not present in the India NFHS-5 individual extract — Household and Facility barrier targets are built from b+c and g+h only, by design, not by omission. Analytic sample is the full 724,115 women (barrier module has zero missingness); the ~108K figure some columns show is structural (subset-only questions), not a filtering decision. Both carry through unchanged into every Stage 2 step below.
+0.1 The One New Constraint This Guide Has to Work Around
+v1 could reach into 115 district-level columns to build rich Stage 2 outcome targets (child nutrition, NCD burden, cancer screening, family planning uptake). The individual-level extract PBC is working from has only 32 columns, and only two of them are plausible, independent health-outcome measures: m14 (ANC visit count) and v626a (unmet need for family planning). Everything else in the extract is either already a Stage 1 feature/target, an identifier, or — in the case of s245a/s245b/s245h — conceptually the same thing as the barrier module (reasons a complication went untreated: cost, transport, permission), just for a different survey question. Section 2 below explains the call I'm making on this and why.
+SECTION 1  —  REPOSITORY STRUCTURE UPDATES
+1. Folder Structure — What Changes
+Notebook and file ownership from v1 (07–13, matching the RBM/PBC role swap already agreed) stays the same. Only the data source and the logic inside each file change.
+barrier-lens-p48/
+├── data/
+│   ├── raw/IAIR7EFL.DTA                          ← unchanged from Stage 1 v5
+│   └── processed/  X_features.csv, y_household.csv, y_logistic.csv, y_facility.csv   [PBC, done]
+├── notebooks/
+│   ├── 00–06 ...                        ← [DONE — Stage 1 v5, individual-level]
+│   ├── 07_data_integration.ipynb        ← [ACTIVE] OOF Stage 1 probs, individual-level  [RBM]
+│   ├── 08_clustering.ipynb              ← [ACTIVE] K-Means on WOMEN, not districts       [PBC]
+│   ├── 09_stage2_logistic.ipynb         ← [ACTIVE] Multi-Output Logistic Regression       [PBC]
+│   ├── 10_stage2_random_forest.ipynb    ← [ACTIVE] Random Forest + SHAP               [Parvati]
+│   ├── 11_stage2_xgboost.ipynb          ← [ACTIVE] XGBoost + SHAP                     [Sharmila]
+│   ├── 12_stage2_model_compare.ipynb    ← [ACTIVE] Comparison, all models             [Sharmila]
+│   └── 13_barrierlens_platform.ipynb    ← [STILL PENDING]
+└── src/
+├── preprocessing/stage2_integration.py   ← REWRITE: individual-level OOF + targets  [RBM]
+├── clustering/kmeans_cluster.py          ← REWRITE: MiniBatchKMeans, woman-level     [PBC]
+├── models/stage2_{logistic,random_forest,xgboost}.py  ← hyperparams updated for 724K
+└── evaluation/stage2_metrics.py          ← logic unchanged, imbalance framing updated [RBM]
+SECTION 2  —  STAGE 2 TARGET SELECTION — WORKING WITHIN THE 32-COLUMN EXTRACT
+2. Choosing the Stage 2 Health-Outcome Targets
+2.1 What's Actually Available
+Column
+Meaning
+Usable as Stage 2 target?
+m14
+Number of ANC (antenatal care) visits for most recent birth
+YES — Target 1
+v626a
+Unmet need for family planning (categorical)
+YES — Target 2
+v467b, c, d, e, g, h
+Barrier responses
+NO — already Stage 1 targets
+v190, v169a, v170, v481, v157-9, v743f, v466
+Wealth, phone, bank, insurance, media, autonomy
+NO — already Stage 1 features
+s245a, s245b, s245h
+Reasons a complication went untreated: cost, transport, permission
+NO — see leakage guard below
+v012, v013, v106, v130, v131, v501, v717, v024, v025
+Demographics
+NO — Stage 1 features, reused as Stage 2 inputs only
+LEAKAGE GUARD — s245a / s245b / s245h EXCLUDED:
+These ask why a woman did not seek treatment for a specific complication: could not afford treatment, could not afford transport, husband did not give permission. That is the barrier module's own logic (permission/money/transport) applied to one clinical event. Using them as Stage 2 targets or features would let a near-restatement of the label predict itself. They are excluded from both the target list and the Stage 2 feature matrix. If the team wants a robustness check later, they can be used purely as a qualitative cross-tab against predicted barrier probabilities — never inside model training.
+2.2 Stage 2 Target 1 — Antenatal Care Gap (from m14)
+Matches the approach document's original 'maternal health indicators: antenatal care visits (m14)' framing (Section 3.2.5) — this is the same variable the project always intended to use, now genuinely available.
+Attribute
+Detail
+Source column
+m14 — number of ANC visits during pregnancy for most recent birth in the reference period
+Binarization
+target_anc_gap = 1 if m14 < 4 (WHO/NFHS minimum-adequate threshold), else 0
+Structural missingness
+NaN for women with no birth in the reference period — this is NOT random missing, do not median-impute. Restrict this target's modelling sample to rows where m14 is non-null, and report that N explicitly (expect well under 724,115 — likely in the low hundred-thousands).
+2.3 Stage 2 Target 2 — Unmet Need for Family Planning (from v626a)
+Matches the approach document's 'contraceptive needs: unmet need for family planning (v626a)' (Section 3.2.5).
+Attribute
+Detail
+Source column
+v626a — categorical unmet-need status, standard DHS labels (e.g. 'no unmet need', 'unmet need for spacing', 'unmet need for limiting', plus 'using for spacing/limiting' categories)
+Binarization
+target_unmet_fp = 1 if the string label contains 'unmet need', else 0 — verify exact label text with df['v626a'].value_counts() before hardcoding, same discipline used for v467's 'big problem' string match
+Structural missingness
+v626a is only defined for currently married / in-union women (v501-restricted). Never-married women are structurally NaN, not randomly missing — restrict this target's modelling sample the same way as Target 1, and report the restricted N.
+2.4 Discovery Script — Confirm Exact v626a Category Labels
+# src/preprocessing/stage2_integration.py — run interactively first
+import pandas as pd
+df = pd.read_csv('data/processed/X_features_with_raw.csv')  # or reload raw extract with m14, v626a included
+print(df['v626a'].value_counts(dropna=False))
+print(df['m14'].describe())
+print('m14 non-null:', df['m14'].notna().sum(), '/', len(df))
+print('v626a non-null:', df['v626a'].notna().sum(), '/', len(df))
+ACTION FOR PBC/RBM:
+m14 and v626a were listed in the original cols_needed but need to be confirmed as present in the saved NFHS5_Individual.csv extract (the 32-column file) — the exploration notebook loaded them, but re-verify they survived into data/processed/. If either was dropped, re-run Step 1 of the Stage 1 v5 load with them included before starting 07_data_integration.ipynb.
+2.5 Clustering Feature Set — Individual-Level, Not District-Level
+v1's clustering features (infrastructure_index, women_empowerment_index, social_vulnerability_score) were district-percentage composites. Stage 1 v5's engineered features are their individual-level equivalents and are what clustering now runs on.
+Feature
+Source
+Why It Belongs in Clustering
+media_exposure_index
+Stage 1 v5 engineered feature (v157-159)
+Composite media exposure — same protective-factor role as before
+digital_inclusion_index
+Stage 1 v5 engineered feature (v169a + v170)
+Digital/financial empowerment
+vulnerability_score
+Stage 1 v5 engineered feature (wealth + rural + education + media)
+Risk stratification composite
+household_barrier_prob (OOF)
+Stage 1 model, out-of-fold
+Direct barrier-exposure signal
+logistic_barrier_prob (OOF)
+Stage 1 model, out-of-fold
+Direct barrier-exposure signal
+facility_barrier_prob (OOF)
+Stage 1 model, out-of-fold
+Direct barrier-exposure signal
+SECTION 3  —  STAGE 1 → STAGE 2 DATA INTEGRATION  [Owner: RBM]
+3. Building the Stage 2 Feature Matrix
+3.1 Why Out-of-Fold Predictions Still Matter — Now More Than Ever
+Same leakage logic as v1 Section 3.1: Stage 1's models were trained on an 80% split, so calling .predict_proba() on the fitted models across all rows gives artificially confident scores for the ~579K training rows and honest scores for the ~145K test rows. At individual-level scale this gap would be even more consequential — it's a much larger fraction of a much larger dataset silently biased. cross_val_predict remains mandatory.
+3.2 The Fix — OOF at 724K-Row Scale
+# src/preprocessing/stage2_integration.py
+from sklearn.model_selection import cross_val_predict, StratifiedKFold
+from xgboost import XGBClassifier
+import pandas as pd
+def build_oof_barrier_probabilities(X, y_household, y_logistic, y_facility, n_splits=3, random_state=42):
+'''3-fold instead of 5-fold by default — at 724K rows this halves OOF compute
+time with negligible change in prediction stability. Bump to 5 if runtime allows.
+Use the winning Stage 1 model per target once 06_stage1_model_compare.ipynb confirms it —
+XGBoost with tree_method="hist" shown below as the default assumption.'''
+kf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+base_kwargs = dict(max_depth=6, n_estimators=300, learning_rate=0.08,
+subsample=0.8, colsample_bytree=0.8, tree_method='hist', random_state=42)
+oof = {}
+for name, y in [('household_barrier_prob', y_household),
+('logistic_barrier_prob', y_logistic),
+('facility_barrier_prob', y_facility)]:
+neg, pos = (y == 0).sum(), (y == 1).sum()
+model = XGBClassifier(scale_pos_weight=neg / pos, **base_kwargs)
+oof[name] = cross_val_predict(model, X, y, cv=kf, method='predict_proba', n_jobs=-1)[:, 1]
+return pd.DataFrame(oof)
+COMPUTE NOTE:
+3-fold XGBoost OOF across three ~724K-row targets is still a non-trivial job. Run it as a background/batch script rather than interactively in Jupyter, and checkpoint each target's OOF array to disk as it finishes (np.save) so a crash on target 3 doesn't lose targets 1-2.
+3.3 Composite Barrier Score and Targets — Logic Unchanged
+The mean-of-three-OOF-probabilities composite score (v1 Section 3.3) carries over exactly as written. Target construction now uses Section 2.2/2.3's ANC-gap and unmet-need definitions in place of v1's district-level child-health/preventive-gap definitions — including the restricted-sample handling for both (Section 2's structural-missingness note).
+SECTION 4  —  K-MEANS CLUSTERING — WOMAN-LEVEL RISK ARCHETYPES  [Owner: PBC]
+4. Clustering at Individual-Woman Scale
+4.1 What Changes From v1
+Unit of clustering is now one woman, not one district — 724,115 points instead of 707. Plain KMeans' full-data Lloyd's-algorithm iterations become slow at this scale; use MiniBatchKMeans instead, which is designed for exactly this.
+Silhouette scoring on the full 724,115 rows for every k in 2-10 is not necessary and would be slow — score silhouette on a fixed random stratified subsample (e.g. 20,000 rows), pick k from that, then fit the final MiniBatchKMeans on the full data.
+The approach document's dashboard concept (state-level choropleth) now needs an aggregation step: woman-level cluster labels and barrier probabilities get grouped by v024 (state) — or a district identifier if the team later links in DHS spatial/district-linkage data — before they can populate a district or state map. That aggregation belongs in the BarrierLens platform notebook (13, still pending), not in this clustering step; noting it here so it isn't a surprise later.
+4.2 Implementation
+# src/clustering/kmeans_cluster.py
+import pandas as pd, numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import MiniBatchKMeans
+from sklearn.metrics import silhouette_score
+import joblib
+CLUSTER_FEATURES = [
+'media_exposure_index', 'digital_inclusion_index', 'vulnerability_score',
+'household_barrier_prob', 'logistic_barrier_prob', 'facility_barrier_prob',
+]
+def find_best_k(X_scaled, k_range=range(2, 11), sample_size=20000, random_state=42):
+rng = np.random.RandomState(random_state)
+idx = rng.choice(len(X_scaled), size=min(sample_size, len(X_scaled)), replace=False)
+sample = X_scaled[idx]
+scores = {}
+for k in k_range:
+labels = MiniBatchKMeans(n_clusters=k, random_state=random_state, n_init=10).fit_predict(sample)
+scores[k] = silhouette_score(sample, labels)
+print(f'k={k}: silhouette={scores[k]:.4f} (on {len(sample)}-row subsample)')
+best_k = max(scores, key=scores.get)
+print(f'Best k: {best_k} (silhouette={scores[best_k]:.4f})')
+return best_k, scores
+def fit_clusters(X_stage2):
+X_cluster = X_stage2[CLUSTER_FEATURES]
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_cluster)
+best_k, scores = find_best_k(X_scaled)
+model = MiniBatchKMeans(n_clusters=best_k, random_state=42, n_init=10, batch_size=4096)
+labels = model.fit_predict(X_scaled)
+joblib.dump(model, 'saved_models/stage2/kmeans_model.pkl')
+joblib.dump(scaler, 'saved_models/stage2/kmeans_scaler.pkl')
+return labels, model, scaler, X_cluster
+SECTION 5  —  WHY 3 MODELS FOR STAGE 2 — UNCHANGED RATIONALE
+5. Model Justification
+Unchanged from v1: Multi-Output Logistic Regression (PBC) for odds-ratio interpretability, Random Forest (Parvati) and XGBoost (Sharmila) for SHAP-based barrier-vs-socioeconomic attribution. No Decision Tree in Stage 2, same reasoning as v1 — RBM's and Sharmila's shared infrastructure is reused rather than duplicated.
+SECTION 6  —  MODEL TRAINING — UPDATED FOR 2 TARGETS AT 724K SCALE
+6. Implementation Details
+6.1 Shared Setup
+import pandas as pd
+X_stage2 = pd.read_csv('data/processed/stage2/X_stage2_preclustering.csv')
+y = pd.read_csv('data/processed/stage2/y_stage2_targets.csv')   # target_anc_gap, target_unmet_fp
+cluster_labels = pd.read_csv('outputs/stage2_results/cluster_assignments.csv')['cluster']
+X_stage2 = pd.concat([X_stage2, pd.get_dummies(cluster_labels, prefix='cluster')], axis=1)
+print(f'Final Stage 2 feature matrix: {X_stage2.shape}')
+print(f'target_anc_gap (restricted sample): {y["target_anc_gap"].value_counts(dropna=False).to_dict()}')
+print(f'target_unmet_fp (restricted sample): {y["target_unmet_fp"].value_counts(dropna=False).to_dict()}')
+# IMPORTANT: both targets have structural missingness (Section 2.2 / 2.3).
+# Filter to non-null rows PER TARGET before train/test split — do not impute.
+mask_anc = y['target_anc_gap'].notna()
+mask_fp  = y['target_unmet_fp'].notna()
+6.2 Model 1 — Multi-Output Logistic Regression  [Owner: PBC]
+MultiOutputClassifier requires a single shared row set across targets, which the two independent restricted samples above don't give. Train two separate LogisticRegression models instead (one per target, on its own restricted sample) rather than forcing a MultiOutputClassifier wrapper — simpler and avoids silently dropping rows that are valid for one target but not the other.
+# src/models/stage2_logistic.py
+from sklearn.linear_model import LogisticRegression
+import joblib, numpy as np, pandas as pd
+def train_stage2_logistic(X_train, y_train, feature_names, target_name):
+model = LogisticRegression(solver='lbfgs', max_iter=1000, C=1.0,
+class_weight='balanced', random_state=42)
+model.fit(X_train, y_train)
+joblib.dump(model, f'saved_models/stage2/stage2_logistic_{target_name}.pkl')
+coefs = pd.DataFrame({'Feature': feature_names, 'Coefficient': model.coef_[0],
+'OddsRatio': np.exp(model.coef_[0])}).sort_values('OddsRatio', ascending=False)
+print(f'--- Top predictors for {target_name} ---'); print(coefs.head(10))
+return model
+6.3 Model 2 — Random Forest  [Owner: Parvati]
+Parameter
+Value
+Reason
+n_estimators
+300
+Consistent with Stage 1 v5's large-N RF settings
+max_depth
+10-20 (tuned)
+Restricted samples (low hundred-thousands) still support deeper trees than v1's 707-row case
+class_weight
+'balanced'
+Both targets are imbalanced in the real data
+SHAP focus
+Barrier-probability + cluster features vs. raw socioeconomic features
+Central Stage 2 novelty claim, unchanged from v1
+6.4 Model 3 — XGBoost  [Owner: Sharmila]
+Parameter
+Value
+Reason
+n_estimators / max_depth
+300-400 / 5-7 (tuned)
+Matches Stage 1 v5's large-N logic
+tree_method
+'hist'
+Required for tractable training at this scale
+scale_pos_weight
+neg/pos ratio per target
+Restores standard imbalance handling
+SECTION 7  —  EVALUATION STRATEGY
+7. Evaluation
+7.1 Metrics — Framing Updated, Definitions Unchanged
+Accuracy, ROC-AUC, Precision, Recall, F1, Confusion Matrix — same computation as Stage 1 v5's evaluation code (RBM's stage2_metrics.py extends metrics.py). Lead with ROC-AUC and F1 given real class imbalance on both targets, not accuracy.
+7.2 The Barrier-Uplift Question — Unchanged Purpose, Same Priority
+v1 Section 7.2's logic is the single most important carryover: train socioeconomic-only vs. socioeconomic+barrier-probability+cluster feature sets, and report the ROC-AUC delta per model per target. This remains the core empirical evidence for the paper's Stage 2 claim, and now runs on genuinely comparable individual-level data instead of a 707-row proxy version.
+# src/evaluation/stage2_metrics.py (unchanged from v1)
+def compute_barrier_uplift(model_fn, X_socioeconomic, X_full, y, target_name, cv):
+from sklearn.model_selection import cross_val_score
+auc_baseline = cross_val_score(model_fn(), X_socioeconomic, y, cv=cv, scoring='roc_auc').mean()
+auc_full     = cross_val_score(model_fn(), X_full,          y, cv=cv, scoring='roc_auc').mean()
+delta = auc_full - auc_baseline
+print(f'{target_name}: socioeconomic-only={auc_baseline:.4f} | +barriers={auc_full:.4f} | uplift={delta:+.4f}')
+return {'target': target_name, 'auc_socioeconomic_only': auc_baseline, 'auc_with_barriers': auc_full, 'uplift': delta}
+7.3 Cross-Validation
+With restricted-sample sizes still likely in the low hundred-thousands for both targets, single hold-out metrics are stable — 3-fold CV (matching Section 3.2's OOF fold count for consistency) as a stability check is sufficient; 5-fold is optional if compute allows.
+SECTION 8  —  TASK DEPENDENCIES
+8. Dependencies — Unchanged Chain, Restated
+Task / Notebook
+Depends On
+Owner
+07_data_integration.ipynb
+Stage 1 v5 saved models + data/processed/
+RBM
+08_clustering.ipynb
+07 (X_stage2_preclustering.csv)
+PBC
+09_stage2_logistic.ipynb
+07 + 08 (cluster labels)
+PBC
+10_stage2_random_forest.ipynb
+07 + 08
+Parvati
+11_stage2_xgboost.ipynb
+07 + 08
+Sharmila
+12_stage2_model_compare.ipynb
+09-11 complete
+Sharmila
+SECTION 9  —  QUICK-START CHECKLIST
+9. What To Do Right Now
+#
+Action
+Owner
+1
+Confirm m14 and v626a survived into the saved processed extract; re-pull from IAIR7EFL.DTA if not
+PBC
+2
+Run the Section 2.4 discovery script; post confirmed v626a category labels and both targets' non-null counts
+RBM
+3
+Implement src/preprocessing/stage2_integration.py — 3-fold OOF (Section 3.2), composite score, restricted-sample targets (Section 2)
+RBM
+4
+Run 07_data_integration.ipynb; post OOF-vs-in-sample AUC sanity check and both targets' restricted N
+RBM
+5
+Implement src/clustering/kmeans_cluster.py with MiniBatchKMeans (Section 4.2); run 08_clustering.ipynb
+PBC
+6
+Post cluster_profiles.csv, chosen k, named archetypes to the team
+PBC
+7
+Implement and run 09_stage2_logistic.ipynb — two separate LR models, one per target
+PBC
+8
+Extend stage2_metrics.py with compute_barrier_uplift()
+RBM
+9
+Implement and run 10_stage2_random_forest.ipynb with SHAP + uplift comparison
+Parvati
+10
+Implement and run 11_stage2_xgboost.ipynb with SHAP + uplift comparison
+Sharmila
+11
+Run 12_stage2_model_compare.ipynb; export model_comparison_table.csv with uplift figures
+Sharmila
+12
+Write Stage2_Modelling_Report.pdf with real numbers for the paper's Results section
+Sharmila
+SCOPE HONESTY NOTE FOR THE REPORT:
+With only two Stage 2 targets available from the current 32-column extract (vs. the four the approach document originally sketched), the Results section should describe Stage 2 as covering maternal care utilisation and family planning access specifically — not claim broader child-health or NCD outcome modelling that isn't backed by data in this extract. If richer Stage 2 targets are wanted later, the path is pulling additional columns (e.g. m3a-m3n skilled-attendance components) from the full 5,972-column IAIR7EFL.DTA, or sourcing the companion child recode file for nutrition/morbidity outcomes.
+— END OF DOCUMENT —
+WHCARP Project P48 · BarrierLens Stage 2 Implementation Guide v2 · July 2026

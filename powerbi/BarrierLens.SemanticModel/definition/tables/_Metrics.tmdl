@@ -1,0 +1,40 @@
+table _Metrics
+	lineageTag: e2b01e80-1eac-4eea-af76-1fd654aff32f
+
+	measure 'Total Women' = MAX(national_kpi_summary[total_women])
+		formatString: #,0
+
+	measure 'Observed Any Barrier Rate' = MAX(national_kpi_summary[observed_any_barrier_rate])
+		formatString: 0.0%
+
+	measure 'Observed Household Rate' = MAX(national_kpi_summary[observed_household_rate])
+		formatString: 0.0%
+
+	measure 'Predicted Household Prob' = MAX(national_kpi_summary[pred_household_prob])
+		formatString: 0.0%
+
+	measure 'Stage 2 Unmet FP N' = MAX(national_kpi_summary[stage2_unmet_fp_N])
+		formatString: #,0
+
+	measure 'Stage 2 Unmet FP Rate' = MAX(national_kpi_summary[stage2_unmet_fp_observed_rate])
+		formatString: 0.0%
+
+	measure 'Avg State Predicted Facility' = AVERAGE(state_barrier_long[mean_predicted_prob])
+		formatString: 0.0%
+
+	measure 'Avg Barrier Uplift' = AVERAGE(model_comparison_table[Barrier_Uplift])
+		formatString: +0.0000;-0.0000
+
+	measure 'Best Stage 2 ROC-AUC' = MAX(model_comparison_table[ROC-AUC])
+		formatString: 0.0000
+
+	column Placeholder
+		isHidden
+		lineageTag: dfda7d00-2231-41e3-a7e5-e02bc55196dc
+		dataType: string
+		sourceColumn: Placeholder
+		summarizeBy: none
+
+	partition _Metrics = calculated
+		mode: import
+		source = ROW("Placeholder", BLANK())
