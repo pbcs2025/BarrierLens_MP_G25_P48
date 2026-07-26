@@ -1,0 +1,794 @@
+WOMEN'S HEALTHCARE ACCESS RESEARCH PROJECT
+Project ID: P48  |  Machine Learning  |  Deep Learning  |  NLP
+BarrierLens
+Interactive Dashboard Implementation, Base Paper Integration
+& Four-Member Task Allocation Guide
+Dashboard Phase — Next Immediate Milestone After Stage 1 & Stage 2
+Grounded in:
+WHCARP Project Approach Document v2
+Stage 1 Implementation Guide v5 (Individual-Level Rebuild)
+Stage 2 Implementation Guide v2 (Individual-Level Rebuild)
+Pradhan & De (2025), BMC Health Services Research, 25:323
+July 2026
+1. Project Context
+BarrierLens (Project P48) is a four-person team project (PBC, RBM, Parvati, Sharmila) that classifies and predicts barriers Indian women face in accessing healthcare, using NFHS-5 data, and is grounded in Pradhan & De (2025, BMC Health Services Research), which analysed 108,785 women aged 15–49 using multivariate logistic regression and Adjusted Odds Ratios (AOR). BarrierLens extends this with a two-stage ML pipeline (Stage 1: barrier classification with four models; Stage 2: health-outcome impact modelling and K-Means risk clustering), SHAP explainability, and — as the final platform component — an interactive dashboard, chatbot, and policy report generator.
+This document addresses ONLY the immediate next milestone: building the interactive BarrierLens dashboard using Stage 1/Stage 2 outputs and selected base-paper visualisations. The chatbot, PDF report generator, and Profile Risk Calculator are out of scope here and are mentioned only as future phases.
+2. Current Status After Stage 1 and Stage 2 — Read This Before Anything Else
+VERIFICATION REQUIRED BEFORE DASHBOARD DATA WORK BEGINS
+Two dataset generations exist in the project history. Stage1_Implementation_Guide_v4_updated.docx and Stage2_Implementation_Guide_v1.docx were built on a ~707-row DISTRICT-LEVEL Kaggle factsheet — that approach has been formally RETIRED.
+Stage1_Implementation_Guide_v5.docx and Stage2_Implementation_Guide_v2.docx correct this: the real dataset is IAIR7EFL.DTA / NFHS5_Individual.csv, an INDIVIDUAL-LEVEL DHS recode of 724,115 women, with real v467 barrier-response columns — structurally identical to the base paper's unit of analysis.
+However, v5 and v2 are RE-BUILD SPECIFICATIONS, not completion reports. Both documents end in their own 'Quick-Start Checklist' sections with tasks still listed against an owner and no confirmed 'done' status (Stage 1 v5 Section 8, items 1–8; Stage 2 v2 Section 9, items 1–12). Stage 2 v2 references achieved prevalences (household ~27%, logistic ~32%, facility ~46%), suggesting Stage 1 execution had progressed, but neither document confirms all 12 Stage 1 models and all Stage 2 models are trained, evaluated, and saved to disk.
+ACTION FOR THE TEAM: Before Member 1 begins consolidating outputs (Section 20), PBC/RBM must confirm in writing which of the following actually exist on disk: data/processed/ (4 CSVs), saved_models/stage1/ (12 .pkl files), data/processed/stage2/ (X_stage2, y_stage2), saved_models/stage2/ (kmeans + 3×2 model files), and outputs/*/shap_plots/. This guide is written so Member 1's first task IS this verification — the roadmap in Section 26 does not assume these files already exist correctly.
+2.1 What Should Be Available (Per the v5/v2 Specifications)
+#
+Output Category
+Expected Content (per v5/v2 spec)
+Status
+1
+Stage 1 model outputs
+12 trained models (LR/DT/RF/XGB × household/logistic/facility) on 724,115 women; predicted probabilities; AOR/coefficient table (LR); decision rules (DT)
+SPEC'D — verify saved .pkl files & prediction outputs exist
+2
+Stage 2 model outputs
+Multi-output LR, RF, XGBoost predicting target_anc_gap (m14<4) and target_unmet_fp (v626a), each on a restricted sub-sample (women with a recent birth / currently-married women respectively)
+SPEC'D — verify restricted-sample sizes & model files exist
+3
+K-Means risk archetypes
+Woman-level MiniBatchKMeans on media_exposure_index, digital_inclusion_index, vulnerability_score + 3 OOF barrier probabilities; k chosen via silhouette on a 20,000-row subsample
+SPEC'D — verify cluster_profiles.csv, named archetypes, k value
+4
+SHAP / explainability outputs
+SHAP bar + beeswarm for RF & XGBoost, Stage 1 and Stage 2; SHAP-vs-AOR comparison table (RF vs PBC's LR odds ratios)
+SPEC'D — verify plots exist per target per model
+5
+Demographic / socioeconomic variables
+Age group (v013), education (v106), marital status (v501), occupation (v717), wealth index (v190), caste/tribe (v131), religion (v130), residence (v025), bank account (v170), mobile (v169a), health insurance (v481), mass media (v157–9)
+AVAILABLE — confirmed present in load_data.py column list
+6
+State-level information
+v024 (state) — one-hot encoded as a MODEL FEATURE, not retained as a plain grouping column in X_features.csv by default
+NEEDS PREP — dashboard needs an un-encoded v024 label column preserved alongside predictions for aggregation
+7
+Individual → aggregate rollups
+None built yet. v2 Section 4.1 explicitly defers state/district aggregation to the (still-pending) platform notebook 13 — i.e., it is dashboard-phase work, not already-done Stage 1/2 work
+TO BE BUILT — this is the dashboard phase's core data task
+8
+Data prep still required
+See Section 11 in full
+TO BE BUILT
+9
+Files/CSVs to connect
+See Section 10 for the confirmed inventory
+PARTIAL — some confirmed in spec, some pending team verification
+10
+Comparable to base paper
+Barrier prevalence, state variation, wealth/education/residence differentials, AOR vs SHAP — all directly comparable now that Stage 1 uses the same unit of analysis (individual women) as the base paper
+YES — comparability is now structurally sound, unlike the retired district-level approach
+2.2 Key Correction Carried Forward Into This Guide
+Every recommendation below assumes the INDIVIDUAL-LEVEL pipeline (v5/v2) is the source of truth. District-level assumptions from v4_updated / v1 (proxy-inverted median-split targets, 707-row district features, ~50/50 balanced classes, no SMOTE) are NOT used anywhere in this document. Note also: v467f (companion) and v467i (no drugs) are NOT present in this NFHS-5 individual extract — Household barrier = v467b+c only (permission, money); Facility barrier = v467g+h only (no female provider, no provider). This differs slightly from the base paper's b+c+f / g+h+i grouping and must be labelled as such wherever the dashboard shows a barrier-category comparison against the paper.
+3. Scope of the Current Dashboard Phase
+IN SCOPE: an interactive dashboard consuming Stage 1 barrier predictions, Stage 2 outcome predictions, K-Means risk archetypes, SHAP outputs, and selected base-paper-inspired visualisations, presented in a polished, website-like, demonstrable form.
+OUT OF SCOPE (future phases, mentioned for context only): NLP chatbot, automated PDF policy report generation, Profile Risk Calculator, any further model development. No tasks in Sections 20–26 are allocated to these.
+4. Role of the Base Paper in the Dashboard
+The base paper is the dashboard's validation anchor. Its Figure 1 (national barrier prevalence), Figures 2–4 (state-wise prevalence per barrier type), Table 1 (bivariate prevalence by background characteristic), and Table 2 (AOR determinants) give BarrierLens a ground truth to show alongside its own model-based predictions — letting the dashboard visually argue 'here is what the published research found; here is what our ML pipeline, on the same kind of individual-level data, additionally offers.'
+5. Base Paper Findings Relevant to the Dashboard
+Finding
+Statistic
+Source
+At least one perceived barrier
+84.0% of women
+Fig. 1
+Facility-level barrier prevalence
+55.3% (drugs 66.8%, any provider 66.7%, female provider 61.6%)
+Fig. 1, Table 1
+Logistic barrier prevalence
+50.5% (distance 58.0%, transport 56.0%)
+Fig. 1, Table 1
+Household barrier prevalence
+24.6% (money 51.5%, permission 34.2%)
+Fig. 1, Table 1
+Highest household-barrier states
+Chhattisgarh (44.0%), Arunachal Pradesh (39.6%), Karnataka (32.5%)
+Fig. 2
+Highest logistic-barrier states
+Arunachal Pradesh (74.9%), Chhattisgarh (66.0%), Nagaland (64.0%)
+Fig. 3
+Highest facility-barrier states
+Chhattisgarh (76.2%), Nagaland (75.1%), Arunachal Pradesh (71.9%)
+Fig. 4
+Lowest-barrier state (all 3 types)
+Kerala (1.7% / 7.5% / 3.2%)
+Fig. 2–4
+Strongest protective factors (AOR<1)
+Higher education, mass media exposure, professional occupation, bank account, mobile phone, rich wealth quintile, age 35–49
+Table 2
+Strongest risk factors (AOR>1)
+SC & ST caste, Muslim religion, agricultural occupation, rural residence, poor wealth
+Table 2
+Wealth×education interaction
+Higher education + rich wealth gives the largest joint reduction in barriers
+Table 2
+Model fit
+Hosmer-Lemeshow test: no lack of fit; ROC-AUC 0.63–0.68 across the three models
+Methods/Results
+6. Required Base Paper Graphs and Tables
+Section 17 gives the full specification table required for each base-paper-inspired visualisation. This section previews the shortlist and the rationale for excluding others.
+INCLUDE: Fig. 1 (national prevalence bar chart) — anchors the whole dashboard's opening KPI view.
+INCLUDE (adapted): Figs. 2–4 (state-wise bar charts) — adapted into a single interactive choropleth with a barrier-type toggle rather than three static bar charts, since the dashboard is interactive.
+INCLUDE (adapted): Table 1 (prevalence by background characteristic) — adapted into filterable demographic panels rather than one static table.
+INCLUDE (adapted): Table 2 (AOR) — adapted into an AOR-vs-SHAP comparison view (Section 17, item D) rather than reproducing the full regression table verbatim.
+EXCLUDE: the interaction-effect sub-table (wealth × education cells) and the full 36-row region/state raw table — too granular for a dashboard KPI view; available as a drill-through table rather than a headline visual.
+7. Base Paper vs BarrierLens Comparison Strategy
+Every comparison view must keep two rails visually distinct and separately labelled:
+Rail
+What it is
+Source
+Dashboard label
+A
+Observed, descriptive statistics from the published 2019–21 survey (bivariate %, AOR)
+Pradhan & De (2025)
+Base Paper Reference / Observed NFHS-5 Statistic
+B
+Model-predicted probabilities, SHAP importances, and cluster assignments generated by BarrierLens's own pipeline
+Stage 1 / Stage 2 / K-Means / SHAP outputs
+Stage 1 ML Prediction / Stage 2 ML Prediction / K-Means Risk Analysis / SHAP Explainability
+No cross-sectional relationship anywhere in the dashboard — base-paper AOR or BarrierLens SHAP alike — is described as causal. All are framed as observed prevalence, statistical association, or predictive/model-based insight.
+8. Dashboard Objectives
+Show, at a glance, how large and how unevenly distributed healthcare-access barriers are across India.
+Let a user move from national → state → demographic → individual-risk-archetype → health-outcome views.
+Demonstrate, side-by-side, where BarrierLens's ML predictions reproduce the base paper's descriptive findings and where they add new, individual-level predictive and explanatory value.
+Serve as a standalone, presentable artefact for project evaluation/expo demonstration.
+9. Dashboard Users
+User
+Primary need
+State health officers / policy makers
+Where is barrier prevalence/risk highest, and which group needs targeting
+NGO field workers
+Which demographic segments in a state are highest-risk
+Researchers / students / evaluators
+How the ML pipeline compares to and extends the base paper; model validity
+10. Available ML and Analytical Outputs — Confirmed File Inventory
+Files the dashboard is expected to connect to, per the v5/v2 file-ownership tables, subject to the Section 2 verification note:
+File / Path
+Producer
+Contains
+Grain
+data/processed/X_features.csv, y_household.csv, y_logistic.csv, y_facility.csv
+PBC (Stage 1)
+Encoded feature matrix + 3 binary targets
+1 row = 1 woman
+saved_models/stage1/*.pkl (12 files)
+PBC/RBM/Parvati/Sharmila
+Trained LR/DT/RF/XGB models × 3 targets
+Model artefact
+outputs/stage1_results/model_comparison_table.csv
+Sharmila
+Accuracy/ROC-AUC/Precision/Recall/F1 × 12 model-target combos
+1 row = 1 model×target
+outputs/stage1_results/shap_plots/*.png
+Parvati / Sharmila
+SHAP bar + beeswarm, Stage 1
+Image asset
+data/processed/stage2/X_stage2_preclustering.csv, y_stage2_targets.csv
+RBM
+OOF barrier probs + composite score + 2 Stage 2 targets (restricted samples)
+1 row = 1 woman
+outputs/stage2_results/cluster_profiles.csv, cluster_assignments.csv
+PBC
+K-Means cluster means, chosen k, cluster label per woman
+1 row = 1 cluster / 1 woman
+saved_models/stage2/*.pkl
+PBC/Parvati/Sharmila
+Multi-output LR, RF, XGB (ANC-gap / unmet-FP targets)
+Model artefact
+outputs/stage2_results/model_comparison_table.csv (incl. uplift figures)
+Sharmila
+Stage 2 metrics + barrier-uplift AUC deltas
+1 row = 1 model×target
+outputs/stage2_results/shap_plots/*.png (grouped_bar barrier-vs-socioeconomic)
+Parvati / Sharmila
+Stage 2 SHAP
+Image asset
+NOT confirmed to exist and NOT to be assumed by any team member: a pre-built state-level or demographic-level aggregate CSV. Building this is Member 1's core dashboard-phase deliverable (Section 20).
+11. Required Dashboard Data Preparation
+Preserve a human-readable v024 (state name) column and v025 (urban/rural) alongside predictions/cluster labels/OOF probabilities — currently these exist only one-hot-encoded inside X_features.csv, unusable for grouping as-is.
+Build state_level_summary.csv: for each state, mean predicted probability per barrier type, observed target_household/logistic/facility rate, cluster distribution, mean Stage 2 outcome rate, N.
+Build demographic_summary.csv: for each combination of wealth tercile × residence × education × caste, mean predicted barrier probability, observed rate, N (suppress cells with N below an agreed minimum, e.g. 30).
+Build cluster_summary.csv: named archetype, feature-mean profile, state distribution, size.
+Build base_paper_reference.csv: the Section 5 table above, hand-entered once and version-controlled, so Rail A never silently drifts from the published numbers.
+Confirm and document the Stage 2 restricted-sample Ns (women with a recorded birth for ANC-gap; currently-married women for unmet-FP) so the dashboard shows the correct denominator, not 724,115, wherever Stage 2 figures appear.
+12–13. Recommended Dashboard Technology — Power BI vs Tableau vs Streamlit/Plotly
+Criterion
+Power BI
+Tableau (Public)
+Streamlit + Plotly
+India state choropleth
+Good — Shape Map visual or India-states TopoJSON custom visual
+Good — built-in geocoding for Indian states is inconsistent; often needs a custom shapefile
+Good — full control via GeoJSON + Plotly, most flexible but more code
+CSV/model-output ingestion & refresh
+Very easy — Power Query, one-click refresh, handles the Section 10 inventory directly
+Easy — Tableau Public caps workbook size (~15M rows, workable here); refresh is manual re-publish
+Easy but manual — pandas read_csv, no built-in refresh UI, has to be coded
+Interactive drill-down / filters
+Strong, no-code slicers
+Strong, no-code filters/actions
+Strong but every filter is hand-coded
+SHAP / feature-importance visuals
+Possible via bar charts on exported SHAP CSVs; no native SHAP plot
+Same as Power BI — export SHAP values, chart manually
+Best fit — can embed SHAP/matplotlib or Plotly bars natively in Python
+Website-like presentation
+'Publish to web' embed link — free, no server needed
+Tableau Public hosts and embeds — free, no server needed
+Needs a host (e.g. Streamlit Community Cloud) — its own deployment step
+Student project feasibility (4 members, fixed timeline)
+High — fastest to a polished result with least new tooling
+High, comparable to Power BI
+Lower — most flexible but highest build time
+Cost
+Free (Desktop + Publish to web)
+Free (Tableau Public — publishes are public by default)
+Free (open-source; free hosting tier available)
+14. Final Recommended Dashboard Architecture
+RECOMMENDATION: Power BI Desktop, published via 'Publish to Web'
+Rationale: the team's outputs are already flat CSVs (Section 10) — Power BI's Power Query ingests these with the least new tooling for a 4-person team on a fixed deadline. Its slicers/drill-through give the interactivity the dashboard's user journey needs with no code. 'Publish to web' gives a free, shareable, website-like embed link for the expo demo without standing up a server.
+SHAP plots and any visual Power BI can't natively chart (e.g. SHAP beeswarm) are pre-rendered as PNGs by Member 1/3 in Python and imported as static images into the Explainability page — the one place Power BI's no-code approach needs a Python-produced asset, explicitly scoped to Member 3 in Section 22.
+Streamlit + Plotly remains the recommended fallback ONLY if the team is already comfortable in Python and wants full custom SHAP interactivity — not the primary recommendation given its higher build/deployment time for this milestone's timeline.
+15. Dashboard Pages / Sections
+Seven sections were evaluated; Model Performance/Validation is folded into the Explainability page rather than kept separate, since both serve the same 'how much should I trust this' question for the same researcher/student audience — a standalone ninth page would fragment that story without adding a new user need.
+#
+Section
+Purpose
+Target user
+Key data/ML output
+1
+National Overview
+Answer 'how large is the problem'
+All users
+Base paper Fig.1 (Rail A) + national mean predicted probability (Rail B)
+2
+Base Paper Comparison
+Show validation: paper's descriptive stats vs BarrierLens predictions
+Researchers, evaluators
+base_paper_reference.csv + state/demographic summaries
+3
+State-wise Barrier Analysis
+Answer 'where is the problem'
+Policy makers, NGOs
+state_level_summary.csv, choropleth
+4
+Demographic & Socioeconomic Analysis
+Answer 'who is most affected'
+NGOs, policy makers
+demographic_summary.csv
+5
+Risk Archetypes (Clusters)
+Answer 'what distinct risk groups exist'
+NGOs, policy makers
+cluster_summary.csv, cluster_assignments
+6
+Stage 2 Health Outcome Impact
+Answer 'what outcomes are associated with barrier exposure'
+Researchers, policy makers
+Stage 2 predictions + barrier-uplift AUC
+7
+Model Explainability & Validation
+Answer 'why, and how much should I trust this'
+Researchers, students, evaluators
+SHAP plots, AOR-vs-SHAP, model_comparison_table.csv
+16. Dashboard KPIs and Visualisations by Section
+Section
+Headline KPIs
+Main chart
+Filters
+1. National Overview
+% ≥1 barrier (paper) · mean predicted household/logistic/facility probability (BarrierLens)
+Grouped bar: observed (paper) vs predicted (BarrierLens) prevalence, 3 barrier types
+None (landing view)
+2. Base Paper Comparison
+Delta between observed % and predicted %, per barrier type
+Side-by-side bar pairs per demographic group (Rail A vs Rail B)
+Barrier type
+3. State-wise
+Highest/lowest 5 states by predicted probability
+India choropleth, toggle by barrier type
+Barrier type, state
+4. Demographic
+Top risk-elevating and risk-reducing groups
+Small-multiple bars: wealth, education, residence, caste, occupation
+Wealth, education, residence, caste, religion, occupation
+5. Risk Archetypes
+# archetypes, share of women per archetype
+Radar/parallel-coordinates of cluster feature means; state distribution stacked bar
+Archetype, state
+6. Stage 2 Outcome Impact
+AUC uplift from adding barrier probabilities
+Bar: socioeconomic-only vs +barriers AUC, per model per target
+Target (ANC-gap / unmet-FP), model
+7. Explainability & Validation
+Model comparison table headline (best AUC per target)
+SHAP bar (imported PNG) + AOR-vs-SHAP rank comparison table
+Model, target
+17. Base Paper-Inspired Dashboard Visualisations
+A. National Barrier Prevalence
+Attribute
+Detail
+Base paper reference
+Figure 1
+What it shows
+% of women reporting ≥1 barrier, and each of the 8 individual sub-items (drugs, provider, female provider, distance, transport, money, companion, permission)
+Why important
+Single most-cited headline figure in the paper; sets the national baseline every other view compares against
+Reproduce or adapt
+Reproduce directly for the observed side; pair with BarrierLens's predicted-probability equivalent
+Data required (NFHS-5)
+v467b–h prevalence (already computed by PBC in NFHS5_Individual.ipynb)
+Observed or predicted
+OBSERVED (Rail A) — BarrierLens pairs it with PREDICTED (Rail B)
+Recommended chart/table type
+Horizontal bar chart, paired bars per barrier type
+Dashboard section
+1. National Overview
+Responsible member
+Member 2
+B. State-wise Barrier Prevalence (Household/Logistic/Facility)
+Attribute
+Detail
+Base paper reference
+Figures 2, 3, 4
+What it shows
+Bar-ranked list of all States/UTs by barrier-type prevalence
+Why important
+Core evidence for inter-state variation, the paper's headline finding besides the 84% figure
+Reproduce or adapt
+ADAPT — three static ranked bar charts become one interactive choropleth with a barrier-type toggle, plus a ranked table on hover/drill-through
+Data required (NFHS-5)
+v467 targets aggregated by v024 (state)
+Observed or predicted
+OBSERVED (paper, Rail A) shown alongside BarrierLens's state-level mean PREDICTED probability (Rail B)
+Recommended chart/table type
+Choropleth map (India, state-level) + ranked bar drill-through
+Dashboard section
+3. State-wise Barrier Analysis
+Responsible member
+Member 3 (build) / Member 2 (base-paper reference layer)
+C. Prevalence by Background Characteristics
+Attribute
+Detail
+Base paper reference
+Table 1
+What it shows
+Bivariate % of each barrier type by age, education, marital status, media exposure, occupation, bank account, mobile, insurance, sex of HH head, caste, religion, wealth, residence, region
+Why important
+The bivariate evidence base for every demographic claim in the paper
+Reproduce or adapt
+ADAPT — one static 22-row table becomes filterable small-multiple panels, one per characteristic
+Data required (NFHS-5)
+Same predictors used as Stage 1 features (v013, v106, v501, v157-9, v717, v170, v169a, v481, v131, v130, v190, v025, v024)
+Observed or predicted
+OBSERVED (Rail A) vs BarrierLens demographic_summary.csv PREDICTED (Rail B)
+Recommended chart/table type
+Small-multiple grouped bar panels
+Dashboard section
+4. Demographic & Socioeconomic Analysis
+Responsible member
+Member 2 (reference data) / Member 3 (build)
+D. Determinants of Barriers (AOR Table)
+Attribute
+Detail
+Base paper reference
+Table 2
+What it shows
+Adjusted Odds Ratios with 95% CI for every predictor, per barrier type, from multivariate logistic regression
+Why important
+The paper's central inferential result; the natural counterpart to BarrierLens's SHAP feature importance
+Reproduce or adapt
+ADAPT — not reproduced as a raw regression table; shown as a ranked AOR-vs-SHAP comparison view
+Data required (NFHS-5)
+Table 2 values (hand-entered reference) vs PBC's LR odds-ratio table + Parvati's RF SHAP ranking
+Observed or predicted
+OBSERVED/STATISTICAL (Rail A, Table 2) vs Stage 1 ML Prediction / SHAP Explainability (Rail B)
+Recommended chart/table type
+Ranked dual-axis comparison chart or paired ranked lists
+Dashboard section
+7. Model Explainability & Validation
+Responsible member
+Member 2 (paper side) / Member 3 (SHAP side)
+E. Wealth-Category Barrier Prevalence
+Attribute
+Detail
+Base paper reference
+Table 1 (Wealth Index rows)
+What it shows
+Poor / Middle / Rich prevalence per barrier type (e.g. facility: 65.7% poor vs 44.4% rich)
+Why important
+Single strongest socioeconomic driver named in the paper's conclusion
+Reproduce or adapt
+Reproduce the observed split directly; pair with predicted
+Data required (NFHS-5)
+v190 (wealth index)
+Observed or predicted
+OBSERVED (Rail A) + PREDICTED (Rail B)
+Recommended chart/table type
+Grouped bar (3 wealth tiers × 3 barrier types)
+Dashboard section
+4. Demographic & Socioeconomic Analysis
+Responsible member
+Member 2 / Member 3
+F. Urban vs Rural Barrier Prevalence
+Attribute
+Detail
+Base paper reference
+Table 1 (Residence rows)
+What it shows
+Urban vs rural prevalence per barrier type
+Why important
+Second key equity finding; motivates the rural-targeting policy recommendation
+Reproduce or adapt
+Reproduce the observed split directly; pair with predicted
+Data required (NFHS-5)
+v025 (residence)
+Observed or predicted
+OBSERVED (Rail A) + PREDICTED (Rail B)
+Recommended chart/table type
+Grouped bar / donut pair
+Dashboard section
+4. Demographic & Socioeconomic Analysis
+Responsible member
+Member 2 / Member 3
+G. Education-Level Barrier Prevalence
+Attribute
+Detail
+Base paper reference
+Table 1 (Educational Status rows)
+What it shows
+No education / Primary / Secondary / Higher prevalence per barrier type
+Why important
+Strongest protective factor per the paper's conclusion
+Reproduce or adapt
+Reproduce the observed split directly; pair with predicted
+Data required (NFHS-5)
+v106 (education)
+Observed or predicted
+OBSERVED (Rail A) + PREDICTED (Rail B)
+Recommended chart/table type
+Grouped bar, 4 education tiers
+Dashboard section
+4. Demographic & Socioeconomic Analysis
+Responsible member
+Member 2 / Member 3
+H. Risk Archetype Profiles (BarrierLens extension — no direct paper equivalent)
+Attribute
+Detail
+Base paper reference
+No direct paper figure — new to BarrierLens
+What it shows
+Named K-Means clusters (e.g. 'High Vulnerability Archetype') with their feature-mean profile and state distribution
+Why important
+This is where BarrierLens explicitly goes beyond the paper — individual-level risk segmentation the paper's population-level AOR approach cannot produce
+Reproduce or adapt
+NEW — no reproduction; original to this project
+Data required (NFHS-5)
+cluster_profiles.csv, cluster_assignments.csv
+Observed or predicted
+K-Means Risk Analysis (Rail B only — no Rail A equivalent)
+Recommended chart/table type
+Radar chart + stacked state-distribution bar
+Dashboard section
+5. Risk Archetypes
+Responsible member
+Member 3
+18. Filters and Interactive Features
+Global slicers (all pages): State/UT, Residence (urban/rural), Wealth tier.
+Page-local filters: barrier type toggle (National Overview, State-wise, Explainability); demographic characteristic selector (Demographic page); risk archetype selector (Risk Archetypes page); Stage 2 target + model selector (Outcome Impact, Explainability).
+Drill-through: state bar → ranked demographic breakdown for that state; cluster tile → member-level feature profile.
+Tooltips must always state whether the value is OBSERVED (base paper) or PREDICTED (BarrierLens), and the N behind it, particularly for Stage 2's restricted-sample figures.
+19. Dashboard Data Flow
+Already completed (per v5/v2 specifications, pending Section 2 verification):
+NFHS-5 individual-level raw data (IAIR7EFL.DTA) → preprocessing → Stage 1 model training → Stage 1 predictions
+Stage 1 predictions (OOF) → Stage 2 data integration → Stage 2 target construction → Stage 2 model training → Stage 2 predictions
+Stage 2 integration output → K-Means clustering → risk archetypes
+Stage 1 & 2 models → SHAP value computation → SHAP plots
+New in the dashboard phase (this document's scope):
+Base paper Figures/Tables → hand-entered base_paper_reference.csv (Member 2)
+Woman-level predictions + OOF probabilities + cluster labels + state/residence labels → state_level_summary.csv, demographic_summary.csv, cluster_summary.csv (Member 1)
+SHAP PNGs + model_comparison_table.csv → curated explainability asset set (Member 3, with Member 1's inputs)
+All summary CSVs + reference CSV + image assets → Power BI data model (Member 1 hands off, Member 3 builds)
+Power BI report → interactive dashboard pages (Member 3) → integrated, styled, navigable dashboard (Member 4) → Publish to Web (Member 4)
+Throughout, individual-level predictions are converted to dashboard insight strictly by grouped aggregation (mean predicted probability by state / by demographic cell / by cluster) — never by re-fitting or re-deriving new statistics inside the BI tool, so every dashboard number traces back to a specific Stage 1/Stage 2/clustering/SHAP artefact.
+20. Member 1 — Data Preparation & Dashboard Data Pipeline
+Role: Owns the bridge between the ML pipeline's raw outputs and everything the dashboard displays. First and most critical task is verification (Section 2), because every other member's work depends on Member 1's outputs being correct.
+Exact tasks & subtasks
+Verify the file inventory in Section 10 actually exists; for any missing file, flag to PBC/RBM/Parvati/Sharmila and log the gap rather than fabricating placeholder data.
+Re-attach un-encoded v024 (state) and v025 (residence) labels to X_features.csv's row order (join on row index or caseid, whichever survived preprocessing).
+Build state_level_summary.csv: group by state → mean predicted probability (3 barrier types), observed target rate, N, cluster distribution, Stage 2 outcome rate.
+Build demographic_summary.csv: group by wealth×education×residence×caste → predicted/observed rate, N; suppress N<30 cells.
+Build cluster_summary.csv from cluster_profiles.csv + cluster_assignments.csv: named archetype, feature means, state distribution, size.
+Validate: row counts reconcile (724,115 total; Stage 2 restricted Ns documented and correct); no state/demographic cell has an impossible rate (<0% or >100%); cluster assignments cover 100% of rows.
+Input files needed
+Everything in the Section 10 inventory table, plus PBC/RBM's written confirmation from the Section 2 verification step.
+Expected outputs
+state_level_summary.csv, demographic_summary.csv, cluster_summary.csv, a written data-dictionary note, and a verification log listing which Section 10 files were confirmed present vs missing.
+Tools
+Python (pandas), the existing saved_models/ and data/processed/ artefacts, Excel/CSV for handoff.
+Dependencies
+Needs PBC/RBM/Parvati/Sharmila to confirm Stage 1/2/clustering files exist and are current (Section 2). Nothing else in the dashboard phase can start meaningfully before this.
+Provides to / needs from other members
+Provides to Member 2: state_level_summary.csv, demographic_summary.csv (so Member 2's paper-comparison numbers use the same aggregation logic).
+Provides to Member 3: all three summary CSVs, cluster labels, SHAP/model-comparison file paths.
+Needs from Member 2: base_paper_reference.csv schema agreed jointly so join keys (state names, wealth tiers, education tiers) match exactly between the two rails.
+Definition of Done
+All summary CSVs exist, validated, documented, and delivered to Members 2 and 3 with matching join keys; verification log delivered to the team confirming what actually exists from Stage 1/2.
+21. Member 2 — Base Paper Replication & Research Comparison
+Role: Owns fidelity to the published research — ensuring every 'observed' number the dashboard shows matches the paper exactly, and that predicted/observed pairs are genuinely comparable.
+Exact tasks & subtasks
+Hand-transcribe Figure 1, Figures 2–4 (all state values), Table 1, and Table 2 into base_paper_reference.csv, double-checked against the PDF (Section 5/17 are the working source).
+Agree exact join-key spellings (state names, wealth tier labels, education tier labels, caste labels) with Member 1 before either builds their CSV.
+Build the Section 17 item D content: rank PBC's LR odds ratios and Parvati's RF SHAP values for each target, and produce a paired-rank table/chart spec for Member 3 to render.
+Write the one-paragraph methodological note the dashboard needs wherever Rail A and Rail B are shown together: NFHS-5 state-module sample differs slightly (108,785 vs BarrierLens's 724,115 full sample), and the household/facility barrier groupings differ by two sub-items (v467f, v467i absent) — so labelled comparisons should read 'broadly comparable,' not 'identical.'
+Review every dashboard page (once built) for any place a predicted number is displayed without a Rail A/B label, and flag it to Member 4 for correction.
+Input files needed
+The base paper PDF (source of truth), Member 1's state_level_summary.csv and demographic_summary.csv for join-key alignment.
+Expected outputs
+base_paper_reference.csv, the AOR-vs-SHAP comparison table/chart spec, the methodological-note text block, a page-by-page labelling review checklist.
+Tools
+Excel/CSV, the PDF reader, direct text collaboration with Member 3 on chart specs.
+Dependencies
+Needs Member 1's summary CSVs (for join-key alignment) and PBC's LR odds-ratio output + Parvati's SHAP ranking (for item D).
+Provides to / needs from other members
+Provides to Member 3: base_paper_reference.csv, AOR-vs-SHAP chart spec, methodological-note text.
+Provides to Member 4: labelling review checklist for final QA pass.
+Definition of Done
+base_paper_reference.csv fully populated and matches the PDF exactly on spot-check; AOR-vs-SHAP comparison data ready for Member 3; labelling checklist delivered.
+22. Member 3 — Dashboard Analytics and Visualisation
+Role: Builds the actual interactive report in Power BI — every chart, map, and drill-down described in Sections 15–17.
+Exact tasks & subtasks
+Build the Power BI data model: import Member 1's three summary CSVs + Member 2's base_paper_reference.csv; define relationships (state, wealth tier, education tier as shared keys).
+Build the India state choropleth (Section 15, page 3) with barrier-type toggle.
+Build the National Overview, Base Paper Comparison, Demographic, and Risk Archetype pages per the KPI/chart spec in Section 16.
+Build the Stage 2 Outcome Impact page (barrier-uplift bar chart) — clearly caption the restricted sample size per target.
+Build the Explainability & Validation page: import SHAP PNGs as static images, build the model_comparison_table.csv view, and place Member 2's AOR-vs-SHAP comparison chart.
+Add all filters/slicers/drill-throughs from Section 18.
+Input files needed
+Member 1's three summary CSVs, Member 2's base_paper_reference.csv and AOR-vs-SHAP spec, SHAP PNGs and model_comparison_table.csv from the Stage 1/2 outputs inventory.
+Expected outputs
+A working, fully-interactive multi-page Power BI (.pbix) report covering all 7 sections.
+Tools
+Power BI Desktop, Power Query, DAX for measures (mean predicted probability, uplift delta, etc.).
+Dependencies
+Cannot meaningfully start core pages until Member 1's summary CSVs and Member 2's reference CSV exist — can start data-model scaffolding and choropleth base-map work in parallel earlier (Section 25).
+Provides to / needs from other members
+Provides to Member 4: the working .pbix file for integration/styling/publishing.
+Needs from Member 1 & 2: correct, validated CSVs with matching keys (rework otherwise cascades).
+Definition of Done
+All 7 pages built, all Section 16 KPIs/charts present, all Section 18 filters functional, every Rail A/B pair correctly labelled per Member 2's review.
+23. Member 4 — Dashboard UI, Integration & Website-Like Presentation
+Role: Turns Member 3's functional report into a polished, navigable, presentable, publishable artefact.
+Exact tasks & subtasks
+Design consistent visual theme (colour palette, typography, KPI card styling) across all 7 pages.
+Build page navigation (buttons/bookmarks) matching the analytical journey in Section 15/Part 7.
+Apply Member 2's labelling review corrections.
+Test responsiveness/readability at the resolution the report will actually be presented at (projector/laptop).
+Publish to Web; verify the public embed link renders correctly outside the team's own machines.
+Prepare the demonstration walkthrough script (Section 30).
+Input files needed
+Member 3's .pbix file, Member 2's labelling checklist.
+Expected outputs
+Final polished .pbix, live Publish-to-Web link, demonstration script.
+Tools
+Power BI Desktop (theming, bookmarks, navigation), Power BI Service (Publish to Web).
+Dependencies
+Cannot finalize until Member 3's pages are functionally complete and Member 2's labelling review is done — but can build the navigation shell and theme earlier in parallel (Section 25).
+Provides to / needs from other members
+Needs from Member 3: a functionally complete report to style and integrate.
+Needs from Member 2: final labelling sign-off before publishing.
+Definition of Done
+Published, publicly-accessible dashboard link works from an outside machine; navigation and styling consistent across all pages; demonstration script ready.
+24. Task Dependencies
+Task
+Depends on
+Owner
+Section 2 verification
+PBC/RBM/Parvati/Sharmila confirmation
+Member 1 (initiates)
+state_level_summary.csv / demographic_summary.csv / cluster_summary.csv
+Section 2 verification passed
+Member 1
+base_paper_reference.csv
+Base paper PDF (independent — can start immediately)
+Member 2
+Join-key alignment
+Draft versions of Member 1's and Member 2's CSVs
+Member 1 + Member 2 jointly
+AOR-vs-SHAP comparison spec
+PBC's LR odds ratios + Parvati's SHAP output (from Stage 1)
+Member 2
+Power BI data model + core pages
+Member 1's summary CSVs + Member 2's reference CSV
+Member 3
+Explainability page
+SHAP PNGs + model_comparison_table.csv + Member 2's AOR-vs-SHAP spec
+Member 3
+Theming / navigation shell
+None (style guide is independent)
+Member 4
+Final integration & publish
+Member 3's complete report + Member 2's labelling sign-off
+Member 4
+25. Parallel vs Sequential Tasks
+Can run in parallel from day 1
+Member 1: file verification (Section 2)
+Member 2: transcribing base_paper_reference.csv from the PDF
+Member 4: theme design and navigation shell scaffolding (on placeholder data)
+Must be sequential
+Member 1's verification → Member 1's summary CSVs → Member 3's core pages
+Member 1 + Member 2 join-key alignment → both of their final CSVs
+Member 3's functional pages + Member 2's labelling sign-off → Member 4's final integration and publish
+26. Step-by-Step Dashboard Implementation Roadmap
+Step
+Task
+Owner
+Input
+Output
+Depends on
+Completion criteria
+1
+Verify Stage 1/2 outputs exist
+Member 1
+Section 10 inventory, team confirmation
+Verification log
+—
+Every file in Sec. 10 marked present/missing
+2
+Transcribe base paper stats
+Member 2
+Base paper PDF
+base_paper_reference.csv (draft)
+—
+All Section 5/17 figures transcribed & spot-checked
+3
+Design dashboard theme/nav shell
+Member 4
+Section 15 page list
+Placeholder .pbix shell
+—
+7-page navigable shell exists
+4
+Re-attach state/residence labels
+Member 1
+X_features.csv
+Labelled prediction table
+Step 1
+State/residence present on every prediction row
+5
+Build 3 summary CSVs
+Member 1
+Step 4 output + cluster/Stage2 files
+state/demographic/cluster summary CSVs
+Step 4
+CSVs validated (row counts, no impossible rates)
+6
+Align join keys
+Member 1 + 2
+Draft CSVs from Steps 2 & 5
+Matching key schema
+Steps 2, 5
+Identical label spelling confirmed both sides
+7
+Build AOR-vs-SHAP spec
+Member 2
+LR odds ratios, RF SHAP output
+Comparison chart spec
+Step 1
+Ranked comparison ready for Member 3
+8
+Build Power BI data model
+Member 3
+Steps 5, 6 outputs
+Data model with relationships
+Step 6
+All tables load & relate without errors
+9
+Build core 4 pages (1–4)
+Member 3
+Data model
+4 working pages
+Step 8
+KPIs/charts/filters per Section 16 present
+10
+Build Risk Archetype & Outcome pages (5–6)
+Member 3
+Data model
+2 working pages
+Step 8
+Cluster & uplift visuals functional
+11
+Build Explainability page (7)
+Member 3
+SHAP PNGs, Step 7 spec
+Final page
+Steps 7, 8
+SHAP images + AOR/SHAP comparison rendered
+12
+Labelling QA review
+Member 2
+All 7 built pages
+Correction list
+Steps 9–11
+Every value labelled Rail A or Rail B
+13
+Apply theming/navigation to full report
+Member 4
+Steps 9–11 output, Step 3 shell
+Styled, navigable report
+Steps 9–11
+Consistent theme across all pages
+14
+Apply QA corrections
+Member 4
+Step 12 list
+Corrected report
+Steps 12, 13
+All corrections applied and re-checked
+15
+Publish to Web
+Member 4
+Final report
+Public embed link
+Step 14
+Link renders correctly on an outside machine
+16
+Test with realistic user scenarios
+All
+Published link
+Test notes
+Step 15
+3 user journeys (Sec. 30) walk through cleanly
+17
+Prepare demonstration script
+Member 4
+Final dashboard
+Walkthrough script
+Step 16
+Script covers all 7 pages within demo time budget
+18
+Final sign-off
+All
+Everything above
+Team confirmation
+Step 17
+All four members confirm dashboard is demo-ready
+Parallel-eligible: Steps 1–3 (day 1); Steps 9 and 10 (once Step 8 is done, before Step 11). Strictly sequential: 4→5→6→8→9/10→11→12→13→14→15→16→17→18.
+27. Expected Deliverables
+state_level_summary.csv, demographic_summary.csv, cluster_summary.csv, base_paper_reference.csv
+A working, published Power BI dashboard (.pbix + Publish-to-Web link) covering all 7 sections
+AOR-vs-SHAP comparison view
+Verification log of confirmed Stage 1/2/clustering/SHAP outputs
+Demonstration walkthrough script
+28. Definition of Done (Whole Dashboard)
+All 7 dashboard pages functionally complete with correct data, filters, and Rail A/B labelling
+Published link accessible and tested from outside the team's machines
+Every figure traceable to a specific Stage 1/Stage 2/clustering/SHAP artefact or the base paper — no invented numbers
+All four members have signed off per their Definition of Done in Sections 20–23
+29. Dashboard Testing Checklist
+☐ Every predicted-vs-observed pair is labelled Rail A / Rail B
+☐ Stage 2 pages show the correct restricted-sample N, not 724,115
+☐ Choropleth renders correctly for all states/UTs, no missing polygons
+☐ All filters/slicers update all visuals on the page they affect
+☐ Small demographic cells (N<30) are suppressed or flagged, not shown as misleadingly precise percentages
+☐ SHAP images load correctly on the published (not just local) version
+☐ Published link opens correctly on a device outside the team's network
+☐ No causal language anywhere in titles/captions — 'associated with', not 'causes'
+30. Final Dashboard Demonstration Flow
+Recommended live-demo order, following the analytical journey:
+1. National Overview — 'How large is the problem?' (84% observed vs BarrierLens's national predicted rate)
+2. Base Paper Comparison — 'How does our pipeline validate the published research?'
+3. State-wise Analysis — 'Where is the problem?' (choropleth, toggle barrier types)
+4. Demographic Analysis — 'Who is most affected?' (wealth/education/residence panels)
+5. Risk Archetypes — 'What distinct risk groups exist?' (named clusters)
+6. Stage 2 Outcome Impact — 'What health outcomes are associated with barrier exposure?' (uplift chart)
+7. Explainability & Validation — 'Why, and how much should we trust this?' (SHAP + AOR comparison + model metrics)
+Total recommended demo time: 8–10 minutes, roughly 60–90 seconds per page, closing on the Explainability page to end on the pipeline's validity evidence.
+— END OF DOCUMENT —
+BarrierLens P48 · Dashboard Implementation & Task Allocation Guide · July 2026

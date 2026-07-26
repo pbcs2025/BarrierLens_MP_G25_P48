@@ -1,0 +1,6 @@
+expression DashboardDataPath = "../data/dashboard/powerbi" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=false]
+	lineageTag: b2b7e7c3-6abc-4506-a440-f4e0c347a1bf
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text

@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "n_checks": 22,
+  "n_errors": 0,
+  "n_warnings": 1,
+  "checks": [
+    {
+      "name": "row_count_total",
+      "passed": true,
+      "detail": "expected 724,115, got 724,115"
+    },
+    {
+      "name": "cluster_coverage",
+      "passed": true,
+      "detail": "0 rows without cluster assignment"
+    },
+    {
+      "name": "target_unmet_fp_valid_n_documented",
+      "passed": true,
+      "detail": "466,859 women in analytic sample"
+    },
+    {
+      "name": "rate_bounds_observed_household",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_observed_logistic",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_observed_facility",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_household_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_logistic_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_facility_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_composite_barrier_score",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "state_unique",
+      "passed": true,
+      "detail": "0 duplicate state rows"
+    },
+    {
+      "name": "rate_bounds_observed_household_rate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_household_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_observed_logistic_rate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_logistic_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_observed_facility_rate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_facility_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_pred_composite_barrier_score",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_target_unmet_fp_observed_rate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rate_bounds_target_unmet_fp_pred_prob",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "demographic_suppression",
+      "passed": true,
+      "detail": "0 cells with N<30 not suppressed"
+    },
+    {
+      "name": "suppressed_cells_null_rates",
+      "passed": true,
+      "detail": "0 suppressed rows still carry rate values"
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "target_anc_gap: 0 valid rows \u2014 Stage 2 dashboard metrics will be empty"
+  ]
+}

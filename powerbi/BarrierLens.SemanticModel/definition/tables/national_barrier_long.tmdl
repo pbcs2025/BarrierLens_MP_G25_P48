@@ -1,0 +1,36 @@
+table national_barrier_long
+	lineageTag: 731d6e3c-261c-41f1-b9d8-9924d7ab4d87
+
+	column barrier_type
+		dataType: string
+		sourceColumn: barrier_type
+		summarizeBy: none
+
+	column metric_type
+		dataType: string
+		sourceColumn: metric_type
+		summarizeBy: none
+
+	column value
+		dataType: double
+		sourceColumn: value
+		summarizeBy: none
+
+	column data_rail
+		dataType: string
+		sourceColumn: data_rail
+		summarizeBy: none
+
+	partition national_barrier_long = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(
+					File.Contents(DashboardDataPath & "/national_barrier_long.csv"),
+					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
+				),
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"barrier_type", type text}, {"metric_type", type text}, {"value", type number}, {"data_rail", type text}})
+			in
+				#"Changed Type"
+

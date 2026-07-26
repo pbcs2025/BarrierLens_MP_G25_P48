@@ -1,0 +1,4 @@
+Model,Target,Accuracy,ROC-AUC,Precision,Recall,F1-Score,Baseline_ROC-AUC,Full_ROC-AUC,Barrier_Uplift
+Logistic Regression,target_unmet_fp,0.5847,0.6591,0.1573,0.6665,0.2546,0.6566,0.6583,0.0017
+Random Forest,target_unmet_fp,0.6041,0.6672,0.1615,0.6493,0.2587,0.6601,0.6572,-0.003
+XGBoost,target_unmet_fp,0.5927,0.668,0.1603,0.6675,0.2586,0.6654,0.6618,-0.0036

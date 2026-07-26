@@ -1,0 +1,12 @@
+relationship 16f9d012-8194-4f5e-b612-b37d752e9ae0
+	fromColumn: state_barrier_long.state_name
+	toColumn: state_level_summary.state_name
+
+relationship d13dc161-6819-435c-9cb4-6c60afc7b049
+	fromColumn: cluster_state_distribution.cluster_id
+	toColumn: cluster_summary.cluster_id
+
+relationship 811e648c-bc21-4ed6-b015-c20c6b3fd143
+	crossFilteringBehavior: bothDirections
+	fromColumn: cluster_state_distribution.state_name
+	toColumn: state_level_summary.state_name
