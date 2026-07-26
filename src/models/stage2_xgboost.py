@@ -51,9 +51,11 @@ STAGE2_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "stage2_results"
 STAGE2_MODELS_DIR = PROJECT_ROOT / "saved_models" / "stage2"
 SHAP_DIR = STAGE2_OUTPUT_DIR / "shap"
 
-STAGE2_TARGETS: Tuple[str, ...] = ("target_anc_gap", "target_unmet_fp")
+# NOTE: target_anc_gap removed - m14 column not available in current extract
+# Only target_unmet_fp (family planning unmet need) is available
+STAGE2_TARGETS: Tuple[str, ...] = ("target_unmet_fp",)
 TARGET_DISPLAY = {
-    "target_anc_gap": "ANC Care Gap",
+    "target_anc_gap": "ANC Care Gap",  # Not available (m14 missing)
     "target_unmet_fp": "Unmet Family Planning Need",
 }
 
