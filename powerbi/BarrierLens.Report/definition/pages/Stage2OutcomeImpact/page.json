@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "Stage2OutcomeImpact",
-  "displayName": "6. Stage 2 Health Outcome Impact",
+  "displayName": "6. Reproductive Healthcare Outcome & Unmet Need Impact",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
@@ -19,9 +19,82 @@
                 }
               }
             }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
           }
         }
       }
     ]
-  }
+  },
+  "visualContainers": [
+    {
+      "x": 16,
+      "y": 16,
+      "z": 0,
+      "width": 1248,
+      "height": 50,
+      "config": "{\"name\": \"60f805e7-bb02-4b69-a407-f7ceff3cd315\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"6. Clinical Outcome Impact \\u2014 Predicting Women with Confirmed Unmet Family Planning Need\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"5c86f78a-eca9-4d8d-83f3-aa637005ca04\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Stage 2 Analytic Sample\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Stage 2 Analytic Sample\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Stage 2 Analytic Sample'\"}}}}}]}}}"
+    },
+    {
+      "x": 332,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"d6529769-39eb-4550-86bb-4a0956583d79\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Unmet Family Planning Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Unmet Family Planning Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Observed Unmet Need Rate'\"}}}}}]}}}"
+    },
+    {
+      "x": 648,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"55c5d668-2168-4e25-a037-abb099ff452f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Women with Confirmed Unmet Family Planning Need\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Women with Confirmed Unmet Family Planning Need\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Women with Unmet Need (N)'\"}}}}}]}}}"
+    },
+    {
+      "x": 964,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"ee5facf4-8689-40f6-8595-6143430bc671\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Stage 2 Best Area Under the ROC Curve\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Stage 2 Best Area Under the ROC Curve\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Best Model Area Under ROC Curve'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 182,
+      "z": 0,
+      "width": 610,
+      "height": 470,
+      "config": "{\"name\": \"35081791-90bf-4620-a1f6-dd3daa76f7f5\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"model_comparison_table.Machine Learning Classification Model\"}], \"Y\": [{\"queryRef\": \"model_comparison_table.Area Under the ROC Curve (ROC-AUC)\"}, {\"queryRef\": \"model_comparison_table.F1 Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"model_comparison_table.Machine Learning Classification Model\"}, {\"queryRef\": \"model_comparison_table.Area Under the ROC Curve (ROC-AUC)\"}, {\"queryRef\": \"model_comparison_table.F1 Score\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Stage 2 Model Comparison: Area Under ROC Curve & Predictive Metrics'\"}}}}}]}}}"
+    },
+    {
+      "x": 640,
+      "y": 182,
+      "z": 0,
+      "width": 624,
+      "height": 470,
+      "config": "{\"name\": \"6fc1ecc5-de2a-4070-b28f-79b3d6860ebd\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"table\", \"projections\": {\"Values\": [{\"queryRef\": \"model_comparison_table.Machine Learning Classification Model\"}, {\"queryRef\": \"model_comparison_table.Prediction Target (Outcome / Barrier)\"}, {\"queryRef\": \"model_comparison_table.Model Accuracy\"}, {\"queryRef\": \"model_comparison_table.Area Under the ROC Curve (ROC-AUC)\"}, {\"queryRef\": \"model_comparison_table.Precision (Positive Predictive Value)\"}, {\"queryRef\": \"model_comparison_table.Recall (Sensitivity / True Positive Rate)\"}, {\"queryRef\": \"model_comparison_table.F1 Score\"}, {\"queryRef\": \"model_comparison_table.Barrier Predictive Uplift (Full \\u2212 Baseline Area Under the ROC Curve)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"model_comparison_table.Machine Learning Classification Model\"}, {\"queryRef\": \"model_comparison_table.Prediction Target (Outcome / Barrier)\"}, {\"queryRef\": \"model_comparison_table.Model Accuracy\"}, {\"queryRef\": \"model_comparison_table.Area Under the ROC Curve (ROC-AUC)\"}, {\"queryRef\": \"model_comparison_table.Precision (Positive Predictive Value)\"}, {\"queryRef\": \"model_comparison_table.Recall (Sensitivity / True Positive Rate)\"}, {\"queryRef\": \"model_comparison_table.F1 Score\"}, {\"queryRef\": \"model_comparison_table.Barrier Predictive Uplift (Full \\u2212 Baseline Area Under the ROC Curve)\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Comprehensive Stage 2 Model Performance Scorecard'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 664,
+      "z": 0,
+      "width": 1248,
+      "height": 40,
+      "config": "{\"name\": \"6259f9f5-0ff7-4513-8360-7b0199596f9f\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Model Evaluation Note: Restricted to ever-married women in the NFHS-5 analytic sample (N = 466,859). Evaluation via 5-fold stratified cross-validation.\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    }
+  ]
 }

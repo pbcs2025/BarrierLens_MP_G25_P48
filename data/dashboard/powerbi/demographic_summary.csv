@@ -1,289 +1,289 @@
 wealth_tier,education_tier,residence,caste_group,barrier_type,N,suppress_flag,mean_observed_rate,mean_predicted_prob,data_rail_observed,data_rail_predicted
-Middle,Higher,Rural,Don'T Know,Household,65,False,0.015385,0.127885,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Don'T Know,Logistic,65,False,0.123077,0.263564,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Don'T Know,Facility,65,False,0.538462,0.513651,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,No Caste/Tribe,Household,487,False,0.209446,0.425977,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,No Caste/Tribe,Logistic,487,False,0.305955,0.494577,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,No Caste/Tribe,Facility,487,False,0.464066,0.519164,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Other Caste,Household,11140,False,0.19228,0.38815,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Other Caste,Logistic,11140,False,0.276391,0.45164,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Other Caste,Facility,11140,False,0.420826,0.45823,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Tribe,Household,1744,False,0.256881,0.466606,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Tribe,Logistic,1744,False,0.342317,0.512917,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Rural,Tribe,Facility,1744,False,0.463303,0.504649,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Don'T Know,Household,11,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Don'T Know,Logistic,11,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Don'T Know,Facility,11,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,No Caste/Tribe,Household,176,False,0.181818,0.392546,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,No Caste/Tribe,Logistic,176,False,0.113636,0.314617,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,No Caste/Tribe,Facility,176,False,0.471591,0.480851,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Other Caste,Household,2534,False,0.196922,0.391288,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Other Caste,Logistic,2534,False,0.192976,0.337216,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Other Caste,Facility,2534,False,0.363062,0.419768,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Tribe,Household,636,False,0.213836,0.390939,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Tribe,Logistic,636,False,0.224843,0.35287,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Higher,Urban,Tribe,Facility,636,False,0.430818,0.455507,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Don'T Know,Household,99,False,0.282828,0.495379,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Don'T Know,Logistic,99,False,0.313131,0.520722,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Don'T Know,Facility,99,False,0.444444,0.490788,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,No Caste/Tribe,Household,726,False,0.338843,0.586907,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,No Caste/Tribe,Logistic,726,False,0.436639,0.610663,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,No Caste/Tribe,Facility,726,False,0.549587,0.5904,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Other Caste,Household,21928,False,0.278001,0.505155,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Other Caste,Logistic,21928,False,0.348778,0.533895,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Other Caste,Facility,21928,False,0.471954,0.508807,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Tribe,Household,2292,False,0.343368,0.571601,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Tribe,Logistic,2292,False,0.436736,0.61785,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Rural,Tribe,Facility,2292,False,0.529668,0.56654,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Don'T Know,Household,49,False,0.306122,0.523671,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Don'T Know,Logistic,49,False,0.346939,0.494085,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Don'T Know,Facility,49,False,0.326531,0.430564,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,No Caste/Tribe,Household,264,False,0.367424,0.56923,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,No Caste/Tribe,Logistic,264,False,0.272727,0.45301,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,No Caste/Tribe,Facility,264,False,0.492424,0.527979,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Other Caste,Household,5223,False,0.287766,0.513115,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Other Caste,Logistic,5223,False,0.25694,0.431926,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Other Caste,Facility,5223,False,0.425043,0.470648,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Tribe,Household,414,False,0.297101,0.549811,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Tribe,Logistic,414,False,0.301932,0.504027,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,No Education,Urban,Tribe,Facility,414,False,0.509662,0.534274,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Don'T Know,Household,95,False,0.210526,0.381018,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Don'T Know,Logistic,95,False,0.263158,0.457637,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Don'T Know,Facility,95,False,0.505263,0.514132,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,No Caste/Tribe,Household,472,False,0.349576,0.551414,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,No Caste/Tribe,Logistic,472,False,0.334746,0.536731,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,No Caste/Tribe,Facility,472,False,0.480932,0.539424,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Other Caste,Household,12359,False,0.255684,0.480124,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Other Caste,Logistic,12359,False,0.337811,0.520135,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Other Caste,Facility,12359,False,0.470345,0.507574,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Tribe,Household,1637,False,0.302993,0.526496,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Tribe,Logistic,1637,False,0.367746,0.551991,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Rural,Tribe,Facility,1637,False,0.450214,0.501625,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Don'T Know,Household,37,False,0.27027,0.480606,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Don'T Know,Logistic,37,False,0.27027,0.43254,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Don'T Know,Facility,37,False,0.459459,0.417477,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,No Caste/Tribe,Household,210,False,0.328571,0.547283,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,No Caste/Tribe,Logistic,210,False,0.257143,0.404286,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,No Caste/Tribe,Facility,210,False,0.442857,0.519332,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Other Caste,Household,3229,False,0.27284,0.497776,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Other Caste,Logistic,3229,False,0.237535,0.402255,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Other Caste,Facility,3229,False,0.430474,0.466075,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Tribe,Household,362,False,0.212707,0.440289,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Tribe,Logistic,362,False,0.18232,0.378387,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Primary,Urban,Tribe,Facility,362,False,0.364641,0.438749,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Don'T Know,Household,465,False,0.150538,0.325759,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Don'T Know,Logistic,465,False,0.24086,0.404634,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Don'T Know,Facility,465,False,0.52043,0.541074,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,No Caste/Tribe,Household,3020,False,0.287748,0.516173,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,No Caste/Tribe,Logistic,3020,False,0.356954,0.529111,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,No Caste/Tribe,Facility,3020,False,0.495033,0.528876,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Other Caste,Household,55693,False,0.243011,0.46039,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Other Caste,Logistic,55693,False,0.311332,0.492846,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Other Caste,Facility,55693,False,0.457167,0.496639,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Tribe,Household,9123,False,0.285542,0.504339,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Tribe,Logistic,9123,False,0.343199,0.525053,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Rural,Tribe,Facility,9123,False,0.453469,0.493278,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Don'T Know,Household,135,False,0.266667,0.439705,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Don'T Know,Logistic,135,False,0.207407,0.369779,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Don'T Know,Facility,135,False,0.214815,0.364285,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,No Caste/Tribe,Household,1154,False,0.279029,0.496695,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,No Caste/Tribe,Logistic,1154,False,0.233102,0.386284,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,No Caste/Tribe,Facility,1154,False,0.467938,0.497157,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Other Caste,Household,13046,False,0.251111,0.468757,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Other Caste,Logistic,13046,False,0.222214,0.381051,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Other Caste,Facility,13046,False,0.41622,0.455094,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Tribe,Household,2680,False,0.207836,0.410426,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Tribe,Logistic,2680,False,0.214925,0.354534,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Middle,Secondary,Urban,Tribe,Facility,2680,False,0.390672,0.411491,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Don'T Know,Household,28,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Don'T Know,Logistic,28,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Don'T Know,Facility,28,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,No Caste/Tribe,Household,447,False,0.315436,0.542755,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,No Caste/Tribe,Logistic,447,False,0.407159,0.577974,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,No Caste/Tribe,Facility,447,False,0.548098,0.578814,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Other Caste,Household,8766,False,0.265914,0.485752,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Other Caste,Logistic,8766,False,0.344285,0.526922,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Other Caste,Facility,8766,False,0.476386,0.516687,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Tribe,Household,2300,False,0.322609,0.557359,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Tribe,Logistic,2300,False,0.436522,0.622187,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Rural,Tribe,Facility,2300,False,0.543043,0.581828,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Don'T Know,Household,5,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Don'T Know,Logistic,5,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Don'T Know,Facility,5,True,,,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,No Caste/Tribe,Household,44,False,0.318182,0.509957,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,No Caste/Tribe,Logistic,44,False,0.136364,0.373702,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,No Caste/Tribe,Facility,44,False,0.386364,0.487163,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Other Caste,Household,688,False,0.255814,0.468308,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Other Caste,Logistic,688,False,0.212209,0.379774,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Other Caste,Facility,688,False,0.395349,0.453997,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Tribe,Household,204,False,0.289216,0.496356,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Tribe,Logistic,204,False,0.289216,0.436277,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Higher,Urban,Tribe,Facility,204,False,0.470588,0.508849,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Don'T Know,Household,435,False,0.501149,0.691848,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Don'T Know,Logistic,435,False,0.514943,0.665228,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Don'T Know,Facility,435,False,0.547126,0.567628,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,No Caste/Tribe,Household,4233,False,0.546657,0.75461,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,No Caste/Tribe,Logistic,4233,False,0.539334,0.709924,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,No Caste/Tribe,Facility,4233,False,0.625325,0.658811,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Other Caste,Household,78791,False,0.377391,0.615501,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Other Caste,Logistic,78791,False,0.441599,0.628735,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Other Caste,Facility,78791,False,0.548362,0.587119,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Tribe,Household,20963,False,0.439346,0.672308,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Tribe,Logistic,20963,False,0.538043,0.711493,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Rural,Tribe,Facility,20963,False,0.63302,0.668116,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Don'T Know,Household,55,False,0.527273,0.675167,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Don'T Know,Logistic,55,False,0.345455,0.51831,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Don'T Know,Facility,55,False,0.254545,0.440324,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,No Caste/Tribe,Household,331,False,0.422961,0.709601,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,No Caste/Tribe,Logistic,331,False,0.299094,0.523605,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,No Caste/Tribe,Facility,331,False,0.607251,0.613726,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Other Caste,Household,5177,False,0.377246,0.604877,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Other Caste,Logistic,5177,False,0.314661,0.497353,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Other Caste,Facility,5177,False,0.490052,0.533913,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Tribe,Household,603,False,0.376451,0.645278,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Tribe,Logistic,603,False,0.366501,0.580545,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,No Education,Urban,Tribe,Facility,603,False,0.537313,0.584959,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Don'T Know,Household,305,False,0.396721,0.615851,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Don'T Know,Logistic,305,False,0.403279,0.578674,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Don'T Know,Facility,305,False,0.511475,0.5577,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,No Caste/Tribe,Household,2611,False,0.546151,0.75126,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,No Caste/Tribe,Logistic,2611,False,0.469935,0.659309,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,No Caste/Tribe,Facility,2611,False,0.601302,0.645722,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Other Caste,Household,31056,False,0.366692,0.604826,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Other Caste,Logistic,31056,False,0.422495,0.611591,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Other Caste,Facility,31056,False,0.5483,0.585417,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Tribe,Household,10276,False,0.438011,0.66596,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Tribe,Logistic,10276,False,0.521896,0.693727,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Rural,Tribe,Facility,10276,False,0.577851,0.61547,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Don'T Know,Household,37,False,0.513514,0.61176,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Don'T Know,Logistic,37,False,0.27027,0.415956,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Don'T Know,Facility,37,False,0.27027,0.360293,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,No Caste/Tribe,Household,220,False,0.445455,0.690434,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,No Caste/Tribe,Logistic,220,False,0.281818,0.450088,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,No Caste/Tribe,Facility,220,False,0.522727,0.537709,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Other Caste,Household,2422,False,0.36251,0.593613,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Other Caste,Logistic,2422,False,0.284476,0.458715,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Other Caste,Facility,2422,False,0.480595,0.516185,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Tribe,Household,416,False,0.338942,0.612158,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Tribe,Logistic,416,False,0.334135,0.510857,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Primary,Urban,Tribe,Facility,416,False,0.451923,0.508274,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Don'T Know,Household,782,False,0.329923,0.527479,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Don'T Know,Logistic,782,False,0.352941,0.520783,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Don'T Know,Facility,782,False,0.539642,0.573625,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,No Caste/Tribe,Household,7969,False,0.477852,0.699726,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,No Caste/Tribe,Logistic,7969,False,0.447735,0.629807,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,No Caste/Tribe,Facility,7969,False,0.579496,0.615898,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Other Caste,Household,92620,False,0.340089,0.576588,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Other Caste,Logistic,92620,False,0.395692,0.583679,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Other Caste,Facility,92620,False,0.531915,0.570552,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Tribe,Household,29528,False,0.388614,0.624403,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Tribe,Logistic,29528,False,0.473855,0.655519,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Rural,Tribe,Facility,29528,False,0.563668,0.603377,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Don'T Know,Household,72,False,0.472222,0.582226,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Don'T Know,Logistic,72,False,0.222222,0.389579,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Don'T Know,Facility,72,False,0.138889,0.338462,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,No Caste/Tribe,Household,607,False,0.377265,0.633822,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,No Caste/Tribe,Logistic,607,False,0.243822,0.439163,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,No Caste/Tribe,Facility,607,False,0.4514,0.5192,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Other Caste,Household,6576,False,0.336527,0.563207,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Other Caste,Logistic,6576,False,0.267944,0.439151,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Other Caste,Facility,6576,False,0.45955,0.50108,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Tribe,Household,1617,False,0.324057,0.572813,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Tribe,Logistic,1617,False,0.299938,0.480238,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Poor,Secondary,Urban,Tribe,Facility,1617,False,0.484848,0.50539,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Don'T Know,Household,91,False,0.032967,0.094969,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Don'T Know,Logistic,91,False,0.120879,0.254618,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Don'T Know,Facility,91,False,0.417582,0.470264,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,No Caste/Tribe,Household,1243,False,0.160097,0.317069,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,No Caste/Tribe,Logistic,1243,False,0.241352,0.389861,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,No Caste/Tribe,Facility,1243,False,0.411907,0.45892,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Other Caste,Household,27350,False,0.132322,0.285222,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Other Caste,Logistic,27350,False,0.186691,0.32747,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Other Caste,Facility,27350,False,0.344205,0.379572,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Tribe,Household,2035,False,0.170025,0.339533,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Tribe,Logistic,2035,False,0.236855,0.378891,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Rural,Tribe,Facility,2035,False,0.412285,0.443597,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Don'T Know,Household,261,False,0.065134,0.171979,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Don'T Know,Logistic,261,False,0.130268,0.206258,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Don'T Know,Facility,261,False,0.275862,0.311499,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,No Caste/Tribe,Household,2023,False,0.112704,0.251441,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,No Caste/Tribe,Logistic,2023,False,0.096391,0.185821,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,No Caste/Tribe,Facility,2023,False,0.341572,0.37178,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Other Caste,Household,36887,False,0.106325,0.237124,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Other Caste,Logistic,36887,False,0.104834,0.199439,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Other Caste,Facility,36887,False,0.288557,0.322034,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Tribe,Household,2651,False,0.116183,0.24225,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Tribe,Logistic,2651,False,0.115051,0.211229,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Higher,Urban,Tribe,Facility,2651,False,0.314221,0.343363,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Don'T Know,Household,49,False,0.244898,0.387371,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Don'T Know,Logistic,49,False,0.428571,0.524021,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Don'T Know,Facility,49,False,0.510204,0.508302,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,No Caste/Tribe,Household,503,False,0.310139,0.502534,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,No Caste/Tribe,Logistic,503,False,0.4334,0.577578,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,No Caste/Tribe,Facility,503,False,0.530815,0.571428,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Other Caste,Household,13830,False,0.219812,0.425419,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Other Caste,Logistic,13830,False,0.281996,0.459503,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Other Caste,Facility,13830,False,0.420174,0.459736,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Tribe,Household,787,False,0.326557,0.54048,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Tribe,Logistic,787,False,0.410419,0.584242,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Rural,Tribe,Facility,787,False,0.510801,0.537721,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Don'T Know,Household,88,False,0.193182,0.368642,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Don'T Know,Logistic,88,False,0.340909,0.476749,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Don'T Know,Facility,88,False,0.397727,0.457698,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,No Caste/Tribe,Household,472,False,0.233051,0.461288,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,No Caste/Tribe,Logistic,472,False,0.237288,0.404406,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,No Caste/Tribe,Facility,472,False,0.506356,0.525169,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Other Caste,Household,9566,False,0.208133,0.40735,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Other Caste,Logistic,9566,False,0.20552,0.355515,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Other Caste,Facility,9566,False,0.39055,0.428211,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Tribe,Household,426,False,0.288732,0.483569,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Tribe,Logistic,426,False,0.326291,0.443582,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,No Education,Urban,Tribe,Facility,426,False,0.504695,0.506053,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Don'T Know,Household,47,False,0.085106,0.275566,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Don'T Know,Logistic,47,False,0.404255,0.449419,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Don'T Know,Facility,47,False,0.531915,0.530432,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,No Caste/Tribe,Household,287,False,0.229965,0.450237,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,No Caste/Tribe,Logistic,287,False,0.28223,0.469997,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,No Caste/Tribe,Facility,287,False,0.484321,0.52136,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Other Caste,Household,9922,False,0.199254,0.390888,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Other Caste,Logistic,9922,False,0.267386,0.43225,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Other Caste,Facility,9922,False,0.412921,0.44772,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Tribe,Household,570,False,0.233333,0.457652,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Tribe,Logistic,570,False,0.254386,0.47138,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Rural,Tribe,Facility,570,False,0.4,0.471078,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Don'T Know,Household,90,False,0.155556,0.345059,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Don'T Know,Logistic,90,False,0.288889,0.461627,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Don'T Know,Facility,90,False,0.377778,0.449698,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,No Caste/Tribe,Household,329,False,0.231003,0.415628,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,No Caste/Tribe,Logistic,329,False,0.197568,0.324101,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,No Caste/Tribe,Facility,329,False,0.43769,0.498568,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Other Caste,Household,7599,False,0.197131,0.387632,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Other Caste,Logistic,7599,False,0.187525,0.328051,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Other Caste,Facility,7599,False,0.391104,0.42802,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Tribe,Household,395,False,0.164557,0.363998,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Tribe,Logistic,395,False,0.18481,0.30802,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Primary,Urban,Tribe,Facility,395,False,0.387342,0.398835,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Don'T Know,Household,373,False,0.080429,0.213462,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Don'T Know,Logistic,373,False,0.217158,0.373666,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Don'T Know,Facility,373,False,0.530831,0.546186,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,No Caste/Tribe,Household,3110,False,0.204502,0.397177,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,No Caste/Tribe,Logistic,3110,False,0.284566,0.448989,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,No Caste/Tribe,Facility,3110,False,0.446945,0.4817,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Other Caste,Household,66760,False,0.173352,0.356493,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Other Caste,Logistic,66760,False,0.23246,0.394616,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Other Caste,Facility,66760,False,0.384931,0.424903,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Tribe,Household,5168,False,0.215364,0.401228,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Tribe,Logistic,5168,False,0.271865,0.425961,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Rural,Tribe,Facility,5168,False,0.416022,0.435715,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Don'T Know,Household,699,False,0.153076,0.283298,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Don'T Know,Logistic,699,False,0.27897,0.399672,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Don'T Know,Facility,699,False,0.413448,0.426989,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,No Caste/Tribe,Household,3723,False,0.168144,0.346657,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,No Caste/Tribe,Logistic,3723,False,0.151491,0.279144,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,No Caste/Tribe,Facility,3723,False,0.387859,0.429514,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Other Caste,Household,60005,False,0.15577,0.324785,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Other Caste,Logistic,60005,False,0.152004,0.275368,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Other Caste,Facility,60005,False,0.347488,0.382497,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Tribe,Household,5087,False,0.140554,0.287338,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Tribe,Logistic,5087,False,0.132888,0.246305,Rail A — Observed,Rail B — BarrierLens OOF Prediction
-Rich,Secondary,Urban,Tribe,Facility,5087,False,0.273049,0.318496,Rail A — Observed,Rail B — BarrierLens OOF Prediction
+Middle,Higher,Rural,Don't Know,Household Barrier,65,False,0.015385,0.127885,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Don't Know,Logistical Barrier,65,False,0.123077,0.263564,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Don't Know,Health Facility Barrier,65,False,0.538462,0.513651,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,No Caste/Tribe,Household Barrier,487,False,0.209446,0.425977,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,No Caste/Tribe,Logistical Barrier,487,False,0.305955,0.494577,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,No Caste/Tribe,Health Facility Barrier,487,False,0.464066,0.519164,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Other Caste,Household Barrier,11140,False,0.19228,0.38815,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Other Caste,Logistical Barrier,11140,False,0.276391,0.45164,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Other Caste,Health Facility Barrier,11140,False,0.420826,0.45823,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Tribe,Household Barrier,1744,False,0.256881,0.466606,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Tribe,Logistical Barrier,1744,False,0.342317,0.512917,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Rural,Tribe,Health Facility Barrier,1744,False,0.463303,0.504649,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Don't Know,Household Barrier,11,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Don't Know,Logistical Barrier,11,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Don't Know,Health Facility Barrier,11,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,No Caste/Tribe,Household Barrier,176,False,0.181818,0.392546,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,No Caste/Tribe,Logistical Barrier,176,False,0.113636,0.314617,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,No Caste/Tribe,Health Facility Barrier,176,False,0.471591,0.480851,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Other Caste,Household Barrier,2534,False,0.196922,0.391288,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Other Caste,Logistical Barrier,2534,False,0.192976,0.337216,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Other Caste,Health Facility Barrier,2534,False,0.363062,0.419768,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Tribe,Household Barrier,636,False,0.213836,0.390939,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Tribe,Logistical Barrier,636,False,0.224843,0.35287,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Higher,Urban,Tribe,Health Facility Barrier,636,False,0.430818,0.455507,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Don't Know,Household Barrier,99,False,0.282828,0.495379,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Don't Know,Logistical Barrier,99,False,0.313131,0.520722,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Don't Know,Health Facility Barrier,99,False,0.444444,0.490788,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,No Caste/Tribe,Household Barrier,726,False,0.338843,0.586907,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,No Caste/Tribe,Logistical Barrier,726,False,0.436639,0.610663,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,No Caste/Tribe,Health Facility Barrier,726,False,0.549587,0.5904,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Other Caste,Household Barrier,21928,False,0.278001,0.505155,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Other Caste,Logistical Barrier,21928,False,0.348778,0.533895,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Other Caste,Health Facility Barrier,21928,False,0.471954,0.508807,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Tribe,Household Barrier,2292,False,0.343368,0.571601,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Tribe,Logistical Barrier,2292,False,0.436736,0.61785,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Rural,Tribe,Health Facility Barrier,2292,False,0.529668,0.56654,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Don't Know,Household Barrier,49,False,0.306122,0.523671,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Don't Know,Logistical Barrier,49,False,0.346939,0.494085,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Don't Know,Health Facility Barrier,49,False,0.326531,0.430564,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,No Caste/Tribe,Household Barrier,264,False,0.367424,0.56923,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,No Caste/Tribe,Logistical Barrier,264,False,0.272727,0.45301,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,No Caste/Tribe,Health Facility Barrier,264,False,0.492424,0.527979,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Other Caste,Household Barrier,5223,False,0.287766,0.513115,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Other Caste,Logistical Barrier,5223,False,0.25694,0.431926,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Other Caste,Health Facility Barrier,5223,False,0.425043,0.470648,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Tribe,Household Barrier,414,False,0.297101,0.549811,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Tribe,Logistical Barrier,414,False,0.301932,0.504027,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,No Education,Urban,Tribe,Health Facility Barrier,414,False,0.509662,0.534274,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Don't Know,Household Barrier,95,False,0.210526,0.381018,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Don't Know,Logistical Barrier,95,False,0.263158,0.457637,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Don't Know,Health Facility Barrier,95,False,0.505263,0.514132,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,No Caste/Tribe,Household Barrier,472,False,0.349576,0.551414,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,No Caste/Tribe,Logistical Barrier,472,False,0.334746,0.536731,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,No Caste/Tribe,Health Facility Barrier,472,False,0.480932,0.539424,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Other Caste,Household Barrier,12359,False,0.255684,0.480124,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Other Caste,Logistical Barrier,12359,False,0.337811,0.520135,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Other Caste,Health Facility Barrier,12359,False,0.470345,0.507574,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Tribe,Household Barrier,1637,False,0.302993,0.526496,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Tribe,Logistical Barrier,1637,False,0.367746,0.551991,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Rural,Tribe,Health Facility Barrier,1637,False,0.450214,0.501625,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Don't Know,Household Barrier,37,False,0.27027,0.480606,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Don't Know,Logistical Barrier,37,False,0.27027,0.43254,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Don't Know,Health Facility Barrier,37,False,0.459459,0.417477,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,No Caste/Tribe,Household Barrier,210,False,0.328571,0.547283,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,No Caste/Tribe,Logistical Barrier,210,False,0.257143,0.404286,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,No Caste/Tribe,Health Facility Barrier,210,False,0.442857,0.519332,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Other Caste,Household Barrier,3229,False,0.27284,0.497776,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Other Caste,Logistical Barrier,3229,False,0.237535,0.402255,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Other Caste,Health Facility Barrier,3229,False,0.430474,0.466075,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Tribe,Household Barrier,362,False,0.212707,0.440289,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Tribe,Logistical Barrier,362,False,0.18232,0.378387,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Primary,Urban,Tribe,Health Facility Barrier,362,False,0.364641,0.438749,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Don't Know,Household Barrier,465,False,0.150538,0.325759,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Don't Know,Logistical Barrier,465,False,0.24086,0.404634,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Don't Know,Health Facility Barrier,465,False,0.52043,0.541074,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,No Caste/Tribe,Household Barrier,3020,False,0.287748,0.516173,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,No Caste/Tribe,Logistical Barrier,3020,False,0.356954,0.529111,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,No Caste/Tribe,Health Facility Barrier,3020,False,0.495033,0.528876,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Other Caste,Household Barrier,55693,False,0.243011,0.46039,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Other Caste,Logistical Barrier,55693,False,0.311332,0.492846,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Other Caste,Health Facility Barrier,55693,False,0.457167,0.496639,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Tribe,Household Barrier,9123,False,0.285542,0.504339,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Tribe,Logistical Barrier,9123,False,0.343199,0.525053,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Rural,Tribe,Health Facility Barrier,9123,False,0.453469,0.493278,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Don't Know,Household Barrier,135,False,0.266667,0.439705,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Don't Know,Logistical Barrier,135,False,0.207407,0.369779,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Don't Know,Health Facility Barrier,135,False,0.214815,0.364285,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,No Caste/Tribe,Household Barrier,1154,False,0.279029,0.496695,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,No Caste/Tribe,Logistical Barrier,1154,False,0.233102,0.386284,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,No Caste/Tribe,Health Facility Barrier,1154,False,0.467938,0.497157,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Other Caste,Household Barrier,13046,False,0.251111,0.468757,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Other Caste,Logistical Barrier,13046,False,0.222214,0.381051,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Other Caste,Health Facility Barrier,13046,False,0.41622,0.455094,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Tribe,Household Barrier,2680,False,0.207836,0.410426,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Tribe,Logistical Barrier,2680,False,0.214925,0.354534,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Middle,Secondary,Urban,Tribe,Health Facility Barrier,2680,False,0.390672,0.411491,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Don't Know,Household Barrier,28,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Don't Know,Logistical Barrier,28,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Don't Know,Health Facility Barrier,28,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,No Caste/Tribe,Household Barrier,447,False,0.315436,0.542755,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,No Caste/Tribe,Logistical Barrier,447,False,0.407159,0.577974,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,No Caste/Tribe,Health Facility Barrier,447,False,0.548098,0.578814,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Other Caste,Household Barrier,8766,False,0.265914,0.485752,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Other Caste,Logistical Barrier,8766,False,0.344285,0.526922,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Other Caste,Health Facility Barrier,8766,False,0.476386,0.516687,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Tribe,Household Barrier,2300,False,0.322609,0.557359,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Tribe,Logistical Barrier,2300,False,0.436522,0.622187,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Rural,Tribe,Health Facility Barrier,2300,False,0.543043,0.581828,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Don't Know,Household Barrier,5,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Don't Know,Logistical Barrier,5,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Don't Know,Health Facility Barrier,5,True,,,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,No Caste/Tribe,Household Barrier,44,False,0.318182,0.509957,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,No Caste/Tribe,Logistical Barrier,44,False,0.136364,0.373702,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,No Caste/Tribe,Health Facility Barrier,44,False,0.386364,0.487163,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Other Caste,Household Barrier,688,False,0.255814,0.468308,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Other Caste,Logistical Barrier,688,False,0.212209,0.379774,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Other Caste,Health Facility Barrier,688,False,0.395349,0.453997,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Tribe,Household Barrier,204,False,0.289216,0.496356,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Tribe,Logistical Barrier,204,False,0.289216,0.436277,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Higher,Urban,Tribe,Health Facility Barrier,204,False,0.470588,0.508849,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Don't Know,Household Barrier,435,False,0.501149,0.691848,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Don't Know,Logistical Barrier,435,False,0.514943,0.665228,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Don't Know,Health Facility Barrier,435,False,0.547126,0.567628,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,No Caste/Tribe,Household Barrier,4233,False,0.546657,0.75461,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,No Caste/Tribe,Logistical Barrier,4233,False,0.539334,0.709924,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,No Caste/Tribe,Health Facility Barrier,4233,False,0.625325,0.658811,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Other Caste,Household Barrier,78791,False,0.377391,0.615501,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Other Caste,Logistical Barrier,78791,False,0.441599,0.628735,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Other Caste,Health Facility Barrier,78791,False,0.548362,0.587119,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Tribe,Household Barrier,20963,False,0.439346,0.672308,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Tribe,Logistical Barrier,20963,False,0.538043,0.711493,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Rural,Tribe,Health Facility Barrier,20963,False,0.63302,0.668116,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Don't Know,Household Barrier,55,False,0.527273,0.675167,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Don't Know,Logistical Barrier,55,False,0.345455,0.51831,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Don't Know,Health Facility Barrier,55,False,0.254545,0.440324,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,No Caste/Tribe,Household Barrier,331,False,0.422961,0.709601,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,No Caste/Tribe,Logistical Barrier,331,False,0.299094,0.523605,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,No Caste/Tribe,Health Facility Barrier,331,False,0.607251,0.613726,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Other Caste,Household Barrier,5177,False,0.377246,0.604877,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Other Caste,Logistical Barrier,5177,False,0.314661,0.497353,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Other Caste,Health Facility Barrier,5177,False,0.490052,0.533913,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Tribe,Household Barrier,603,False,0.376451,0.645278,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Tribe,Logistical Barrier,603,False,0.366501,0.580545,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,No Education,Urban,Tribe,Health Facility Barrier,603,False,0.537313,0.584959,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Don't Know,Household Barrier,305,False,0.396721,0.615851,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Don't Know,Logistical Barrier,305,False,0.403279,0.578674,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Don't Know,Health Facility Barrier,305,False,0.511475,0.5577,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,No Caste/Tribe,Household Barrier,2611,False,0.546151,0.75126,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,No Caste/Tribe,Logistical Barrier,2611,False,0.469935,0.659309,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,No Caste/Tribe,Health Facility Barrier,2611,False,0.601302,0.645722,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Other Caste,Household Barrier,31056,False,0.366692,0.604826,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Other Caste,Logistical Barrier,31056,False,0.422495,0.611591,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Other Caste,Health Facility Barrier,31056,False,0.5483,0.585417,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Tribe,Household Barrier,10276,False,0.438011,0.66596,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Tribe,Logistical Barrier,10276,False,0.521896,0.693727,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Rural,Tribe,Health Facility Barrier,10276,False,0.577851,0.61547,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Don't Know,Household Barrier,37,False,0.513514,0.61176,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Don't Know,Logistical Barrier,37,False,0.27027,0.415956,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Don't Know,Health Facility Barrier,37,False,0.27027,0.360293,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,No Caste/Tribe,Household Barrier,220,False,0.445455,0.690434,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,No Caste/Tribe,Logistical Barrier,220,False,0.281818,0.450088,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,No Caste/Tribe,Health Facility Barrier,220,False,0.522727,0.537709,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Other Caste,Household Barrier,2422,False,0.36251,0.593613,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Other Caste,Logistical Barrier,2422,False,0.284476,0.458715,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Other Caste,Health Facility Barrier,2422,False,0.480595,0.516185,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Tribe,Household Barrier,416,False,0.338942,0.612158,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Tribe,Logistical Barrier,416,False,0.334135,0.510857,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Primary,Urban,Tribe,Health Facility Barrier,416,False,0.451923,0.508274,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Don't Know,Household Barrier,782,False,0.329923,0.527479,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Don't Know,Logistical Barrier,782,False,0.352941,0.520783,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Don't Know,Health Facility Barrier,782,False,0.539642,0.573625,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,No Caste/Tribe,Household Barrier,7969,False,0.477852,0.699726,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,No Caste/Tribe,Logistical Barrier,7969,False,0.447735,0.629807,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,No Caste/Tribe,Health Facility Barrier,7969,False,0.579496,0.615898,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Other Caste,Household Barrier,92620,False,0.340089,0.576588,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Other Caste,Logistical Barrier,92620,False,0.395692,0.583679,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Other Caste,Health Facility Barrier,92620,False,0.531915,0.570552,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Tribe,Household Barrier,29528,False,0.388614,0.624403,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Tribe,Logistical Barrier,29528,False,0.473855,0.655519,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Rural,Tribe,Health Facility Barrier,29528,False,0.563668,0.603377,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Don't Know,Household Barrier,72,False,0.472222,0.582226,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Don't Know,Logistical Barrier,72,False,0.222222,0.389579,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Don't Know,Health Facility Barrier,72,False,0.138889,0.338462,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,No Caste/Tribe,Household Barrier,607,False,0.377265,0.633822,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,No Caste/Tribe,Logistical Barrier,607,False,0.243822,0.439163,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,No Caste/Tribe,Health Facility Barrier,607,False,0.4514,0.5192,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Other Caste,Household Barrier,6576,False,0.336527,0.563207,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Other Caste,Logistical Barrier,6576,False,0.267944,0.439151,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Other Caste,Health Facility Barrier,6576,False,0.45955,0.50108,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Tribe,Household Barrier,1617,False,0.324057,0.572813,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Tribe,Logistical Barrier,1617,False,0.299938,0.480238,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Poor,Secondary,Urban,Tribe,Health Facility Barrier,1617,False,0.484848,0.50539,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Don't Know,Household Barrier,91,False,0.032967,0.094969,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Don't Know,Logistical Barrier,91,False,0.120879,0.254618,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Don't Know,Health Facility Barrier,91,False,0.417582,0.470264,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,No Caste/Tribe,Household Barrier,1243,False,0.160097,0.317069,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,No Caste/Tribe,Logistical Barrier,1243,False,0.241352,0.389861,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,No Caste/Tribe,Health Facility Barrier,1243,False,0.411907,0.45892,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Other Caste,Household Barrier,27350,False,0.132322,0.285222,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Other Caste,Logistical Barrier,27350,False,0.186691,0.32747,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Other Caste,Health Facility Barrier,27350,False,0.344205,0.379572,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Tribe,Household Barrier,2035,False,0.170025,0.339533,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Tribe,Logistical Barrier,2035,False,0.236855,0.378891,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Rural,Tribe,Health Facility Barrier,2035,False,0.412285,0.443597,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Don't Know,Household Barrier,261,False,0.065134,0.171979,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Don't Know,Logistical Barrier,261,False,0.130268,0.206258,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Don't Know,Health Facility Barrier,261,False,0.275862,0.311499,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,No Caste/Tribe,Household Barrier,2023,False,0.112704,0.251441,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,No Caste/Tribe,Logistical Barrier,2023,False,0.096391,0.185821,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,No Caste/Tribe,Health Facility Barrier,2023,False,0.341572,0.37178,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Other Caste,Household Barrier,36887,False,0.106325,0.237124,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Other Caste,Logistical Barrier,36887,False,0.104834,0.199439,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Other Caste,Health Facility Barrier,36887,False,0.288557,0.322034,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Tribe,Household Barrier,2651,False,0.116183,0.24225,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Tribe,Logistical Barrier,2651,False,0.115051,0.211229,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Higher,Urban,Tribe,Health Facility Barrier,2651,False,0.314221,0.343363,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Don't Know,Household Barrier,49,False,0.244898,0.387371,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Don't Know,Logistical Barrier,49,False,0.428571,0.524021,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Don't Know,Health Facility Barrier,49,False,0.510204,0.508302,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,No Caste/Tribe,Household Barrier,503,False,0.310139,0.502534,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,No Caste/Tribe,Logistical Barrier,503,False,0.4334,0.577578,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,No Caste/Tribe,Health Facility Barrier,503,False,0.530815,0.571428,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Other Caste,Household Barrier,13830,False,0.219812,0.425419,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Other Caste,Logistical Barrier,13830,False,0.281996,0.459503,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Other Caste,Health Facility Barrier,13830,False,0.420174,0.459736,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Tribe,Household Barrier,787,False,0.326557,0.54048,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Tribe,Logistical Barrier,787,False,0.410419,0.584242,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Rural,Tribe,Health Facility Barrier,787,False,0.510801,0.537721,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Don't Know,Household Barrier,88,False,0.193182,0.368642,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Don't Know,Logistical Barrier,88,False,0.340909,0.476749,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Don't Know,Health Facility Barrier,88,False,0.397727,0.457698,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,No Caste/Tribe,Household Barrier,472,False,0.233051,0.461288,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,No Caste/Tribe,Logistical Barrier,472,False,0.237288,0.404406,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,No Caste/Tribe,Health Facility Barrier,472,False,0.506356,0.525169,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Other Caste,Household Barrier,9566,False,0.208133,0.40735,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Other Caste,Logistical Barrier,9566,False,0.20552,0.355515,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Other Caste,Health Facility Barrier,9566,False,0.39055,0.428211,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Tribe,Household Barrier,426,False,0.288732,0.483569,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Tribe,Logistical Barrier,426,False,0.326291,0.443582,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,No Education,Urban,Tribe,Health Facility Barrier,426,False,0.504695,0.506053,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Don't Know,Household Barrier,47,False,0.085106,0.275566,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Don't Know,Logistical Barrier,47,False,0.404255,0.449419,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Don't Know,Health Facility Barrier,47,False,0.531915,0.530432,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,No Caste/Tribe,Household Barrier,287,False,0.229965,0.450237,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,No Caste/Tribe,Logistical Barrier,287,False,0.28223,0.469997,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,No Caste/Tribe,Health Facility Barrier,287,False,0.484321,0.52136,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Other Caste,Household Barrier,9922,False,0.199254,0.390888,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Other Caste,Logistical Barrier,9922,False,0.267386,0.43225,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Other Caste,Health Facility Barrier,9922,False,0.412921,0.44772,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Tribe,Household Barrier,570,False,0.233333,0.457652,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Tribe,Logistical Barrier,570,False,0.254386,0.47138,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Rural,Tribe,Health Facility Barrier,570,False,0.4,0.471078,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Don't Know,Household Barrier,90,False,0.155556,0.345059,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Don't Know,Logistical Barrier,90,False,0.288889,0.461627,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Don't Know,Health Facility Barrier,90,False,0.377778,0.449698,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,No Caste/Tribe,Household Barrier,329,False,0.231003,0.415628,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,No Caste/Tribe,Logistical Barrier,329,False,0.197568,0.324101,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,No Caste/Tribe,Health Facility Barrier,329,False,0.43769,0.498568,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Other Caste,Household Barrier,7599,False,0.197131,0.387632,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Other Caste,Logistical Barrier,7599,False,0.187525,0.328051,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Other Caste,Health Facility Barrier,7599,False,0.391104,0.42802,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Tribe,Household Barrier,395,False,0.164557,0.363998,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Tribe,Logistical Barrier,395,False,0.18481,0.30802,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Primary,Urban,Tribe,Health Facility Barrier,395,False,0.387342,0.398835,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Don't Know,Household Barrier,373,False,0.080429,0.213462,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Don't Know,Logistical Barrier,373,False,0.217158,0.373666,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Don't Know,Health Facility Barrier,373,False,0.530831,0.546186,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,No Caste/Tribe,Household Barrier,3110,False,0.204502,0.397177,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,No Caste/Tribe,Logistical Barrier,3110,False,0.284566,0.448989,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,No Caste/Tribe,Health Facility Barrier,3110,False,0.446945,0.4817,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Other Caste,Household Barrier,66760,False,0.173352,0.356493,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Other Caste,Logistical Barrier,66760,False,0.23246,0.394616,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Other Caste,Health Facility Barrier,66760,False,0.384931,0.424903,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Tribe,Household Barrier,5168,False,0.215364,0.401228,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Tribe,Logistical Barrier,5168,False,0.271865,0.425961,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Rural,Tribe,Health Facility Barrier,5168,False,0.416022,0.435715,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Don't Know,Household Barrier,699,False,0.153076,0.283298,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Don't Know,Logistical Barrier,699,False,0.27897,0.399672,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Don't Know,Health Facility Barrier,699,False,0.413448,0.426989,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,No Caste/Tribe,Household Barrier,3723,False,0.168144,0.346657,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,No Caste/Tribe,Logistical Barrier,3723,False,0.151491,0.279144,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,No Caste/Tribe,Health Facility Barrier,3723,False,0.387859,0.429514,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Other Caste,Household Barrier,60005,False,0.15577,0.324785,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Other Caste,Logistical Barrier,60005,False,0.152004,0.275368,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Other Caste,Health Facility Barrier,60005,False,0.347488,0.382497,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Tribe,Household Barrier,5087,False,0.140554,0.287338,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Tribe,Logistical Barrier,5087,False,0.132888,0.246305,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rich,Secondary,Urban,Tribe,Health Facility Barrier,5087,False,0.273049,0.318496,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability

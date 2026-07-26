@@ -1,0 +1,6 @@
+model,target,class,class_display,precision,recall,f1-score,support
+Random Forest,Women with Confirmed Unmet Family Planning Need,0,No Unmet Family Planning Need,0.936034822665964,0.5747261439631822,0.7121757791325398,83438.0
+Random Forest,Women with Confirmed Unmet Family Planning Need,1,Women with Confirmed Unmet Family Planning Need,0.1579696732398376,0.6701228105496275,0.2556697071531445,9934.0
+Random Forest,Women with Confirmed Unmet Family Planning Need,accuracy,Overall Accuracy,0.584875551557212,0.584875551557212,0.584875551557212,0.584875551557212
+Random Forest,Women with Confirmed Unmet Family Planning Need,macro avg,Macro Average,0.5470022479529009,0.6224244772564049,0.4839227431428421,93372.0
+Random Forest,Women with Confirmed Unmet Family Planning Need,weighted avg,Weighted Average,0.8532551971422615,0.584875551557212,0.6636073504917984,93372.0

@@ -1,0 +1,11 @@
+parameter,value,parameter_code
+Bootstrap Sampling,True,bootstrap
+Class Weight Strategy,balanced,class_weight
+Split Criterion,gini,criterion
+Maximum Tree Depth,8,max_depth
+Features per Split,sqrt,max_features
+Min Samples per Leaf,8,min_samples_leaf
+Min Samples to Split,2,min_samples_split
+Number of Trees,400,n_estimators
+Parallel Jobs,-1,n_jobs
+Random Seed,42,random_state

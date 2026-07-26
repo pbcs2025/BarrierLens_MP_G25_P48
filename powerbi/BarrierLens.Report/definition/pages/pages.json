@@ -1,41 +1,61 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
-  "activePageName": "NationalOverview",
+  "activePageName": "LandingPage",
   "pages": [
     {
-      "name": "NationalOverview",
-      "displayName": "1. National Overview",
+      "name": "LandingPage",
+      "displayName": "0. BarrierLens \u2014 Executive Home",
       "ordinal": 0
     },
     {
-      "name": "BasePaperComparison",
-      "displayName": "2. Base Paper Comparison",
+      "name": "NationalOverview",
+      "displayName": "1. National Barrier Overview",
       "ordinal": 1
     },
     {
-      "name": "StateBarrierAnalysis",
-      "displayName": "3. State-wise Barrier Analysis",
+      "name": "BasePaperComparison",
+      "displayName": "2. Literature Benchmark & Base Paper Comparison",
       "ordinal": 2
     },
     {
-      "name": "DemographicAnalysis",
-      "displayName": "4. Demographic & Socioeconomic",
+      "name": "StateBarrierAnalysis",
+      "displayName": "3. State & Union Territory Barrier Analysis",
       "ordinal": 3
     },
     {
-      "name": "RiskArchetypes",
-      "displayName": "5. Risk Archetypes",
+      "name": "DemographicAnalysis",
+      "displayName": "4. Demographic & Socioeconomic Disparities",
       "ordinal": 4
     },
     {
-      "name": "Stage2OutcomeImpact",
-      "displayName": "6. Stage 2 Health Outcome Impact",
+      "name": "AIPrediction",
+      "displayName": "4b. AI Healthcare Access Prediction Dashboard",
       "ordinal": 5
     },
     {
-      "name": "ExplainabilityValidation",
-      "displayName": "7. Model Explainability & Validation",
+      "name": "RiskArchetypes",
+      "displayName": "5. Population Risk Archetypes & Clustering",
       "ordinal": 6
+    },
+    {
+      "name": "Stage2OutcomeImpact",
+      "displayName": "6. Reproductive Healthcare Outcome & Unmet Need Impact",
+      "ordinal": 7
+    },
+    {
+      "name": "ExplainabilityValidation",
+      "displayName": "7. AI Model Explainability & Feature Attribution",
+      "ordinal": 8
+    },
+    {
+      "name": "PolicyIntelligence",
+      "displayName": "10. Policy Intelligence & Decision Support",
+      "ordinal": 9
+    },
+    {
+      "name": "ExecutiveSummary",
+      "displayName": "11. Executive Summary & Policy Blueprint",
+      "ordinal": 10
     }
   ]
 }

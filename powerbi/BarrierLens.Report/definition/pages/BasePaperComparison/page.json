@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "BasePaperComparison",
-  "displayName": "2. Base Paper Comparison",
+  "displayName": "2. Literature Benchmark & Base Paper Comparison",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
@@ -19,9 +19,74 @@
                 }
               }
             }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
           }
         }
       }
     ]
-  }
+  },
+  "visualContainers": [
+    {
+      "x": 16,
+      "y": 16,
+      "z": 0,
+      "width": 1248,
+      "height": 50,
+      "config": "{\"name\": \"fd7dcaf0-1e08-442b-8f6d-408b292d657b\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"2. Literature Benchmark \\u2014 BarrierLens Estimates vs. Standard NFHS-5 Published Factsheets\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 78,
+      "z": 0,
+      "width": 398,
+      "height": 90,
+      "config": "{\"name\": \"83cf4eb6-7cf9-427f-a8d3-aeeb136a21ab\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"base_paper_reference.Base Paper Sample Size\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"base_paper_reference.Base Paper Sample Size\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Base Paper Sample Size'\"}}}}}]}}}"
+    },
+    {
+      "x": 432,
+      "y": 78,
+      "z": 0,
+      "width": 398,
+      "height": 90,
+      "config": "{\"name\": \"41013748-0351-4145-bdec-510af1961c2c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"base_paper_reference.BarrierLens National Sample Size\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"base_paper_reference.BarrierLens National Sample Size\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'BarrierLens National Sample Size'\"}}}}}]}}}"
+    },
+    {
+      "x": 848,
+      "y": 78,
+      "z": 0,
+      "width": 416,
+      "height": 90,
+      "config": "{\"name\": \"efcaa98e-c4b5-4bb6-8196-e17ebed9afd3\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.BarrierLens vs Base Paper Facility Gap\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.BarrierLens vs Base Paper Facility Gap\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Health Facility Coverage Improvement'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 182,
+      "z": 0,
+      "width": 610,
+      "height": 470,
+      "config": "{\"name\": \"283ae375-947c-4ab7-a70e-1a01bc943e03\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"base_paper_reference.Healthcare Access Barrier Category\"}], \"Y\": [{\"queryRef\": \"base_paper_reference.NFHS-5 Factsheet Reference Rate (%)\"}, {\"queryRef\": \"base_paper_reference.BarrierLens Observed Sample Rate (%)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"base_paper_reference.Healthcare Access Barrier Category\"}, {\"queryRef\": \"base_paper_reference.NFHS-5 Factsheet Reference Rate (%)\"}, {\"queryRef\": \"base_paper_reference.BarrierLens Observed Sample Rate (%)\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Barrier Rate Comparison: Published Factsheets vs BarrierLens'\"}}}}}]}}}"
+    },
+    {
+      "x": 640,
+      "y": 182,
+      "z": 0,
+      "width": 624,
+      "height": 470,
+      "config": "{\"name\": \"f4273c0f-9206-4cb2-a822-11cee2fda419\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"table\", \"projections\": {\"Values\": [{\"queryRef\": \"base_paper_reference.Healthcare Access Barrier Category\"}, {\"queryRef\": \"base_paper_reference.Barrier Category Scope & Definition\"}, {\"queryRef\": \"base_paper_reference.NFHS-5 Factsheet Reference Rate (%)\"}, {\"queryRef\": \"base_paper_reference.BarrierLens Observed Sample Rate (%)\"}, {\"queryRef\": \"base_paper_reference.Sample & Methodology Comparability Note\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"base_paper_reference.Healthcare Access Barrier Category\"}, {\"queryRef\": \"base_paper_reference.Barrier Category Scope & Definition\"}, {\"queryRef\": \"base_paper_reference.NFHS-5 Factsheet Reference Rate (%)\"}, {\"queryRef\": \"base_paper_reference.BarrierLens Observed Sample Rate (%)\"}, {\"queryRef\": \"base_paper_reference.Sample & Methodology Comparability Note\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Methodological Alignment & Comparison Matrix'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 664,
+      "z": 0,
+      "width": 1248,
+      "height": 40,
+      "config": "{\"name\": \"ba2e3409-91e4-4a95-8d55-163c01515af8\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Base Paper Reference: Standard NFHS-5 National Factsheets (~108,785 women subsample). BarrierLens extends coverage to the full NFHS-5 individual recode (724,115 women).\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    }
+  ]
 }

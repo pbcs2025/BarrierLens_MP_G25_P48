@@ -13,6 +13,13 @@ ref table cluster_summary
 ref table cluster_state_distribution
 ref table model_comparison_table
 ref table stage2_xgboost_results
+ref table shap_importance
+ref table shap_top20
+ref table stage1_model_comparison
+ref table stage1_barrier_rates_long
+ref table base_paper_reference
+ref table classification_report_display
+ref table hyperparameters_display
 ref table _Metrics
 
 ref cultureInfo en-US

@@ -1,0 +1,50 @@
+table stage1_model_comparison
+	lineageTag: c2d3e4f5-a6b7-8901-bcde-f12345678901
+
+	column Model
+		dataType: string
+		sourceColumn: Model
+		summarizeBy: none
+
+	column Target
+		dataType: string
+		sourceColumn: Target
+		summarizeBy: none
+
+	column Accuracy
+		dataType: double
+		sourceColumn: Accuracy
+		summarizeBy: none
+
+	column 'ROC-AUC'
+		dataType: double
+		sourceColumn: 'ROC-AUC'
+		summarizeBy: none
+
+	column Precision
+		dataType: double
+		sourceColumn: Precision
+		summarizeBy: none
+
+	column Recall
+		dataType: double
+		sourceColumn: Recall
+		summarizeBy: none
+
+	column 'F1-Score'
+		dataType: double
+		sourceColumn: 'F1-Score'
+		summarizeBy: none
+
+	partition stage1_model_comparison = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(
+					File.Contents(DashboardDataPath & "/stage1_model_comparison.csv"),
+					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
+				),
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Model", type text}, {"Target", type text}, {"Accuracy", type number}, {#"ROC-AUC", type number}, {"Precision", type number}, {"Recall", type number}, {#"F1-Score", type number}})
+			in
+				#"Changed Type"

@@ -32,5 +32,37 @@
         }
       ]
     }
+  ],
+  "bookmarks": [
+    {
+      "name": "Bookmark_ResetFilters",
+      "displayName": "Reset All Filters",
+      "options": {
+        "targetVisualNames": [],
+        "data": true,
+        "display": true,
+        "page": true
+      }
+    },
+    {
+      "name": "Bookmark_ExecutiveView",
+      "displayName": "Executive KPI View",
+      "options": {
+        "targetVisualNames": [],
+        "data": false,
+        "display": true,
+        "page": true
+      }
+    },
+    {
+      "name": "Bookmark_DetailedScorecard",
+      "displayName": "Detailed Scorecard View",
+      "options": {
+        "targetVisualNames": [],
+        "data": false,
+        "display": true,
+        "page": true
+      }
+    }
   ]
 }

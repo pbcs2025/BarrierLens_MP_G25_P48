@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "NationalOverview",
-  "displayName": "1. National Overview",
+  "displayName": "1. National Barrier Overview",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
@@ -19,9 +19,82 @@
                 }
               }
             }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
           }
         }
       }
     ]
-  }
+  },
+  "visualContainers": [
+    {
+      "x": 16,
+      "y": 16,
+      "z": 0,
+      "width": 1248,
+      "height": 50,
+      "config": "{\"name\": \"e20244e1-5388-455a-969b-180cb5ce3ca7\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"1. National Barrier Overview \\u2014 Empirical Benchmark Rates vs. AI-Predicted Probabilities\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"1b8628fa-5e6b-49cf-9468-bcc288332234\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Household Barrier Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Household Barrier Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Household Barrier Rate'\"}}}}}]}}}"
+    },
+    {
+      "x": 332,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"01c01aaf-f0b0-42f8-8e02-bee0c88471f8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Predicted Household Barrier Probability\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Predicted Household Barrier Probability\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Predicted Household Prob'\"}}}}}]}}}"
+    },
+    {
+      "x": 648,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"9427670e-85e1-42aa-b89f-b1b39d959525\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Logistical Barrier Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Logistical Barrier Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Logistical Barrier Rate'\"}}}}}]}}}"
+    },
+    {
+      "x": 964,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"cbd4b76c-a8bc-4bf9-9054-744310277b13\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Health Facility Barrier Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Health Facility Barrier Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Health Facility Barrier Rate'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 182,
+      "z": 0,
+      "width": 610,
+      "height": 470,
+      "config": "{\"name\": \"f1666656-a986-4c08-9454-875d3dc652ea\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"national_barrier_long.Healthcare Access Barrier Category\"}], \"Y\": [{\"queryRef\": \"national_barrier_long.Observed Rate / Predicted Probability\"}], \"Series\": [{\"queryRef\": \"national_barrier_long.Metric Type (Observed Rate vs AI Probability)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"national_barrier_long.Healthcare Access Barrier Category\"}, {\"queryRef\": \"national_barrier_long.Observed Rate / Predicted Probability\"}, {\"queryRef\": \"national_barrier_long.Metric Type (Observed Rate vs AI Probability)\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'National Healthcare Barriers: Observed vs AI Predicted'\"}}}}}]}}}"
+    },
+    {
+      "x": 640,
+      "y": 182,
+      "z": 0,
+      "width": 624,
+      "height": 470,
+      "config": "{\"name\": \"3ceb1705-1c09-4384-bacb-b8c93fb1787b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"demographic_summary.Healthcare Access Barrier Category\"}], \"Y\": [{\"queryRef\": \"demographic_summary.Mean Observed Barrier Rate (%)\"}, {\"queryRef\": \"demographic_summary.Mean Predicted Barrier Probability\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"demographic_summary.Healthcare Access Barrier Category\"}, {\"queryRef\": \"demographic_summary.Mean Observed Barrier Rate (%)\"}, {\"queryRef\": \"demographic_summary.Mean Predicted Barrier Probability\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Barrier Prevalence Gap Across Socioeconomic Cohorts'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 664,
+      "z": 0,
+      "width": 1248,
+      "height": 40,
+      "config": "{\"name\": \"033ae654-fa29-4a17-8142-49fa16c5f835\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Note: Empirical benchmark rates are derived from NFHS-5 individual survey responses (N = 724,115). Predicted probabilities are produced by BarrierLens XGBoost and Random Forest models.\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    }
+  ]
 }
