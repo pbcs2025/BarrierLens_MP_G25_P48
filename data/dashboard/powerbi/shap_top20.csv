@@ -1,0 +1,21 @@
+model,target,rank,feature,mean_abs_shap
+Random Forest,Women with Confirmed Unmet Family Planning Need,1,Respondent's current age,0.046116024488113
+Random Forest,Women with Confirmed Unmet Family Planning Need,2,Age group (5-year groups),0.0400135194461331
+Random Forest,Women with Confirmed Unmet Family Planning Need,3,Religion: Hindu,0.0162944877070717
+Random Forest,Women with Confirmed Unmet Family Planning Need,4,Highest educational level,0.0159424927556161
+Random Forest,Women with Confirmed Unmet Family Planning Need,5,Current marital status: Married,0.0105944605112924
+Random Forest,Women with Confirmed Unmet Family Planning Need,6,Covered by health insurance: Yes,0.0098868913933072
+Random Forest,Women with Confirmed Unmet Family Planning Need,7,Media exposure index,0.0080833234063112
+Random Forest,Women with Confirmed Unmet Family Planning Need,8,Household barrier probability,0.0076174566251715
+Random Forest,Women with Confirmed Unmet Family Planning Need,9,Religion: Christian,0.006206713933697
+Random Forest,Women with Confirmed Unmet Family Planning Need,10,Current marital status: Widowed,0.0059510274517317
+Random Forest,Women with Confirmed Unmet Family Planning Need,11,Caste/tribe: Scheduled tribe,0.0042860727306497
+Random Forest,Women with Confirmed Unmet Family Planning Need,12,Composite barrier score,0.003538030517327
+Random Forest,Women with Confirmed Unmet Family Planning Need,13,Religion: Muslim,0.0033391993016361
+Random Forest,Women with Confirmed Unmet Family Planning Need,14,Logistic barrier probability,0.0031221869531765
+Random Forest,Women with Confirmed Unmet Family Planning Need,15,Wealth index quintile,0.0029735563371709
+Random Forest,Women with Confirmed Unmet Family Planning Need,16,Facility barrier probability,0.0025345136478149
+Random Forest,Women with Confirmed Unmet Family Planning Need,17,Vulnerability score,0.0016002209925443
+Random Forest,Women with Confirmed Unmet Family Planning Need,18,Cluster 0,0.0009815019277332
+Random Forest,Women with Confirmed Unmet Family Planning Need,19,Cluster 1,0.0008220333058524
+Random Forest,Women with Confirmed Unmet Family Planning Need,20,Current marital status: Never married,0.0006739272299286

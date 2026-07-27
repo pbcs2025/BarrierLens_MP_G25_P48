@@ -1,0 +1,25 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+
+ref table national_kpi_summary
+ref table national_barrier_long
+ref table state_level_summary
+ref table state_barrier_long
+ref table demographic_summary
+ref table demographic_comparison_long
+ref table cluster_summary
+ref table cluster_state_distribution
+ref table model_comparison_table
+ref table stage2_xgboost_results
+ref table shap_importance
+ref table shap_top20
+ref table stage1_model_comparison
+ref table stage1_barrier_rates_long
+ref table base_paper_reference
+ref table classification_report_display
+ref table hyperparameters_display
+ref table _Metrics
+
+ref cultureInfo en-US

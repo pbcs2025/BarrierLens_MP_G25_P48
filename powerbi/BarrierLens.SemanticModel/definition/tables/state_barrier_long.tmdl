@@ -1,0 +1,51 @@
+table state_barrier_long
+	lineageTag: acc85d43-33f9-4ec8-a4f4-d73a53e1e86c
+
+	column state_name
+		dataType: string
+		sourceColumn: state_name
+		summarizeBy: none
+
+	column barrier_type
+		dataType: string
+		sourceColumn: barrier_type
+		summarizeBy: none
+
+	column N
+		dataType: int64
+		sourceColumn: N
+		summarizeBy: none
+
+	column mean_observed_rate
+		dataType: double
+		sourceColumn: mean_observed_rate
+		summarizeBy: none
+
+	column mean_predicted_prob
+		dataType: double
+		sourceColumn: mean_predicted_prob
+		summarizeBy: none
+
+	column data_rail_observed
+		dataType: string
+		sourceColumn: data_rail_observed
+		summarizeBy: none
+
+	column data_rail_predicted
+		dataType: string
+		sourceColumn: data_rail_predicted
+		summarizeBy: none
+
+	partition state_barrier_long = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(
+					File.Contents(DashboardDataPath & "/state_barrier_long.csv"),
+					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
+				),
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"state_name", type text}, {"barrier_type", type text}, {"N", Int64.Type}, {"mean_observed_rate", type number}, {"mean_predicted_prob", type number}, {"data_rail_observed", type text}, {"data_rail_predicted", type text}})
+			in
+				#"Changed Type"
+

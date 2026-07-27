@@ -1,0 +1,44 @@
+model,target,rank,feature,mean_abs_shap
+Random Forest,Women with Confirmed Unmet Family Planning Need,1,Respondent's current age,0.046116024488113
+Random Forest,Women with Confirmed Unmet Family Planning Need,2,Age group (5-year groups),0.0400135194461331
+Random Forest,Women with Confirmed Unmet Family Planning Need,3,Religion: Hindu,0.0162944877070717
+Random Forest,Women with Confirmed Unmet Family Planning Need,4,Highest educational level,0.0159424927556161
+Random Forest,Women with Confirmed Unmet Family Planning Need,5,Current marital status: Married,0.0105944605112924
+Random Forest,Women with Confirmed Unmet Family Planning Need,6,Covered by health insurance: Yes,0.0098868913933072
+Random Forest,Women with Confirmed Unmet Family Planning Need,7,Media exposure index,0.0080833234063112
+Random Forest,Women with Confirmed Unmet Family Planning Need,8,Household barrier probability,0.0076174566251715
+Random Forest,Women with Confirmed Unmet Family Planning Need,9,Religion: Christian,0.006206713933697
+Random Forest,Women with Confirmed Unmet Family Planning Need,10,Current marital status: Widowed,0.0059510274517317
+Random Forest,Women with Confirmed Unmet Family Planning Need,11,Caste/tribe: Scheduled tribe,0.0042860727306497
+Random Forest,Women with Confirmed Unmet Family Planning Need,12,Composite barrier score,0.003538030517327
+Random Forest,Women with Confirmed Unmet Family Planning Need,13,Religion: Muslim,0.0033391993016361
+Random Forest,Women with Confirmed Unmet Family Planning Need,14,Logistic barrier probability,0.0031221869531765
+Random Forest,Women with Confirmed Unmet Family Planning Need,15,Wealth index quintile,0.0029735563371709
+Random Forest,Women with Confirmed Unmet Family Planning Need,16,Facility barrier probability,0.0025345136478149
+Random Forest,Women with Confirmed Unmet Family Planning Need,17,Vulnerability score,0.0016002209925443
+Random Forest,Women with Confirmed Unmet Family Planning Need,18,Cluster 0,0.0009815019277332
+Random Forest,Women with Confirmed Unmet Family Planning Need,19,Cluster 1,0.0008220333058524
+Random Forest,Women with Confirmed Unmet Family Planning Need,20,Current marital status: Never married,0.0006739272299286
+Random Forest,Women with Confirmed Unmet Family Planning Need,21,Who decides on respondent's own health care: Woman + partner,0.0003537789569721
+Random Forest,Women with Confirmed Unmet Family Planning Need,22,Current occupation: Not working,0.0003042251113719
+Random Forest,Women with Confirmed Unmet Family Planning Need,23,Caste/tribe: No caste/tribe,0.0002680360021604
+Random Forest,Women with Confirmed Unmet Family Planning Need,24,Digital inclusion index,0.0002514777529655
+Random Forest,Women with Confirmed Unmet Family Planning Need,25,Current occupation: Missing,0.0002286067962753
+Random Forest,Women with Confirmed Unmet Family Planning Need,26,Current marital status: Separated,0.0001511988734378
+Random Forest,Women with Confirmed Unmet Family Planning Need,27,Who decides on respondent's own health care: Missing,0.0001262714636794
+Random Forest,Women with Confirmed Unmet Family Planning Need,28,Religion: Other,0.0001206170570436
+Random Forest,Women with Confirmed Unmet Family Planning Need,29,Religion: Sikh,0.0001084611408533
+Random Forest,Women with Confirmed Unmet Family Planning Need,30,Current occupation: Manual work,0.0001003394875636
+Random Forest,Women with Confirmed Unmet Family Planning Need,31,Who decides on respondent's own health care: Woman decides alone,4.7774431869857015e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,32,Current occupation: Professional,2.697138186179708e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,33,Caste/tribe: Missing,2.6544031032557663e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,34,Who decides on respondent's own health care: Other,2.3781864251250448e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,35,Current occupation: Domestic work,2.1967764718336077e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,36,Religion: Jain,1.925784821620445e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,37,Current occupation: Sales,1.4065863516460216e-05
+Random Forest,Women with Confirmed Unmet Family Planning Need,38,Current occupation: Other,5.830674166218975e-06
+Random Forest,Women with Confirmed Unmet Family Planning Need,39,Who decides on respondent's own health care: Partner no earnings,3.3739663676155624e-06
+Random Forest,Women with Confirmed Unmet Family Planning Need,40,Religion: No Religion,1.5300309229578838e-06
+Random Forest,Women with Confirmed Unmet Family Planning Need,41,Current occupation: Clerical,8.325566982851645e-07
+Random Forest,Women with Confirmed Unmet Family Planning Need,42,Religion: Jewish,0.0
+Random Forest,Women with Confirmed Unmet Family Planning Need,43,Religion: Parsi / Zoroastrian,0.0

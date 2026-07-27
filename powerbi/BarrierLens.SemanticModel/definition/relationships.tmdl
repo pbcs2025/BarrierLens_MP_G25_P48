@@ -1,0 +1,28 @@
+relationship 16f9d012-8194-4f5e-b612-b37d752e9ae0
+	fromColumn: state_barrier_long.state_name
+	toColumn: state_level_summary.state_name
+
+relationship d13dc161-6819-435c-9cb4-6c60afc7b049
+	fromColumn: cluster_state_distribution.cluster_id
+	toColumn: cluster_summary.cluster_id
+
+relationship 811e648c-bc21-4ed6-b015-c20c6b3fd143
+	crossFilteringBehavior: bothDirections
+	fromColumn: cluster_state_distribution.state_name
+	toColumn: state_level_summary.state_name
+
+relationship f1a2b3c4-d5e6-7890-abcd-ef1234567891
+	fromColumn: shap_importance.model
+	toColumn: model_comparison_table.Model
+
+relationship e2b3c4d5-f6a7-8901-bcde-f12345678902
+	fromColumn: shap_top20.model
+	toColumn: model_comparison_table.Model
+
+relationship c4d5e6f7-a8b9-0123-defa-345678901234
+	fromColumn: classification_report_display.model
+	toColumn: model_comparison_table.Model
+
+relationship b5c6d7e8-f9a0-1234-efab-456789012345
+	fromColumn: stage1_model_comparison.Model
+	toColumn: stage1_barrier_rates_long.model

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "RiskArchetypes",
+  "displayName": "5. Population Risk Archetypes & Clustering",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F8FAFC'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualContainers": [
+    {
+      "x": 16,
+      "y": 16,
+      "z": 0,
+      "width": 1248,
+      "height": 50,
+      "config": "{\"name\": \"19bb534e-14f5-4b43-bd53-de6ac9850522\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"5. Unsupervised Segmentation \\u2014 Population Risk Archetypes & K-Means Clusters\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"14430054-b4b6-44f1-b87e-d7430bcef03c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Cluster 0 Size\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Cluster 0 Size\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'High-Vulnerability Archetype Size'\"}}}}}]}}}"
+    },
+    {
+      "x": 332,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"839f1816-f5f6-4514-85f8-97a931654825\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Cluster 0 Share\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Cluster 0 Share\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'High-Vulnerability Archetype Share'\"}}}}}]}}}"
+    },
+    {
+      "x": 648,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"645a0ad8-740a-4c96-abbe-000a895c0601\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Cluster 1 Size\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Cluster 1 Size\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'High-Inclusion Archetype Size'\"}}}}}]}}}"
+    },
+    {
+      "x": 964,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"b064a67e-60e9-4f93-a7e1-7902b4513ad7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Cluster Barrier Gap\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Cluster Barrier Gap\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Archetype Composite Barrier Gap'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 182,
+      "z": 0,
+      "width": 610,
+      "height": 470,
+      "config": "{\"name\": \"c352d430-65f1-4c1e-ac38-0eb789018a33\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"cluster_summary.Healthcare Access Archetype Name\"}], \"Y\": [{\"queryRef\": \"cluster_summary.Mean Vulnerability Score\"}, {\"queryRef\": \"cluster_summary.Mean Composite Barrier Probability Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"cluster_summary.Healthcare Access Archetype Name\"}, {\"queryRef\": \"cluster_summary.Mean Vulnerability Score\"}, {\"queryRef\": \"cluster_summary.Mean Composite Barrier Probability Score\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Feature Profiles Across Population Risk Archetypes'\"}}}}}]}}}"
+    },
+    {
+      "x": 640,
+      "y": 182,
+      "z": 0,
+      "width": 624,
+      "height": 470,
+      "config": "{\"name\": \"828c90ca-2774-459e-afa9-936d3aeb6673\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"table\", \"projections\": {\"Values\": [{\"queryRef\": \"cluster_state_distribution.State / Union Territory\"}, {\"queryRef\": \"cluster_state_distribution.Sample Size (Women)\"}, {\"queryRef\": \"cluster_state_distribution.State Share Within Archetype (%)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"cluster_state_distribution.State / Union Territory\"}, {\"queryRef\": \"cluster_state_distribution.Sample Size (Women)\"}, {\"queryRef\": \"cluster_state_distribution.State Share Within Archetype (%)\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'State Distribution Within High-Vulnerability Archetype'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 664,
+      "z": 0,
+      "width": 1248,
+      "height": 40,
+      "config": "{\"name\": \"0d548cb6-06f7-4e67-951d-3e62e4e4dc10\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Clustering Insight: 53.8% of women belong to Cluster 0 (High-Vulnerability Archetype) with a mean composite barrier score of 0.585.\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    }
+  ]
+}

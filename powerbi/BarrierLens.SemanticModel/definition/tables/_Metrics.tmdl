@@ -1,0 +1,595 @@
+table _Metrics
+	lineageTag: e2b01e80-1eac-4eea-af76-1fd654aff32f
+
+	/// Total women in NFHS-5 analytic sample
+	measure 'Total Women Analysed' = MAX(national_kpi_summary[total_women])
+		formatString: #,##0
+		displayFolder: "01 National KPIs"
+
+	/// % women facing at least one healthcare access barrier
+	measure 'Any Barrier Rate' = MAX(national_kpi_summary[observed_any_barrier_rate])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// Observed household barrier prevalence
+	measure 'Household Barrier Rate' = MAX(national_kpi_summary[observed_household_rate])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// Observed logistic barrier prevalence
+	measure 'Logistical Barrier Rate' = MAX(national_kpi_summary[observed_logistic_rate])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// Observed facility barrier prevalence
+	measure 'Health Facility Barrier Rate' = MAX(national_kpi_summary[observed_facility_rate])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// AI-predicted probability of facing a household barrier to healthcare
+	measure 'Predicted Household Barrier Probability' = MAX(national_kpi_summary[pred_household_prob])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// AI-predicted probability of facing a logistic (transport/distance) barrier to healthcare
+	measure 'Predicted Logistical Barrier Probability' = MAX(national_kpi_summary[pred_logistic_prob])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// AI-predicted probability of facing a facility (quality/supply) barrier to healthcare
+	measure 'Predicted Health Facility Barrier Probability' = MAX(national_kpi_summary[pred_facility_prob])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// Mean composite barrier probability across all three barrier types
+	measure 'Composite Barrier Score' = MAX(national_kpi_summary[pred_composite_barrier_score])
+		formatString: 0.000
+		displayFolder: "01 National KPIs"
+
+	/// Number of women with unmet need for family planning in the analytic sample
+	measure 'Women With Confirmed Unmet Family Planning Need (KPI)' = MAX(national_kpi_summary[stage2_unmet_fp_N])
+		formatString: #,##0
+		displayFolder: "01 National KPIs"
+
+	/// Observed prevalence of unmet need for family planning (%)
+	measure 'Unmet Family Planning Rate' = MAX(national_kpi_summary[stage2_unmet_fp_observed_rate])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// AI-predicted probability of unmet need for family planning
+	measure 'Predicted Unmet Family Planning Probability' = MAX(national_kpi_summary[stage2_unmet_fp_pred_prob])
+		formatString: 0.0%
+		displayFolder: "01 National KPIs"
+
+	/// Model uplift vs observed rate (positive = model detects more latent barriers)
+	measure 'Household Prediction Gap' =
+		[Predicted Household Barrier Probability] - [Household Barrier Rate]
+		formatString: +0.0%;-0.0%
+		displayFolder: "01 National KPIs"
+
+	measure 'Health Facility Prediction Gap' =
+		[Predicted Health Facility Barrier Probability] - [Health Facility Barrier Rate]
+		formatString: +0.0%;-0.0%
+		displayFolder: "01 National KPIs"
+
+	measure 'Selected State Household Rate' =
+		SELECTEDVALUE(state_level_summary[observed_household_rate], [Household Barrier Rate])
+		formatString: 0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'Selected State Facility Rate' =
+		SELECTEDVALUE(state_level_summary[observed_facility_rate], [Health Facility Barrier Rate])
+		formatString: 0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'Selected State N' =
+		SELECTEDVALUE(state_level_summary[N], SUM(state_level_summary[N]))
+		formatString: #,##0
+		displayFolder: "03 State Analysis"
+
+	measure 'Highest Risk State' =
+		CALCULATE(
+			FIRSTNONBLANK(state_level_summary[state_name], 1),
+			TOPN(1, state_level_summary, state_level_summary[observed_facility_rate], DESC)
+		)
+		displayFolder: "03 State Analysis"
+
+	measure 'Lowest Risk State' =
+		CALCULATE(
+			FIRSTNONBLANK(state_level_summary[state_name], 1),
+			TOPN(1, state_level_summary, state_level_summary[observed_facility_rate], ASC)
+		)
+		displayFolder: "03 State Analysis"
+
+	measure 'Max Facility Rate (State)' =
+		MAXX(state_level_summary, state_level_summary[observed_facility_rate])
+		formatString: 0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'Min Facility Rate (State)' =
+		MINX(state_level_summary, state_level_summary[observed_facility_rate])
+		formatString: 0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'Avg State Predicted Facility' =
+		AVERAGE(state_barrier_long[mean_predicted_prob])
+		formatString: 0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'Avg State Observed Facility' =
+		AVERAGEX(
+			FILTER(state_barrier_long, state_barrier_long[barrier_type] = "Health Facility Barrier"),
+			state_barrier_long[mean_observed_rate]
+		)
+		formatString: 0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'State Rank by Facility Barrier' =
+		RANKX(
+			ALL(state_level_summary[state_name]),
+			state_level_summary[observed_facility_rate],
+			,
+			DESC,
+			Dense
+		)
+		formatString: #,##0
+		displayFolder: "03 State Analysis"
+
+	/// Selected state vs national average — positive = above average risk
+	measure 'State vs National Household' =
+		SELECTEDVALUE(state_level_summary[observed_household_rate], BLANK()) - [Household Barrier Rate]
+		formatString: +0.0%;-0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'State vs National Facility' =
+		SELECTEDVALUE(state_level_summary[observed_facility_rate], BLANK()) - [Health Facility Barrier Rate]
+		formatString: +0.0%;-0.0%
+		displayFolder: "03 State Analysis"
+
+	measure 'Demo Observed Rate' =
+		AVERAGE(demographic_comparison_long[value])
+		formatString: 0.0%
+		displayFolder: "04 Demographics"
+
+	measure 'Demo Cell Count' =
+		SUMX(
+			FILTER(demographic_comparison_long, demographic_comparison_long[metric_type] = "Observed"),
+			demographic_comparison_long[N]
+		)
+		formatString: #,##0
+		displayFolder: "04 Demographics"
+
+	/// Rich minus Poor observed barrier rate — negative = rich have lower barriers
+	measure 'Richest vs Poorest Gap' =
+		CALCULATE(
+			AVERAGE(demographic_comparison_long[value]),
+			demographic_comparison_long[wealth_tier] = "Rich",
+			demographic_comparison_long[metric_type] = "Observed"
+		) -
+		CALCULATE(
+			AVERAGE(demographic_comparison_long[value]),
+			demographic_comparison_long[wealth_tier] = "Poor",
+			demographic_comparison_long[metric_type] = "Observed"
+		)
+		formatString: +0.0%;-0.0%
+		displayFolder: "04 Demographics"
+
+	measure 'Higher Education vs No Education Gap' =
+		CALCULATE(
+			AVERAGE(demographic_comparison_long[value]),
+			demographic_comparison_long[education_tier] = "Higher",
+			demographic_comparison_long[metric_type] = "Observed"
+		) -
+		CALCULATE(
+			AVERAGE(demographic_comparison_long[value]),
+			demographic_comparison_long[education_tier] = "No Education",
+			demographic_comparison_long[metric_type] = "Observed"
+		)
+		formatString: +0.0%;-0.0%
+		displayFolder: "04 Demographics"
+
+	measure 'Urban vs Rural Gap' =
+		CALCULATE(
+			AVERAGE(demographic_comparison_long[value]),
+			demographic_comparison_long[residence] = "Urban",
+			demographic_comparison_long[metric_type] = "Observed"
+		) -
+		CALCULATE(
+			AVERAGE(demographic_comparison_long[value]),
+			demographic_comparison_long[residence] = "Rural",
+			demographic_comparison_long[metric_type] = "Observed"
+		)
+		formatString: +0.0%;-0.0%
+		displayFolder: "04 Demographics"
+
+	measure 'Cluster 0 Size' =
+		CALCULATE(MAX(cluster_summary[n_women]), cluster_summary[cluster_id] = 0)
+		formatString: #,##0
+		displayFolder: "05 Clusters"
+
+	measure 'Cluster 1 Size' =
+		CALCULATE(MAX(cluster_summary[n_women]), cluster_summary[cluster_id] = 1)
+		formatString: #,##0
+		displayFolder: "05 Clusters"
+
+	measure 'Cluster 0 Share' =
+		CALCULATE(MAX(cluster_summary[share_of_total]), cluster_summary[cluster_id] = 0)
+		formatString: 0.0%
+		displayFolder: "05 Clusters"
+
+	measure 'Cluster 1 Share' =
+		CALCULATE(MAX(cluster_summary[share_of_total]), cluster_summary[cluster_id] = 1)
+		formatString: 0.0%
+		displayFolder: "05 Clusters"
+
+	measure 'Cluster 0 Composite Score' =
+		CALCULATE(MAX(cluster_summary[composite_barrier_score_mean]), cluster_summary[cluster_id] = 0)
+		formatString: 0.000
+		displayFolder: "05 Clusters"
+
+	measure 'Cluster 1 Composite Score' =
+		CALCULATE(MAX(cluster_summary[composite_barrier_score_mean]), cluster_summary[cluster_id] = 1)
+		formatString: 0.000
+		displayFolder: "05 Clusters"
+
+	/// Composite barrier score: High-Vulnerability Healthcare Access Archetype minus High-Inclusion cluster
+	measure 'Cluster Barrier Gap' =
+		[Cluster 0 Composite Score] - [Cluster 1 Composite Score]
+		formatString: +0.000;-0.000
+		displayFolder: "05 Clusters"
+
+	measure 'Selected Cluster Archetype' =
+		SELECTEDVALUE(cluster_summary[archetype_name], "All Clusters")
+		displayFolder: "05 Clusters"
+
+	measure 'Selected Cluster N' =
+		SELECTEDVALUE(cluster_summary[n_women], SUM(cluster_summary[n_women]))
+		formatString: #,##0
+		displayFolder: "05 Clusters"
+
+	measure 'Stage 2 Analytic Sample' =
+		MAX(national_kpi_summary[stage2_unmet_fp_N])
+		formatString: #,##0
+		displayFolder: "06 Stage 2"
+
+	/// Estimated number of women with confirmed unmet need for family planning
+	measure 'Women with Confirmed Unmet Family Planning Need' =
+		ROUND([Stage 2 Analytic Sample] * [Unmet Family Planning Rate], 0)
+		formatString: #,##0
+		displayFolder: "06 Stage 2"
+
+	measure 'Stage 2 Best Area Under the ROC Curve' =
+		MAX(model_comparison_table[ROC-AUC])
+		formatString: 0.0000
+		displayFolder: "06 Stage 2"
+
+	measure 'Stage 2 Best F1 Score' =
+		MAXX(model_comparison_table, model_comparison_table[F1-Score])
+		formatString: 0.0000
+		displayFolder: "06 Stage 2"
+
+	measure 'Stage 2 Avg Barrier Uplift' =
+		AVERAGE(model_comparison_table[Barrier_Uplift])
+		formatString: +0.0000;-0.0000
+		displayFolder: "06 Stage 2"
+
+	measure 'XGBoost Area Under the ROC Curve' =
+		CALCULATE(
+			MAX(model_comparison_table[ROC-AUC]),
+			model_comparison_table[Model] = "XGBoost"
+		)
+		formatString: 0.0000
+		displayFolder: "06 Stage 2"
+
+	/// Area Under the ROC Curve (ROC-AUC) for the Random Forest model on Women with Confirmed Unmet Family Planning Need prediction
+	measure 'Random Forest Area Under the ROC Curve' =
+		CALCULATE(
+			MAX(model_comparison_table[ROC-AUC]),
+			model_comparison_table[Model] = "Random Forest"
+		)
+		formatString: 0.0000
+		displayFolder: "06 Stage 2"
+
+	/// Area Under the ROC Curve (ROC-AUC) for the Logistic Regression model on Women with Confirmed Unmet Family Planning Need prediction
+	measure 'Logistic Regression Area Under the ROC Curve' =
+		CALCULATE(
+			MAX(model_comparison_table[ROC-AUC]),
+			model_comparison_table[Model] = "Logistic Regression"
+		)
+		formatString: 0.0000
+		displayFolder: "06 Stage 2"
+
+	/// Model with the highest Area Under the ROC Curve for predicting women with confirmed unmet family planning need
+	measure 'Best Model Name' =
+		CALCULATE(
+			FIRSTNONBLANK(model_comparison_table[Model], 1),
+			TOPN(1, model_comparison_table, model_comparison_table[ROC-AUC], DESC)
+		)
+		displayFolder: "06 Stage 2"
+
+	measure 'XGBoost Baseline Area Under the ROC Curve' =
+		CALCULATE(
+			MAX(model_comparison_table[Baseline_ROC-AUC]),
+			model_comparison_table[Model] = "XGBoost"
+		)
+		formatString: 0.0000
+		displayFolder: "06 Stage 2"
+
+	measure 'XGBoost Barrier Uplift' =
+		CALCULATE(
+			MAX(model_comparison_table[Barrier_Uplift]),
+			model_comparison_table[Model] = "XGBoost"
+		)
+		formatString: +0.0000;-0.0000
+		displayFolder: "06 Stage 2"
+
+	measure 'Selected Model Area Under the ROC Curve' =
+		SELECTEDVALUE(model_comparison_table[ROC-AUC], [Stage 2 Best Area Under the ROC Curve])
+		formatString: 0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'Selected Model F1 Score' =
+		SELECTEDVALUE(model_comparison_table[F1-Score], [Stage 2 Best F1 Score])
+		formatString: 0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'Selected Model Accuracy' =
+		SELECTEDVALUE(model_comparison_table[Accuracy], BLANK())
+		formatString: 0.0%
+		displayFolder: "07 Explainability"
+
+	measure 'Selected Model Precision' =
+		SELECTEDVALUE(model_comparison_table[Precision], BLANK())
+		formatString: 0.0%
+		displayFolder: "07 Explainability"
+
+	measure 'Selected Model Recall' =
+		SELECTEDVALUE(model_comparison_table[Recall], BLANK())
+		formatString: 0.0%
+		displayFolder: "07 Explainability"
+
+	measure 'Model Count' =
+		COUNTROWS(model_comparison_table)
+		formatString: #,##0
+		displayFolder: "07 Explainability"
+
+	/// Best model Area Under the ROC Curve minus socioeconomic-only baseline — validates healthcare barrier predictive value
+	measure 'Best vs Baseline Uplift' =
+		[Stage 2 Best Area Under the ROC Curve] - MAXX(model_comparison_table, model_comparison_table[Baseline_ROC-AUC])
+		formatString: +0.0000;-0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'KPI Headline' =
+		"BarrierLens analysed " &
+		FORMAT([Total Women Analysed], "#,##0") &
+		" women across 36 States and UTs. " &
+		FORMAT([Any Barrier Rate], "0.0%") &
+		" face at least one healthcare access barrier."
+		displayFolder: "Narratives"
+
+	measure 'Barrier Summary Line' =
+		"Household: " & FORMAT([Household Barrier Rate], "0.0%") &
+		"  |  Logistical: " & FORMAT([Logistical Barrier Rate], "0.0%") &
+		"  |  Health Facility: " & FORMAT([Health Facility Barrier Rate], "0.0%")
+		displayFolder: "Narratives"
+
+	measure 'Stage 2 Headline' =
+		"Of " & FORMAT([Stage 2 Analytic Sample], "#,##0") &
+		" women in the analytic sample, " &
+		FORMAT([Unmet Family Planning Rate], "0.0%") &
+		" have unmet family planning needs. " &
+		"Best Model Area Under the ROC Curve: " & FORMAT([Stage 2 Best Area Under the ROC Curve], "0.0000") & "."
+		displayFolder: "Narratives"
+
+	measure 'Cluster Insight' =
+		"Two distinct risk archetypes identified. " &
+		FORMAT([Cluster 0 Share], "0.0%") &
+		" of women belong to the High-Vulnerability Healthcare Access Archetype with a composite barrier score of " &
+		FORMAT([Cluster 0 Composite Score], "0.000") & "."
+		displayFolder: "Narratives"
+
+	measure 'Model Comparison Headline' =
+		"Best performing model: " & [Best Model Name] &
+		" (ROC-AUC = " & FORMAT([Stage 2 Best Area Under the ROC Curve], "0.0000") & ")." &
+		" Barrier features provide " &
+		FORMAT(ABS([Stage 2 Avg Barrier Uplift]), "0.0000") &
+		" additional predictive power over socioeconomic features alone."
+		displayFolder: "Narratives"
+
+	measure 'Base Paper Household Rate' =
+		CALCULATE(MAX(base_paper_reference[base_paper_rate]),
+			base_paper_reference[barrier_type] = "Household Barrier")
+		formatString: 0.0%
+		displayFolder: "02 Base Paper"
+
+	measure 'Base Paper Logistic Rate' =
+		CALCULATE(MAX(base_paper_reference[base_paper_rate]),
+			base_paper_reference[barrier_type] = "Logistical Barrier")
+		formatString: 0.0%
+		displayFolder: "02 Base Paper"
+
+	measure 'Base Paper Facility Rate' =
+		CALCULATE(MAX(base_paper_reference[base_paper_rate]),
+			base_paper_reference[barrier_type] = "Health Facility Barrier")
+		formatString: 0.0%
+		displayFolder: "02 Base Paper"
+
+	/// BarrierLens observed rate minus base paper rate — shows research coverage improvement
+	measure 'BarrierLens vs Base Paper Facility Gap' =
+		[Health Facility Barrier Rate] - [Base Paper Facility Rate]
+		formatString: +0.0%;-0.0%
+		displayFolder: "02 Base Paper"
+
+	measure 'Stage 1 Best Model Area Under the ROC Curve' =
+		MAX(stage1_model_comparison[ROC-AUC])
+		formatString: 0.0000
+		displayFolder: "02 Base Paper"
+
+	measure 'Stage 1 Model Count' =
+		DISTINCTCOUNT(stage1_model_comparison[Model])
+		formatString: #,##0
+		displayFolder: "02 Base Paper"
+
+	/// Feature with the highest mean absolute SHAP value
+	measure 'Top SHAP Feature' =
+		CALCULATE(
+			FIRSTNONBLANK(shap_top20[feature], 1),
+			TOPN(1, shap_top20, shap_top20[mean_abs_shap], DESC)
+		)
+		displayFolder: "07 Explainability"
+
+	measure 'Top SHAP Value' =
+		MAXX(shap_top20, shap_top20[mean_abs_shap])
+		formatString: 0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'SHAP Feature Count' =
+		COUNTROWS(shap_top20)
+		formatString: #,##0
+		displayFolder: "07 Explainability"
+
+	/// Total SHAP contribution from Stage 1 barrier probability features
+	measure 'SHAP Barrier Features Sum' =
+		CALCULATE(
+			SUM(shap_top20[mean_abs_shap]),
+			shap_top20[feature] IN {
+				"Household barrier probability",
+				"Logistic barrier probability",
+				"Facility barrier probability",
+				"Composite barrier score"
+			}
+		)
+		formatString: 0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'SHAP Socioeconomic Features Sum' =
+		CALCULATE(
+			SUM(shap_top20[mean_abs_shap]),
+			NOT shap_top20[feature] IN {
+				"Household barrier probability",
+				"Logistic barrier probability",
+				"Facility barrier probability",
+				"Composite barrier score",
+				"Vulnerability score",
+				"Media exposure index",
+				"Digital inclusion index"
+			}
+		)
+		formatString: 0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'SHAP Interpretation' =
+		"Top predictor: " & [Top SHAP Feature] &
+		" (mean |SHAP| = " & FORMAT([Top SHAP Value], "0.0000") & "). " &
+		"Barrier probability features contribute " &
+		FORMAT([SHAP Barrier Features Sum], "0.0000") &
+		" total SHAP weight, confirming their predictive value beyond socioeconomic factors."
+		displayFolder: "Narratives"
+
+	/// Number of States and Union Territories where health facility barrier rate exceeds 50%
+	measure 'High Risk States Count' =
+		COUNTROWS(
+			FILTER(state_level_summary,
+				state_level_summary[observed_facility_rate] > 0.50)
+		)
+		formatString: #,##0
+		displayFolder: "10 Policy"
+
+	/// States where AI predicted composite barrier score > 55%
+	measure 'Critical Risk States' =
+		CALCULATE(
+			COUNTROWS(state_level_summary),
+			state_level_summary[pred_composite_barrier_score] > 0.55
+		)
+		formatString: #,##0
+		displayFolder: "10 Policy"
+
+	measure 'Highest Vulnerability Cluster Share' =
+		[Cluster 0 Share]
+		formatString: 0.0%
+		displayFolder: "10 Policy"
+
+	/// Women in High-Vulnerability Healthcare Access Archetype — primary policy intervention population
+	measure 'Priority Intervention Population' =
+		ROUND([Total Women Analysed] * [Cluster 0 Share], 0)
+		formatString: #,##0
+		displayFolder: "10 Policy"
+
+	measure 'Policy Headline' =
+		FORMAT([High Risk States Count], "0") &
+		" states have facility barrier rates above 50%. " &
+		FORMAT([Priority Intervention Population], "#,##0") &
+		" women (" & FORMAT([Cluster 0 Share], "0.0%") &
+		") are in the High-Vulnerability Healthcare Access Archetype and should be prioritised for intervention."
+		displayFolder: "Narratives"
+
+	/// True positive rate — proportion of women with unmet family planning need correctly identified
+	measure 'Sensitivity (Class 1 Recall)' =
+		CALCULATE(
+			MAX(classification_report_display[recall]),
+			classification_report_display[class] = "1"
+		)
+		formatString: 0.0%
+		displayFolder: "07 Explainability"
+
+	/// True negative rate proxy
+	measure 'Specificity Proxy (Class 0 Recall)' =
+		CALCULATE(
+			MAX(classification_report_display[recall]),
+			classification_report_display[class] = "0"
+		)
+		formatString: 0.0%
+		displayFolder: "07 Explainability"
+
+	measure 'F1 Score (Class 1)' =
+		CALCULATE(
+			MAX(classification_report_display[f1-score]),
+			classification_report_display[class] = "1"
+		)
+		formatString: 0.0000
+		displayFolder: "07 Explainability"
+
+	measure 'Executive Summary' =
+		"BarrierLens analysed " & FORMAT([Total Women Analysed], "#,##0") &
+		" women from the NFHS-5 survey across 36 States and Union Territories. " &
+		FORMAT([Any Barrier Rate], "0.0%") & " of women face at least one healthcare access barrier. " &
+		"The AI pipeline uses a two-stage architecture: Stage 1 predicts three barrier types " &
+		"(household, logistic, and facility) using 4 machine learning models. " &
+		"Stage 2 predicts unmet family planning need for " & FORMAT([Stage 2 Analytic Sample], "#,##0") &
+		" eligible women. Best Model Area Under the ROC Curve: " & FORMAT([Stage 2 Best Area Under the ROC Curve], "0.0000") & ". " &
+		"SHAP explainability confirms that " & [Top SHAP Feature] &
+		" is the strongest predictor of unmet healthcare need."
+		displayFolder: "Narratives"
+
+	measure 'Barrier Risk Color' =
+		SWITCH(
+			TRUE(),
+			[Household Barrier Rate] >= 0.40, "#E63946",
+			[Household Barrier Rate] >= 0.25, "#F4A261",
+			"#2A9D8F"
+		)
+		displayFolder: "Formatting"
+
+	measure 'Model ROC Color' =
+		SWITCH(
+			TRUE(),
+			[Selected Model Area Under the ROC Curve] >= 0.70, "#2A9D8F",
+			[Selected Model Area Under the ROC Curve] >= 0.65, "#F4A261",
+			"#E63946"
+		)
+		displayFolder: "Formatting"
+
+	measure 'Uplift Direction Icon' =
+		IF([XGBoost Barrier Uplift] > 0, "▲ Positive Uplift", "▼ Marginal / Neutral")
+		displayFolder: "Formatting"
+
+	column Placeholder
+		isHidden
+		lineageTag: dfda7d00-2231-41e3-a7e5-e02bc55196dc
+		dataType: string
+		sourceColumn: Placeholder
+		summarizeBy: none
+
+	partition _Metrics = calculated
+		mode: import
+		source = ROW("Placeholder", BLANK())

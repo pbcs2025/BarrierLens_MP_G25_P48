@@ -1,0 +1,4 @@
+barrier_type,description,base_paper_rate,barrierlens_observed,barrierlens_predicted,base_paper_n,barrierlens_n,source_note,comparability
+Household Barrier,Women citing household/permission barriers to accessing care,0.17,0.2716,0.4792,"~108,785","724,115",NFHS-5 national factsheet; BarrierLens full extract,Broadly comparable — different sample scope
+Logistical Barrier,Women citing distance/transport as a barrier to care,0.26,0.3161,0.4822,"~108,785","724,115",NFHS-5 national factsheet; BarrierLens full extract,Broadly comparable — BarrierLens broader sample
+Health Health Facility Barrier,Women citing facility quality or availability as a barrier,0.48,0.4601,0.4978,"~108,785","724,115",NFHS-5 national factsheet; BarrierLens full extract,Broadly comparable — highest agreement barrier type

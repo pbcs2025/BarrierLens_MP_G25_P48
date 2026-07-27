@@ -1,0 +1,73 @@
+cluster_id,archetype_name,state_name,n_women,share_within_cluster
+0,"High-Vulnerability Healthcare Access Archetype",Uttar Pradesh,57699,0.147958
+0,"High-Vulnerability Healthcare Access Archetype",Bihar,33154,0.085017
+0,"High-Vulnerability Healthcare Access Archetype",Madhya Pradesh,31281,0.080214
+0,"High-Vulnerability Healthcare Access Archetype",Assam,27204,0.06976
+0,"High-Vulnerability Healthcare Access Archetype",Rajasthan,23549,0.060387
+0,"High-Vulnerability Healthcare Access Archetype",Jharkhand,20137,0.051638
+0,"High-Vulnerability Healthcare Access Archetype",Chhattisgarh,19394,0.049732
+0,"High-Vulnerability Healthcare Access Archetype",Odisha,19317,0.049535
+0,"High-Vulnerability Healthcare Access Archetype",Gujarat,16249,0.041668
+0,"High-Vulnerability Healthcare Access Archetype",Arunachal Pradesh,14615,0.037477
+0,"High-Vulnerability Healthcare Access Archetype",West Bengal,14226,0.03648
+0,"High-Vulnerability Healthcare Access Archetype",Maharashtra,13474,0.034552
+0,"High-Vulnerability Healthcare Access Archetype",Telangana,12565,0.032221
+0,"High-Vulnerability Healthcare Access Archetype",Karnataka,11798,0.030254
+0,"High-Vulnerability Healthcare Access Archetype",Jammu & Kashmir,11386,0.029197
+0,"High-Vulnerability Healthcare Access Archetype",Meghalaya,9381,0.024056
+0,"High-Vulnerability Healthcare Access Archetype",Tamil Nadu,6801,0.01744
+0,"High-Vulnerability Healthcare Access Archetype",Nagaland,6676,0.017119
+0,"High-Vulnerability Healthcare Access Archetype",Uttarakhand,6180,0.015847
+0,"High-Vulnerability Healthcare Access Archetype",Tripura,5614,0.014396
+0,"High-Vulnerability Healthcare Access Archetype",Haryana,5220,0.013386
+0,"High-Vulnerability Healthcare Access Archetype",Andhra Pradesh,4690,0.012027
+0,"High-Vulnerability Healthcare Access Archetype",Manipur,4351,0.011157
+0,"High-Vulnerability Healthcare Access Archetype",Himachal Pradesh,3360,0.008616
+0,"High-Vulnerability Healthcare Access Archetype",Punjab,3122,0.008006
+0,"High-Vulnerability Healthcare Access Archetype",Mizoram,1993,0.005111
+0,"High-Vulnerability Healthcare Access Archetype",Sikkim,1665,0.00427
+0,"High-Vulnerability Healthcare Access Archetype",Ladakh,1304,0.003344
+0,"High-Vulnerability Healthcare Access Archetype",Kerala,908,0.002328
+0,"High-Vulnerability Healthcare Access Archetype",Dadra & Nagar Haveli And Daman & Diu,886,0.002272
+0,"High-Vulnerability Healthcare Access Archetype",Andaman & Nicobar Islands,804,0.002062
+0,"High-Vulnerability Healthcare Access Archetype",Nct Of Delhi,457,0.001172
+0,"High-Vulnerability Healthcare Access Archetype",Puducherry,273,0.0007
+0,"High-Vulnerability Healthcare Access Archetype",Goa,135,0.000346
+0,"High-Vulnerability Healthcare Access Archetype",Lakshadweep,60,0.000154
+0,"High-Vulnerability Healthcare Access Archetype",Chandigarh,40,0.000103
+1,High-Inclusion Healthcare Access Archetype,Uttar Pradesh,35425,0.106016
+1,High-Inclusion Healthcare Access Archetype,Maharashtra,20281,0.060695
+1,High-Inclusion Healthcare Access Archetype,Rajasthan,19441,0.058181
+1,High-Inclusion Healthcare Access Archetype,Tamil Nadu,18849,0.056409
+1,High-Inclusion Healthcare Access Archetype,Karnataka,18657,0.055835
+1,High-Inclusion Healthcare Access Archetype,Punjab,18649,0.055811
+1,High-Inclusion Healthcare Access Archetype,Madhya Pradesh,17129,0.051262
+1,High-Inclusion Healthcare Access Archetype,Gujarat,17094,0.051157
+1,High-Inclusion Healthcare Access Archetype,Haryana,16689,0.049945
+1,High-Inclusion Healthcare Access Archetype,Telangana,14953,0.04475
+1,High-Inclusion Healthcare Access Archetype,Jammu & Kashmir,11651,0.034868
+1,High-Inclusion Healthcare Access Archetype,Nct Of Delhi,10702,0.032028
+1,High-Inclusion Healthcare Access Archetype,Kerala,10061,0.03011
+1,High-Inclusion Healthcare Access Archetype,Bihar,9329,0.027919
+1,High-Inclusion Healthcare Access Archetype,Chhattisgarh,9074,0.027156
+1,High-Inclusion Healthcare Access Archetype,Odisha,8654,0.025899
+1,High-Inclusion Healthcare Access Archetype,Assam,7775,0.023268
+1,High-Inclusion Healthcare Access Archetype,West Bengal,7182,0.021494
+1,High-Inclusion Healthcare Access Archetype,Uttarakhand,7100,0.021248
+1,High-Inclusion Healthcare Access Archetype,Himachal Pradesh,7008,0.020973
+1,High-Inclusion Healthcare Access Archetype,Jharkhand,6358,0.019028
+1,High-Inclusion Healthcare Access Archetype,Andhra Pradesh,6285,0.018809
+1,High-Inclusion Healthcare Access Archetype,Mizoram,5286,0.015819
+1,High-Inclusion Healthcare Access Archetype,Arunachal Pradesh,5150,0.015412
+1,High-Inclusion Healthcare Access Archetype,Meghalaya,3708,0.011097
+1,High-Inclusion Healthcare Access Archetype,Manipur,3691,0.011046
+1,High-Inclusion Healthcare Access Archetype,Puducherry,3396,0.010163
+1,High-Inclusion Healthcare Access Archetype,Nagaland,3018,0.009032
+1,High-Inclusion Healthcare Access Archetype,Goa,1895,0.005671
+1,High-Inclusion Healthcare Access Archetype,Dadra & Nagar Haveli And Daman & Diu,1827,0.005468
+1,High-Inclusion Healthcare Access Archetype,Tripura,1700,0.005088
+1,High-Inclusion Healthcare Access Archetype,Sikkim,1606,0.004806
+1,High-Inclusion Healthcare Access Archetype,Andaman & Nicobar Islands,1593,0.004767
+1,High-Inclusion Healthcare Access Archetype,Lakshadweep,1174,0.003513
+1,High-Inclusion Healthcare Access Archetype,Ladakh,1051,0.003145
+1,High-Inclusion Healthcare Access Archetype,Chandigarh,706,0.002113

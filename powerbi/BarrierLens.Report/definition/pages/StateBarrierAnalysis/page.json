@@ -1,0 +1,113 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "StateBarrierAnalysis",
+  "displayName": "3. State & Union Territory Barrier Analysis",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F8FAFC'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualContainers": [
+    {
+      "x": 16,
+      "y": 16,
+      "z": 0,
+      "width": 1248,
+      "height": 50,
+      "config": "{\"name\": \"bf3199bd-abf6-4d14-a18f-f8d4bac93e5d\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"3. Spatial Geographic Analysis \\u2014 Healthcare Access Barrier Disparities Across 36 States & UTs\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"ece61f5d-a6c9-4ebe-820d-5de06fca40e6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Highest Risk State\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Highest Risk State\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Highest Risk State'\"}}}}}]}}}"
+    },
+    {
+      "x": 332,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"ab0be044-03f9-4b13-8823-30e73096d503\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Lowest Risk State\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Lowest Risk State\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Lowest Risk State'\"}}}}}]}}}"
+    },
+    {
+      "x": 648,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"7ebb1fab-9de5-4a27-8bce-13a013d3a6eb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.State Rank by Facility Barrier\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.State Rank by Facility Barrier\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Selected State Rank'\"}}}}}]}}}"
+    },
+    {
+      "x": 964,
+      "y": 78,
+      "z": 0,
+      "width": 298,
+      "height": 90,
+      "config": "{\"name\": \"e6f0d233-7e16-445d-b3e7-9beba7c57ed3\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Selected State N\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Selected State N\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Selected State Sample Size'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 182,
+      "z": 0,
+      "width": 610,
+      "height": 470,
+      "config": "{\"name\": \"f81f4b41-b7bc-4e47-82cc-ad5b42437eeb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"state_level_summary.State / Union Territory\"}], \"Y\": [{\"queryRef\": \"state_level_summary.Observed Health Facility Barrier Prevalence Rate (%)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"state_level_summary.State / Union Territory\"}, {\"queryRef\": \"state_level_summary.Observed Health Facility Barrier Prevalence Rate (%)\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'State-wise Health Facility Barrier Prevalence Rate (%)'\"}}}}}]}}}"
+    },
+    {
+      "x": 640,
+      "y": 182,
+      "z": 0,
+      "width": 624,
+      "height": 470,
+      "config": "{\"name\": \"435a8d23-ef6e-488c-8fa0-a74b7769d5cf\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"table\", \"projections\": {\"Values\": [{\"queryRef\": \"state_level_summary.State / Union Territory\"}, {\"queryRef\": \"state_level_summary.Sample Size (Women)\"}, {\"queryRef\": \"state_level_summary.Observed Household Barrier Prevalence Rate (%)\"}, {\"queryRef\": \"state_level_summary.Observed Logistical Barrier Prevalence Rate (%)\"}, {\"queryRef\": \"state_level_summary.Observed Health Facility Barrier Prevalence Rate (%)\"}, {\"queryRef\": \"state_level_summary.Predicted Composite Barrier Probability Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"state_level_summary.State / Union Territory\"}, {\"queryRef\": \"state_level_summary.Sample Size (Women)\"}, {\"queryRef\": \"state_level_summary.Observed Household Barrier Prevalence Rate (%)\"}, {\"queryRef\": \"state_level_summary.Observed Logistical Barrier Prevalence Rate (%)\"}, {\"queryRef\": \"state_level_summary.Observed Health Facility Barrier Prevalence Rate (%)\"}, {\"queryRef\": \"state_level_summary.Predicted Composite Barrier Probability Score\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'State Level Health Access Scorecard & Composite Risk'\"}}}}}]}}}"
+    },
+    {
+      "x": 16,
+      "y": 664,
+      "z": 0,
+      "width": 1248,
+      "height": 40,
+      "config": "{\"name\": \"65aa200c-adfe-409a-8162-71592f2ecdbe\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Drill-through Enabled: Select any State to view demographic and sub-regional barrier profiles.\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+    }
+  ],
+  "drillthroughTargets": [
+    {
+      "name": "Drillthrough_State",
+      "displayName": "Drill Through State Barrier Profile",
+      "type": 0,
+      "projections": [
+        {
+          "queryRef": "state_level_summary.State / Union Territory",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+state_name,barrier_type,N,mean_observed_rate,mean_predicted_prob,data_rail_observed,data_rail_predicted
+Andaman & Nicobar Islands,Household Barrier,2397,0.035044,0.371794,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Andaman & Nicobar Islands,Logistical Barrier,2397,0.112641,0.420464,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Andaman & Nicobar Islands,Health Facility Barrier,2397,0.640384,0.512518,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Andhra Pradesh,Household Barrier,10975,0.261321,0.433986,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Andhra Pradesh,Logistical Barrier,10975,0.31262,0.447126,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Andhra Pradesh,Health Facility Barrier,10975,0.360547,0.47798,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Arunachal Pradesh,Household Barrier,19765,0.440577,0.565933,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Arunachal Pradesh,Logistical Barrier,19765,0.547989,0.58731,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Arunachal Pradesh,Health Facility Barrier,19765,0.605565,0.545243,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Assam,Household Barrier,34979,0.404385,0.579563,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Assam,Logistical Barrier,34979,0.372452,0.562609,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Assam,Health Facility Barrier,34979,0.540296,0.571498,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Bihar,Household Barrier,42483,0.343761,0.552939,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Bihar,Logistical Barrier,42483,0.374103,0.55328,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Bihar,Health Facility Barrier,42483,0.533413,0.544207,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Chandigarh,Household Barrier,746,0.128686,0.308081,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Chandigarh,Logistical Barrier,746,0.107239,0.267873,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Chandigarh,Health Facility Barrier,746,0.119303,0.358472,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Chhattisgarh,Household Barrier,28468,0.367465,0.522099,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Chhattisgarh,Logistical Barrier,28468,0.392827,0.533287,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Chhattisgarh,Health Facility Barrier,28468,0.653857,0.558774,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Dadra & Nagar Haveli And Daman & Diu,Household Barrier,2713,0.15481,0.415807,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Dadra & Nagar Haveli And Daman & Diu,Logistical Barrier,2713,0.302248,0.415526,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Dadra & Nagar Haveli And Daman & Diu,Health Facility Barrier,2713,0.336159,0.477229,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Goa,Household Barrier,2030,0.040394,0.270152,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Goa,Logistical Barrier,2030,0.080788,0.264995,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Goa,Health Facility Barrier,2030,0.38867,0.360691,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Gujarat,Household Barrier,33343,0.209009,0.450286,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Gujarat,Logistical Barrier,33343,0.329275,0.455579,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Gujarat,Health Facility Barrier,33343,0.471883,0.489919,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Haryana,Household Barrier,21909,0.168378,0.374487,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Haryana,Logistical Barrier,21909,0.224702,0.379521,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Haryana,Health Facility Barrier,21909,0.44735,0.430215,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Himachal Pradesh,Household Barrier,10368,0.080729,0.398937,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Himachal Pradesh,Logistical Barrier,10368,0.248071,0.433416,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Himachal Pradesh,Health Facility Barrier,10368,0.317419,0.459244,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Jammu & Kashmir,Household Barrier,23037,0.286409,0.478776,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Jammu & Kashmir,Logistical Barrier,23037,0.437948,0.491278,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Jammu & Kashmir,Health Facility Barrier,23037,0.516994,0.492948,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Jharkhand,Household Barrier,26495,0.372146,0.556293,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Jharkhand,Logistical Barrier,26495,0.429402,0.555334,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Jharkhand,Health Facility Barrier,26495,0.592074,0.55837,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Karnataka,Household Barrier,30455,0.243704,0.44743,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Karnataka,Logistical Barrier,30455,0.282909,0.44672,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Karnataka,Health Facility Barrier,30455,0.4132,0.47502,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Kerala,Household Barrier,10969,0.034096,0.326551,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Kerala,Logistical Barrier,10969,0.040478,0.328639,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Kerala,Health Facility Barrier,10969,0.014404,0.380753,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Ladakh,Household Barrier,2355,0.278556,0.508115,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Ladakh,Logistical Barrier,2355,0.424628,0.558652,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Ladakh,Health Facility Barrier,2355,0.453928,0.510938,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Lakshadweep,Household Barrier,1234,0.02107,0.300748,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Lakshadweep,Logistical Barrier,1234,0.029173,0.290217,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Lakshadweep,Health Facility Barrier,1234,0.023501,0.344637,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Madhya Pradesh,Household Barrier,48410,0.254266,0.508896,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Madhya Pradesh,Logistical Barrier,48410,0.33429,0.513091,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Madhya Pradesh,Health Facility Barrier,48410,0.535117,0.529677,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Maharashtra,Household Barrier,33755,0.19049,0.439905,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Maharashtra,Logistical Barrier,33755,0.234869,0.43964,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Maharashtra,Health Facility Barrier,33755,0.395349,0.47418,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Manipur,Household Barrier,8042,0.225441,0.511415,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Manipur,Logistical Barrier,8042,0.200199,0.502356,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Manipur,Health Facility Barrier,8042,0.103581,0.470838,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Meghalaya,Household Barrier,13089,0.406066,0.580215,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Meghalaya,Logistical Barrier,13089,0.406983,0.577468,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Meghalaya,Health Facility Barrier,13089,0.433723,0.506719,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Mizoram,Household Barrier,7279,0.044512,0.380893,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Mizoram,Logistical Barrier,7279,0.061684,0.369262,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Mizoram,Health Facility Barrier,7279,0.016761,0.355641,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Nagaland,Household Barrier,9694,0.370951,0.559727,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Nagaland,Logistical Barrier,9694,0.45327,0.57544,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Nagaland,Health Facility Barrier,9694,0.72189,0.53685,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Nct Of Delhi,Household Barrier,11159,0.095259,0.318817,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Nct Of Delhi,Logistical Barrier,11159,0.117484,0.271058,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Nct Of Delhi,Health Facility Barrier,11159,0.281656,0.376981,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Odisha,Household Barrier,27971,0.339852,0.523417,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Odisha,Logistical Barrier,27971,0.403489,0.534433,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Odisha,Health Facility Barrier,27971,0.792535,0.546656,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Puducherry,Household Barrier,3669,0.146361,0.326302,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Puducherry,Logistical Barrier,3669,0.118016,0.294937,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Puducherry,Health Facility Barrier,3669,0.182884,0.387033,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Punjab,Household Barrier,21771,0.197005,0.370626,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Punjab,Logistical Barrier,21771,0.23908,0.381762,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Punjab,Health Facility Barrier,21771,0.201553,0.323796,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rajasthan,Household Barrier,42990,0.211282,0.457649,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rajasthan,Logistical Barrier,42990,0.275576,0.474409,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Rajasthan,Health Facility Barrier,42990,0.492626,0.514309,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Sikkim,Household Barrier,3271,0.342097,0.470967,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Sikkim,Logistical Barrier,3271,0.453684,0.496475,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Sikkim,Health Facility Barrier,3271,0.613268,0.484662,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Tamil Nadu,Household Barrier,25650,0.196101,0.399333,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Tamil Nadu,Logistical Barrier,25650,0.239064,0.399861,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Tamil Nadu,Health Facility Barrier,25650,0.262339,0.445614,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Telangana,Household Barrier,27518,0.283414,0.437491,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Telangana,Logistical Barrier,27518,0.39367,0.451894,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Telangana,Health Facility Barrier,27518,0.441093,0.483208,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Tripura,Household Barrier,7314,0.469374,0.56059,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Tripura,Logistical Barrier,7314,0.318567,0.553037,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Tripura,Health Facility Barrier,7314,0.474569,0.557293,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Uttar Pradesh,Household Barrier,93124,0.264765,0.494014,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Uttar Pradesh,Logistical Barrier,93124,0.263971,0.492237,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Uttar Pradesh,Health Facility Barrier,93124,0.397663,0.503489,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Uttarakhand,Household Barrier,13280,0.13637,0.428721,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Uttarakhand,Logistical Barrier,13280,0.344352,0.44861,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+Uttarakhand,Health Facility Barrier,13280,0.522816,0.481535,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+West Bengal,Household Barrier,21408,0.496357,0.540028,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+West Bengal,Logistical Barrier,21408,0.337444,0.515364,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
+West Bengal,Health Facility Barrier,21408,0.500374,0.531757,Rail A — Observed Rate (NFHS-5),Rail B — BarrierLens AI Predicted Probability
