@@ -1,0 +1,376 @@
+{
+  "metadata": {
+    "title": "Socio-Demographic Healthcare Barrier Breakdown",
+    "suppression_threshold": 30
+  },
+  "by_wealth": [
+    {
+      "group_keys": {
+        "wealth_clean": "Middle"
+      },
+      "sample_size_n": 151505,
+      "pct_national_sample": 0.2092,
+      "suppressed": false,
+      "observed_household_rate": 0.2535,
+      "observed_logistic_rate": 0.3058,
+      "observed_facility_rate": 0.4518,
+      "observed_any_barrier_rate": 0.5869,
+      "predicted_household_prob": 0.4713,
+      "predicted_logistic_prob": 0.4849,
+      "predicted_facility_prob": 0.491
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer"
+      },
+      "sample_size_n": 160340,
+      "pct_national_sample": 0.2214,
+      "suppressed": false,
+      "observed_household_rate": 0.3269,
+      "observed_logistic_rate": 0.3807,
+      "observed_facility_rate": 0.508,
+      "observed_any_barrier_rate": 0.6647,
+      "predicted_household_prob": 0.5603,
+      "predicted_logistic_prob": 0.567,
+      "predicted_facility_prob": 0.5472
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest"
+      },
+      "sample_size_n": 149844,
+      "pct_national_sample": 0.2069,
+      "suppressed": false,
+      "observed_household_rate": 0.4237,
+      "observed_logistic_rate": 0.4775,
+      "observed_facility_rate": 0.589,
+      "observed_any_barrier_rate": 0.7562,
+      "predicted_household_prob": 0.6587,
+      "predicted_logistic_prob": 0.6602,
+      "predicted_facility_prob": 0.6264
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer"
+      },
+      "sample_size_n": 139607,
+      "pct_national_sample": 0.1928,
+      "suppressed": false,
+      "observed_household_rate": 0.1929,
+      "observed_logistic_rate": 0.2314,
+      "observed_facility_rate": 0.4002,
+      "observed_any_barrier_rate": 0.5089,
+      "predicted_household_prob": 0.3834,
+      "predicted_logistic_prob": 0.3896,
+      "predicted_facility_prob": 0.4379
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest"
+      },
+      "sample_size_n": 122819,
+      "pct_national_sample": 0.1696,
+      "suppressed": false,
+      "observed_household_rate": 0.1254,
+      "observed_logistic_rate": 0.1436,
+      "observed_facility_rate": 0.3184,
+      "observed_any_barrier_rate": 0.3953,
+      "predicted_household_prob": 0.2709,
+      "predicted_logistic_prob": 0.2608,
+      "predicted_facility_prob": 0.3529
+    }
+  ],
+  "by_residence": [
+    {
+      "group_keys": {
+        "residence_clean": "Rural"
+      },
+      "sample_size_n": 544580,
+      "pct_national_sample": 0.7521,
+      "suppressed": false,
+      "observed_household_rate": 0.2995,
+      "observed_logistic_rate": 0.363,
+      "observed_facility_rate": 0.4918,
+      "observed_any_barrier_rate": 0.6349,
+      "predicted_household_prob": 0.5157,
+      "predicted_logistic_prob": 0.5225,
+      "predicted_facility_prob": 0.523
+    },
+    {
+      "group_keys": {
+        "residence_clean": "Urban"
+      },
+      "sample_size_n": 179535,
+      "pct_national_sample": 0.2479,
+      "suppressed": false,
+      "observed_household_rate": 0.1868,
+      "observed_logistic_rate": 0.1736,
+      "observed_facility_rate": 0.3637,
+      "observed_any_barrier_rate": 0.4603,
+      "predicted_household_prob": 0.367,
+      "predicted_logistic_prob": 0.3631,
+      "predicted_facility_prob": 0.4214
+    }
+  ],
+  "by_education": [
+    {
+      "group_keys": {
+        "education_clean": "Unknown"
+      },
+      "sample_size_n": 724115,
+      "pct_national_sample": 1.0,
+      "suppressed": false,
+      "observed_household_rate": 0.2716,
+      "observed_logistic_rate": 0.3161,
+      "observed_facility_rate": 0.4601,
+      "observed_any_barrier_rate": 0.5916,
+      "predicted_household_prob": 0.4788,
+      "predicted_logistic_prob": 0.483,
+      "predicted_facility_prob": 0.4978
+    }
+  ],
+  "by_wealth_residence": [
+    {
+      "group_keys": {
+        "wealth_clean": "Middle",
+        "residence_clean": "Rural"
+      },
+      "sample_size_n": 121345,
+      "pct_national_sample": 0.1676,
+      "suppressed": false,
+      "observed_household_rate": 0.2536,
+      "observed_logistic_rate": 0.3251,
+      "observed_facility_rate": 0.4609,
+      "observed_any_barrier_rate": 0.5981,
+      "predicted_household_prob": 0.4714,
+      "predicted_logistic_prob": 0.4865,
+      "predicted_facility_prob": 0.4923
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Middle",
+        "residence_clean": "Urban"
+      },
+      "sample_size_n": 30160,
+      "pct_national_sample": 0.0417,
+      "suppressed": false,
+      "observed_household_rate": 0.2532,
+      "observed_logistic_rate": 0.228,
+      "observed_facility_rate": 0.4156,
+      "observed_any_barrier_rate": 0.5418,
+      "predicted_household_prob": 0.4712,
+      "predicted_logistic_prob": 0.4783,
+      "predicted_facility_prob": 0.4858
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer",
+        "residence_clean": "Rural"
+      },
+      "sample_size_n": 146628,
+      "pct_national_sample": 0.2025,
+      "suppressed": false,
+      "observed_household_rate": 0.327,
+      "observed_logistic_rate": 0.3912,
+      "observed_facility_rate": 0.5132,
+      "observed_any_barrier_rate": 0.6703,
+      "predicted_household_prob": 0.5603,
+      "predicted_logistic_prob": 0.5677,
+      "predicted_facility_prob": 0.548
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer",
+        "residence_clean": "Urban"
+      },
+      "sample_size_n": 13712,
+      "pct_national_sample": 0.0189,
+      "suppressed": false,
+      "observed_household_rate": 0.3264,
+      "observed_logistic_rate": 0.2686,
+      "observed_facility_rate": 0.4529,
+      "observed_any_barrier_rate": 0.6045,
+      "predicted_household_prob": 0.5594,
+      "predicted_logistic_prob": 0.5595,
+      "predicted_facility_prob": 0.5391
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest",
+        "residence_clean": "Rural"
+      },
+      "sample_size_n": 144482,
+      "pct_national_sample": 0.1995,
+      "suppressed": false,
+      "observed_household_rate": 0.4237,
+      "observed_logistic_rate": 0.4827,
+      "observed_facility_rate": 0.5914,
+      "observed_any_barrier_rate": 0.7584,
+      "predicted_household_prob": 0.6589,
+      "predicted_logistic_prob": 0.6608,
+      "predicted_facility_prob": 0.6269
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest",
+        "residence_clean": "Urban"
+      },
+      "sample_size_n": 5362,
+      "pct_national_sample": 0.0074,
+      "suppressed": false,
+      "observed_household_rate": 0.4217,
+      "observed_logistic_rate": 0.337,
+      "observed_facility_rate": 0.5257,
+      "observed_any_barrier_rate": 0.6979,
+      "predicted_household_prob": 0.6533,
+      "predicted_logistic_prob": 0.6458,
+      "predicted_facility_prob": 0.6105
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer",
+        "residence_clean": "Rural"
+      },
+      "sample_size_n": 85993,
+      "pct_national_sample": 0.1188,
+      "suppressed": false,
+      "observed_household_rate": 0.1934,
+      "observed_logistic_rate": 0.262,
+      "observed_facility_rate": 0.4117,
+      "observed_any_barrier_rate": 0.5269,
+      "predicted_household_prob": 0.386,
+      "predicted_logistic_prob": 0.3953,
+      "predicted_facility_prob": 0.4401
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer",
+        "residence_clean": "Urban"
+      },
+      "sample_size_n": 53614,
+      "pct_national_sample": 0.074,
+      "suppressed": false,
+      "observed_household_rate": 0.192,
+      "observed_logistic_rate": 0.1825,
+      "observed_facility_rate": 0.3817,
+      "observed_any_barrier_rate": 0.48,
+      "predicted_household_prob": 0.3792,
+      "predicted_logistic_prob": 0.3805,
+      "predicted_facility_prob": 0.4345
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest",
+        "residence_clean": "Rural"
+      },
+      "sample_size_n": 46132,
+      "pct_national_sample": 0.0637,
+      "suppressed": false,
+      "observed_household_rate": 0.1417,
+      "observed_logistic_rate": 0.1869,
+      "observed_facility_rate": 0.3431,
+      "observed_any_barrier_rate": 0.4341,
+      "predicted_household_prob": 0.284,
+      "predicted_logistic_prob": 0.2776,
+      "predicted_facility_prob": 0.3533
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest",
+        "residence_clean": "Urban"
+      },
+      "sample_size_n": 76687,
+      "pct_national_sample": 0.1059,
+      "suppressed": false,
+      "observed_household_rate": 0.1156,
+      "observed_logistic_rate": 0.1175,
+      "observed_facility_rate": 0.3035,
+      "observed_any_barrier_rate": 0.372,
+      "predicted_household_prob": 0.263,
+      "predicted_logistic_prob": 0.2508,
+      "predicted_facility_prob": 0.3527
+    }
+  ],
+  "by_wealth_education": [
+    {
+      "group_keys": {
+        "wealth_clean": "Middle",
+        "education_clean": "Unknown"
+      },
+      "sample_size_n": 151505,
+      "pct_national_sample": 0.2092,
+      "suppressed": false,
+      "observed_household_rate": 0.2535,
+      "observed_logistic_rate": 0.3058,
+      "observed_facility_rate": 0.4518,
+      "observed_any_barrier_rate": 0.5869,
+      "predicted_household_prob": 0.4713,
+      "predicted_logistic_prob": 0.4849,
+      "predicted_facility_prob": 0.491
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer",
+        "education_clean": "Unknown"
+      },
+      "sample_size_n": 160340,
+      "pct_national_sample": 0.2214,
+      "suppressed": false,
+      "observed_household_rate": 0.3269,
+      "observed_logistic_rate": 0.3807,
+      "observed_facility_rate": 0.508,
+      "observed_any_barrier_rate": 0.6647,
+      "predicted_household_prob": 0.5603,
+      "predicted_logistic_prob": 0.567,
+      "predicted_facility_prob": 0.5472
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest",
+        "education_clean": "Unknown"
+      },
+      "sample_size_n": 149844,
+      "pct_national_sample": 0.2069,
+      "suppressed": false,
+      "observed_household_rate": 0.4237,
+      "observed_logistic_rate": 0.4775,
+      "observed_facility_rate": 0.589,
+      "observed_any_barrier_rate": 0.7562,
+      "predicted_household_prob": 0.6587,
+      "predicted_logistic_prob": 0.6602,
+      "predicted_facility_prob": 0.6264
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer",
+        "education_clean": "Unknown"
+      },
+      "sample_size_n": 139607,
+      "pct_national_sample": 0.1928,
+      "suppressed": false,
+      "observed_household_rate": 0.1929,
+      "observed_logistic_rate": 0.2314,
+      "observed_facility_rate": 0.4002,
+      "observed_any_barrier_rate": 0.5089,
+      "predicted_household_prob": 0.3834,
+      "predicted_logistic_prob": 0.3896,
+      "predicted_facility_prob": 0.4379
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest",
+        "education_clean": "Unknown"
+      },
+      "sample_size_n": 122819,
+      "pct_national_sample": 0.1696,
+      "suppressed": false,
+      "observed_household_rate": 0.1254,
+      "observed_logistic_rate": 0.1436,
+      "observed_facility_rate": 0.3184,
+      "observed_any_barrier_rate": 0.3953,
+      "predicted_household_prob": 0.2709,
+      "predicted_logistic_prob": 0.2608,
+      "predicted_facility_prob": 0.3529
+    }
+  ]
+}

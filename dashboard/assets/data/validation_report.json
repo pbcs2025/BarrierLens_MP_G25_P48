@@ -1,0 +1,44 @@
+{
+  "validation_passed": true,
+  "total_files": 9,
+  "passed_files": 9,
+  "failed_files": 0,
+  "details": {
+    "national_overview.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "state_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "demographic_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "cluster_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "outcome_impact_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "rural_urban_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "empowerment_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "multiple_barrier_summary.json": {
+      "status": "PASS",
+      "errors": []
+    },
+    "regression_summary.json": {
+      "status": "PASS",
+      "errors": []
+    }
+  }
+}

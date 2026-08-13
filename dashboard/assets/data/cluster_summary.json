@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "title": "K-Means Cluster Archetype Summary (k=2 confirmed)",
+    "total_women": 724115,
+    "k_selected": 2,
+    "silhouette_score_k2": 0.3986
+  },
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "archetype_name": "High Media & Digital Inclusion",
+      "sample_size_n": 344575,
+      "pct_total_women": 0.4759,
+      "media_exposure_index": 0.9149,
+      "digital_inclusion_index": 0.1225,
+      "vulnerability_score": 0.2623,
+      "predicted_household_prob": 0.3557,
+      "predicted_logistic_prob": 0.3588,
+      "predicted_facility_prob": 0.4137,
+      "predicted_composite_score": 0.3761
+    },
+    {
+      "cluster_id": 1,
+      "archetype_name": "High Vulnerability, High Barrier Exposure",
+      "sample_size_n": 379540,
+      "pct_total_women": 0.5241,
+      "media_exposure_index": 0.3493,
+      "digital_inclusion_index": 0.0794,
+      "vulnerability_score": 0.7694,
+      "predicted_household_prob": 0.5907,
+      "predicted_logistic_prob": 0.5957,
+      "predicted_facility_prob": 0.5741,
+      "predicted_composite_score": 0.5868
+    }
+  ]
+}

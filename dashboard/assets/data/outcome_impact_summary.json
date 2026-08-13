@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "title": "Healthcare Utilization Impact (Stage 2 Outcome Modelling)",
+    "primary_target": "target_unmet_fp (Confirmed Unmet Family Planning Need)",
+    "secondary_target": "target_anc_gap (Antenatal Care Gap \u2014 Documented Extension)"
+  },
+  "target_unmet_fp": {
+    "analytic_sample_n": 466859,
+    "positive_cases_n": 49672,
+    "positive_rate": 0.1064,
+    "logistic_regression": {
+      "accuracy": 0.6124,
+      "roc_auc": 0.6591,
+      "precision": 0.1652,
+      "recall": 0.6015,
+      "f1_score": 0.2592,
+      "baseline_socioeconomic_auc": 0.6574,
+      "full_with_barriers_auc": 0.6591,
+      "barrier_uplift_auc": 0.0017
+    },
+    "random_forest": {
+      "accuracy": 0.5849,
+      "roc_auc": 0.5849,
+      "barrier_uplift_auc": 0.0017
+    },
+    "top_predictor": {
+      "feature": "household_barrier_prob",
+      "odds_ratio": 1.15,
+      "interpretation": "Higher predicted household barrier odds are associated with increased risk of unmet family planning need."
+    }
+  },
+  "target_anc_gap": {
+    "status": "Documented Extension (Requires m14)",
+    "analytic_sample_n": 163018,
+    "positive_rate": 0.378,
+    "logistic_regression": {
+      "roc_auc": 0.6356,
+      "barrier_uplift_auc": 0.002
+    },
+    "top_predictor": {
+      "feature": "household_barrier_prob",
+      "odds_ratio": 1.31,
+      "interpretation": "Higher predicted household barrier odds increase the likelihood of missing required antenatal care visits."
+    }
+  },
+  "institutional_delivery_note": "Institutional delivery is not currently present in raw NFHS-5 extract columns; documented as a planned future extension."
+}

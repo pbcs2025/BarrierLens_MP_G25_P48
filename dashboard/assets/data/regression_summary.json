@@ -1,0 +1,1638 @@
+{
+  "metadata": {
+    "title": "Stage 1 Logistic Regression Odds Ratios & Coefficients",
+    "section_reference": "Section 11.2 & Section 6 Item 6 (Honesty Flag Respected)",
+    "honesty_flag_note": "Report actual computed LR coefficients and odds ratios directly. Do not adjust figures to force typical expected narratives."
+  },
+  "targets": {
+    "household": {
+      "target": "target_household",
+      "intercept": -1.0688,
+      "num_features": 56,
+      "top_risk_factors": [
+        {
+          "feature": "v190_poorest",
+          "coefficient": 0.2346,
+          "odds_ratio": 1.2643,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 1
+        },
+        {
+          "feature": "v106_no education",
+          "coefficient": 0.1787,
+          "odds_ratio": 1.1957,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 2
+        },
+        {
+          "feature": "v106_secondary",
+          "coefficient": 0.1427,
+          "odds_ratio": 1.1534,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 3
+        },
+        {
+          "feature": "v106_primary",
+          "coefficient": 0.1326,
+          "odds_ratio": 1.1418,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 4
+        },
+        {
+          "feature": "v190_poorer",
+          "coefficient": 0.1123,
+          "odds_ratio": 1.1189,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 5
+        },
+        {
+          "feature": "v013_45-49",
+          "coefficient": 0.0883,
+          "odds_ratio": 1.0924,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 6
+        },
+        {
+          "feature": "v159_not at all",
+          "coefficient": 0.0729,
+          "odds_ratio": 1.0756,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 7
+        },
+        {
+          "feature": "v131_no caste / tribe",
+          "coefficient": 0.07,
+          "odds_ratio": 1.0726,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 8
+        },
+        {
+          "feature": "v157_not at all",
+          "coefficient": 0.0609,
+          "odds_ratio": 1.0628,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 9
+        },
+        {
+          "feature": "v013_40-44",
+          "coefficient": 0.0603,
+          "odds_ratio": 1.0622,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 10
+        }
+      ],
+      "top_protective_factors": [
+        {
+          "feature": "v190_richest",
+          "coefficient": -0.2532,
+          "odds_ratio": 0.7763,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 56
+        },
+        {
+          "feature": "v012",
+          "coefficient": -0.1444,
+          "odds_ratio": 0.8655,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 55
+        },
+        {
+          "feature": "v190_richer",
+          "coefficient": -0.1113,
+          "odds_ratio": 0.8947,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 54
+        },
+        {
+          "feature": "v158_not at all",
+          "coefficient": -0.0913,
+          "odds_ratio": 0.9128,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 53
+        },
+        {
+          "feature": "v130_hindu",
+          "coefficient": -0.0878,
+          "odds_ratio": 0.9159,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 52
+        },
+        {
+          "feature": "v743f_respondent and husband/partner",
+          "coefficient": -0.0842,
+          "odds_ratio": 0.9192,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 51
+        },
+        {
+          "feature": "v743f_missing",
+          "coefficient": -0.0674,
+          "odds_ratio": 0.9348,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 50
+        },
+        {
+          "feature": "v501_married",
+          "coefficient": -0.0474,
+          "odds_ratio": 0.9537,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 49
+        },
+        {
+          "feature": "media_exposure_index",
+          "coefficient": -0.0422,
+          "odds_ratio": 0.9587,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 48
+        },
+        {
+          "feature": "v130_christian",
+          "coefficient": -0.0382,
+          "odds_ratio": 0.9626,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 47
+        }
+      ],
+      "all_features": [
+        {
+          "feature": "v190_poorest",
+          "coefficient": 0.2346,
+          "odds_ratio": 1.2643,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 1
+        },
+        {
+          "feature": "v106_no education",
+          "coefficient": 0.1787,
+          "odds_ratio": 1.1957,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 2
+        },
+        {
+          "feature": "v106_secondary",
+          "coefficient": 0.1427,
+          "odds_ratio": 1.1534,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 3
+        },
+        {
+          "feature": "v106_primary",
+          "coefficient": 0.1326,
+          "odds_ratio": 1.1418,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 4
+        },
+        {
+          "feature": "v190_poorer",
+          "coefficient": 0.1123,
+          "odds_ratio": 1.1189,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 5
+        },
+        {
+          "feature": "v013_45-49",
+          "coefficient": 0.0883,
+          "odds_ratio": 1.0924,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 6
+        },
+        {
+          "feature": "v159_not at all",
+          "coefficient": 0.0729,
+          "odds_ratio": 1.0756,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 7
+        },
+        {
+          "feature": "v131_no caste / tribe",
+          "coefficient": 0.07,
+          "odds_ratio": 1.0726,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 8
+        },
+        {
+          "feature": "v157_not at all",
+          "coefficient": 0.0609,
+          "odds_ratio": 1.0628,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 9
+        },
+        {
+          "feature": "v013_40-44",
+          "coefficient": 0.0603,
+          "odds_ratio": 1.0622,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 10
+        },
+        {
+          "feature": "v013_35-39",
+          "coefficient": 0.0568,
+          "odds_ratio": 1.0584,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 11
+        },
+        {
+          "feature": "v131_tribe",
+          "coefficient": 0.0517,
+          "odds_ratio": 1.053,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 12
+        },
+        {
+          "feature": "v013_30-34",
+          "coefficient": 0.0455,
+          "odds_ratio": 1.0466,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 13
+        },
+        {
+          "feature": "v013_25-29",
+          "coefficient": 0.0421,
+          "odds_ratio": 1.043,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 14
+        },
+        {
+          "feature": "v501_widowed",
+          "coefficient": 0.0299,
+          "odds_ratio": 1.0303,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 15
+        },
+        {
+          "feature": "v013_20-24",
+          "coefficient": 0.0295,
+          "odds_ratio": 1.03,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 16
+        },
+        {
+          "feature": "v170_no",
+          "coefficient": 0.0269,
+          "odds_ratio": 1.0273,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 17
+        },
+        {
+          "feature": "v159_less than once a week",
+          "coefficient": 0.0218,
+          "odds_ratio": 1.0221,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 18
+        },
+        {
+          "feature": "v501_no longer living together/separated",
+          "coefficient": 0.0184,
+          "odds_ratio": 1.0186,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 19
+        },
+        {
+          "feature": "v157_less than once a week",
+          "coefficient": 0.0112,
+          "odds_ratio": 1.0112,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 20
+        },
+        {
+          "feature": "v169a_no",
+          "coefficient": 0.0092,
+          "odds_ratio": 1.0092,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 21
+        },
+        {
+          "feature": "v717_sales",
+          "coefficient": 0.0065,
+          "odds_ratio": 1.0065,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 22
+        },
+        {
+          "feature": "v717_don't know",
+          "coefficient": 0.0058,
+          "odds_ratio": 1.0058,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 23
+        },
+        {
+          "feature": "v130_jewish",
+          "coefficient": 0.0043,
+          "odds_ratio": 1.0044,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 24
+        },
+        {
+          "feature": "v717_skilled and unskilled manual",
+          "coefficient": 0.0037,
+          "odds_ratio": 1.0037,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 25
+        },
+        {
+          "feature": "v717_clerical",
+          "coefficient": 0.0027,
+          "odds_ratio": 1.0027,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 26
+        },
+        {
+          "feature": "v130_no religion",
+          "coefficient": 0.0013,
+          "odds_ratio": 1.0013,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 27
+        },
+        {
+          "feature": "v717_services / household and domestic",
+          "coefficient": 0.0004,
+          "odds_ratio": 1.0004,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 28
+        },
+        {
+          "feature": "v717_other",
+          "coefficient": -0.0005,
+          "odds_ratio": 0.9995,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 29
+        },
+        {
+          "feature": "v717_missing",
+          "coefficient": -0.0007,
+          "odds_ratio": 0.9993,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 30
+        },
+        {
+          "feature": "v130_parsi / zoroastrian",
+          "coefficient": -0.0016,
+          "odds_ratio": 0.9984,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 31
+        },
+        {
+          "feature": "v130_sikh",
+          "coefficient": -0.0044,
+          "odds_ratio": 0.9956,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 32
+        },
+        {
+          "feature": "v131_don't know",
+          "coefficient": -0.0046,
+          "odds_ratio": 0.9954,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 33
+        },
+        {
+          "feature": "v743f_respondent alone",
+          "coefficient": -0.0047,
+          "odds_ratio": 0.9953,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 34
+        },
+        {
+          "feature": "v743f_husband/partner has no earnings",
+          "coefficient": -0.0061,
+          "odds_ratio": 0.9939,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 35
+        },
+        {
+          "feature": "v169a_yes",
+          "coefficient": -0.0075,
+          "odds_ratio": 0.9925,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 36
+        },
+        {
+          "feature": "v717_professional / technical / managerial",
+          "coefficient": -0.0079,
+          "odds_ratio": 0.9921,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 37
+        },
+        {
+          "feature": "v130_other",
+          "coefficient": -0.01,
+          "odds_ratio": 0.9901,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 38
+        },
+        {
+          "feature": "v717_not working",
+          "coefficient": -0.0099,
+          "odds_ratio": 0.9901,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 39
+        },
+        {
+          "feature": "v481_yes",
+          "coefficient": -0.0101,
+          "odds_ratio": 0.99,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 40
+        },
+        {
+          "feature": "v743f_other",
+          "coefficient": -0.0112,
+          "odds_ratio": 0.9889,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 41
+        },
+        {
+          "feature": "v170_yes",
+          "coefficient": -0.014,
+          "odds_ratio": 0.9861,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 42
+        },
+        {
+          "feature": "v130_jain",
+          "coefficient": -0.0235,
+          "odds_ratio": 0.9768,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 43
+        },
+        {
+          "feature": "v130_muslim",
+          "coefficient": -0.0322,
+          "odds_ratio": 0.9684,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 44
+        },
+        {
+          "feature": "v501_never in union  [includes: married gauna not performed]",
+          "coefficient": -0.0339,
+          "odds_ratio": 0.9667,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 45
+        },
+        {
+          "feature": "v158_less than once a week",
+          "coefficient": -0.0365,
+          "odds_ratio": 0.9642,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 46
+        },
+        {
+          "feature": "v130_christian",
+          "coefficient": -0.0382,
+          "odds_ratio": 0.9626,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 47
+        },
+        {
+          "feature": "media_exposure_index",
+          "coefficient": -0.0422,
+          "odds_ratio": 0.9587,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 48
+        },
+        {
+          "feature": "v501_married",
+          "coefficient": -0.0474,
+          "odds_ratio": 0.9537,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 49
+        },
+        {
+          "feature": "v743f_missing",
+          "coefficient": -0.0674,
+          "odds_ratio": 0.9348,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 50
+        },
+        {
+          "feature": "v743f_respondent and husband/partner",
+          "coefficient": -0.0842,
+          "odds_ratio": 0.9192,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 51
+        },
+        {
+          "feature": "v130_hindu",
+          "coefficient": -0.0878,
+          "odds_ratio": 0.9159,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 52
+        },
+        {
+          "feature": "v158_not at all",
+          "coefficient": -0.0913,
+          "odds_ratio": 0.9128,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 53
+        },
+        {
+          "feature": "v190_richer",
+          "coefficient": -0.1113,
+          "odds_ratio": 0.8947,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 54
+        },
+        {
+          "feature": "v012",
+          "coefficient": -0.1444,
+          "odds_ratio": 0.8655,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 55
+        },
+        {
+          "feature": "v190_richest",
+          "coefficient": -0.2532,
+          "odds_ratio": 0.7763,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 56
+        }
+      ]
+    },
+    "logistic": {
+      "target": "target_logistic",
+      "intercept": -0.8404,
+      "num_features": 56,
+      "top_risk_factors": [
+        {
+          "feature": "v190_poorest",
+          "coefficient": 0.218,
+          "odds_ratio": 1.2436,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 1
+        },
+        {
+          "feature": "v106_no education",
+          "coefficient": 0.1502,
+          "odds_ratio": 1.162,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 2
+        },
+        {
+          "feature": "v106_secondary",
+          "coefficient": 0.1085,
+          "odds_ratio": 1.1146,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 3
+        },
+        {
+          "feature": "v190_poorer",
+          "coefficient": 0.1023,
+          "odds_ratio": 1.1077,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 4
+        },
+        {
+          "feature": "v106_primary",
+          "coefficient": 0.0956,
+          "odds_ratio": 1.1003,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 5
+        },
+        {
+          "feature": "v131_tribe",
+          "coefficient": 0.0854,
+          "odds_ratio": 1.0891,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 6
+        },
+        {
+          "feature": "v157_not at all",
+          "coefficient": 0.0799,
+          "odds_ratio": 1.0832,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 7
+        },
+        {
+          "feature": "v159_not at all",
+          "coefficient": 0.053,
+          "odds_ratio": 1.0545,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 8
+        },
+        {
+          "feature": "v501_never in union  [includes: married gauna not performed]",
+          "coefficient": 0.0352,
+          "odds_ratio": 1.0358,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 9
+        },
+        {
+          "feature": "v131_no caste / tribe",
+          "coefficient": 0.0338,
+          "odds_ratio": 1.0344,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 10
+        }
+      ],
+      "top_protective_factors": [
+        {
+          "feature": "v190_richest",
+          "coefficient": -0.2987,
+          "odds_ratio": 0.7418,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 56
+        },
+        {
+          "feature": "v130_hindu",
+          "coefficient": -0.1264,
+          "odds_ratio": 0.8812,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 55
+        },
+        {
+          "feature": "v190_richer",
+          "coefficient": -0.1222,
+          "odds_ratio": 0.885,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 54
+        },
+        {
+          "feature": "v130_muslim",
+          "coefficient": -0.1004,
+          "odds_ratio": 0.9045,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 53
+        },
+        {
+          "feature": "v158_not at all",
+          "coefficient": -0.0775,
+          "odds_ratio": 0.9255,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 52
+        },
+        {
+          "feature": "v130_christian",
+          "coefficient": -0.0764,
+          "odds_ratio": 0.9264,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 51
+        },
+        {
+          "feature": "v743f_respondent and husband/partner",
+          "coefficient": -0.0612,
+          "odds_ratio": 0.9406,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 50
+        },
+        {
+          "feature": "v717_not working",
+          "coefficient": -0.0524,
+          "odds_ratio": 0.949,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 49
+        },
+        {
+          "feature": "media_exposure_index",
+          "coefficient": -0.0522,
+          "odds_ratio": 0.9491,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 48
+        },
+        {
+          "feature": "v743f_missing",
+          "coefficient": -0.0478,
+          "odds_ratio": 0.9533,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 47
+        }
+      ],
+      "all_features": [
+        {
+          "feature": "v190_poorest",
+          "coefficient": 0.218,
+          "odds_ratio": 1.2436,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 1
+        },
+        {
+          "feature": "v106_no education",
+          "coefficient": 0.1502,
+          "odds_ratio": 1.162,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 2
+        },
+        {
+          "feature": "v106_secondary",
+          "coefficient": 0.1085,
+          "odds_ratio": 1.1146,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 3
+        },
+        {
+          "feature": "v190_poorer",
+          "coefficient": 0.1023,
+          "odds_ratio": 1.1077,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 4
+        },
+        {
+          "feature": "v106_primary",
+          "coefficient": 0.0956,
+          "odds_ratio": 1.1003,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 5
+        },
+        {
+          "feature": "v131_tribe",
+          "coefficient": 0.0854,
+          "odds_ratio": 1.0891,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 6
+        },
+        {
+          "feature": "v157_not at all",
+          "coefficient": 0.0799,
+          "odds_ratio": 1.0832,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 7
+        },
+        {
+          "feature": "v159_not at all",
+          "coefficient": 0.053,
+          "odds_ratio": 1.0545,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 8
+        },
+        {
+          "feature": "v501_never in union  [includes: married gauna not performed]",
+          "coefficient": 0.0352,
+          "odds_ratio": 1.0358,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 9
+        },
+        {
+          "feature": "v131_no caste / tribe",
+          "coefficient": 0.0338,
+          "odds_ratio": 1.0344,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 10
+        },
+        {
+          "feature": "v170_no",
+          "coefficient": 0.0268,
+          "odds_ratio": 1.0272,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 11
+        },
+        {
+          "feature": "v157_less than once a week",
+          "coefficient": 0.0251,
+          "odds_ratio": 1.0254,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 12
+        },
+        {
+          "feature": "v013_20-24",
+          "coefficient": 0.0176,
+          "odds_ratio": 1.0177,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 13
+        },
+        {
+          "feature": "v013_25-29",
+          "coefficient": 0.0149,
+          "odds_ratio": 1.015,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 14
+        },
+        {
+          "feature": "v501_widowed",
+          "coefficient": 0.0134,
+          "odds_ratio": 1.0135,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 15
+        },
+        {
+          "feature": "v159_less than once a week",
+          "coefficient": 0.0134,
+          "odds_ratio": 1.0135,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 16
+        },
+        {
+          "feature": "v130_no religion",
+          "coefficient": 0.0125,
+          "odds_ratio": 1.0126,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 17
+        },
+        {
+          "feature": "v169a_yes",
+          "coefficient": 0.0112,
+          "odds_ratio": 1.0113,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 18
+        },
+        {
+          "feature": "v501_married",
+          "coefficient": 0.0104,
+          "odds_ratio": 1.0105,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 19
+        },
+        {
+          "feature": "v013_30-34",
+          "coefficient": 0.0093,
+          "odds_ratio": 1.0093,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 20
+        },
+        {
+          "feature": "v169a_no",
+          "coefficient": 0.0083,
+          "odds_ratio": 1.0084,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 21
+        },
+        {
+          "feature": "v013_35-39",
+          "coefficient": 0.0061,
+          "odds_ratio": 1.0061,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 22
+        },
+        {
+          "feature": "v481_yes",
+          "coefficient": 0.0038,
+          "odds_ratio": 1.0038,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 23
+        },
+        {
+          "feature": "v170_yes",
+          "coefficient": 0.0014,
+          "odds_ratio": 1.0014,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 24
+        },
+        {
+          "feature": "v501_no longer living together/separated",
+          "coefficient": -0.0,
+          "odds_ratio": 1.0,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 25
+        },
+        {
+          "feature": "v130_jewish",
+          "coefficient": -0.0006,
+          "odds_ratio": 0.9994,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 26
+        },
+        {
+          "feature": "v131_don't know",
+          "coefficient": -0.001,
+          "odds_ratio": 0.999,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 27
+        },
+        {
+          "feature": "v717_don't know",
+          "coefficient": -0.001,
+          "odds_ratio": 0.999,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 28
+        },
+        {
+          "feature": "v013_45-49",
+          "coefficient": -0.0017,
+          "odds_ratio": 0.9983,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 29
+        },
+        {
+          "feature": "v130_parsi / zoroastrian",
+          "coefficient": -0.0024,
+          "odds_ratio": 0.9976,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 30
+        },
+        {
+          "feature": "v717_other",
+          "coefficient": -0.0039,
+          "odds_ratio": 0.9961,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 31
+        },
+        {
+          "feature": "v013_40-44",
+          "coefficient": -0.0047,
+          "odds_ratio": 0.9953,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 32
+        },
+        {
+          "feature": "v717_clerical",
+          "coefficient": -0.0047,
+          "odds_ratio": 0.9953,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 33
+        },
+        {
+          "feature": "v130_sikh",
+          "coefficient": -0.0049,
+          "odds_ratio": 0.9952,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 34
+        },
+        {
+          "feature": "v743f_husband/partner has no earnings",
+          "coefficient": -0.0049,
+          "odds_ratio": 0.9951,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 35
+        },
+        {
+          "feature": "v743f_respondent alone",
+          "coefficient": -0.0061,
+          "odds_ratio": 0.9939,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 36
+        },
+        {
+          "feature": "v717_services / household and domestic",
+          "coefficient": -0.0062,
+          "odds_ratio": 0.9938,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 37
+        },
+        {
+          "feature": "v717_sales",
+          "coefficient": -0.0068,
+          "odds_ratio": 0.9932,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 38
+        },
+        {
+          "feature": "v012",
+          "coefficient": -0.009,
+          "odds_ratio": 0.9911,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 39
+        },
+        {
+          "feature": "v743f_other",
+          "coefficient": -0.0115,
+          "odds_ratio": 0.9886,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 40
+        },
+        {
+          "feature": "v717_professional / technical / managerial",
+          "coefficient": -0.0133,
+          "odds_ratio": 0.9868,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 41
+        },
+        {
+          "feature": "v717_missing",
+          "coefficient": -0.0145,
+          "odds_ratio": 0.9856,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 42
+        },
+        {
+          "feature": "v717_skilled and unskilled manual",
+          "coefficient": -0.0148,
+          "odds_ratio": 0.9853,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 43
+        },
+        {
+          "feature": "v130_other",
+          "coefficient": -0.0172,
+          "odds_ratio": 0.983,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 44
+        },
+        {
+          "feature": "v130_jain",
+          "coefficient": -0.023,
+          "odds_ratio": 0.9773,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 45
+        },
+        {
+          "feature": "v158_less than once a week",
+          "coefficient": -0.0263,
+          "odds_ratio": 0.9741,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 46
+        },
+        {
+          "feature": "v743f_missing",
+          "coefficient": -0.0478,
+          "odds_ratio": 0.9533,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 47
+        },
+        {
+          "feature": "media_exposure_index",
+          "coefficient": -0.0522,
+          "odds_ratio": 0.9491,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 48
+        },
+        {
+          "feature": "v717_not working",
+          "coefficient": -0.0524,
+          "odds_ratio": 0.949,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 49
+        },
+        {
+          "feature": "v743f_respondent and husband/partner",
+          "coefficient": -0.0612,
+          "odds_ratio": 0.9406,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 50
+        },
+        {
+          "feature": "v130_christian",
+          "coefficient": -0.0764,
+          "odds_ratio": 0.9264,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 51
+        },
+        {
+          "feature": "v158_not at all",
+          "coefficient": -0.0775,
+          "odds_ratio": 0.9255,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 52
+        },
+        {
+          "feature": "v130_muslim",
+          "coefficient": -0.1004,
+          "odds_ratio": 0.9045,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 53
+        },
+        {
+          "feature": "v190_richer",
+          "coefficient": -0.1222,
+          "odds_ratio": 0.885,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 54
+        },
+        {
+          "feature": "v130_hindu",
+          "coefficient": -0.1264,
+          "odds_ratio": 0.8812,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 55
+        },
+        {
+          "feature": "v190_richest",
+          "coefficient": -0.2987,
+          "odds_ratio": 0.7418,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 56
+        }
+      ]
+    },
+    "facility": {
+      "target": "target_facility",
+      "intercept": -0.1683,
+      "num_features": 56,
+      "top_risk_factors": [
+        {
+          "feature": "v190_poorest",
+          "coefficient": 0.1812,
+          "odds_ratio": 1.1987,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 1
+        },
+        {
+          "feature": "v501_never in union  [includes: married gauna not performed]",
+          "coefficient": 0.1379,
+          "odds_ratio": 1.1479,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 2
+        },
+        {
+          "feature": "v501_married",
+          "coefficient": 0.1202,
+          "odds_ratio": 1.1277,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 3
+        },
+        {
+          "feature": "v106_no education",
+          "coefficient": 0.1094,
+          "odds_ratio": 1.1156,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 4
+        },
+        {
+          "feature": "v131_tribe",
+          "coefficient": 0.079,
+          "odds_ratio": 1.0822,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 5
+        },
+        {
+          "feature": "v106_secondary",
+          "coefficient": 0.0748,
+          "odds_ratio": 1.0777,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 6
+        },
+        {
+          "feature": "v190_poorer",
+          "coefficient": 0.0743,
+          "odds_ratio": 1.0772,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 7
+        },
+        {
+          "feature": "v106_primary",
+          "coefficient": 0.0736,
+          "odds_ratio": 1.0763,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 8
+        },
+        {
+          "feature": "v130_hindu",
+          "coefficient": 0.0554,
+          "odds_ratio": 1.057,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 9
+        },
+        {
+          "feature": "v157_not at all",
+          "coefficient": 0.0499,
+          "odds_ratio": 1.0511,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 10
+        }
+      ],
+      "top_protective_factors": [
+        {
+          "feature": "v190_richest",
+          "coefficient": -0.1512,
+          "odds_ratio": 0.8597,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 56
+        },
+        {
+          "feature": "v130_sikh",
+          "coefficient": -0.0774,
+          "odds_ratio": 0.9255,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 55
+        },
+        {
+          "feature": "v190_richer",
+          "coefficient": -0.0586,
+          "odds_ratio": 0.9431,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 54
+        },
+        {
+          "feature": "v012",
+          "coefficient": -0.0457,
+          "odds_ratio": 0.9553,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 53
+        },
+        {
+          "feature": "v130_christian",
+          "coefficient": -0.0454,
+          "odds_ratio": 0.9556,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 52
+        },
+        {
+          "feature": "media_exposure_index",
+          "coefficient": -0.0392,
+          "odds_ratio": 0.9616,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 51
+        },
+        {
+          "feature": "v130_parsi / zoroastrian",
+          "coefficient": -0.0107,
+          "odds_ratio": 0.9894,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 50
+        },
+        {
+          "feature": "v717_professional / technical / managerial",
+          "coefficient": -0.0101,
+          "odds_ratio": 0.9899,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 49
+        },
+        {
+          "feature": "v159_less than once a week",
+          "coefficient": -0.0085,
+          "odds_ratio": 0.9916,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 48
+        },
+        {
+          "feature": "v717_don't know",
+          "coefficient": -0.0079,
+          "odds_ratio": 0.9921,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 47
+        }
+      ],
+      "all_features": [
+        {
+          "feature": "v190_poorest",
+          "coefficient": 0.1812,
+          "odds_ratio": 1.1987,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 1
+        },
+        {
+          "feature": "v501_never in union  [includes: married gauna not performed]",
+          "coefficient": 0.1379,
+          "odds_ratio": 1.1479,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 2
+        },
+        {
+          "feature": "v501_married",
+          "coefficient": 0.1202,
+          "odds_ratio": 1.1277,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 3
+        },
+        {
+          "feature": "v106_no education",
+          "coefficient": 0.1094,
+          "odds_ratio": 1.1156,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 4
+        },
+        {
+          "feature": "v131_tribe",
+          "coefficient": 0.079,
+          "odds_ratio": 1.0822,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 5
+        },
+        {
+          "feature": "v106_secondary",
+          "coefficient": 0.0748,
+          "odds_ratio": 1.0777,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 6
+        },
+        {
+          "feature": "v190_poorer",
+          "coefficient": 0.0743,
+          "odds_ratio": 1.0772,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 7
+        },
+        {
+          "feature": "v106_primary",
+          "coefficient": 0.0736,
+          "odds_ratio": 1.0763,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 8
+        },
+        {
+          "feature": "v130_hindu",
+          "coefficient": 0.0554,
+          "odds_ratio": 1.057,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 9
+        },
+        {
+          "feature": "v157_not at all",
+          "coefficient": 0.0499,
+          "odds_ratio": 1.0511,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 10
+        },
+        {
+          "feature": "v131_no caste / tribe",
+          "coefficient": 0.0491,
+          "odds_ratio": 1.0503,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 11
+        },
+        {
+          "feature": "v501_widowed",
+          "coefficient": 0.0391,
+          "odds_ratio": 1.0399,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 12
+        },
+        {
+          "feature": "v481_yes",
+          "coefficient": 0.0325,
+          "odds_ratio": 1.033,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 13
+        },
+        {
+          "feature": "v130_muslim",
+          "coefficient": 0.0322,
+          "odds_ratio": 1.0327,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 14
+        },
+        {
+          "feature": "v157_less than once a week",
+          "coefficient": 0.024,
+          "odds_ratio": 1.0243,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 15
+        },
+        {
+          "feature": "v013_20-24",
+          "coefficient": 0.0219,
+          "odds_ratio": 1.0222,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 16
+        },
+        {
+          "feature": "v158_not at all",
+          "coefficient": 0.0148,
+          "odds_ratio": 1.0149,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 17
+        },
+        {
+          "feature": "v013_25-29",
+          "coefficient": 0.0124,
+          "odds_ratio": 1.0125,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 18
+        },
+        {
+          "feature": "v013_30-34",
+          "coefficient": 0.0099,
+          "odds_ratio": 1.0099,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 19
+        },
+        {
+          "feature": "v501_no longer living together/separated",
+          "coefficient": 0.0092,
+          "odds_ratio": 1.0092,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 20
+        },
+        {
+          "feature": "v169a_no",
+          "coefficient": 0.0076,
+          "odds_ratio": 1.0076,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 21
+        },
+        {
+          "feature": "v013_35-39",
+          "coefficient": 0.0073,
+          "odds_ratio": 1.0074,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 22
+        },
+        {
+          "feature": "v013_45-49",
+          "coefficient": 0.0063,
+          "odds_ratio": 1.0064,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 23
+        },
+        {
+          "feature": "v131_don't know",
+          "coefficient": 0.0064,
+          "odds_ratio": 1.0064,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 24
+        },
+        {
+          "feature": "v130_jain",
+          "coefficient": 0.0031,
+          "odds_ratio": 1.0031,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 25
+        },
+        {
+          "feature": "v170_no",
+          "coefficient": 0.0031,
+          "odds_ratio": 1.0031,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 26
+        },
+        {
+          "feature": "v170_yes",
+          "coefficient": 0.0027,
+          "odds_ratio": 1.0027,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 27
+        },
+        {
+          "feature": "v013_40-44",
+          "coefficient": 0.0015,
+          "odds_ratio": 1.0015,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 28
+        },
+        {
+          "feature": "v130_no religion",
+          "coefficient": 0.0009,
+          "odds_ratio": 1.0009,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 29
+        },
+        {
+          "feature": "v743f_other",
+          "coefficient": 0.0009,
+          "odds_ratio": 1.0009,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 30
+        },
+        {
+          "feature": "v130_other",
+          "coefficient": 0.0005,
+          "odds_ratio": 1.0005,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 31
+        },
+        {
+          "feature": "v743f_missing",
+          "coefficient": 0.0001,
+          "odds_ratio": 1.0001,
+          "effect_type": "Risk Factor (OR > 1)",
+          "rank": 32
+        },
+        {
+          "feature": "v130_jewish",
+          "coefficient": -0.0008,
+          "odds_ratio": 0.9992,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 33
+        },
+        {
+          "feature": "v717_other",
+          "coefficient": -0.0015,
+          "odds_ratio": 0.9985,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 34
+        },
+        {
+          "feature": "v158_less than once a week",
+          "coefficient": -0.0015,
+          "odds_ratio": 0.9985,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 35
+        },
+        {
+          "feature": "v169a_yes",
+          "coefficient": -0.0018,
+          "odds_ratio": 0.9982,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 36
+        },
+        {
+          "feature": "v743f_husband/partner has no earnings",
+          "coefficient": -0.0023,
+          "odds_ratio": 0.9978,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 37
+        },
+        {
+          "feature": "v717_clerical",
+          "coefficient": -0.003,
+          "odds_ratio": 0.997,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 38
+        },
+        {
+          "feature": "v717_services / household and domestic",
+          "coefficient": -0.0037,
+          "odds_ratio": 0.9963,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 39
+        },
+        {
+          "feature": "v717_missing",
+          "coefficient": -0.004,
+          "odds_ratio": 0.9961,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 40
+        },
+        {
+          "feature": "v717_skilled and unskilled manual",
+          "coefficient": -0.0042,
+          "odds_ratio": 0.9958,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 41
+        },
+        {
+          "feature": "v743f_respondent alone",
+          "coefficient": -0.005,
+          "odds_ratio": 0.995,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 42
+        },
+        {
+          "feature": "v159_not at all",
+          "coefficient": -0.0059,
+          "odds_ratio": 0.9941,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 43
+        },
+        {
+          "feature": "v743f_respondent and husband/partner",
+          "coefficient": -0.0063,
+          "odds_ratio": 0.9938,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 44
+        },
+        {
+          "feature": "v717_sales",
+          "coefficient": -0.007,
+          "odds_ratio": 0.993,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 45
+        },
+        {
+          "feature": "v717_not working",
+          "coefficient": -0.0076,
+          "odds_ratio": 0.9924,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 46
+        },
+        {
+          "feature": "v717_don't know",
+          "coefficient": -0.0079,
+          "odds_ratio": 0.9921,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 47
+        },
+        {
+          "feature": "v159_less than once a week",
+          "coefficient": -0.0085,
+          "odds_ratio": 0.9916,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 48
+        },
+        {
+          "feature": "v717_professional / technical / managerial",
+          "coefficient": -0.0101,
+          "odds_ratio": 0.9899,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 49
+        },
+        {
+          "feature": "v130_parsi / zoroastrian",
+          "coefficient": -0.0107,
+          "odds_ratio": 0.9894,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 50
+        },
+        {
+          "feature": "media_exposure_index",
+          "coefficient": -0.0392,
+          "odds_ratio": 0.9616,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 51
+        },
+        {
+          "feature": "v130_christian",
+          "coefficient": -0.0454,
+          "odds_ratio": 0.9556,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 52
+        },
+        {
+          "feature": "v012",
+          "coefficient": -0.0457,
+          "odds_ratio": 0.9553,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 53
+        },
+        {
+          "feature": "v190_richer",
+          "coefficient": -0.0586,
+          "odds_ratio": 0.9431,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 54
+        },
+        {
+          "feature": "v130_sikh",
+          "coefficient": -0.0774,
+          "odds_ratio": 0.9255,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 55
+        },
+        {
+          "feature": "v190_richest",
+          "coefficient": -0.1512,
+          "odds_ratio": 0.8597,
+          "effect_type": "Protective Factor (OR < 1)",
+          "rank": 56
+        }
+      ]
+    }
+  }
+}
