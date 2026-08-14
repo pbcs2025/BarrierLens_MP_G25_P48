@@ -66,5 +66,55 @@ const ChartUtils = {
 
     const config = { responsive: true, displayModeBar: false };
     Plotly.newPlot(containerId, data, layout, config);
+  },
+
+  createRankedBarChart: function (containerId, title, categories, values, color = '#0284c7', yAxisTitle = 'Prevalence (%)') {
+    const data = [{
+      x: categories,
+      y: values,
+      type: 'bar',
+      marker: { color: color },
+      text: values.map(v => (typeof v === 'number' ? (v > 1 ? v.toFixed(1) + '%' : (v * 100).toFixed(1) + '%') : v)),
+      textposition: 'auto',
+      hovertemplate: '<b>%{x}</b><br>' + yAxisTitle + ': %{y:.1f}%<extra></extra>'
+    }];
+
+    const layout = {
+      title: { text: title, font: { size: 16, color: '#0f172a' } },
+      margin: { t: 50, b: 100, l: 60, r: 20 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      xaxis: { color: '#64748b', tickangle: -45 },
+      yaxis: { color: '#64748b', gridcolor: '#f1f5f9', title: yAxisTitle }
+    };
+
+    const config = { responsive: true, displayModeBar: false };
+    Plotly.newPlot(containerId, data, layout, config);
+  },
+
+  createHorizontalBarChart: function (containerId, title, categories, values, color = '#0284c7', xAxisTitle = 'Prevalence (%)') {
+    const data = [{
+      x: values,
+      y: categories,
+      type: 'bar',
+      orientation: 'h',
+      marker: { color: color },
+      text: values.map(v => (typeof v === 'number' ? (v > 1 ? v.toFixed(1) + '%' : (v * 100).toFixed(1) + '%') : v)),
+      textposition: 'auto',
+      hovertemplate: '<b>%{y}</b><br>' + xAxisTitle + ': %{x:.1f}%<extra></extra>'
+    }];
+
+    const layout = {
+      title: { text: title, font: { size: 16, color: '#0f172a' } },
+      margin: { t: 50, b: 50, l: 180, r: 30 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      xaxis: { color: '#64748b', gridcolor: '#f1f5f9', title: xAxisTitle },
+      yaxis: { color: '#0f172a', autorange: 'reversed' }
+    };
+
+    const config = { responsive: true, displayModeBar: false };
+    Plotly.newPlot(containerId, data, layout, config);
   }
 };
+

@@ -13,8 +13,8 @@
 <body>
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">Page G: Multiple Overlapping Barrier Analysis</h1>
-      <p class="page-subtitle">Faculty Requirement Item 7: Analyzing compounded disadvantage across 0, 1, 2, and 3 concurrent barrier types.</p>
+      <h1 class="page-title">Multiple Overlapping Barrier Analysis</h1>
+      <p class="page-subtitle">Evaluating compounded disadvantage across 0, 1, 2, and 3 concurrent healthcare access barrier domains (NFHS-5, N=724,115).</p>
     </div>
 
     <div class="card" style="margin-bottom: 20px;">
@@ -66,14 +66,21 @@
       <div id="residence-stacked-chart" class="chart-box"></div>
     </div>
 
-    <!-- Interpretation Box -->
-    <div class="card" style="background-color: #f8fafc; border-left: 4px solid var(--primary-color);">
-      <h3 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Faculty-Requested Interpretation Text</h3>
-      <p style="font-size: 0.95rem; color: #334155; line-height: 1.6;" id="interpretation-text">
-        "The coexistence of household, logistic and facility-level barriers suggests compounded disadvantage among vulnerable women — nearly 1 in 3 Indian women (30.85%) faces 2 or more concurrent healthcare access barriers, with severe multi-barrier exposure concentrated among the poorest wealth quintile (45.2% facing 2+ barriers) compared to the richest quintile (14.8%)."
+    <!-- Executive Insights Card -->
+    <div class="insights-card">
+      <div class="insights-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="insights-card-title">Compounded Disadvantage Insights</div>
+      </div>
+      <p class="insights-card-body" id="interpretation-text">
+        The coexistence of household, logistic, and facility-level barriers highlights compounded disadvantage among vulnerable women — nearly 1 in 3 Indian women (30.85%) faces 2 or more concurrent healthcare access barriers. Severe multi-barrier exposure is disproportionately concentrated in the poorest wealth quintile (45.2% facing 2+ barriers) compared to the richest quintile (14.8%).
       </p>
     </div>
+
+    <!-- Data & Methodology Notes -->
+    <div id="methodology-note-slot"></div>
   </div>
+
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {

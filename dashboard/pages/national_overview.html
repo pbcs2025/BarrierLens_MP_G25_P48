@@ -13,8 +13,8 @@
 <body>
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">Page A: National Healthcare Access Barrier Overview</h1>
-      <p class="page-subtitle">National prevalence, comparative barrier ranking, and observed vs predicted model alignment across 724,115 Indian women.</p>
+      <h1 class="page-title">National Healthcare Access Barrier Overview</h1>
+      <p class="page-subtitle">National prevalence, comparative domain ranking, and observed vs predicted model alignment across 724,115 Indian women (NFHS-5).</p>
     </div>
 
     <div class="card" style="margin-bottom: 20px;">
@@ -34,7 +34,7 @@
       <div class="kpi-card">
         <div class="kpi-title">At Least One Barrier</div>
         <div class="kpi-value" id="kpi-any-barrier">60.68%</div>
-        <div class="kpi-subtext">Base Paper: 84.0%</div>
+        <div class="kpi-subtext">Base Paper Benchmark: 84.0%</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Facility-Level Barrier</div>
@@ -63,7 +63,7 @@
 
     <!-- Barrier Ranking Table Card -->
     <div class="card">
-      <div class="card-title">Faculty Requirement Item 2: Comparative Barrier Ranking</div>
+      <div class="card-title">Comparative Barrier Domain Ranking</div>
       <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 12px;">
         <thead>
           <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem;">
@@ -81,16 +81,21 @@
       </table>
     </div>
 
-    <!-- Methodological Note & Summary Banner -->
-    <div id="methodology-note-slot"></div>
-
-    <div class="card" style="background-color: #0f172a; color: #ffffff; margin-top: 24px;">
-      <h3 style="font-size: 1.1rem; color: #38bdf8; margin-bottom: 8px;">National Summary Banner</h3>
-      <p style="font-size: 0.95rem; line-height: 1.6; color: #94a3b8;" id="summary-banner-text">
-        Across 724,115 Indian women surveyed in NFHS-5, healthcare access barriers are highly prevalent, with 60.68% experiencing at least one major barrier. Facility-level concerns remain the single highest barrier domain (46.01% observed), followed by logistic barriers (31.61%) and household-level autonomy/financial constraints (27.16%). BarrierLens machine learning predictions closely mirror this rank ordering, validating the base paper's structural findings on nationwide healthcare access inequality.
+    <!-- Executive Insights Card -->
+    <div class="insights-card">
+      <div class="insights-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="insights-card-title">Executive Insights & National Trends</div>
+      </div>
+      <p class="insights-card-body" id="summary-banner-text">
+        Across 724,115 Indian women surveyed in NFHS-5, healthcare access barriers remain highly prevalent, with 60.68% experiencing at least one major barrier. Facility-level concerns represent the primary constraint (46.01% observed), followed by logistic barriers (31.61%) and household financial/autonomy constraints (27.16%). BarrierLens machine learning predictions closely match this rank ordering, confirming macro-level alignment across observed and predicted domains.
       </p>
     </div>
+
+    <!-- Data & Methodology Notes -->
+    <div id="methodology-note-slot"></div>
   </div>
+
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
