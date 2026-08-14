@@ -84,12 +84,21 @@
       </div>
     </div>
 
-    <!-- Chart Card -->
+    <!-- Ranked Bar Chart Card -->
     <div class="card">
       <div class="card-title">
         <span id="chart-card-title">State-wise Ranked Barrier Prevalence</span>
       </div>
       <div id="state-ranked-chart" class="chart-box" style="min-height: 550px;"></div>
+    </div>
+
+    <!-- State-wise Treemap Card (Proportional Rectangles) -->
+    <div class="card">
+      <div class="card-title">
+        <span id="treemap-card-title">State-wise Healthcare Barrier Treemap</span>
+      </div>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px;">Visualizing state barrier prevalence as proportional rectangular tiles. Larger tiles represent higher barrier values.</p>
+      <div id="state-treemap-chart" class="chart-box" style="min-height: 580px;"></div>
     </div>
 
     <!-- Data Table Card -->
@@ -190,6 +199,7 @@
 
       const isPredicted = metric.startsWith("predicted");
       const color = isPredicted ? ChartUtils.colors.railB : ChartUtils.colors.railA;
+      const colorscale = isPredicted ? 'Purples' : 'Blues';
 
       const metricLabels = {
         "observed_any_barrier_rate": "Observed Any Barrier Prevalence (Rail A)",
@@ -199,11 +209,17 @@
         "predicted_composite_score": "Predicted Composite Risk Score (Rail B)"
       };
 
+      // 1. Render Ranked Bar Chart
       document.getElementById("chart-card-title").textContent = metricLabels[metric] + " by State / UT";
       ChartUtils.createRankedBarChart("state-ranked-chart", metricLabels[metric], categories, values, color, "Percentage (%)");
 
+      // 2. Render Treemap Chart
+      document.getElementById("treemap-card-title").textContent = metricLabels[metric] + " Treemap";
+      ChartUtils.createTreemapChart("state-treemap-chart", metricLabels[metric], categories, values, colorscale, metricLabels[metric]);
+
       renderTable(sorted);
     }
+
 
     function renderTable(states) {
       const tbody = document.getElementById("state-table-body");
@@ -229,3 +245,5 @@
   </script>
 </body>
 </html>
+
+

@@ -115,6 +115,36 @@ const ChartUtils = {
 
     const config = { responsive: true, displayModeBar: false };
     Plotly.newPlot(containerId, data, layout, config);
+  },
+
+  createTreemapChart: function (containerId, title, labels, values, colorscale = 'Blues', domainName = 'Prevalence') {
+    const data = [{
+      type: 'treemap',
+      labels: labels,
+      parents: labels.map(() => ''),
+      values: values,
+      texttemplate: '<b>%{label}</b><br>%{value:.1f}%',
+      textfont: { size: 13 },
+      hovertemplate: 'State / UT: <b>%{label}</b><br>' + domainName + ': <b>%{value:.1f}%</b><extra></extra>',
+      marker: {
+        colors: values,
+        colorscale: colorscale,
+        showscale: true,
+        colorbar: { title: 'Prevalence (%)' }
+      }
+    }];
+
+    const layout = {
+      title: { text: title, font: { size: 16, color: '#0f172a' } },
+      margin: { t: 50, b: 20, l: 20, r: 20 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent'
+    };
+
+    const config = { responsive: true, displayModeBar: false };
+    Plotly.newPlot(containerId, data, layout, config);
   }
 };
+
+
 
