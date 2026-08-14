@@ -245,28 +245,51 @@ def export_state_summary(df):
 
 def export_demographic_summary(df):
     print("Building demographic_summary.json...")
-    # Map wealth, residence, education
+    # Map wealth, residence, education, age, occupation
     wealth_map = {"poorest": "Poorest", "poorer": "Poorer", "middle": "Middle", "richer": "Richer", "richest": "Richest"}
     res_map = {"rural": "Rural", "urban": "Urban"}
-    edu_map = {0: "No Education", 1: "Primary", 2: "Secondary", 3: "Higher"}
+    edu_map = {"no education": "No Education", "primary": "Primary", "secondary": "Secondary", "higher": "Higher"}
+    occ_map = {
+        "not working": "Not Working",
+        "agricultural": "Agricultural",
+        "skilled and unskilled manual": "Skilled and Unskilled Manual",
+        "services / household and domestic": "Services / Household and Domestic",
+        "professional / technical / managerial": "Professional / Technical / Managerial",
+        "sales": "Sales",
+        "other": "Other",
+        "clerical": "Clerical",
+        "don't know": "Don't Know",
+        "missing": "Missing",
+        "nan": "Missing"
+    }
+
+    def clean_occ(val):
+        if pd.isna(val):
+            return "Missing"
+        s = str(val).strip().lower()
+        if s in ["", "nan", "none", "missing"]:
+            return "Missing"
+        return occ_map.get(s, str(val).title())
 
     df_demo = df.copy()
-    df_demo["wealth_clean"] = df_demo["v190"].astype(str).str.lower().map(lambda x: wealth_map.get(x, x.title()))
-    df_demo["residence_clean"] = df_demo["v025"].astype(str).str.lower().map(lambda x: res_map.get(x, x.title()))
-    df_demo["education_clean"] = df_demo["v106"].map(lambda x: edu_map.get(x, "Unknown"))
+    df_demo["wealth_clean"] = df_demo["v190"].apply(lambda x: wealth_map.get(str(x).strip().lower(), str(x).title()))
+    df_demo["residence_clean"] = df_demo["v025"].apply(lambda x: res_map.get(str(x).strip().lower(), str(x).title()))
+    df_demo["education_clean"] = df_demo["v106"].apply(lambda x: edu_map.get(str(x).strip().lower(), str(x).title()))
+    df_demo["age_clean"] = df_demo["v013"].astype(str).str.strip()
+    df_demo["occupation_clean"] = df_demo["v717"].apply(clean_occ)
 
     total_n = len(df_demo)
 
     def summarize_group(grp_cols):
         records = []
-        for keys, g in df_demo.groupby(grp_cols):
+        for keys, g in df_demo.groupby(grp_cols, sort=True):
             n = len(g)
             suppressed = n < 30
             rec = {
                 "group_keys": dict(zip(grp_cols, keys if isinstance(keys, tuple) else [keys])),
-                "sample_size_n": n,
-                "pct_national_sample": round(n / total_n, 4),
-                "suppressed": suppressed
+                "sample_size_n": int(n),
+                "pct_national_sample": round(float(n / total_n), 4),
+                "suppressed": bool(suppressed)
             }
             if not suppressed:
                 rec.update({
@@ -278,17 +301,45 @@ def export_demographic_summary(df):
                     "predicted_logistic_prob": round(float(g["logistic_barrier_prob"].mean()), 4),
                     "predicted_facility_prob": round(float(g["facility_barrier_prob"].mean()), 4)
                 })
+            else:
+                rec.update({
+                    "observed_household_rate": None,
+                    "observed_logistic_rate": None,
+                    "observed_facility_rate": None,
+                    "observed_any_barrier_rate": None,
+                    "predicted_household_prob": None,
+                    "predicted_logistic_prob": None,
+                    "predicted_facility_prob": None
+                })
             records.append(rec)
         return records
+
+    by_occ = summarize_group(["occupation_clean"])
 
     data = {
         "metadata": {
             "title": "Socio-Demographic Healthcare Barrier Breakdown",
-            "suppression_threshold": 30
+            "suppression_threshold": 30,
+            "total_women": total_n,
+            "dimensions": [
+                "Age (v013)",
+                "Education (v106)",
+                "Wealth (v190)",
+                "Residence (v025)",
+                "Occupation / Employment (v717)"
+            ],
+            "targets": [
+                "target_household",
+                "target_logistic",
+                "target_facility"
+            ]
         },
         "by_wealth": summarize_group(["wealth_clean"]),
         "by_residence": summarize_group(["residence_clean"]),
         "by_education": summarize_group(["education_clean"]),
+        "by_age": summarize_group(["age_clean"]),
+        "by_occupation": by_occ,
+        "by_employment": by_occ,
         "by_wealth_residence": summarize_group(["wealth_clean", "residence_clean"]),
         "by_wealth_education": summarize_group(["wealth_clean", "education_clean"])
     }

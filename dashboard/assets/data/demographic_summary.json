@@ -1,7 +1,20 @@
 {
   "metadata": {
     "title": "Socio-Demographic Healthcare Barrier Breakdown",
-    "suppression_threshold": 30
+    "suppression_threshold": 30,
+    "total_women": 724115,
+    "dimensions": [
+      "Age (v013)",
+      "Education (v106)",
+      "Wealth (v190)",
+      "Residence (v025)",
+      "Occupation / Employment (v717)"
+    ],
+    "targets": [
+      "target_household",
+      "target_logistic",
+      "target_facility"
+    ]
   },
   "by_wealth": [
     {
@@ -115,18 +128,474 @@
   "by_education": [
     {
       "group_keys": {
-        "education_clean": "Unknown"
+        "education_clean": "Higher"
       },
-      "sample_size_n": 724115,
-      "pct_national_sample": 1.0,
+      "sample_size_n": 101816,
+      "pct_national_sample": 0.1406,
       "suppressed": false,
-      "observed_household_rate": 0.2716,
-      "observed_logistic_rate": 0.3161,
-      "observed_facility_rate": 0.4601,
-      "observed_any_barrier_rate": 0.5916,
-      "predicted_household_prob": 0.4788,
-      "predicted_logistic_prob": 0.483,
-      "predicted_facility_prob": 0.4978
+      "observed_household_rate": 0.152,
+      "observed_logistic_rate": 0.1886,
+      "observed_facility_rate": 0.355,
+      "observed_any_barrier_rate": 0.4471,
+      "predicted_household_prob": 0.3139,
+      "predicted_logistic_prob": 0.3235,
+      "predicted_facility_prob": 0.3925
+    },
+    {
+      "group_keys": {
+        "education_clean": "No Education"
+      },
+      "sample_size_n": 167304,
+      "pct_national_sample": 0.231,
+      "suppressed": false,
+      "observed_household_rate": 0.3492,
+      "observed_logistic_rate": 0.4053,
+      "observed_facility_rate": 0.5245,
+      "observed_any_barrier_rate": 0.6786,
+      "predicted_household_prob": 0.5777,
+      "predicted_logistic_prob": 0.5862,
+      "predicted_facility_prob": 0.5621
+    },
+    {
+      "group_keys": {
+        "education_clean": "Primary"
+      },
+      "sample_size_n": 84983,
+      "pct_national_sample": 0.1174,
+      "suppressed": false,
+      "observed_household_rate": 0.321,
+      "observed_logistic_rate": 0.3657,
+      "observed_facility_rate": 0.4991,
+      "observed_any_barrier_rate": 0.6499,
+      "predicted_household_prob": 0.5419,
+      "predicted_logistic_prob": 0.5427,
+      "predicted_facility_prob": 0.5368
+    },
+    {
+      "group_keys": {
+        "education_clean": "Secondary"
+      },
+      "sample_size_n": 370012,
+      "pct_national_sample": 0.511,
+      "suppressed": false,
+      "observed_household_rate": 0.258,
+      "observed_logistic_rate": 0.2994,
+      "observed_facility_rate": 0.4509,
+      "observed_any_barrier_rate": 0.5787,
+      "predicted_household_prob": 0.4651,
+      "predicted_logistic_prob": 0.4665,
+      "predicted_facility_prob": 0.4888
+    }
+  ],
+  "by_age": [
+    {
+      "group_keys": {
+        "age_clean": "15-19"
+      },
+      "sample_size_n": 122480,
+      "pct_national_sample": 0.1691,
+      "suppressed": false,
+      "observed_household_rate": 0.2899,
+      "observed_logistic_rate": 0.326,
+      "observed_facility_rate": 0.4811,
+      "observed_any_barrier_rate": 0.611,
+      "predicted_household_prob": 0.5061,
+      "predicted_logistic_prob": 0.4973,
+      "predicted_facility_prob": 0.5196
+    },
+    {
+      "group_keys": {
+        "age_clean": "20-24"
+      },
+      "sample_size_n": 118700,
+      "pct_national_sample": 0.1639,
+      "suppressed": false,
+      "observed_household_rate": 0.2703,
+      "observed_logistic_rate": 0.3109,
+      "observed_facility_rate": 0.468,
+      "observed_any_barrier_rate": 0.5956,
+      "predicted_household_prob": 0.4797,
+      "predicted_logistic_prob": 0.4788,
+      "predicted_facility_prob": 0.5062
+    },
+    {
+      "group_keys": {
+        "age_clean": "25-29"
+      },
+      "sample_size_n": 118379,
+      "pct_national_sample": 0.1635,
+      "suppressed": false,
+      "observed_household_rate": 0.2688,
+      "observed_logistic_rate": 0.311,
+      "observed_facility_rate": 0.4574,
+      "observed_any_barrier_rate": 0.5879,
+      "predicted_household_prob": 0.4757,
+      "predicted_logistic_prob": 0.4772,
+      "predicted_facility_prob": 0.4952
+    },
+    {
+      "group_keys": {
+        "age_clean": "30-34"
+      },
+      "sample_size_n": 101049,
+      "pct_national_sample": 0.1395,
+      "suppressed": false,
+      "observed_household_rate": 0.2675,
+      "observed_logistic_rate": 0.3149,
+      "observed_facility_rate": 0.4567,
+      "observed_any_barrier_rate": 0.5867,
+      "predicted_household_prob": 0.4721,
+      "predicted_logistic_prob": 0.4802,
+      "predicted_facility_prob": 0.4942
+    },
+    {
+      "group_keys": {
+        "age_clean": "35-39"
+      },
+      "sample_size_n": 98068,
+      "pct_national_sample": 0.1354,
+      "suppressed": false,
+      "observed_household_rate": 0.2687,
+      "observed_logistic_rate": 0.3184,
+      "observed_facility_rate": 0.454,
+      "observed_any_barrier_rate": 0.5887,
+      "predicted_household_prob": 0.4742,
+      "predicted_logistic_prob": 0.4844,
+      "predicted_facility_prob": 0.4914
+    },
+    {
+      "group_keys": {
+        "age_clean": "40-44"
+      },
+      "sample_size_n": 81380,
+      "pct_national_sample": 0.1124,
+      "suppressed": false,
+      "observed_household_rate": 0.2614,
+      "observed_logistic_rate": 0.3126,
+      "observed_facility_rate": 0.4459,
+      "observed_any_barrier_rate": 0.5802,
+      "predicted_household_prob": 0.4635,
+      "predicted_logistic_prob": 0.4772,
+      "predicted_facility_prob": 0.4832
+    },
+    {
+      "group_keys": {
+        "age_clean": "45-49"
+      },
+      "sample_size_n": 84059,
+      "pct_national_sample": 0.1161,
+      "suppressed": false,
+      "observed_household_rate": 0.2684,
+      "observed_logistic_rate": 0.318,
+      "observed_facility_rate": 0.4468,
+      "observed_any_barrier_rate": 0.5834,
+      "predicted_household_prob": 0.4708,
+      "predicted_logistic_prob": 0.4833,
+      "predicted_facility_prob": 0.4838
+    }
+  ],
+  "by_occupation": [
+    {
+      "group_keys": {
+        "occupation_clean": "Agricultural"
+      },
+      "sample_size_n": 18031,
+      "pct_national_sample": 0.0249,
+      "suppressed": false,
+      "observed_household_rate": 0.3279,
+      "observed_logistic_rate": 0.4093,
+      "observed_facility_rate": 0.5161,
+      "observed_any_barrier_rate": 0.6712,
+      "predicted_household_prob": 0.5497,
+      "predicted_logistic_prob": 0.5848,
+      "predicted_facility_prob": 0.5516
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Clerical"
+      },
+      "sample_size_n": 479,
+      "pct_national_sample": 0.0007,
+      "suppressed": false,
+      "observed_household_rate": 0.19,
+      "observed_logistic_rate": 0.2255,
+      "observed_facility_rate": 0.3653,
+      "observed_any_barrier_rate": 0.4697,
+      "predicted_household_prob": 0.3242,
+      "predicted_logistic_prob": 0.3344,
+      "predicted_facility_prob": 0.3976
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Don't Know"
+      },
+      "sample_size_n": 131,
+      "pct_national_sample": 0.0002,
+      "suppressed": false,
+      "observed_household_rate": 0.3511,
+      "observed_logistic_rate": 0.3435,
+      "observed_facility_rate": 0.3282,
+      "observed_any_barrier_rate": 0.5573,
+      "predicted_household_prob": 0.4819,
+      "predicted_logistic_prob": 0.4852,
+      "predicted_facility_prob": 0.3435
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Missing"
+      },
+      "sample_size_n": 615330,
+      "pct_national_sample": 0.8498,
+      "suppressed": false,
+      "observed_household_rate": 0.272,
+      "observed_logistic_rate": 0.3169,
+      "observed_facility_rate": 0.4604,
+      "observed_any_barrier_rate": 0.5922,
+      "predicted_household_prob": 0.4805,
+      "predicted_logistic_prob": 0.4847,
+      "predicted_facility_prob": 0.4983
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Not Working"
+      },
+      "sample_size_n": 73809,
+      "pct_national_sample": 0.1019,
+      "suppressed": false,
+      "observed_household_rate": 0.2598,
+      "observed_logistic_rate": 0.294,
+      "observed_facility_rate": 0.4535,
+      "observed_any_barrier_rate": 0.5762,
+      "predicted_household_prob": 0.46,
+      "predicted_logistic_prob": 0.4555,
+      "predicted_facility_prob": 0.4912
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Other"
+      },
+      "sample_size_n": 1477,
+      "pct_national_sample": 0.002,
+      "suppressed": false,
+      "observed_household_rate": 0.2769,
+      "observed_logistic_rate": 0.3439,
+      "observed_facility_rate": 0.4489,
+      "observed_any_barrier_rate": 0.5728,
+      "predicted_household_prob": 0.4586,
+      "predicted_logistic_prob": 0.4957,
+      "predicted_facility_prob": 0.4853
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Professional / Technical / Managerial"
+      },
+      "sample_size_n": 2985,
+      "pct_national_sample": 0.0041,
+      "suppressed": false,
+      "observed_household_rate": 0.14,
+      "observed_logistic_rate": 0.1752,
+      "observed_facility_rate": 0.329,
+      "observed_any_barrier_rate": 0.4194,
+      "predicted_household_prob": 0.2667,
+      "predicted_logistic_prob": 0.2875,
+      "predicted_facility_prob": 0.3625
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Sales"
+      },
+      "sample_size_n": 2046,
+      "pct_national_sample": 0.0028,
+      "suppressed": false,
+      "observed_household_rate": 0.2639,
+      "observed_logistic_rate": 0.2898,
+      "observed_facility_rate": 0.414,
+      "observed_any_barrier_rate": 0.545,
+      "predicted_household_prob": 0.4495,
+      "predicted_logistic_prob": 0.4445,
+      "predicted_facility_prob": 0.4497
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Services / Household and Domestic"
+      },
+      "sample_size_n": 3433,
+      "pct_national_sample": 0.0047,
+      "suppressed": false,
+      "observed_household_rate": 0.245,
+      "observed_logistic_rate": 0.2925,
+      "observed_facility_rate": 0.4232,
+      "observed_any_barrier_rate": 0.5552,
+      "predicted_household_prob": 0.4266,
+      "predicted_logistic_prob": 0.4446,
+      "predicted_facility_prob": 0.4575
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Skilled and Unskilled Manual"
+      },
+      "sample_size_n": 6394,
+      "pct_national_sample": 0.0088,
+      "suppressed": false,
+      "observed_household_rate": 0.2889,
+      "observed_logistic_rate": 0.3139,
+      "observed_facility_rate": 0.4573,
+      "observed_any_barrier_rate": 0.6128,
+      "predicted_household_prob": 0.4893,
+      "predicted_logistic_prob": 0.4769,
+      "predicted_facility_prob": 0.4934
+    }
+  ],
+  "by_employment": [
+    {
+      "group_keys": {
+        "occupation_clean": "Agricultural"
+      },
+      "sample_size_n": 18031,
+      "pct_national_sample": 0.0249,
+      "suppressed": false,
+      "observed_household_rate": 0.3279,
+      "observed_logistic_rate": 0.4093,
+      "observed_facility_rate": 0.5161,
+      "observed_any_barrier_rate": 0.6712,
+      "predicted_household_prob": 0.5497,
+      "predicted_logistic_prob": 0.5848,
+      "predicted_facility_prob": 0.5516
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Clerical"
+      },
+      "sample_size_n": 479,
+      "pct_national_sample": 0.0007,
+      "suppressed": false,
+      "observed_household_rate": 0.19,
+      "observed_logistic_rate": 0.2255,
+      "observed_facility_rate": 0.3653,
+      "observed_any_barrier_rate": 0.4697,
+      "predicted_household_prob": 0.3242,
+      "predicted_logistic_prob": 0.3344,
+      "predicted_facility_prob": 0.3976
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Don't Know"
+      },
+      "sample_size_n": 131,
+      "pct_national_sample": 0.0002,
+      "suppressed": false,
+      "observed_household_rate": 0.3511,
+      "observed_logistic_rate": 0.3435,
+      "observed_facility_rate": 0.3282,
+      "observed_any_barrier_rate": 0.5573,
+      "predicted_household_prob": 0.4819,
+      "predicted_logistic_prob": 0.4852,
+      "predicted_facility_prob": 0.3435
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Missing"
+      },
+      "sample_size_n": 615330,
+      "pct_national_sample": 0.8498,
+      "suppressed": false,
+      "observed_household_rate": 0.272,
+      "observed_logistic_rate": 0.3169,
+      "observed_facility_rate": 0.4604,
+      "observed_any_barrier_rate": 0.5922,
+      "predicted_household_prob": 0.4805,
+      "predicted_logistic_prob": 0.4847,
+      "predicted_facility_prob": 0.4983
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Not Working"
+      },
+      "sample_size_n": 73809,
+      "pct_national_sample": 0.1019,
+      "suppressed": false,
+      "observed_household_rate": 0.2598,
+      "observed_logistic_rate": 0.294,
+      "observed_facility_rate": 0.4535,
+      "observed_any_barrier_rate": 0.5762,
+      "predicted_household_prob": 0.46,
+      "predicted_logistic_prob": 0.4555,
+      "predicted_facility_prob": 0.4912
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Other"
+      },
+      "sample_size_n": 1477,
+      "pct_national_sample": 0.002,
+      "suppressed": false,
+      "observed_household_rate": 0.2769,
+      "observed_logistic_rate": 0.3439,
+      "observed_facility_rate": 0.4489,
+      "observed_any_barrier_rate": 0.5728,
+      "predicted_household_prob": 0.4586,
+      "predicted_logistic_prob": 0.4957,
+      "predicted_facility_prob": 0.4853
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Professional / Technical / Managerial"
+      },
+      "sample_size_n": 2985,
+      "pct_national_sample": 0.0041,
+      "suppressed": false,
+      "observed_household_rate": 0.14,
+      "observed_logistic_rate": 0.1752,
+      "observed_facility_rate": 0.329,
+      "observed_any_barrier_rate": 0.4194,
+      "predicted_household_prob": 0.2667,
+      "predicted_logistic_prob": 0.2875,
+      "predicted_facility_prob": 0.3625
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Sales"
+      },
+      "sample_size_n": 2046,
+      "pct_national_sample": 0.0028,
+      "suppressed": false,
+      "observed_household_rate": 0.2639,
+      "observed_logistic_rate": 0.2898,
+      "observed_facility_rate": 0.414,
+      "observed_any_barrier_rate": 0.545,
+      "predicted_household_prob": 0.4495,
+      "predicted_logistic_prob": 0.4445,
+      "predicted_facility_prob": 0.4497
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Services / Household and Domestic"
+      },
+      "sample_size_n": 3433,
+      "pct_national_sample": 0.0047,
+      "suppressed": false,
+      "observed_household_rate": 0.245,
+      "observed_logistic_rate": 0.2925,
+      "observed_facility_rate": 0.4232,
+      "observed_any_barrier_rate": 0.5552,
+      "predicted_household_prob": 0.4266,
+      "predicted_logistic_prob": 0.4446,
+      "predicted_facility_prob": 0.4575
+    },
+    {
+      "group_keys": {
+        "occupation_clean": "Skilled and Unskilled Manual"
+      },
+      "sample_size_n": 6394,
+      "pct_national_sample": 0.0088,
+      "suppressed": false,
+      "observed_household_rate": 0.2889,
+      "observed_logistic_rate": 0.3139,
+      "observed_facility_rate": 0.4573,
+      "observed_any_barrier_rate": 0.6128,
+      "predicted_household_prob": 0.4893,
+      "predicted_logistic_prob": 0.4769,
+      "predicted_facility_prob": 0.4934
     }
   ],
   "by_wealth_residence": [
@@ -295,82 +764,322 @@
     {
       "group_keys": {
         "wealth_clean": "Middle",
-        "education_clean": "Unknown"
+        "education_clean": "Higher"
       },
-      "sample_size_n": 151505,
-      "pct_national_sample": 0.2092,
+      "sample_size_n": 16793,
+      "pct_national_sample": 0.0232,
       "suppressed": false,
-      "observed_household_rate": 0.2535,
-      "observed_logistic_rate": 0.3058,
-      "observed_facility_rate": 0.4518,
-      "observed_any_barrier_rate": 0.5869,
-      "predicted_household_prob": 0.4713,
-      "predicted_logistic_prob": 0.4849,
-      "predicted_facility_prob": 0.491
+      "observed_household_rate": 0.2003,
+      "observed_logistic_rate": 0.2671,
+      "observed_facility_rate": 0.419,
+      "observed_any_barrier_rate": 0.5418,
+      "predicted_household_prob": 0.405,
+      "predicted_logistic_prob": 0.4399,
+      "predicted_facility_prob": 0.4612
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Middle",
+        "education_clean": "No Education"
+      },
+      "sample_size_n": 30995,
+      "pct_national_sample": 0.0428,
+      "suppressed": false,
+      "observed_household_rate": 0.287,
+      "observed_logistic_rate": 0.3405,
+      "observed_facility_rate": 0.4705,
+      "observed_any_barrier_rate": 0.6184,
+      "predicted_household_prob": 0.5139,
+      "predicted_logistic_prob": 0.5271,
+      "predicted_facility_prob": 0.5081
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Middle",
+        "education_clean": "Primary"
+      },
+      "sample_size_n": 18401,
+      "pct_national_sample": 0.0254,
+      "suppressed": false,
+      "observed_household_rate": 0.2651,
+      "observed_logistic_rate": 0.3183,
+      "observed_facility_rate": 0.4596,
+      "observed_any_barrier_rate": 0.6048,
+      "predicted_household_prob": 0.4881,
+      "predicted_logistic_prob": 0.5004,
+      "predicted_facility_prob": 0.5004
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Middle",
+        "education_clean": "Secondary"
+      },
+      "sample_size_n": 85316,
+      "pct_national_sample": 0.1178,
+      "suppressed": false,
+      "observed_household_rate": 0.2493,
+      "observed_logistic_rate": 0.2981,
+      "observed_facility_rate": 0.4499,
+      "observed_any_barrier_rate": 0.5805,
+      "predicted_household_prob": 0.4653,
+      "predicted_logistic_prob": 0.475,
+      "predicted_facility_prob": 0.4887
     },
     {
       "group_keys": {
         "wealth_clean": "Poorer",
-        "education_clean": "Unknown"
+        "education_clean": "Higher"
       },
-      "sample_size_n": 160340,
-      "pct_national_sample": 0.2214,
+      "sample_size_n": 9252,
+      "pct_national_sample": 0.0128,
       "suppressed": false,
-      "observed_household_rate": 0.3269,
-      "observed_logistic_rate": 0.3807,
-      "observed_facility_rate": 0.508,
-      "observed_any_barrier_rate": 0.6647,
-      "predicted_household_prob": 0.5603,
-      "predicted_logistic_prob": 0.567,
-      "predicted_facility_prob": 0.5472
+      "observed_household_rate": 0.2583,
+      "observed_logistic_rate": 0.3379,
+      "observed_facility_rate": 0.473,
+      "observed_any_barrier_rate": 0.6151,
+      "predicted_household_prob": 0.4884,
+      "predicted_logistic_prob": 0.5225,
+      "predicted_facility_prob": 0.5155
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer",
+        "education_clean": "No Education"
+      },
+      "sample_size_n": 45457,
+      "pct_national_sample": 0.0628,
+      "suppressed": false,
+      "observed_household_rate": 0.3429,
+      "observed_logistic_rate": 0.4033,
+      "observed_facility_rate": 0.5159,
+      "observed_any_barrier_rate": 0.6762,
+      "predicted_household_prob": 0.5787,
+      "predicted_logistic_prob": 0.5905,
+      "predicted_facility_prob": 0.5553
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer",
+        "education_clean": "Primary"
+      },
+      "sample_size_n": 23312,
+      "pct_national_sample": 0.0322,
+      "suppressed": false,
+      "observed_household_rate": 0.3376,
+      "observed_logistic_rate": 0.3863,
+      "observed_facility_rate": 0.5133,
+      "observed_any_barrier_rate": 0.6758,
+      "predicted_household_prob": 0.5709,
+      "predicted_logistic_prob": 0.5728,
+      "predicted_facility_prob": 0.5513
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorer",
+        "education_clean": "Secondary"
+      },
+      "sample_size_n": 82319,
+      "pct_national_sample": 0.1137,
+      "suppressed": false,
+      "observed_household_rate": 0.3228,
+      "observed_logistic_rate": 0.3715,
+      "observed_facility_rate": 0.5061,
+      "observed_any_barrier_rate": 0.6607,
+      "predicted_household_prob": 0.5551,
+      "predicted_logistic_prob": 0.5574,
+      "predicted_facility_prob": 0.5452
     },
     {
       "group_keys": {
         "wealth_clean": "Poorest",
-        "education_clean": "Unknown"
+        "education_clean": "Higher"
       },
-      "sample_size_n": 149844,
-      "pct_national_sample": 0.2069,
+      "sample_size_n": 3230,
+      "pct_national_sample": 0.0045,
       "suppressed": false,
-      "observed_household_rate": 0.4237,
-      "observed_logistic_rate": 0.4775,
-      "observed_facility_rate": 0.589,
-      "observed_any_barrier_rate": 0.7562,
-      "predicted_household_prob": 0.6587,
-      "predicted_logistic_prob": 0.6602,
-      "predicted_facility_prob": 0.6264
+      "observed_household_rate": 0.3331,
+      "observed_logistic_rate": 0.4006,
+      "observed_facility_rate": 0.5245,
+      "observed_any_barrier_rate": 0.692,
+      "predicted_household_prob": 0.5815,
+      "predicted_logistic_prob": 0.6033,
+      "predicted_facility_prob": 0.5858
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest",
+        "education_clean": "No Education"
+      },
+      "sample_size_n": 65131,
+      "pct_national_sample": 0.0899,
+      "suppressed": false,
+      "observed_household_rate": 0.4336,
+      "observed_logistic_rate": 0.4946,
+      "observed_facility_rate": 0.5986,
+      "observed_any_barrier_rate": 0.7644,
+      "predicted_household_prob": 0.6684,
+      "predicted_logistic_prob": 0.6752,
+      "predicted_facility_prob": 0.6356
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest",
+        "education_clean": "Primary"
+      },
+      "sample_size_n": 24031,
+      "pct_national_sample": 0.0332,
+      "suppressed": false,
+      "observed_household_rate": 0.4453,
+      "observed_logistic_rate": 0.4881,
+      "observed_facility_rate": 0.591,
+      "observed_any_barrier_rate": 0.7659,
+      "predicted_household_prob": 0.6765,
+      "predicted_logistic_prob": 0.6683,
+      "predicted_facility_prob": 0.6268
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Poorest",
+        "education_clean": "Secondary"
+      },
+      "sample_size_n": 57452,
+      "pct_national_sample": 0.0793,
+      "suppressed": false,
+      "observed_household_rate": 0.4084,
+      "observed_logistic_rate": 0.4581,
+      "observed_facility_rate": 0.581,
+      "observed_any_barrier_rate": 0.7464,
+      "predicted_household_prob": 0.6446,
+      "predicted_logistic_prob": 0.643,
+      "predicted_facility_prob": 0.618
     },
     {
       "group_keys": {
         "wealth_clean": "Richer",
-        "education_clean": "Unknown"
+        "education_clean": "Higher"
       },
-      "sample_size_n": 139607,
-      "pct_national_sample": 0.1928,
+      "sample_size_n": 26905,
+      "pct_national_sample": 0.0372,
       "suppressed": false,
-      "observed_household_rate": 0.1929,
-      "observed_logistic_rate": 0.2314,
-      "observed_facility_rate": 0.4002,
-      "observed_any_barrier_rate": 0.5089,
-      "predicted_household_prob": 0.3834,
-      "predicted_logistic_prob": 0.3896,
-      "predicted_facility_prob": 0.4379
+      "observed_household_rate": 0.1534,
+      "observed_logistic_rate": 0.1959,
+      "observed_facility_rate": 0.3687,
+      "observed_any_barrier_rate": 0.4642,
+      "predicted_household_prob": 0.3214,
+      "predicted_logistic_prob": 0.3448,
+      "predicted_facility_prob": 0.4082
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer",
+        "education_clean": "No Education"
+      },
+      "sample_size_n": 18235,
+      "pct_national_sample": 0.0252,
+      "suppressed": false,
+      "observed_household_rate": 0.2417,
+      "observed_logistic_rate": 0.2819,
+      "observed_facility_rate": 0.4337,
+      "observed_any_barrier_rate": 0.5612,
+      "predicted_household_prob": 0.4531,
+      "predicted_logistic_prob": 0.4526,
+      "predicted_facility_prob": 0.4696
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer",
+        "education_clean": "Primary"
+      },
+      "sample_size_n": 12867,
+      "pct_national_sample": 0.0178,
+      "suppressed": false,
+      "observed_household_rate": 0.2161,
+      "observed_logistic_rate": 0.2546,
+      "observed_facility_rate": 0.4211,
+      "observed_any_barrier_rate": 0.5393,
+      "predicted_household_prob": 0.4171,
+      "predicted_logistic_prob": 0.4195,
+      "predicted_facility_prob": 0.4574
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richer",
+        "education_clean": "Secondary"
+      },
+      "sample_size_n": 81600,
+      "pct_national_sample": 0.1127,
+      "suppressed": false,
+      "observed_household_rate": 0.1913,
+      "observed_logistic_rate": 0.2282,
+      "observed_facility_rate": 0.3998,
+      "observed_any_barrier_rate": 0.5072,
+      "predicted_household_prob": 0.3829,
+      "predicted_logistic_prob": 0.3856,
+      "predicted_facility_prob": 0.4375
     },
     {
       "group_keys": {
         "wealth_clean": "Richest",
-        "education_clean": "Unknown"
+        "education_clean": "Higher"
       },
-      "sample_size_n": 122819,
-      "pct_national_sample": 0.1696,
+      "sample_size_n": 45636,
+      "pct_national_sample": 0.063,
       "suppressed": false,
-      "observed_household_rate": 0.1254,
-      "observed_logistic_rate": 0.1436,
-      "observed_facility_rate": 0.3184,
-      "observed_any_barrier_rate": 0.3953,
-      "predicted_household_prob": 0.2709,
-      "predicted_logistic_prob": 0.2608,
-      "predicted_facility_prob": 0.3529
+      "observed_household_rate": 0.0989,
+      "observed_logistic_rate": 0.1102,
+      "observed_facility_rate": 0.2876,
+      "observed_any_barrier_rate": 0.3509,
+      "predicted_household_prob": 0.2216,
+      "predicted_logistic_prob": 0.2079,
+      "predicted_facility_prob": 0.3192
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest",
+        "education_clean": "No Education"
+      },
+      "sample_size_n": 7486,
+      "pct_national_sample": 0.0103,
+      "suppressed": false,
+      "observed_household_rate": 0.1734,
+      "observed_logistic_rate": 0.2096,
+      "observed_facility_rate": 0.377,
+      "observed_any_barrier_rate": 0.4816,
+      "predicted_household_prob": 0.3496,
+      "predicted_logistic_prob": 0.3568,
+      "predicted_facility_prob": 0.4127
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest",
+        "education_clean": "Primary"
+      },
+      "sample_size_n": 6372,
+      "pct_national_sample": 0.0088,
+      "suppressed": false,
+      "observed_household_rate": 0.1653,
+      "observed_logistic_rate": 0.1901,
+      "observed_facility_rate": 0.3726,
+      "observed_any_barrier_rate": 0.4713,
+      "predicted_household_prob": 0.3362,
+      "predicted_logistic_prob": 0.3301,
+      "predicted_facility_prob": 0.4098
+    },
+    {
+      "group_keys": {
+        "wealth_clean": "Richest",
+        "education_clean": "Secondary"
+      },
+      "sample_size_n": 63325,
+      "pct_national_sample": 0.0875,
+      "suppressed": false,
+      "observed_household_rate": 0.1348,
+      "observed_logistic_rate": 0.1551,
+      "observed_facility_rate": 0.3282,
+      "observed_any_barrier_rate": 0.4095,
+      "predicted_household_prob": 0.2905,
+      "predicted_logistic_prob": 0.2807,
+      "predicted_facility_prob": 0.3644
     }
   ]
 }
