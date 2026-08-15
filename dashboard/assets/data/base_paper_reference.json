@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "title": "Base Paper Reference Statistics (Pradhan & De, 2025)",
+    "source": "Published base-paper findings — NFHS-5 cross-sectional survey",
+    "sample_note": "Ever-married women subset (N ≈ 108,785) with 8 barrier sub-items",
+    "rail_label": "Rail A — Observed / Reference Base Paper Statistic",
+    "comparability_note": "BarrierLens uses the full NFHS-5 extract (N = 724,115) with 6 barrier indicators. National rates are broadly comparable but not identical."
+  },
+  "national_prevalence": {
+    "at_least_one_barrier": 0.84,
+    "facility_barrier": 0.553,
+    "logistic_barrier": 0.505,
+    "household_barrier": 0.246
+  },
+  "highest_barrier_states": [
+    "Chhattisgarh",
+    "Arunachal Pradesh",
+    "Nagaland"
+  ],
+  "lowest_barrier_state": {
+    "state_name": "Kerala",
+    "household_barrier": 0.017,
+    "logistic_barrier": 0.075,
+    "facility_barrier": 0.032
+  },
+  "protective_factors": [
+    {
+      "factor": "Higher education",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    },
+    {
+      "factor": "Mass media exposure",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    },
+    {
+      "factor": "Professional occupation",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    },
+    {
+      "factor": "Bank account",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    },
+    {
+      "factor": "Mobile phone",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    },
+    {
+      "factor": "Rich wealth",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    },
+    {
+      "factor": "Age 35–49",
+      "reported_direction": "AOR < 1",
+      "interpretation": "Associated with lower odds of barriers in the base paper"
+    }
+  ],
+  "risk_factors": [
+    {
+      "factor": "SC & ST caste",
+      "reported_direction": "AOR > 1",
+      "interpretation": "Associated with higher odds of barriers in the base paper"
+    },
+    {
+      "factor": "Muslim religion",
+      "reported_direction": "AOR > 1",
+      "interpretation": "Associated with higher odds of barriers in the base paper"
+    },
+    {
+      "factor": "Agricultural occupation",
+      "reported_direction": "AOR > 1",
+      "interpretation": "Associated with higher odds of barriers in the base paper"
+    },
+    {
+      "factor": "Rural residence",
+      "reported_direction": "AOR > 1",
+      "interpretation": "Associated with higher odds of barriers in the base paper"
+    },
+    {
+      "factor": "Poor wealth",
+      "reported_direction": "AOR > 1",
+      "interpretation": "Associated with higher odds of barriers in the base paper"
+    }
+  ]
+}

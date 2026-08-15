@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Utilization Impact — BarrierLens P48</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Healthcare Utilization Impact</h1>
+      <p class="page-subtitle">Stage 2 outcome modelling — associations between barrier exposure and unmet family planning need / antenatal care gaps (predictive, not causal).</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <span id="rail-b-badge-slot"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Primary Target — Unmet Family Planning Need (<code>target_unmet_fp</code>)</div>
+      <div class="kpi-grid" id="unmet-fp-kpis"></div>
+      <div id="unmet-fp-chart" class="chart-box" style="min-height: 320px;"></div>
+      <div id="unmet-fp-note" class="callout" style="margin-top: 12px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Secondary Target — Antenatal Care Gap (<code>target_anc_gap</code>)</div>
+      <div id="anc-gap-content"></div>
+    </div>
+
+    <div id="methodology-note-slot"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B_STAGE2");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+
+      fetch("../assets/data/outcome_impact_summary.json")
+        .then(r => r.ok ? r.json() : Promise.reject("missing"))
+        .then(data => {
+          const fp = data.target_unmet_fp;
+          const lr = fp.logistic_regression;
+          const rf = fp.random_forest;
+
+          document.getElementById("unmet-fp-kpis").innerHTML = `
+            <div class="kpi-card"><div class="kpi-title">Analytic Sample N</div><div class="kpi-value">${fp.analytic_sample_n.toLocaleString()}</div></div>
+            <div class="kpi-card"><div class="kpi-title">Positive Cases</div><div class="kpi-value">${fp.positive_cases_n.toLocaleString()}</div><div class="kpi-subtext">${LabelRenderer.formatPercent(fp.positive_rate, 2)} prevalence</div></div>
+            <div class="kpi-card"><div class="kpi-title">LR ROC-AUC</div><div class="kpi-value">${lr.roc_auc.toFixed(4)}</div><div class="kpi-subtext">Barrier uplift: +${lr.barrier_uplift_auc.toFixed(4)}</div></div>
+            <div class="kpi-card"><div class="kpi-title">RF ROC-AUC</div><div class="kpi-value">${rf.roc_auc.toFixed(4)}</div><div class="kpi-subtext">Model result (Stage 2)</div></div>
+          `;
+
+          ChartUtils.createGroupedBarChart("unmet-fp-chart", "Stage 2 Model Performance — Unmet FP", ["Accuracy", "ROC-AUC", "F1 Score"], [
+            { name: "Logistic Regression", values: [lr.accuracy * 100, lr.roc_auc * 100, lr.f1_score * 100], color: ChartUtils.colors.railA },
+            { name: "Random Forest", values: [rf.accuracy * 100, rf.roc_auc * 100, 0], color: ChartUtils.colors.railB }
+          ]);
+
+          document.getElementById("unmet-fp-note").innerHTML =
+            `<strong>Top predictor (LR):</strong> ${fp.top_predictor.feature} — OR ${fp.top_predictor.odds_ratio.toFixed(2)}. ${fp.top_predictor.interpretation}`;
+
+          const anc = data.target_anc_gap;
+          document.getElementById("anc-gap-content").innerHTML = `
+            <p style="font-size:0.875rem;color:#64748b;margin-bottom:12px;">${anc.status}</p>
+            <div class="kpi-grid">
+              <div class="kpi-card"><div class="kpi-title">Analytic Sample N</div><div class="kpi-value">${anc.analytic_sample_n.toLocaleString()}</div></div>
+              <div class="kpi-card"><div class="kpi-title">Positive Rate</div><div class="kpi-value">${LabelRenderer.formatPercent(anc.positive_rate, 2)}</div></div>
+              <div class="kpi-card"><div class="kpi-title">LR ROC-AUC</div><div class="kpi-value">${anc.logistic_regression.roc_auc.toFixed(4)}</div></div>
+            </div>
+            <div class="callout" style="margin-top:12px;"><strong>Top predictor:</strong> ${anc.top_predictor.feature} — OR ${anc.top_predictor.odds_ratio.toFixed(2)}. ${anc.top_predictor.interpretation}</div>
+            <div class="callout" style="margin-top:12px;">${data.institutional_delivery_note}</div>
+          `;
+        })
+        .catch(() => {
+          document.querySelector(".container").insertAdjacentHTML("beforeend",
+            LabelRenderer.renderDataUnavailable("outcome_impact_summary.json could not be loaded."));
+        });
+    });
+  </script>
+</body>
+</html>

@@ -13,12 +13,20 @@ document.addEventListener("DOMContentLoaded", function () {
     { name: "Explainability & Reg", path: "explainability.html", id: "page-j" },
   ];
 
-  const currentFile = window.location.pathname.split("/").pop();
+  const pathname = window.location.pathname.replace(/\\/g, "/");
+  const inPagesDir = pathname.includes("/pages/");
+  const currentFile = pathname.split("/").pop() || "index.html";
+
+  function pageHref(pageFile) {
+    return inPagesDir ? pageFile : "pages/" + pageFile;
+  }
+
+  const homeHref = inPagesDir ? "../index.html" : "index.html";
 
   const navHtml = `
     <header class="header-nav">
       <div class="brand-container">
-        <a href="../index.html" class="brand-title">BarrierLens P48</a>
+        <a href="${homeHref}" class="brand-title">BarrierLens P48</a>
         <span class="brand-badge">NFHS-5</span>
       </div>
       <nav>
@@ -26,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ${pages
             .map(
               (p) =>
-                `<li><a href="${p.path}" class="nav-link ${
+                `<li><a href="${pageHref(p.path)}" class="nav-link ${
                   currentFile === p.path ? "active" : ""
                 }">${p.name}</a></li>`
             )

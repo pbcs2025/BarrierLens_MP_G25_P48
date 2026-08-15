@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Archetypes — BarrierLens P48</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Risk Archetypes (K-Means Clustering)</h1>
+      <p class="page-subtitle">K-Means (k=2) vulnerability segmentation across 724,115 NFHS-5 women — associational risk profiles, not causal groupings.</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <span id="rail-b-badge-slot"></span>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Total Women</div>
+        <div class="kpi-value" id="kpi-total">—</div>
+        <div class="kpi-subtext">Clustering Sample</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Clusters (k)</div>
+        <div class="kpi-value" id="kpi-k">2</div>
+        <div class="kpi-subtext">Silhouette: <span id="kpi-silhouette">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Predicted Barrier Probabilities by Cluster Archetype</div>
+      <div id="cluster-bar-chart" class="chart-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Cluster Profile Summary</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Cluster</th>
+            <th>Archetype</th>
+            <th>N</th>
+            <th>% Women</th>
+            <th>Vulnerability Score</th>
+            <th>Media Exposure</th>
+            <th>Digital Inclusion</th>
+            <th>Composite Predicted Barrier</th>
+          </tr>
+        </thead>
+        <tbody id="cluster-table-body"></tbody>
+      </table>
+    </div>
+
+    <div id="methodology-note-slot"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B_CLUSTER");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+
+      fetch("../assets/data/cluster_summary.json")
+        .then(r => r.ok ? r.json() : Promise.reject("missing"))
+        .then(data => {
+          document.getElementById("kpi-total").textContent = data.metadata.total_women.toLocaleString();
+          document.getElementById("kpi-k").textContent = data.metadata.k_selected;
+          document.getElementById("kpi-silhouette").textContent = data.metadata.silhouette_score_k2.toFixed(4);
+
+          document.getElementById("cluster-table-body").innerHTML = data.clusters.map(c => `
+            <tr>
+              <td>#${c.cluster_id}</td>
+              <td><strong>${c.archetype_name}</strong></td>
+              <td>${c.sample_size_n.toLocaleString()}</td>
+              <td>${(c.pct_total_women * 100).toFixed(2)}%</td>
+              <td>${c.vulnerability_score.toFixed(4)}</td>
+              <td>${c.media_exposure_index.toFixed(4)}</td>
+              <td>${c.digital_inclusion_index.toFixed(4)}</td>
+              <td>${LabelRenderer.formatPercent(c.predicted_composite_score, 2)}</td>
+            </tr>
+          `).join("");
+
+          const labels = data.clusters.map(c => c.archetype_name);
+          ChartUtils.createGroupedBarChart("cluster-bar-chart", "Predicted Barrier Probabilities by Cluster", ["Household", "Logistic", "Facility"], [
+            { name: labels[0], values: [data.clusters[0].predicted_household_prob * 100, data.clusters[0].predicted_logistic_prob * 100, data.clusters[0].predicted_facility_prob * 100], color: ChartUtils.colors.c0 },
+            { name: labels[1], values: [data.clusters[1].predicted_household_prob * 100, data.clusters[1].predicted_logistic_prob * 100, data.clusters[1].predicted_facility_prob * 100], color: ChartUtils.colors.c2 }
+          ]);
+        })
+        .catch(() => {
+          document.querySelector(".container").insertAdjacentHTML("beforeend",
+            LabelRenderer.renderDataUnavailable("cluster_summary.json could not be loaded."));
+        });
+    });
+  </script>
+</body>
+</html>

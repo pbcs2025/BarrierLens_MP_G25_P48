@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Household Empowerment — BarrierLens P48</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Household Empowerment Analysis</h1>
+      <p class="page-subtitle">Cross-sectional associations between women's financial, digital, and decision-making characteristics (<code>v170</code>, <code>v743f</code>, <code>v169a</code>) and observed household/logistic healthcare-access barrier rates in the NFHS-5 extract.</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <span id="rail-b-badge-slot"></span>
+        <span class="info-note-pill">All statistics are Rail B — BarrierLens computed observed rates</span>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      This page examines <strong>observed associations</strong> only. Lower barrier rates among empowered groups do not prove that empowerment reduces barriers — NFHS-5 is cross-sectional and confounding may be present.
+    </div>
+
+    <!-- Chart 1: Bank Account -->
+    <div class="card">
+      <div class="card-title">
+        <span>Chart 1 — Bank Account (<code>v170</code>) vs Barrier Rates</span>
+        <span id="bank-n-badge" class="info-note-pill"></span>
+      </div>
+      <div id="bank-chart" class="chart-box" style="min-height: 360px;"></div>
+      <div id="bank-interpretation"></div>
+    </div>
+
+    <!-- Chart 2: Decision Making -->
+    <div class="card">
+      <div class="card-title">
+        <span>Chart 2 — Medical Decision-Making (<code>v743f</code>) vs Barrier Rates</span>
+        <span id="decision-n-badge" class="info-note-pill"></span>
+      </div>
+      <div id="decision-chart" class="chart-box" style="min-height: 360px;"></div>
+      <div id="decision-interpretation"></div>
+    </div>
+
+    <!-- Chart 3: Mobile Access -->
+    <div class="card">
+      <div class="card-title">
+        <span>Chart 3 — Mobile Phone Access (<code>v169a</code>) vs Barrier Rates</span>
+        <span id="mobile-n-badge" class="info-note-pill"></span>
+      </div>
+      <div id="mobile-chart" class="chart-box" style="min-height: 360px;"></div>
+      <div id="mobile-interpretation"></div>
+    </div>
+
+    <!-- Composite Empowerment Score -->
+    <div class="card">
+      <div class="card-title">Composite Empowerment Score (0–3 items)</div>
+      <div id="composite-chart" class="chart-box" style="min-height: 360px;"></div>
+      <table class="data-table" style="margin-top: 16px;">
+        <thead>
+          <tr>
+            <th>Empowerment Level</th>
+            <th>N</th>
+            <th>% of Women</th>
+            <th>Household Barrier</th>
+            <th>Logistic Barrier</th>
+            <th>Facility Barrier</th>
+            <th>Any Barrier</th>
+          </tr>
+        </thead>
+        <tbody id="composite-table-body"></tbody>
+      </table>
+    </div>
+
+    <div id="methodology-note-slot"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+
+      fetch("../assets/data/empowerment_summary.json")
+        .then(r => {
+          if (!r.ok) throw new Error("File not found");
+          return r.json();
+        })
+        .then(data => {
+          renderBinaryChart(data, "has_bank_account", "bank-chart", "bank-n-badge", "bank-interpretation",
+            ["No Bank Account", "Has Bank Account"], "access to a bank account");
+          renderBinaryChart(data, "decides_own_health", "decision-chart", "decision-n-badge", "decision-interpretation",
+            ["Does Not Decide Own Health", "Decides on Own Health Care"], "autonomy in medical decision-making");
+          renderBinaryChart(data, "has_mobile_phone", "mobile-chart", "mobile-n-badge", "mobile-interpretation",
+            ["No Mobile Phone", "Has Mobile Phone"], "mobile phone access");
+          renderComposite(data);
+        })
+        .catch(err => {
+          console.error(err);
+          document.querySelector(".container").insertAdjacentHTML("beforeend",
+            LabelRenderer.renderDataUnavailable("empowerment_summary.json could not be loaded."));
+        });
+    });
+
+    function aggregateByField(rows, field) {
+      const groups = { 0: { n: 0, hh: 0, log: 0 }, 1: { n: 0, hh: 0, log: 0 } };
+      rows.forEach(row => {
+        const k = row[field];
+        groups[k].n += row.sample_size_n;
+        groups[k].hh += row.observed_household_rate * row.sample_size_n;
+        groups[k].log += row.observed_logistic_rate * row.sample_size_n;
+      });
+      return {
+        0: { n: groups[0].n, household: groups[0].n ? groups[0].hh / groups[0].n : null, logistic: groups[0].n ? groups[0].log / groups[0].n : null },
+        1: { n: groups[1].n, household: groups[1].n ? groups[1].hh / groups[1].n : null, logistic: groups[1].n ? groups[1].log / groups[1].n : null }
+      };
+    }
+
+    function renderBinaryChart(data, field, chartId, nBadgeId, interpId, labels, factorPhrase) {
+      const agg = aggregateByField(data.detailed_combinations, field);
+      const totalN = agg[0].n + agg[1].n;
+      document.getElementById(nBadgeId).textContent = "N = " + totalN.toLocaleString();
+
+      const categories = ["Household Barrier", "Logistic Barrier"];
+      ChartUtils.createGroupedBarChart(chartId, labels.join(" vs ") + " — Observed Barrier Rates", categories, [
+        {
+          name: labels[0] + " (N=" + agg[0].n.toLocaleString() + ")",
+          values: [agg[0].household * 100, agg[0].logistic * 100],
+          color: "#64748b"
+        },
+        {
+          name: labels[1] + " (N=" + agg[1].n.toLocaleString() + ")",
+          values: [agg[1].household * 100, agg[1].logistic * 100],
+          color: ChartUtils.colors.railB
+        }
+      ]);
+
+      const hhText = LabelRenderer.describeAssociation(factorPhrase, agg[1].household, agg[0].household, "household barrier rate");
+      const logText = LabelRenderer.describeAssociation(factorPhrase, agg[1].logistic, agg[0].logistic, "logistic barrier rate");
+      document.getElementById(interpId).innerHTML =
+        LabelRenderer.renderAssociationCallout(hhText) +
+        LabelRenderer.renderAssociationCallout(logText);
+    }
+
+    function renderComposite(data) {
+      const levels = data.by_empowerment_level;
+      document.getElementById("composite-table-body").innerHTML = levels.map(l => `
+        <tr>
+          <td><strong>${l.empowerment_level}</strong></td>
+          <td>${l.sample_size_n.toLocaleString()}</td>
+          <td>${(l.pct_women * 100).toFixed(2)}%</td>
+          <td>${LabelRenderer.formatPercent(l.observed_household_rate, 2)}</td>
+          <td>${LabelRenderer.formatPercent(l.observed_logistic_rate, 2)}</td>
+          <td>${LabelRenderer.formatPercent(l.observed_facility_rate, 2)}</td>
+          <td>${LabelRenderer.formatPercent(l.observed_any_barrier_rate, 2)}</td>
+        </tr>
+      `).join("");
+
+      const cats = levels.map(l => l.empowerment_level.replace(" Empowerment", "").replace(" (", "\n("));
+      ChartUtils.createGroupedBarChart("composite-chart", "Empowerment Score vs Observed Barrier Rates", cats, [
+        {
+          name: "Household Barrier",
+          values: levels.map(l => l.observed_household_rate * 100),
+          color: ChartUtils.colors.household
+        },
+        {
+          name: "Logistic Barrier",
+          values: levels.map(l => l.observed_logistic_rate * 100),
+          color: ChartUtils.colors.logistic
+        },
+        {
+          name: "Facility Barrier",
+          values: levels.map(l => l.observed_facility_rate * 100),
+          color: ChartUtils.colors.facility
+        }
+      ]);
+    }
+  </script>
+</body>
+</html>

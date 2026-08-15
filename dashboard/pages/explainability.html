@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explainability & Regression — BarrierLens P48</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Explainability &amp; Regression Analysis</h1>
+      <p class="page-subtitle">Stage 1 logistic regression odds ratios and SHAP explainability plots. Results are reported exactly as computed — not adjusted to match expected narratives.</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <span id="rail-b-stage1-badge"></span>
+        <span id="rail-b-shap-badge"></span>
+      </div>
+    </div>
+
+    <!-- Section 1: Logistic Regression -->
+    <div class="card">
+      <div class="card-title">Section 1 — Stage 1 Logistic Regression Odds Ratios</div>
+      <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 16px;">
+        Odds ratios (OR) from Stage 1 logistic regression on barrier targets. <strong>OR &gt; 1</strong> indicates higher odds of the barrier; <strong>OR &lt; 1</strong> indicates lower odds; <strong>OR ≈ 1</strong> indicates little association. Statistical significance is not reported unless available in the model output.
+      </p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+        <button class="tab-btn active" data-target="household" onclick="switchTarget('household', this)">Household Barrier</button>
+        <button class="tab-btn" data-target="logistic" onclick="switchTarget('logistic', this)">Logistic Barrier</button>
+        <button class="tab-btn" data-target="facility" onclick="switchTarget('facility', this)">Facility Barrier</button>
+      </div>
+      <div id="lr-summary-text" class="callout" style="margin-bottom: 16px;"></div>
+      <div id="lr-or-chart" class="chart-box" style="min-height: 480px;"></div>
+      <table class="data-table" style="margin-top: 16px;">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Feature</th>
+            <th>Coefficient</th>
+            <th>Odds Ratio</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody id="lr-table-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Section 2: Top Predictors -->
+    <div class="card">
+      <div class="card-title">Section 2 — Top Predictors (Strongest |log OR| from Stage 1 LR)</div>
+      <div id="top-predictors-chart" class="chart-box" style="min-height: 420px;"></div>
+    </div>
+
+    <!-- Section 3: SHAP Explainability -->
+    <div class="card">
+      <div class="card-title">Section 3 — SHAP Explainability</div>
+      <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 8px;">
+        Pre-computed SHAP plots from Stage 1 Random Forest (barrier targets) and Stage 2 RF/XGBoost (<code>target_unmet_fp</code>). Images are copied from project outputs without modification.
+      </p>
+
+      <h3 style="font-size: 1rem; margin: 20px 0 12px;">Stage 1 — Barrier Targets (Random Forest SHAP)</h3>
+      <div class="shap-gallery" id="stage1-shap-gallery"></div>
+
+      <h3 style="font-size: 1rem; margin: 28px 0 12px;">Stage 2 — Unmet FP Target (Random Forest SHAP)</h3>
+      <div class="shap-gallery" id="stage2-rf-shap-gallery"></div>
+
+      <h3 style="font-size: 1rem; margin: 28px 0 12px;">Stage 2 — Unmet FP Target (XGBoost SHAP)</h3>
+      <div class="shap-gallery" id="stage2-xgb-shap-gallery"></div>
+
+      <h3 style="font-size: 1rem; margin: 28px 0 12px;">Stage 2 — Additional XGBoost SHAP Views</h3>
+      <div class="shap-gallery" id="stage2-xgb-extra-gallery"></div>
+    </div>
+
+    <!-- Section 4: Interpretation -->
+    <div class="card">
+      <div class="card-title">Section 4 — Honest Interpretation</div>
+      <div id="interpretation-content"></div>
+    </div>
+
+    <div class="insights-card">
+      <div class="insights-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="insights-card-title">Key Explainability Takeaways</div>
+      </div>
+      <p class="insights-card-body" id="key-takeaways"></p>
+    </div>
+
+    <div id="methodology-note-slot"></div>
+  </div>
+
+  <style>
+    .tab-btn {
+      padding: 8px 16px;
+      border: 1px solid #cbd5e1;
+      background-color: #ffffff;
+      color: #475569;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background-color: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+  </style>
+
+  <script>
+    const SHAP_MAP = {
+      stage1: [
+        { file: "rf_bar_household.png", title: "Household Barrier — SHAP Bar", model: "Stage 1 RF", target: "target_household" },
+        { file: "rf_summary_household.png", title: "Household Barrier — SHAP Beeswarm", model: "Stage 1 RF", target: "target_household" },
+        { file: "rf_bar_logistic.png", title: "Logistic Barrier — SHAP Bar", model: "Stage 1 RF", target: "target_logistic" },
+        { file: "rf_summary_logistic.png", title: "Logistic Barrier — SHAP Beeswarm", model: "Stage 1 RF", target: "target_logistic" },
+        { file: "rf_bar_facility.png", title: "Facility Barrier — SHAP Bar", model: "Stage 1 RF", target: "target_facility" },
+        { file: "rf_summary_facility.png", title: "Facility Barrier — SHAP Beeswarm", model: "Stage 1 RF", target: "target_facility" }
+      ],
+      stage2_rf: [
+        { file: "rf_shap_bar_target_unmet_fp.png", title: "Unmet FP — RF SHAP Bar", model: "Stage 2 RF", target: "target_unmet_fp" },
+        { file: "rf_shap_beeswarm_target_unmet_fp.png", title: "Unmet FP — RF SHAP Beeswarm", model: "Stage 2 RF", target: "target_unmet_fp" },
+        { file: "rf_shap_group_comparison_target_unmet_fp.png", title: "Unmet FP — RF SHAP Group Comparison", model: "Stage 2 RF", target: "target_unmet_fp" }
+      ],
+      stage2_xgb: [
+        { file: "xgb_shap_bar_target_unmet_fp.png", title: "Unmet FP — XGBoost SHAP Bar", model: "Stage 2 XGBoost", target: "target_unmet_fp" },
+        { file: "xgb_shap_beeswarm_target_unmet_fp.png", title: "Unmet FP — XGBoost SHAP Beeswarm", model: "Stage 2 XGBoost", target: "target_unmet_fp" },
+        { file: "xgb_shap_group_comparison_target_unmet_fp.png", title: "Unmet FP — XGBoost SHAP Group Comparison", model: "Stage 2 XGBoost", target: "target_unmet_fp" }
+      ],
+      stage2_xgb_extra: [
+        { file: "shap_summary_target_unmet_fp.png", title: "Unmet FP — SHAP Summary", model: "Stage 2 XGBoost", target: "target_unmet_fp" },
+        { file: "shap_bar_target_unmet_fp.png", title: "Unmet FP — SHAP Bar (alt)", model: "Stage 2 XGBoost", target: "target_unmet_fp" },
+        { file: "shap_waterfall_target_unmet_fp.png", title: "Unmet FP — SHAP Waterfall", model: "Stage 2 XGBoost", target: "target_unmet_fp" },
+        { file: "shap_dependence_target_unmet_fp.png", title: "Unmet FP — SHAP Dependence", model: "Stage 2 XGBoost", target: "target_unmet_fp" },
+        { file: "shap_heatmap_target_unmet_fp.png", title: "Unmet FP — SHAP Heatmap", model: "Stage 2 XGBoost", target: "target_unmet_fp" }
+      ]
+    };
+
+    let regressionData = null;
+    let activeTarget = "household";
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("rail-b-stage1-badge").innerHTML = LabelRenderer.renderRailBadge("B_STAGE1");
+      document.getElementById("rail-b-shap-badge").innerHTML = LabelRenderer.renderRailBadge("B_SHAP");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+
+      renderShapGallery("stage1-shap-gallery", SHAP_MAP.stage1);
+      renderShapGallery("stage2-rf-shap-gallery", SHAP_MAP.stage2_rf);
+      renderShapGallery("stage2-xgb-shap-gallery", SHAP_MAP.stage2_xgb);
+      renderShapGallery("stage2-xgb-extra-gallery", SHAP_MAP.stage2_xgb_extra);
+
+      fetch("../assets/data/regression_summary.json")
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null)
+        .then(data => {
+          regressionData = data;
+          if (!data) {
+            document.getElementById("lr-or-chart").innerHTML = LabelRenderer.renderDataUnavailable("regression_summary.json not available.");
+            return;
+          }
+          renderTarget(activeTarget);
+          renderTopPredictors(data);
+          renderInterpretation(data);
+        });
+    });
+
+    function switchTarget(target, btn) {
+      activeTarget = target;
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (regressionData) renderTarget(target);
+    }
+
+    function renderTarget(targetKey) {
+      const t = regressionData.targets[targetKey];
+      if (!t) {
+        document.getElementById("lr-or-chart").innerHTML = LabelRenderer.renderDataUnavailable("No regression data for target: " + targetKey);
+        return;
+      }
+
+      const label = targetKey.charAt(0).toUpperCase() + targetKey.slice(1);
+      document.getElementById("lr-summary-text").innerHTML =
+        `<strong>${label} barrier model</strong> (${t.target}): intercept = ${t.intercept.toFixed(4)}, ${t.num_features} features. Top 10 risk and protective factors by |coefficient| magnitude shown below.`;
+
+      const topRisk = t.top_risk_factors.slice(0, 10);
+      const topProt = t.top_protective_factors.slice(0, 10).reverse();
+      const combined = topProt.concat(topRisk);
+      const features = combined.map(f => f.feature);
+      const orValues = combined.map(f => f.odds_ratio);
+      const colors = combined.map(f => f.odds_ratio > 1.05 ? "#e11d48" : f.odds_ratio < 0.95 ? "#0d9488" : "#64748b");
+
+      Plotly.newPlot("lr-or-chart", [{
+        x: orValues,
+        y: features,
+        type: "bar",
+        orientation: "h",
+        marker: { color: colors },
+        text: orValues.map(v => v.toFixed(3)),
+        textposition: "auto",
+        hovertemplate: "<b>%{y}</b><br>OR: %{x:.3f}<extra></extra>"
+      }], {
+        title: { text: label + " Barrier — Top LR Odds Ratios", font: { size: 16, color: "#0f172a" } },
+        shapes: [{ type: "line", x0: 1, x1: 1, y0: -0.5, y1: features.length - 0.5, line: { color: "#94a3b8", dash: "dash", width: 2 } }],
+        margin: { t: 50, b: 50, l: 220, r: 30 },
+        paper_bgcolor: "transparent",
+        plot_bgcolor: "transparent",
+        xaxis: { title: "Odds Ratio", gridcolor: "#f1f5f9", color: "#64748b" },
+        yaxis: { autorange: "reversed", color: "#0f172a" }
+      }, { responsive: true, displayModeBar: false });
+
+      document.getElementById("lr-table-body").innerHTML = combined.map(f => {
+        const interp = LabelRenderer.interpretOddsRatio(f.odds_ratio);
+        return `<tr>
+          <td>#${f.rank}</td>
+          <td>${f.feature}</td>
+          <td>${f.coefficient.toFixed(4)}</td>
+          <td>${f.odds_ratio.toFixed(4)}</td>
+          <td class="${interp.cssClass}">${interp.label}</td>
+        </tr>`;
+      }).join("");
+    }
+
+    function renderTopPredictors(data) {
+      const allFeatures = [];
+      ["household", "logistic", "facility"].forEach(key => {
+        const t = data.targets[key];
+        if (!t) return;
+        t.all_features.forEach(f => {
+          allFeatures.push({
+            feature: f.feature,
+            target: key,
+            odds_ratio: f.odds_ratio,
+            magnitude: Math.abs(Math.log(f.odds_ratio))
+          });
+        });
+      });
+
+      allFeatures.sort((a, b) => b.magnitude - a.magnitude);
+      const top15 = allFeatures.slice(0, 15);
+      const labels = top15.map(f => f.feature + " (" + f.target + ")");
+      const mags = top15.map(f => f.magnitude);
+
+      ChartUtils.createHorizontalBarChart(
+        "top-predictors-chart",
+        "Strongest Predictors Across All Barrier Targets (|log OR|)",
+        labels,
+        mags,
+        ChartUtils.colors.railB,
+        "|log(Odds Ratio)|"
+      );
+    }
+
+    function renderShapGallery(containerId, items) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = items.map(item => `
+        <div class="shap-card">
+          <img src="../assets/images/${item.file}" alt="${item.title}" loading="lazy"
+            onerror="this.parentElement.querySelector('.shap-error').style.display='block'; this.style.display='none';">
+          <div class="shap-error" style="display:none; padding:20px; color:#92400e; font-size:0.85rem;">
+            Image not found: ${item.file}
+          </div>
+          <div class="shap-card-caption">
+            <strong>${item.title}</strong>
+            ${item.model} · Target: <code>${item.target}</code>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderInterpretation(data) {
+      const hh = data.targets.household;
+      const educationFeatures = hh.all_features.filter(f => f.feature.includes("v106"));
+      const wealthFeatures = hh.all_features.filter(f => f.feature.includes("v190"));
+
+      let educationNote = "";
+      if (educationFeatures.length) {
+        const dirs = educationFeatures.map(f => `${f.feature}: OR ${f.odds_ratio.toFixed(3)}`).join("; ");
+        educationNote = `<p><strong>Education (v106) — Stage 1 household barrier:</strong> ${dirs}. In Stage 1 LR, several education categories show OR &gt; 1 (associated with higher odds of household barriers in this model specification). This differs from the base-paper narrative that higher education is protective. The BarrierLens result is reported as an empirical model finding, not adjusted to match the reference study.</p>`;
+      }
+
+      let wealthNote = "";
+      if (wealthFeatures.length) {
+        const richest = wealthFeatures.find(f => f.feature.includes("richest"));
+        const poorest = wealthFeatures.find(f => f.feature.includes("poorest"));
+        if (richest && poorest) {
+          wealthNote = `<p><strong>Wealth index (v190):</strong> Poorest OR = ${poorest.odds_ratio.toFixed(3)} (higher odds); Richest OR = ${richest.odds_ratio.toFixed(3)} (lower odds). This direction aligns with the base-paper finding that poor wealth is a risk factor and rich wealth is protective — as an associational pattern in the Stage 1 model.</p>`;
+        }
+      }
+
+      document.getElementById("interpretation-content").innerHTML = `
+        <div class="callout callout-warning" style="margin-bottom: 16px;">
+          <strong>Honesty rule:</strong> The faculty guide gives an example that education and wealth reduce barriers. However, Stage 1 LR shows education categories with OR &gt; 1 for household barriers, and Stage 2 logistic regression for <code>target_unmet_fp</code> reports <code>v106</code> with OR = 1.144 (positive coefficient). These differences are reported as empirical model results rather than being adjusted to match expected narratives.
+        </div>
+        ${educationNote}
+        ${wealthNote}
+        <p><strong>How to read OR vs SHAP:</strong> Logistic regression odds ratios provide adjusted associational estimates comparable to the base paper's AOR framework. SHAP values from tree models quantify each feature's contribution to individual predictions and may rank features differently due to non-linearities and interactions. Neither method establishes causation in cross-sectional NFHS-5 data.</p>
+        <p><strong>Stage 2 note:</strong> For unmet family planning (<code>target_unmet_fp</code>), the Stage 2 logistic model includes barrier probabilities and cluster membership. Facility barrier probability shows OR = 0.814 (associated with lower odds), while household barrier probability shows OR = 1.150 — both are model outputs on the Stage 2 feature set.</p>
+      `;
+
+      document.getElementById("key-takeaways").textContent =
+        "Poorest wealth (v190_poorest) ranks among the strongest risk factors across all three Stage 1 barrier targets. Richest wealth is consistently protective (OR < 1). Education effects in Stage 1 LR do not uniformly match the base-paper protective narrative — some education levels show OR > 1. SHAP plots confirm socioeconomic and barrier-probability features among top contributors in both Stage 1 barrier models and Stage 2 outcome models. All findings are predictive/associational.";
+    }
+  </script>
+</body>
+</html>

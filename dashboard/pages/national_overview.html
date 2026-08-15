@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>National Overview — BarrierLens P48</title>
   <link rel="stylesheet" href="../assets/css/style.css">
-  <script src="https://cdn.plot.ly/plotly-latest.min.min.js" default></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
   <script src="../assets/js/nav.js"></script>
@@ -98,15 +98,101 @@
 
 
   <script>
+    function showChartError(message) {
+      const el = document.getElementById("national-overview-chart");
+      el.innerHTML = `<div class="callout callout-warning" style="margin:0;">${message}</div>`;
+    }
+
+    function renderNationalComparisonChart(chartData) {
+      if (typeof Plotly === "undefined") {
+        const msg = "Plotly.js failed to load. Check the CDN script tag and browser console.";
+        console.error(msg);
+        showChartError(msg);
+        return;
+      }
+
+      if (!Array.isArray(chartData) || chartData.length === 0) {
+        const msg = "Chart data is unavailable or has an unexpected structure.";
+        console.error(msg, chartData);
+        showChartError(msg);
+        return;
+      }
+
+      const categories = chartData.map(d => d.barrier_type);
+      const seriesList = [];
+
+      if (chartData.every(d => d.observed != null)) {
+        seriesList.push({
+          name: "Rail A — Observed (NFHS-5)",
+          values: chartData.map(d => d.observed * 100),
+          color: ChartUtils.colors.railA,
+          hoverLabel: "Observed prevalence"
+        });
+      }
+      if (chartData.every(d => d.predicted != null)) {
+        seriesList.push({
+          name: "Rail B — Predicted (BarrierLens)",
+          values: chartData.map(d => d.predicted * 100),
+          color: ChartUtils.colors.railB,
+          hoverLabel: "Predicted probability"
+        });
+      }
+      if (chartData.every(d => d.base_paper != null)) {
+        seriesList.push({
+          name: "Base Paper Reference (Pradhan & De)",
+          values: chartData.map(d => d.base_paper * 100),
+          color: ChartUtils.colors.basePaper,
+          hoverLabel: "Published reference"
+        });
+      }
+
+      if (seriesList.length === 0) {
+        const msg = "Chart data is unavailable or has an unexpected structure.";
+        console.error(msg, chartData);
+        showChartError(msg);
+        return;
+      }
+
+      try {
+        const traces = seriesList.map(s => ({
+          x: categories,
+          y: s.values,
+          name: s.name,
+          type: "bar",
+          marker: { color: s.color },
+          text: s.values.map(v => v.toFixed(1) + "%"),
+          textposition: "auto",
+          hovertemplate: "<b>%{x}</b><br>" + s.hoverLabel + ": %{y:.1f}%<extra></extra>"
+        }));
+
+        Plotly.newPlot("national-overview-chart", traces, {
+          title: { text: "Observed vs Predicted vs Published Base Paper Prevalence", font: { size: 16, color: "#0f172a" } },
+          barmode: "group",
+          margin: { t: 50, b: 40, l: 60, r: 20 },
+          paper_bgcolor: "transparent",
+          plot_bgcolor: "transparent",
+          xaxis: { color: "#64748b", title: "Barrier Domain" },
+          yaxis: { color: "#64748b", gridcolor: "#f1f5f9", title: "Prevalence (%)", ticksuffix: "%" },
+          legend: { orientation: "h", y: -0.15 }
+        }, { responsive: true, displayModeBar: false });
+      } catch (err) {
+        console.error("Error rendering national overview chart:", err);
+        showChartError("Unable to render chart. Check the browser console for details.");
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
-      // Render Rail Badges & Callout
       document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
       document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
       document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
 
-      // Fetch JSON data
       fetch("../assets/data/national_overview.json")
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status + " loading national_overview.json");
+          }
+          return response.json();
+        })
         .then(data => {
           const kpis = data.kpis;
           document.getElementById("kpi-total-women").textContent = kpis.total_women.toLocaleString();
@@ -115,7 +201,6 @@
           document.getElementById("kpi-logistic-barrier").textContent = (kpis.observed_logistic_rate * 100).toFixed(2) + "%";
           document.getElementById("kpi-household-barrier").textContent = (kpis.observed_household_rate * 100).toFixed(2) + "%";
 
-          // Render Ranking Table
           const tbody = document.getElementById("ranking-table-body");
           tbody.innerHTML = data.barrier_ranking.map(item => `
             <tr style="border-bottom: 1px solid var(--border-color);">
@@ -128,19 +213,12 @@
             </tr>
           `).join("");
 
-          // Render Plotly Grouped Bar Chart
-          const categories = data.comparison_chart_data.map(d => d.barrier_type);
-          const observedVals = data.comparison_chart_data.map(d => d.observed * 100);
-          const predictedVals = data.comparison_chart_data.map(d => d.predicted * 100);
-          const basePaperVals = data.comparison_chart_data.map(d => d.base_paper * 100);
-
-          ChartUtils.createGroupedBarChart("national-overview-chart", "Observed vs Predicted vs Published Base Paper Prevalence", categories, [
-            { name: "Rail A — Observed (NFHS-5)", values: observedVals, color: ChartUtils.colors.railA },
-            { name: "Rail B — Predicted (BarrierLens)", values: predictedVals, color: ChartUtils.colors.railB },
-            { name: "Base Paper Reference (Pradhan & De)", values: basePaperVals, color: ChartUtils.colors.basePaper }
-          ]);
+          renderNationalComparisonChart(data.comparison_chart_data);
         })
-        .catch(err => console.error("Error loading national_overview.json:", err));
+        .catch(err => {
+          console.error("Error loading national_overview.json:", err);
+          showChartError("Unable to load national_overview.json. Check the data path and browser console.");
+        });
     });
   </script>
 </body>
