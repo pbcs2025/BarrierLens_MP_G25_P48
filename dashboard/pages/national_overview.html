@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Overview — BarrierLens P48</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.min.js" default></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">National Healthcare Access Barrier Overview</h1>
+      <p class="page-subtitle">National prevalence, comparative domain ranking, and observed vs predicted model alignment across 724,115 Indian women (NFHS-5).</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <span id="rail-a-badge-slot"></span>
+        <span id="rail-b-badge-slot"></span>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Total Women Analysed</div>
+        <div class="kpi-value" id="kpi-total-women">724,115</div>
+        <div class="kpi-subtext">NFHS-5 Individual Recode</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">At Least One Barrier</div>
+        <div class="kpi-value" id="kpi-any-barrier">60.68%</div>
+        <div class="kpi-subtext">Base Paper Benchmark: 84.0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Facility-Level Barrier</div>
+        <div class="kpi-value" id="kpi-facility-barrier" style="color: #e11d48;">46.01%</div>
+        <div class="kpi-subtext">Rank 1 (Highest Barrier)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Logistic Barrier</div>
+        <div class="kpi-value" id="kpi-logistic-barrier" style="color: #d97706;">31.61%</div>
+        <div class="kpi-subtext">Rank 2 (Moderate Barrier)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Household Barrier</div>
+        <div class="kpi-value" id="kpi-household-barrier" style="color: #2563eb;">27.16%</div>
+        <div class="kpi-subtext">Rank 3 (Lowest Barrier)</div>
+      </div>
+    </div>
+
+    <!-- Main Chart Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>Barrier Prevalence Comparison: Observed vs Predicted vs Base Paper</span>
+      </div>
+      <div id="national-overview-chart" class="chart-box"></div>
+    </div>
+
+    <!-- Barrier Ranking Table Card -->
+    <div class="card">
+      <div class="card-title">Comparative Barrier Domain Ranking</div>
+      <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 12px;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem;">
+            <th style="padding: 10px;">Rank</th>
+            <th style="padding: 10px;">Barrier Domain</th>
+            <th style="padding: 10px;">Observed Prevalence (Rail A)</th>
+            <th style="padding: 10px;">Predicted Probability (Rail B)</th>
+            <th style="padding: 10px;">Base Paper Reference</th>
+            <th style="padding: 10px;">Prevalence Level</th>
+          </tr>
+        </thead>
+        <tbody id="ranking-table-body" style="font-size: 0.95rem;">
+          <!-- Dynamically filled -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Executive Insights Card -->
+    <div class="insights-card">
+      <div class="insights-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="insights-card-title">Executive Insights & National Trends</div>
+      </div>
+      <p class="insights-card-body" id="summary-banner-text">
+        Across 724,115 Indian women surveyed in NFHS-5, healthcare access barriers remain highly prevalent, with 60.68% experiencing at least one major barrier. Facility-level concerns represent the primary constraint (46.01% observed), followed by logistic barriers (31.61%) and household financial/autonomy constraints (27.16%). BarrierLens machine learning predictions closely match this rank ordering, confirming macro-level alignment across observed and predicted domains.
+      </p>
+    </div>
+
+    <!-- Data & Methodology Notes -->
+    <div id="methodology-note-slot"></div>
+  </div>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Render Rail Badges & Callout
+      document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
+      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+
+      // Fetch JSON data
+      fetch("../assets/data/national_overview.json")
+        .then(response => response.json())
+        .then(data => {
+          const kpis = data.kpis;
+          document.getElementById("kpi-total-women").textContent = kpis.total_women.toLocaleString();
+          document.getElementById("kpi-any-barrier").textContent = (kpis.observed_any_barrier_rate * 100).toFixed(2) + "%";
+          document.getElementById("kpi-facility-barrier").textContent = (kpis.observed_facility_rate * 100).toFixed(2) + "%";
+          document.getElementById("kpi-logistic-barrier").textContent = (kpis.observed_logistic_rate * 100).toFixed(2) + "%";
+          document.getElementById("kpi-household-barrier").textContent = (kpis.observed_household_rate * 100).toFixed(2) + "%";
+
+          // Render Ranking Table
+          const tbody = document.getElementById("ranking-table-body");
+          tbody.innerHTML = data.barrier_ranking.map(item => `
+            <tr style="border-bottom: 1px solid var(--border-color);">
+              <td style="padding: 12px; font-weight: 700;">#${item.rank}</td>
+              <td style="padding: 12px; font-weight: 600;">${item.barrier_type}</td>
+              <td style="padding: 12px; color: #0284c7; font-weight: 600;">${(item.observed_rate * 100).toFixed(2)}%</td>
+              <td style="padding: 12px; color: #7c3aed; font-weight: 600;">${(item.predicted_prob * 100).toFixed(2)}%</td>
+              <td style="padding: 12px; color: #64748b;">${(item.base_paper_rate * 100).toFixed(1)}%</td>
+              <td style="padding: 12px;"><span style="padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; background: #f1f5f9; color: #334155;">${item.level}</span></td>
+            </tr>
+          `).join("");
+
+          // Render Plotly Grouped Bar Chart
+          const categories = data.comparison_chart_data.map(d => d.barrier_type);
+          const observedVals = data.comparison_chart_data.map(d => d.observed * 100);
+          const predictedVals = data.comparison_chart_data.map(d => d.predicted * 100);
+          const basePaperVals = data.comparison_chart_data.map(d => d.base_paper * 100);
+
+          ChartUtils.createGroupedBarChart("national-overview-chart", "Observed vs Predicted vs Published Base Paper Prevalence", categories, [
+            { name: "Rail A — Observed (NFHS-5)", values: observedVals, color: ChartUtils.colors.railA },
+            { name: "Rail B — Predicted (BarrierLens)", values: predictedVals, color: ChartUtils.colors.railB },
+            { name: "Base Paper Reference (Pradhan & De)", values: basePaperVals, color: ChartUtils.colors.basePaper }
+          ]);
+        })
+        .catch(err => console.error("Error loading national_overview.json:", err));
+    });
+  </script>
+</body>
+</html>

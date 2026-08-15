@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "title": "Multiple Overlapping Barriers Analysis (0-3 Barrier Count)",
+    "section_reference": "Section 11.2 & Section 6 Item 7",
+    "formula": "barrier_count = target_household + target_logistic + target_facility"
+  },
+  "overall": {
+    "total_women": 724115,
+    "mean_barrier_count": 1.0477,
+    "pct_facing_2plus_barriers": 0.3155,
+    "distribution": [
+      {
+        "barrier_count": 0,
+        "label": "0 Barriers",
+        "sample_size_n": 295720,
+        "pct_women": 0.4084
+      },
+      {
+        "barrier_count": 1,
+        "label": "1 Barrier",
+        "sample_size_n": 199943,
+        "pct_women": 0.2761
+      },
+      {
+        "barrier_count": 2,
+        "label": "2 Barriers",
+        "sample_size_n": 126647,
+        "pct_women": 0.1749
+      },
+      {
+        "barrier_count": 3,
+        "label": "3 Barriers",
+        "sample_size_n": 101805,
+        "pct_women": 0.1406
+      }
+    ]
+  },
+  "by_wealth_tier": [
+    {
+      "wealth_tier": "Poorest",
+      "sample_size_n": 149844,
+      "pct_national_sample": 0.2069,
+      "mean_barrier_count": 1.4902,
+      "pct_facing_2plus_barriers": 0.4907,
+      "distribution": {
+        "count_0_pct": 0.2438,
+        "count_1_pct": 0.2655,
+        "count_2_pct": 0.2474,
+        "count_3_pct": 0.2433
+      }
+    },
+    {
+      "wealth_tier": "Poorer",
+      "sample_size_n": 160340,
+      "pct_national_sample": 0.2214,
+      "mean_barrier_count": 1.2157,
+      "pct_facing_2plus_barriers": 0.3808,
+      "distribution": {
+        "count_0_pct": 0.3353,
+        "count_1_pct": 0.2839,
+        "count_2_pct": 0.2105,
+        "count_3_pct": 0.1702
+      }
+    },
+    {
+      "wealth_tier": "Middle",
+      "sample_size_n": 151505,
+      "pct_national_sample": 0.2092,
+      "mean_barrier_count": 1.0111,
+      "pct_facing_2plus_barriers": 0.2993,
+      "distribution": {
+        "count_0_pct": 0.4131,
+        "count_1_pct": 0.2876,
+        "count_2_pct": 0.1744,
+        "count_3_pct": 0.1249
+      }
+    },
+    {
+      "wealth_tier": "Richer",
+      "sample_size_n": 139607,
+      "pct_national_sample": 0.1928,
+      "mean_barrier_count": 0.8245,
+      "pct_facing_2plus_barriers": 0.2253,
+      "distribution": {
+        "count_0_pct": 0.4911,
+        "count_1_pct": 0.2836,
+        "count_2_pct": 0.1349,
+        "count_3_pct": 0.0903
+      }
+    },
+    {
+      "wealth_tier": "Richest",
+      "sample_size_n": 122819,
+      "pct_national_sample": 0.1696,
+      "mean_barrier_count": 0.5873,
+      "pct_facing_2plus_barriers": 0.139,
+      "distribution": {
+        "count_0_pct": 0.6047,
+        "count_1_pct": 0.2563,
+        "count_2_pct": 0.086,
+        "count_3_pct": 0.053
+      }
+    }
+  ],
+  "by_residence": [
+    {
+      "residence": "Rural",
+      "sample_size_n": 544580,
+      "pct_national_sample": 0.7521,
+      "mean_barrier_count": 1.1544,
+      "pct_facing_2plus_barriers": 0.3579,
+      "distribution": {
+        "count_0_pct": 0.3651,
+        "count_1_pct": 0.277,
+        "count_2_pct": 0.1964,
+        "count_3_pct": 0.1615
+      }
+    },
+    {
+      "residence": "Urban",
+      "sample_size_n": 179535,
+      "pct_national_sample": 0.2479,
+      "mean_barrier_count": 0.7241,
+      "pct_facing_2plus_barriers": 0.1868,
+      "distribution": {
+        "count_0_pct": 0.5397,
+        "count_1_pct": 0.2735,
+        "count_2_pct": 0.1097,
+        "count_3_pct": 0.0771
+      }
+    }
+  ]
+}

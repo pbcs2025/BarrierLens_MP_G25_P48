@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rural-Urban Comparison — BarrierLens P48</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Rural–Urban Barrier Comparison</h1>
+      <p class="page-subtitle">Comparative analysis of healthcare access barriers across Rural vs Urban populations (NFHS-5, N=724,115).</p>
+    </div>
+
+    <!-- Rail Badges Header -->
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <span id="rail-a-badge-slot"></span>
+          <span id="rail-b-badge-slot"></span>
+        </div>
+        <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">
+          75.2% Rural / 24.8% Urban Sample Breakdown
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Scope Note -->
+    <div class="callout" style="margin-bottom: 24px;">
+      <strong>Methodology Note:</strong> Place of residence comparisons focus strictly on reported household, logistic, and facility access barriers in NFHS-5. Waiting-time and service-quality metrics are not present in standard NFHS-5 survey files.
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Rural Sample (N)</div>
+        <div class="kpi-value" id="kpi-rural-n">544,580</div>
+        <div class="kpi-subtext">75.21% of National Sample</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Urban Sample (N)</div>
+        <div class="kpi-value" id="kpi-urban-n">179,535</div>
+        <div class="kpi-subtext">24.79% of National Sample</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Rural Any Barrier Rate</div>
+        <div class="kpi-value" id="kpi-rural-any" style="color: #e11d48;">63.49%</div>
+        <div class="kpi-subtext">Observed (Rail A)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Urban Any Barrier Rate</div>
+        <div class="kpi-value" id="kpi-urban-any" style="color: #0284c7;">46.03%</div>
+        <div class="kpi-subtext">Observed (Rail A)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Dominant Barrier Domain</div>
+        <div class="kpi-value" style="color: #d97706;">Facility</div>
+        <div class="kpi-subtext">Rank #1 for both Rural & Urban</div>
+      </div>
+    </div>
+
+    <!-- Main Visualizations Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>Rural vs Urban Healthcare Barrier Domain Comparison</span>
+      </div>
+      <div id="rural-urban-chart" class="chart-box" style="min-height: 480px;"></div>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="card">
+      <div class="card-title">Rural vs Urban Domain Disparity Analysis</div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 12px;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem;">
+              <th style="padding: 10px;">Barrier Domain / Indicator</th>
+              <th style="padding: 10px;">Rural Rate (Rail A)</th>
+              <th style="padding: 10px;">Urban Rate (Rail A)</th>
+              <th style="padding: 10px;">Absolute Disparity (pp)</th>
+              <th style="padding: 10px;">Disparity Ratio (Rural/Urban)</th>
+              <th style="padding: 10px;">Rural ML Pred Prob (Rail B)</th>
+              <th style="padding: 10px;">Urban ML Pred Prob (Rail B)</th>
+            </tr>
+          </thead>
+          <tbody id="ru-table-body" style="font-size: 0.9rem;">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Executive Insights Card -->
+    <div class="insights-card">
+      <div class="insights-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="insights-card-title">Rural–Urban Insights & Disparities</div>
+      </div>
+      <p class="insights-card-body" id="summary-banner-text">
+        Rural women show higher healthcare-access barriers across all three domains compared to urban women (63.49% vs 46.03% facing at least one barrier). Facility-level concerns represent the dominant barrier domain for both groups (49.18% in rural vs 36.38% in urban settings). Logistic barriers exhibit the highest relative disparity ratio (1.38x higher in rural areas), reflecting infrastructure and transportation gaps in rural healthcare access.
+      </p>
+    </div>
+
+    <!-- Data & Methodology Notes -->
+    <div id="methodology-note-slot"></div>
+  </div>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Render Badges & Callout
+      document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
+      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+
+      fetch("../assets/data/rural_urban_summary.json")
+        .then(res => res.json())
+        .then(data => {
+          const groups = data.groups;
+          const rural = groups.find(g => g.residence === "Rural");
+          const urban = groups.find(g => g.residence === "Urban");
+
+          if (rural && urban) {
+            document.getElementById("kpi-rural-n").textContent = rural.sample_size_n.toLocaleString();
+            document.getElementById("kpi-urban-n").textContent = urban.sample_size_n.toLocaleString();
+            document.getElementById("kpi-rural-any").textContent = (rural.observed_any_barrier_rate * 100).toFixed(2) + "%";
+            document.getElementById("kpi-urban-any").textContent = (urban.observed_any_barrier_rate * 100).toFixed(2) + "%";
+
+            // Render Chart
+            const domains = ["Household Barrier", "Logistic Barrier", "Facility Barrier", "Any Barrier (≥1)"];
+            const ruralObs = [
+              rural.observed_household_rate * 100,
+              rural.observed_logistic_rate * 100,
+              rural.observed_facility_rate * 100,
+              rural.observed_any_barrier_rate * 100
+            ];
+            const urbanObs = [
+              urban.observed_household_rate * 100,
+              urban.observed_logistic_rate * 100,
+              urban.observed_facility_rate * 100,
+              urban.observed_any_barrier_rate * 100
+            ];
+
+            ChartUtils.createGroupedBarChart("rural-urban-chart", "Rural vs Urban Healthcare Barrier Domain Rates (Rail A)", domains, [
+              { name: "Rural Women (N = 544,580)", values: ruralObs, color: "#d97706" },
+              { name: "Urban Women (N = 179,535)", values: urbanObs, color: "#0284c7" }
+            ]);
+
+            // Render Table
+            const tableRows = [
+              { name: "Household Barrier", rObs: rural.observed_household_rate, uObs: urban.observed_household_rate, rPred: rural.predicted_household_prob, uPred: urban.predicted_household_prob },
+              { name: "Logistic Barrier", rObs: rural.observed_logistic_rate, uObs: urban.observed_logistic_rate, rPred: rural.predicted_logistic_prob, uPred: urban.predicted_logistic_prob },
+              { name: "Facility Barrier", rObs: rural.observed_facility_rate, uObs: urban.observed_facility_rate, rPred: rural.predicted_facility_prob, uPred: urban.predicted_facility_prob },
+              { name: "Any Barrier (≥1)", rObs: rural.observed_any_barrier_rate, uObs: urban.observed_any_barrier_rate, rPred: null, uPred: null }
+            ];
+
+            const tbody = document.getElementById("ru-table-body");
+            tbody.innerHTML = tableRows.map(row => {
+              const diff = (row.rObs - row.uObs) * 100;
+              const ratio = row.rObs / row.uObs;
+              return `
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 10px; font-weight: 600;">${row.name}</td>
+                  <td style="padding: 10px; color: #d97706; font-weight: 600;">${(row.rObs * 100).toFixed(2)}%</td>
+                  <td style="padding: 10px; color: #0284c7; font-weight: 600;">${(row.uObs * 100).toFixed(2)}%</td>
+                  <td style="padding: 10px; color: #e11d48; font-weight: 600;">+${diff.toFixed(2)} pp</td>
+                  <td style="padding: 10px; font-weight: 700;">${ratio.toFixed(2)}x</td>
+                  <td style="padding: 10px; color: #7c3aed;">${row.rPred ? (row.rPred * 100).toFixed(2) + '%' : '-'}</td>
+                  <td style="padding: 10px; color: #7c3aed;">${row.uPred ? (row.uPred * 100).toFixed(2) + '%' : '-'}</td>
+                </tr>
+              `;
+            }).join("");
+          }
+        })
+        .catch(err => console.error("Error loading rural_urban_summary.json:", err));
+    });
+  </script>
+</body>
+</html>

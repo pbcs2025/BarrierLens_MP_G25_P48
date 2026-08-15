@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "title": "Rural vs Urban Healthcare Access Barrier Comparison",
+    "section_reference": "Section 11.2 & Section 6 Item 4",
+    "scope_exclusion_note": "Explicitly excludes waiting-time and service-quality metrics because they are not supported by available NFHS-5 v467 columns in India recode."
+  },
+  "groups": [
+    {
+      "residence": "Rural",
+      "sample_size_n": 544580,
+      "pct_national_sample": 0.7521,
+      "observed_household_rate": 0.2995,
+      "observed_logistic_rate": 0.363,
+      "observed_facility_rate": 0.4918,
+      "observed_any_barrier_rate": 0.6349,
+      "predicted_household_prob": 0.5157,
+      "predicted_logistic_prob": 0.5225,
+      "predicted_facility_prob": 0.523,
+      "dominant_barrier": "Facility"
+    },
+    {
+      "residence": "Urban",
+      "sample_size_n": 179535,
+      "pct_national_sample": 0.2479,
+      "observed_household_rate": 0.1868,
+      "observed_logistic_rate": 0.1736,
+      "observed_facility_rate": 0.3637,
+      "observed_any_barrier_rate": 0.4603,
+      "predicted_household_prob": 0.367,
+      "predicted_logistic_prob": 0.3631,
+      "predicted_facility_prob": 0.4214,
+      "dominant_barrier": "Facility"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "title": "Household Empowerment & Autonomy Barrier Analysis",
+    "section_reference": "Section 11.2 & Section 6 Item 5",
+    "empowerment_indicators": [
+      "v170 (Bank Account)",
+      "v743f (Medical Autonomy)",
+      "v169a (Mobile Phone)"
+    ]
+  },
+  "by_empowerment_level": [
+    {
+      "empowerment_level": "Low Empowerment (0 items)",
+      "sample_size_n": 624570,
+      "pct_women": 0.8625,
+      "observed_household_rate": 0.2734,
+      "observed_logistic_rate": 0.318,
+      "observed_facility_rate": 0.461,
+      "observed_any_barrier_rate": 0.5932
+    },
+    {
+      "empowerment_level": "Moderate Empowerment (1-2 items)",
+      "sample_size_n": 69412,
+      "pct_women": 0.0959,
+      "observed_household_rate": 0.2818,
+      "observed_logistic_rate": 0.324,
+      "observed_facility_rate": 0.4725,
+      "observed_any_barrier_rate": 0.6059
+    },
+    {
+      "empowerment_level": "High Empowerment (3 items)",
+      "sample_size_n": 30133,
+      "pct_women": 0.0416,
+      "observed_household_rate": 0.2091,
+      "observed_logistic_rate": 0.2577,
+      "observed_facility_rate": 0.4133,
+      "observed_any_barrier_rate": 0.5267
+    }
+  ],
+  "detailed_combinations": [
+    {
+      "has_bank_account": 0,
+      "decides_own_health": 0,
+      "has_mobile_phone": 0,
+      "empowerment_score": 0,
+      "sample_size_n": 624570,
+      "pct_women": 0.8625,
+      "observed_household_rate": 0.2734,
+      "observed_logistic_rate": 0.318,
+      "observed_facility_rate": 0.461,
+      "observed_any_barrier_rate": 0.5932
+    },
+    {
+      "has_bank_account": 0,
+      "decides_own_health": 0,
+      "has_mobile_phone": 1,
+      "empowerment_score": 1,
+      "sample_size_n": 3707,
+      "pct_women": 0.0051,
+      "observed_household_rate": 0.2959,
+      "observed_logistic_rate": 0.3275,
+      "observed_facility_rate": 0.4589,
+      "observed_any_barrier_rate": 0.587
+    },
+    {
+      "has_bank_account": 0,
+      "decides_own_health": 1,
+      "has_mobile_phone": 0,
+      "empowerment_score": 1,
+      "sample_size_n": 6419,
+      "pct_women": 0.0089,
+      "observed_household_rate": 0.3499,
+      "observed_logistic_rate": 0.386,
+      "observed_facility_rate": 0.5213,
+      "observed_any_barrier_rate": 0.6693
+    },
+    {
+      "has_bank_account": 0,
+      "decides_own_health": 1,
+      "has_mobile_phone": 1,
+      "empowerment_score": 2,
+      "sample_size_n": 4030,
+      "pct_women": 0.0056,
+      "observed_household_rate": 0.2658,
+      "observed_logistic_rate": 0.3112,
+      "observed_facility_rate": 0.4424,
+      "observed_any_barrier_rate": 0.5784
+    },
+    {
+      "has_bank_account": 1,
+      "decides_own_health": 0,
+      "has_mobile_phone": 0,
+      "empowerment_score": 1,
+      "sample_size_n": 15906,
+      "pct_women": 0.022,
+      "observed_household_rate": 0.3078,
+      "observed_logistic_rate": 0.3413,
+      "observed_facility_rate": 0.4901,
+      "observed_any_barrier_rate": 0.6287
+    },
+    {
+      "has_bank_account": 1,
+      "decides_own_health": 0,
+      "has_mobile_phone": 1,
+      "empowerment_score": 2,
+      "sample_size_n": 21387,
+      "pct_women": 0.0295,
+      "observed_household_rate": 0.2378,
+      "observed_logistic_rate": 0.2776,
+      "observed_facility_rate": 0.4282,
+      "observed_any_barrier_rate": 0.5462
+    },
+    {
+      "has_bank_account": 1,
+      "decides_own_health": 1,
+      "has_mobile_phone": 0,
+      "empowerment_score": 2,
+      "sample_size_n": 17963,
+      "pct_women": 0.0248,
+      "observed_household_rate": 0.2876,
+      "observed_logistic_rate": 0.3439,
+      "observed_facility_rate": 0.5018,
+      "observed_any_barrier_rate": 0.6442
+    },
+    {
+      "has_bank_account": 1,
+      "decides_own_health": 1,
+      "has_mobile_phone": 1,
+      "empowerment_score": 3,
+      "sample_size_n": 30133,
+      "pct_women": 0.0416,
+      "observed_household_rate": 0.2091,
+      "observed_logistic_rate": 0.2577,
+      "observed_facility_rate": 0.4133,
+      "observed_any_barrier_rate": 0.5267
+    }
+  ]
+}

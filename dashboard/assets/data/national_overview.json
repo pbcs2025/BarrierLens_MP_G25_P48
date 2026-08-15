@@ -1,0 +1,70 @@
+{
+  "metadata": {
+    "title": "National Healthcare Access Barrier Overview",
+    "sample_size_N": 724115,
+    "rail_a_label": "Base Paper Reference / Observed NFHS-5 Statistic",
+    "rail_b_label": "BarrierLens ML Prediction (Stage 1 / Stage 2 OOF)",
+    "methodology_note": "Base paper uses 108,785 ever-married women subset with 8 items; BarrierLens uses full 724,115 sample with 6 items (v467f, v467i absent). Values are broadly comparable, not identical."
+  },
+  "kpis": {
+    "total_women": 724115,
+    "observed_any_barrier_rate": 0.5916,
+    "observed_household_rate": 0.2716,
+    "observed_logistic_rate": 0.3161,
+    "observed_facility_rate": 0.4601,
+    "base_paper_any_barrier_rate": 0.84,
+    "base_paper_household_rate": 0.246,
+    "base_paper_logistic_rate": 0.505,
+    "base_paper_facility_rate": 0.553,
+    "predicted_household_prob": 0.4788,
+    "predicted_logistic_prob": 0.483,
+    "predicted_facility_prob": 0.4978,
+    "predicted_composite_score": 0.4865
+  },
+  "barrier_ranking": [
+    {
+      "barrier_type": "Facility-level Barrier",
+      "observed_rate": 0.4601,
+      "predicted_prob": 0.4978,
+      "base_paper_rate": 0.553,
+      "rank": 1,
+      "level": "Highest"
+    },
+    {
+      "barrier_type": "Logistic Barrier",
+      "observed_rate": 0.3161,
+      "predicted_prob": 0.483,
+      "base_paper_rate": 0.505,
+      "rank": 2,
+      "level": "Moderate"
+    },
+    {
+      "barrier_type": "Household Barrier",
+      "observed_rate": 0.2716,
+      "predicted_prob": 0.4788,
+      "base_paper_rate": 0.246,
+      "rank": 3,
+      "level": "Lowest"
+    }
+  ],
+  "comparison_chart_data": [
+    {
+      "barrier_type": "Facility",
+      "observed": 0.4601,
+      "predicted": 0.4978,
+      "base_paper": 0.553
+    },
+    {
+      "barrier_type": "Logistic",
+      "observed": 0.3161,
+      "predicted": 0.483,
+      "base_paper": 0.505
+    },
+    {
+      "barrier_type": "Household",
+      "observed": 0.2716,
+      "predicted": 0.4788,
+      "base_paper": 0.246
+    }
+  ]
+}
