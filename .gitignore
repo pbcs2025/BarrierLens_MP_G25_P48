@@ -37,4 +37,4 @@ notebooks/saved_models/
 notebooks/*.png
 
 #Ignore implementation docs
-docs/
+docs/data/dashboard/woman_level_master.csv
