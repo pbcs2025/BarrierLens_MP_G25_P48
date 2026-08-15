@@ -1,0 +1,77 @@
+granularity,state_name,outcome,metric_type,value,N
+National,India,Unmet Family Planning,Observed,0.106396,466859
+National,India,Unmet Family Planning,Predicted,0.456837,466859
+National,India,ANC Care Gap,Observed,,0
+National,India,ANC Care Gap,Predicted,,0
+State,Andaman & Nicobar Islands,Unmet Family Planning,Observed,0.121114,1544
+State,Andaman & Nicobar Islands,Unmet Family Planning,Predicted,0.42415,1544
+State,Andhra Pradesh,Unmet Family Planning,Observed,0.049383,8019
+State,Andhra Pradesh,Unmet Family Planning,Predicted,0.374419,8019
+State,Arunachal Pradesh,Unmet Family Planning,Observed,0.133311,11822
+State,Arunachal Pradesh,Unmet Family Planning,Predicted,0.526906,11822
+State,Assam,Unmet Family Planning,Observed,0.122967,21949
+State,Assam,Unmet Family Planning,Predicted,0.493969,21949
+State,Bihar,Unmet Family Planning,Observed,0.144676,28125
+State,Bihar,Unmet Family Planning,Predicted,0.518958,28125
+State,Chandigarh,Unmet Family Planning,Observed,0.072052,458
+State,Chandigarh,Unmet Family Planning,Predicted,0.419067,458
+State,Chhattisgarh,Unmet Family Planning,Observed,0.092483,17506
+State,Chhattisgarh,Unmet Family Planning,Predicted,0.414451,17506
+State,Dadra & Nagar Haveli And Daman & Diu,Unmet Family Planning,Observed,0.13036,1749
+State,Dadra & Nagar Haveli And Daman & Diu,Unmet Family Planning,Predicted,0.409074,1749
+State,Goa,Unmet Family Planning,Observed,0.081414,1216
+State,Goa,Unmet Family Planning,Predicted,0.398559,1216
+State,Gujarat,Unmet Family Planning,Observed,0.115462,21730
+State,Gujarat,Unmet Family Planning,Predicted,0.430807,21730
+State,Haryana,Unmet Family Planning,Observed,0.082828,14838
+State,Haryana,Unmet Family Planning,Predicted,0.436553,14838
+State,Himachal Pradesh,Unmet Family Planning,Observed,0.073117,7235
+State,Himachal Pradesh,Unmet Family Planning,Predicted,0.413637,7235
+State,Jammu & Kashmir,Unmet Family Planning,Observed,0.097376,11892
+State,Jammu & Kashmir,Unmet Family Planning,Predicted,0.496666,11892
+State,Jharkhand,Unmet Family Planning,Observed,0.129983,17310
+State,Jharkhand,Unmet Family Planning,Predicted,0.495532,17310
+State,Karnataka,Unmet Family Planning,Observed,0.069914,20654
+State,Karnataka,Unmet Family Planning,Predicted,0.410279,20654
+State,Kerala,Unmet Family Planning,Observed,0.132882,7390
+State,Kerala,Unmet Family Planning,Predicted,0.441477,7390
+State,Ladakh,Unmet Family Planning,Observed,0.105509,1071
+State,Ladakh,Unmet Family Planning,Predicted,0.512629,1071
+State,Lakshadweep,Unmet Family Planning,Observed,0.141129,744
+State,Lakshadweep,Unmet Family Planning,Predicted,0.51978,744
+State,Madhya Pradesh,Unmet Family Planning,Observed,0.080157,33160
+State,Madhya Pradesh,Unmet Family Planning,Predicted,0.442787,33160
+State,Maharashtra,Unmet Family Planning,Observed,0.095569,23428
+State,Maharashtra,Unmet Family Planning,Predicted,0.435848,23428
+State,Manipur,Unmet Family Planning,Observed,0.132331,4655
+State,Manipur,Unmet Family Planning,Predicted,0.543976,4655
+State,Meghalaya,Unmet Family Planning,Observed,0.329102,6618
+State,Meghalaya,Unmet Family Planning,Predicted,0.637417,6618
+State,Mizoram,Unmet Family Planning,Observed,0.246472,3047
+State,Mizoram,Unmet Family Planning,Predicted,0.621767,3047
+State,Nagaland,Unmet Family Planning,Observed,0.098236,4988
+State,Nagaland,Unmet Family Planning,Predicted,0.585822,4988
+State,Nct Of Delhi,Unmet Family Planning,Observed,0.060789,6975
+State,Nct Of Delhi,Unmet Family Planning,Predicted,0.429115,6975
+State,Odisha,Unmet Family Planning,Observed,0.070623,18719
+State,Odisha,Unmet Family Planning,Predicted,0.445951,18719
+State,Puducherry,Unmet Family Planning,Observed,0.077307,2406
+State,Puducherry,Unmet Family Planning,Predicted,0.40161,2406
+State,Punjab,Unmet Family Planning,Observed,0.110225,13536
+State,Punjab,Unmet Family Planning,Predicted,0.440834,13536
+State,Rajasthan,Unmet Family Planning,Observed,0.080454,29433
+State,Rajasthan,Unmet Family Planning,Predicted,0.410278,29433
+State,Sikkim,Unmet Family Planning,Observed,0.086785,2028
+State,Sikkim,Unmet Family Planning,Predicted,0.455819,2028
+State,Tamil Nadu,Unmet Family Planning,Observed,0.08088,17458
+State,Tamil Nadu,Unmet Family Planning,Predicted,0.402558,17458
+State,Telangana,Unmet Family Planning,Observed,0.07076,19220
+State,Telangana,Unmet Family Planning,Predicted,0.375011,19220
+State,Tripura,Unmet Family Planning,Observed,0.101427,5117
+State,Tripura,Unmet Family Planning,Predicted,0.483775,5117
+State,Uttar Pradesh,Unmet Family Planning,Observed,0.143378,56794
+State,Uttar Pradesh,Unmet Family Planning,Predicted,0.489743,56794
+State,Uttarakhand,Unmet Family Planning,Observed,0.09887,8850
+State,Uttarakhand,Unmet Family Planning,Predicted,0.425642,8850
+State,West Bengal,Unmet Family Planning,Observed,0.081582,15175
+State,West Bengal,Unmet Family Planning,Predicted,0.480464,15175

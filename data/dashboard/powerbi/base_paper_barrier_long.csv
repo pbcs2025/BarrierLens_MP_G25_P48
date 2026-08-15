@@ -1,0 +1,10 @@
+barrier_type,comparison_source,value
+Household Barrier,Base Paper (Pradhan & De 2025),0.17
+Household Barrier,BarrierLens Observed,0.2716
+Household Barrier,BarrierLens Predicted,0.4792
+Logistical Barrier,Base Paper (Pradhan & De 2025),0.26
+Logistical Barrier,BarrierLens Observed,0.3161
+Logistical Barrier,BarrierLens Predicted,0.4822
+Health Health Facility Barrier,Base Paper (Pradhan & De 2025),0.48
+Health Health Facility Barrier,BarrierLens Observed,0.4601
+Health Health Facility Barrier,BarrierLens Predicted,0.4978

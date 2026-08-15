@@ -1,0 +1,9 @@
+category,metric_type,value,N
+Don't Know,Observed,0.600274,4373
+Don't Know,Predicted,0.452602,4373
+No Caste/Tribe,Observed,0.650212,34661
+No Caste/Tribe,Predicted,0.539717,34661
+Other Caste,Observed,0.575214,583167
+Other Caste,Predicted,0.46895,583167
+Tribe,Observed,0.665139,101914
+Tribe,Predicted,0.569614,101914

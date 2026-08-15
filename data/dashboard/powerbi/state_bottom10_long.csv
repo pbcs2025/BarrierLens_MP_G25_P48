@@ -1,0 +1,11 @@
+rank_order,state_name,pred_composite_barrier_score,N
+1,Tamil Nadu,0.414936,25650
+2,Haryana,0.394741,21909
+3,Mizoram,0.368599,7279
+4,Punjab,0.358728,21771
+5,Kerala,0.345315,10969
+6,Puducherry,0.336091,3669
+7,Nct Of Delhi,0.322286,11159
+8,Lakshadweep,0.311867,1234
+9,Chandigarh,0.311475,746
+10,Goa,0.298613,2030

@@ -1,0 +1,15 @@
+cluster_id,archetype_name,risk_tier,metric_label,value
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Media Exposure,0.362267
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Digital Inclusion,0.079199
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Vulnerability,0.765437
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Household Barrier Prob,0.586635
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Logistic Barrier Prob,0.595177
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Facility Barrier Prob,0.572963
+0,"High Vulnerability, High Barrier Exposure",High Risk Cluster,Composite Barrier,0.584925
+1,High Media & Digital Inclusion,Low Risk Cluster,Media Exposure,0.917466
+1,High Media & Digital Inclusion,Low Risk Cluster,Digital Inclusion,0.124011
+1,High Media & Digital Inclusion,Low Risk Cluster,Vulnerability,0.251151
+1,High Media & Digital Inclusion,Low Risk Cluster,Household Barrier Prob,0.353775
+1,High Media & Digital Inclusion,Low Risk Cluster,Logistic Barrier Prob,0.350334
+1,High Media & Digital Inclusion,Low Risk Cluster,Facility Barrier Prob,0.410177
+1,High Media & Digital Inclusion,Low Risk Cluster,Composite Barrier,0.371429

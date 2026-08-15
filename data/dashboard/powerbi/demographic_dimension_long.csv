@@ -1,0 +1,79 @@
+dimension,category,metric_type,value,N
+Education,Higher,Observed,0.44713,101816
+Education,Higher,Predicted,0.340948,101816
+Education,No Education,Observed,0.678585,167304
+Education,No Education,Predicted,0.575646,167304
+Education,Primary,Observed,0.649906,84983
+Education,Primary,Predicted,0.540947,84983
+Education,Secondary,Observed,0.578654,370012
+Education,Secondary,Predicted,0.473555,370012
+Wealth,Middle,Observed,0.586892,151505
+Wealth,Middle,Predicted,0.481614,151505
+Wealth,Poor,Observed,0.70887,310184
+Wealth,Poor,Predicted,0.601916,310184
+Wealth,Rich,Observed,0.45574,262426
+Wealth,Rich,Predicted,0.352642,262426
+Residence,Rural,Observed,0.634915,544580
+Residence,Rural,Predicted,0.529373,544580
+Residence,Urban,Observed,0.460261,179535
+Residence,Urban,Predicted,0.356076,179535
+Religion,Buddhist / Neo-Buddhist,Observed,0.627149,9076
+Religion,Buddhist / Neo-Buddhist,Predicted,0.528609,9076
+Religion,Christian,Observed,0.583765,52146
+Religion,Christian,Predicted,0.502402,52146
+Religion,Hindu,Observed,0.59448,546007
+Religion,Hindu,Predicted,0.484897,546007
+Religion,Jain,Observed,0.40248,887
+Religion,Jain,Predicted,0.252655,887
+Religion,Muslim,Observed,0.602531,90729
+Religion,Muslim,Predicted,0.498188,90729
+Religion,No Religion,Observed,0.690217,368
+Religion,No Religion,Predicted,0.608012,368
+Religion,Other,Observed,0.665433,8644
+Religion,Other,Predicted,0.57768,8644
+Religion,Parsi / Zoroastrian,Observed,0.490196,51
+Religion,Parsi / Zoroastrian,Predicted,0.422038,51
+Religion,Sikh,Observed,0.408148,16200
+Religion,Sikh,Predicted,0.357685,16200
+Occupation,Agricultural,Observed,0.671233,18031
+Occupation,Agricultural,Predicted,0.562909,18031
+Occupation,Clerical,Observed,0.469729,479
+Occupation,Clerical,Predicted,0.355973,479
+Occupation,Don't Know,Observed,0.557252,131
+Occupation,Don't Know,Predicted,0.447338,131
+Occupation,Manual,Observed,0.612762,6394
+Occupation,Manual,Predicted,0.486107,6394
+Occupation,Missing,Observed,0.592246,615330
+Occupation,Missing,Predicted,0.487632,615330
+Occupation,Not Working,Observed,0.576217,73809
+Occupation,Not Working,Predicted,0.469106,73809
+Occupation,Other,Observed,0.572783,1477
+Occupation,Other,Predicted,0.478296,1477
+Occupation,Professional/Technical/Managerial,Observed,0.41943,2985
+Occupation,Professional/Technical/Managerial,Predicted,0.306639,2985
+Occupation,Sales,Observed,0.544966,2046
+Occupation,Sales,Predicted,0.446211,2046
+Occupation,Services/Household,Observed,0.5552,3433
+Occupation,Services/Household,Predicted,0.440917,3433
+Caste,Don't Know,Observed,0.600274,4373
+Caste,Don't Know,Predicted,0.452602,4373
+Caste,No Caste/Tribe,Observed,0.650212,34661
+Caste,No Caste/Tribe,Predicted,0.539717,34661
+Caste,Other Caste,Observed,0.575214,583167
+Caste,Other Caste,Predicted,0.46895,583167
+Caste,Tribe,Observed,0.665139,101914
+Caste,Tribe,Predicted,0.569614,101914
+Age Group,15-19,Observed,0.61099,122480
+Age Group,15-19,Predicted,0.507519,122480
+Age Group,20-24,Observed,0.595552,118700
+Age Group,20-24,Predicted,0.488037,118700
+Age Group,25-29,Observed,0.5879,118379
+Age Group,25-29,Predicted,0.482568,118379
+Age Group,30-34,Observed,0.586705,101049
+Age Group,30-34,Predicted,0.482274,101049
+Age Group,35-39,Observed,0.588683,98068
+Age Group,35-39,Predicted,0.483056,98068
+Age Group,40-44,Observed,0.580204,81380
+Age Group,40-44,Predicted,0.474646,81380
+Age Group,45-49,Observed,0.5834,84059
+Age Group,45-49,Predicted,0.479007,84059

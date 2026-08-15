@@ -41,7 +41,17 @@ DISPLAY_NAMES: dict[str, str] = {
     "stage2_unmet_fp_observed_rate":       "Observed Unmet Family Planning Rate (%)",
     "stage2_unmet_fp_pred_prob":           "Predicted Unmet FP Probability",
     "stage2_anc_gap_N":                    "Analytic Sample — ANC Care Gap (N)",
+    "stage2_anc_gap_observed_rate":        "Observed ANC Gap Rate (%)",
+    "stage2_anc_gap_pred_prob":            "Predicted ANC Gap Probability",
     "data_note":                           "Data Note",
+
+    # ── national_barrier_predicted_mix ────────────────────────────────────────
+    "share":                               "Share of Predicted Mix (%)",
+
+    # ── state_ranking_long / top10 / bottom10 ───────────────────────────────────
+    "ranking_type":                        "Ranking Type",
+    "rank_order":                          "Rank Order",
+    "pred_composite_barrier_score":        "Predicted Composite Barrier Score",
 
     # ── national_barrier_long ─────────────────────────────────────────────────
     "barrier_type":                        "Barrier Type",
@@ -148,6 +158,20 @@ DISPLAY_NAMES: dict[str, str] = {
     "source_note":                         "Source Note",
     "comparability":                       "Comparability Note",
 
+    # ── demographic_dimension_long / slices ─────────────────────────────────
+    "dimension":                           "Demographic Dimension",
+    "category":                            "Category",
+    "metric_type":                         "Metric Type (Observed / Predicted)",
+    "comparison_source":                   "Comparison Source",
+
+    # ── cluster_radar_long ─────────────────────────────────────────────────────
+    "metric_label":                        "Profile Metric",
+    "risk_tier":                           "Risk Tier",
+
+    # ── stage2_outcome_long ────────────────────────────────────────────────────
+    "granularity":                         "Granularity",
+    "outcome":                             "Health Outcome",
+
     # ── classification_report_display ────────────────────────────────────────
     # model, target covered
     "class":                               "Class Code",
@@ -241,34 +265,24 @@ def process_all_tables() -> None:
     tables_modified = []
 
     for tmdl_path in sorted(TABLES_DIR.glob("*.tmdl")):
-        if tmdl_path.name == "_Metrics.tmdl":
-            continue  # measures table has no columns needing display names
-
-        table_name = tmdl_path.stem
-        original   = tmdl_path.read_text(encoding="utf-8")
-        updated, n = _inject_display_name(original, table_name)
-
-        if n > 0:
-            tmdl_path.write_text(updated, encoding="utf-8")
-            tables_modified.append((tmdl_path.name, n))
-            changes_total += n
-            print(f"  Modified  {tmdl_path.name}  (+{n} displayName annotations)")
+        original = tmdl_path.read_text(encoding="utf-8")
+        lines = original.split("\n")
+        new_lines = [line for line in lines if not re.match(r'^\t+displayName:', line)]
+        if len(new_lines) != len(lines):
+            tmdl_path.write_text("\n".join(new_lines), encoding="utf-8")
+            removed = len(lines) - len(new_lines)
+            tables_modified.append((tmdl_path.name, removed))
+            changes_total += removed
+            print(f"  Cleaned {tmdl_path.name} (-{removed} displayName lines)")
         else:
             print(f"  No change {tmdl_path.name}")
 
-    print(f"\nTotal: {changes_total} displayName annotations added across {len(tables_modified)} tables")
-    if tables_modified:
-        print("Files modified:")
-        for name, n in tables_modified:
-            print(f"  {name}  ({n} annotations)")
+    print(f"\nTotal: {changes_total} unsupported displayName lines removed across {len(tables_modified)} tables")
 
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("Applying Power BI displayName annotations")
-    print("Physical columns NOT renamed — display only")
+    print("Cleaning unsupported displayName properties from TMDL tables")
     print("=" * 60)
     process_all_tables()
-    print("=" * 60)
-    print("Done. No CSV, notebook, or ML code modified.")
     print("=" * 60)

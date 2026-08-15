@@ -1,0 +1,5 @@
+category,metric_type,value,N
+Rural,Observed,0.634915,544580
+Rural,Predicted,0.529373,544580
+Urban,Observed,0.460261,179535
+Urban,Predicted,0.356076,179535

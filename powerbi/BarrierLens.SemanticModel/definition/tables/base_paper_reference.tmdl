@@ -1,5 +1,5 @@
 table base_paper_reference
-	lineageTag: e4f5a6b7-c8d9-0123-defa-234567890123
+	lineageTag: 75dcab3c-541b-4f98-9473-9d0ea6cabef5
 
 	column barrier_type
 		dataType: string
@@ -54,7 +54,7 @@ table base_paper_reference
 					File.Contents(DashboardDataPath & "/base_paper_reference.csv"),
 					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
 				),
-				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"barrier_type", type text}, {"description", type text}, {"base_paper_rate", type number}, {"barrierlens_observed", type number}, {"barrierlens_predicted", type number}, {"base_paper_n", type text}, {"barrierlens_n", type text}, {"source_note", type text}, {"comparability", type text}})
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
 			in
-				#"Changed Type"
+				#"Promoted Headers"
+

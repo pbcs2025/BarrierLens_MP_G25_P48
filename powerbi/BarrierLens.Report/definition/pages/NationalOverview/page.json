@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "NationalOverview",
-  "displayName": "1. National Barrier Overview",
+  "displayName": "1. National Overview",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
@@ -33,68 +33,247 @@
   },
   "visualContainers": [
     {
-      "x": 16,
-      "y": 16,
-      "z": 0,
-      "width": 1248,
-      "height": 50,
-      "config": "{\"name\": \"e20244e1-5388-455a-969b-180cb5ce3ca7\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"1. National Barrier Overview \\u2014 Empirical Benchmark Rates vs. AI-Predicted Probabilities\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+      "x": 0,
+      "y": 0,
+      "z": 10000,
+      "width": 1280,
+      "height": 44,
+      "config": "{\"name\":\"80c27e41-b9f5-4757-a8de-09943b5f0931\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"BarrierLens \\u2014 National Overview\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"16pt\",\"color\":\"#FFFFFF\"}}]}]}}]}}}",
+      "filters": "[]"
     },
     {
       "x": 16,
-      "y": 78,
-      "z": 0,
-      "width": 298,
-      "height": 90,
-      "config": "{\"name\": \"1b8628fa-5e6b-49cf-9468-bcc288332234\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Household Barrier Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Household Barrier Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Household Barrier Rate'\"}}}}}]}}}"
-    },
-    {
-      "x": 332,
-      "y": 78,
-      "z": 0,
-      "width": 298,
-      "height": 90,
-      "config": "{\"name\": \"01c01aaf-f0b0-42f8-8e02-bee0c88471f8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Predicted Household Barrier Probability\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Predicted Household Barrier Probability\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Predicted Household Prob'\"}}}}}]}}}"
-    },
-    {
-      "x": 648,
-      "y": 78,
-      "z": 0,
-      "width": 298,
-      "height": 90,
-      "config": "{\"name\": \"9427670e-85e1-42aa-b89f-b1b39d959525\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Logistical Barrier Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Logistical Barrier Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Logistical Barrier Rate'\"}}}}}]}}}"
-    },
-    {
-      "x": 964,
-      "y": 78,
-      "z": 0,
-      "width": 298,
-      "height": 90,
-      "config": "{\"name\": \"cbd4b76c-a8bc-4bf9-9054-744310277b13\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Metrics.Health Facility Barrier Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"_Metrics.Health Facility Barrier Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Health Facility Barrier Rate'\"}}}}}]}}}"
+      "y": 48,
+      "z": 9999,
+      "width": 900,
+      "height": 24,
+      "config": "{\"name\":\"3ed76e52-bd4f-4649-a839-df4ddd55ad3f\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"NFHS-5 India | Stage 1 OOF barrier predictions | ML pipeline executive summary\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"10pt\",\"color\":\"#A8DADC\"}}]}]}}]}}}",
+      "filters": "[]"
     },
     {
       "x": 16,
-      "y": 182,
-      "z": 0,
-      "width": 610,
-      "height": 470,
-      "config": "{\"name\": \"f1666656-a986-4c08-9454-875d3dc652ea\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"national_barrier_long.Healthcare Access Barrier Category\"}], \"Y\": [{\"queryRef\": \"national_barrier_long.Observed Rate / Predicted Probability\"}], \"Series\": [{\"queryRef\": \"national_barrier_long.Metric Type (Observed Rate vs AI Probability)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"national_barrier_long.Healthcare Access Barrier Category\"}, {\"queryRef\": \"national_barrier_long.Observed Rate / Predicted Probability\"}, {\"queryRef\": \"national_barrier_long.Metric Type (Observed Rate vs AI Probability)\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'National Healthcare Barriers: Observed vs AI Predicted'\"}}}}}]}}}"
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"1a7afbaa-6cc2-4a27-a6eb-58771f8442c4\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 National\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 192,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"b762ddc4-7e8a-41da-98ec-0ec3e8adcc72\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 States\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 368,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"f17b2ed4-4943-4846-b154-7a1c5cd15cbf\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Demographics\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 544,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"90ad2ac5-f0a0-4d1a-a597-f9503c121846\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Stage 2\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 720,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"b7c1c511-5acd-45b3-96c9-c6551a037833\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Clusters\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 896,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"55238846-566b-4916-a039-a78f415deebf\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Models\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1072,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"63ae47f3-889c-447b-9eda-d4513b1ab489\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 SHAP\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 112,
+      "z": 200,
+      "width": 148,
+      "height": 64,
+      "config": "{\"name\":\"1e94c6e2-917f-4cf5-ab1b-3b44f01c787c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"state_level_summary.state_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_level_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"state_name\"},\"Name\":\"state_level_summary.state_name\",\"NativeReferenceName\":\"state_name\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'State'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 172,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"6f0e34ef-7de6-4b22-bafa-3b867cd1ea26\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.residence\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"residence\"},\"Name\":\"woman_level_master.residence\",\"NativeReferenceName\":\"residence\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Residence'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 300,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"bb3b9510-a808-4661-8e84-f77b2608dc4c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.education_tier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"education_tier\"},\"Name\":\"woman_level_master.education_tier\",\"NativeReferenceName\":\"education_tier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Education'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 428,
+      "y": 112,
+      "z": 200,
+      "width": 132,
+      "height": 64,
+      "config": "{\"name\":\"0384fbeb-2fa3-43e4-8dcf-17b4b9458a7c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.occupation_group\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"occupation_group\"},\"Name\":\"woman_level_master.occupation_group\",\"NativeReferenceName\":\"occupation_group\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Occupation'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 568,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"394cbe17-7389-44b2-b43b-f03bb55f8df7\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.religion\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"religion\"},\"Name\":\"woman_level_master.religion\",\"NativeReferenceName\":\"religion\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Religion'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 696,
+      "y": 112,
+      "z": 200,
+      "width": 108,
+      "height": 64,
+      "config": "{\"name\":\"04615489-9f0f-4b98-9bdd-3255ec6fc1d6\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.wealth_tier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"wealth_tier\"},\"Name\":\"woman_level_master.wealth_tier\",\"NativeReferenceName\":\"wealth_tier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Wealth'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 812,
+      "y": 112,
+      "z": 200,
+      "width": 132,
+      "height": 64,
+      "config": "{\"name\":\"3fa4e641-4273-44ff-b063-4bff7139871e\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"state_barrier_long.barrier_type\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_barrier_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"barrier_type\"},\"Name\":\"state_barrier_long.barrier_type\",\"NativeReferenceName\":\"barrier_type\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Barrier Type'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 952,
+      "y": 112,
+      "z": 200,
+      "width": 148,
+      "height": 64,
+      "config": "{\"name\":\"91fbf39c-8f57-489b-92f9-598c6f7cacaf\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"stage2_outcome_long.outcome\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage2_outcome_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"outcome\"},\"Name\":\"stage2_outcome_long.outcome\",\"NativeReferenceName\":\"outcome\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Stage 2 Target'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1108,
+      "y": 112,
+      "z": 200,
+      "width": 156,
+      "height": 64,
+      "config": "{\"name\":\"e5ca5377-fb57-4f7e-a51e-3a4a45fc7e1a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"cluster_summary.archetype_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"cluster_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"archetype_name\"},\"Name\":\"cluster_summary.archetype_name\",\"NativeReferenceName\":\"archetype_name\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Cluster'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 188,
+      "z": 100,
+      "width": 200,
+      "height": 88,
+      "config": "{\"name\":\"1b082c8e-7dbf-43b9-b3f7-698cf834006a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"_Metrics.Total Women Analysed\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_Metrics\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Total Women Analysed\"},\"Name\":\"_Metrics.Total Women Analysed\",\"NativeReferenceName\":\"Total Women Analysed\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Total Women Analysed'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 224,
+      "y": 188,
+      "z": 100,
+      "width": 200,
+      "height": 88,
+      "config": "{\"name\":\"f84a235c-6820-47ac-bc2f-9554e597b8a1\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"_Metrics.Predicted Household Barrier Probability\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_Metrics\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Predicted Household Barrier Probability\"},\"Name\":\"_Metrics.Predicted Household Barrier Probability\",\"NativeReferenceName\":\"Predicted Household Barrier Probability\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Household Barrier %'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 432,
+      "y": 188,
+      "z": 100,
+      "width": 200,
+      "height": 88,
+      "config": "{\"name\":\"c2a1072c-f97d-4d47-9057-6064bfbaea72\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"_Metrics.Predicted Logistical Barrier Probability\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_Metrics\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Predicted Logistical Barrier Probability\"},\"Name\":\"_Metrics.Predicted Logistical Barrier Probability\",\"NativeReferenceName\":\"Predicted Logistical Barrier Probability\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Logistic Barrier %'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
     },
     {
       "x": 640,
-      "y": 182,
-      "z": 0,
-      "width": 624,
-      "height": 470,
-      "config": "{\"name\": \"3ceb1705-1c09-4384-bacb-b8c93fb1787b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 0, \"y\": 0, \"z\": 0, \"width\": 100, \"height\": 100}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"demographic_summary.Healthcare Access Barrier Category\"}], \"Y\": [{\"queryRef\": \"demographic_summary.Mean Observed Barrier Rate (%)\"}, {\"queryRef\": \"demographic_summary.Mean Predicted Barrier Probability\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [], \"Select\": [{\"queryRef\": \"demographic_summary.Healthcare Access Barrier Category\"}, {\"queryRef\": \"demographic_summary.Mean Observed Barrier Rate (%)\"}, {\"queryRef\": \"demographic_summary.Mean Predicted Barrier Probability\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Barrier Prevalence Gap Across Socioeconomic Cohorts'\"}}}}}]}}}"
+      "y": 188,
+      "z": 100,
+      "width": 200,
+      "height": 88,
+      "config": "{\"name\":\"b6c39a16-df3f-4479-9d96-f0578a6d0baf\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"_Metrics.Predicted Health Facility Barrier Probability\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_Metrics\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Predicted Health Facility Barrier Probability\"},\"Name\":\"_Metrics.Predicted Health Facility Barrier Probability\",\"NativeReferenceName\":\"Predicted Health Facility Barrier Probability\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Facility Barrier %'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 848,
+      "y": 188,
+      "z": 100,
+      "width": 200,
+      "height": 88,
+      "config": "{\"name\":\"f9ef7ee9-c668-4caa-a9ab-3b64dc99b60c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"_Metrics.Mean Stage 2 ANC Prediction\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_Metrics\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Mean Stage 2 ANC Prediction\"},\"Name\":\"_Metrics.Mean Stage 2 ANC Prediction\",\"NativeReferenceName\":\"Mean Stage 2 ANC Prediction\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Mean Stage 2 ANC Prediction'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1056,
+      "y": 188,
+      "z": 100,
+      "width": 200,
+      "height": 88,
+      "config": "{\"name\":\"07b9a9d5-5d35-44c6-bacc-6f759876cc33\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"_Metrics.Mean Unmet FP Prediction\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"_\",\"Entity\":\"_Metrics\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"Mean Unmet FP Prediction\"},\"Name\":\"_Metrics.Mean Unmet FP Prediction\",\"NativeReferenceName\":\"Mean Unmet FP Prediction\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Mean Unmet FP Prediction'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
     },
     {
       "x": 16,
-      "y": 664,
-      "z": 0,
-      "width": 1248,
-      "height": 40,
-      "config": "{\"name\": \"033ae654-fa29-4a17-8142-49fa16c5f835\", \"singleVisual\": {\"visualType\": \"textbox\", \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Note: Empirical benchmark rates are derived from NFHS-5 individual survey responses (N = 724,115). Predicted probabilities are produced by BarrierLens XGBoost and Random Forest models.\", \"style\": {\"fontFamily\": \"Segoe UI\", \"fontSize\": \"11pt\", \"color\": \"#1D3557\"}}]}]}}]}}}"
+      "y": 292,
+      "z": 10,
+      "width": 420,
+      "height": 396,
+      "config": "{\"name\":\"7f957133-f843-4c2b-8d16-7abf39d1f641\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"filledMap\",\"projections\":{\"Location\":[{\"queryRef\":\"state_level_summary.state_name\"}],\"Size\":[{\"queryRef\":\"_Metrics.State Mean Predicted Composite Barrier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_level_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"state_name\"},\"Name\":\"state_level_summary.state_name\",\"NativeReferenceName\":\"state_name\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"_\"}},\"Property\":\"State Mean Predicted Composite Barrier\"},\"Name\":\"_Metrics.State Mean Predicted Composite Barrier\",\"NativeReferenceName\":\"State Mean Predicted Composite Barrier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'India Risk Map \\u2014 Mean Predicted Barrier %'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 448,
+      "y": 292,
+      "z": 10,
+      "width": 380,
+      "height": 396,
+      "config": "{\"name\":\"a74e6291-9624-4dae-9607-db5db272e44b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"donutChart\",\"projections\":{\"Category\":[{\"queryRef\":\"national_barrier_predicted_mix.barrier_type\"}],\"Y\":[{\"queryRef\":\"national_barrier_predicted_mix.value\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"n\",\"Entity\":\"national_barrier_predicted_mix\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"n\"}},\"Property\":\"barrier_type\"},\"Name\":\"national_barrier_predicted_mix.barrier_type\",\"NativeReferenceName\":\"barrier_type\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"n\"}},\"Property\":\"value\"},\"Name\":\"national_barrier_predicted_mix.value\",\"NativeReferenceName\":\"value\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Barrier Distribution \\u2014 Predicted Mix'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 840,
+      "y": 292,
+      "z": 10,
+      "width": 424,
+      "height": 396,
+      "config": "{\"name\":\"f29f5f91-ef1a-474b-8373-5ad7eb99665b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"clusteredBarChart\",\"projections\":{\"Category\":[{\"queryRef\":\"national_barrier_long.barrier_type\"}],\"Series\":[{\"queryRef\":\"national_barrier_long.metric_type\"}],\"Y\":[{\"queryRef\":\"national_barrier_long.value\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"n\",\"Entity\":\"national_barrier_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"n\"}},\"Property\":\"barrier_type\"},\"Name\":\"national_barrier_long.barrier_type\",\"NativeReferenceName\":\"barrier_type\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"n\"}},\"Property\":\"metric_type\"},\"Name\":\"national_barrier_long.metric_type\",\"NativeReferenceName\":\"metric_type\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"n\"}},\"Property\":\"value\"},\"Name\":\"national_barrier_long.value\",\"NativeReferenceName\":\"value\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'National Predicted vs Observed Barrier %'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
     }
   ]
 }

@@ -1,0 +1,19 @@
+category,metric_type,value,N
+Buddhist / Neo-Buddhist,Observed,0.627149,9076
+Buddhist / Neo-Buddhist,Predicted,0.528609,9076
+Christian,Observed,0.583765,52146
+Christian,Predicted,0.502402,52146
+Hindu,Observed,0.59448,546007
+Hindu,Predicted,0.484897,546007
+Jain,Observed,0.40248,887
+Jain,Predicted,0.252655,887
+Muslim,Observed,0.602531,90729
+Muslim,Predicted,0.498188,90729
+No Religion,Observed,0.690217,368
+No Religion,Predicted,0.608012,368
+Other,Observed,0.665433,8644
+Other,Predicted,0.57768,8644
+Parsi / Zoroastrian,Observed,0.490196,51
+Parsi / Zoroastrian,Predicted,0.422038,51
+Sikh,Observed,0.408148,16200
+Sikh,Predicted,0.357685,16200

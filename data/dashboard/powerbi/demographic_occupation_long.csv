@@ -1,0 +1,21 @@
+category,metric_type,value,N
+Agricultural,Observed,0.671233,18031
+Agricultural,Predicted,0.562909,18031
+Clerical,Observed,0.469729,479
+Clerical,Predicted,0.355973,479
+Don't Know,Observed,0.557252,131
+Don't Know,Predicted,0.447338,131
+Manual,Observed,0.612762,6394
+Manual,Predicted,0.486107,6394
+Missing,Observed,0.592246,615330
+Missing,Predicted,0.487632,615330
+Not Working,Observed,0.576217,73809
+Not Working,Predicted,0.469106,73809
+Other,Observed,0.572783,1477
+Other,Predicted,0.478296,1477
+Professional/Technical/Managerial,Observed,0.41943,2985
+Professional/Technical/Managerial,Predicted,0.306639,2985
+Sales,Observed,0.544966,2046
+Sales,Predicted,0.446211,2046
+Services/Household,Observed,0.5552,3433
+Services/Household,Predicted,0.440917,3433

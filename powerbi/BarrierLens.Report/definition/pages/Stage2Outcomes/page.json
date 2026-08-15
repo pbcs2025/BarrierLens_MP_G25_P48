@@ -1,0 +1,225 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "Stage2Outcomes",
+  "displayName": "4. Stage 2 Health Outcomes",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F8FAFC'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualContainers": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 10000,
+      "width": 1280,
+      "height": 44,
+      "config": "{\"name\":\"0ad49cf0-687c-4c95-9874-b9eff5152cee\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"Stage 2 Health Outcomes \\u2014 Impact Modeling\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"16pt\",\"color\":\"#FFFFFF\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 48,
+      "z": 9999,
+      "width": 900,
+      "height": 24,
+      "config": "{\"name\":\"a6a0d496-fa2f-4ce9-8b14-d9343d7bd56e\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"XGBoost outcome models | Unmet FP (N=466,859) | ANC gap when analytic sample available\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"10pt\",\"color\":\"#A8DADC\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"60416259-e73e-4154-9e61-6717776a07ae\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 National\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 192,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"9b6244c1-bc12-45e2-83a4-15e6dcf5a77a\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 States\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 368,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"76367ed8-fa28-4b26-a276-9672bc5a8686\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Demographics\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 544,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"733f08c3-7eb7-435e-880f-1d037210dacb\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Stage 2\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 720,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"922e7576-f0b8-4cb4-aeac-f2fa13579c7a\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Clusters\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 896,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"db0c0cf4-1d04-4347-b6e5-b38e60a6a97d\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Models\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1072,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"a8af2117-f0e7-40f2-bae0-2b8e2d8af893\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 SHAP\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 112,
+      "z": 200,
+      "width": 148,
+      "height": 64,
+      "config": "{\"name\":\"1744cb4f-e177-4fce-ab29-551dd5bac9b2\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"state_level_summary.state_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_level_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"state_name\"},\"Name\":\"state_level_summary.state_name\",\"NativeReferenceName\":\"state_name\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'State'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 172,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"421c37ad-2d70-4228-9768-bb6abee20a18\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.residence\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"residence\"},\"Name\":\"woman_level_master.residence\",\"NativeReferenceName\":\"residence\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Residence'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 300,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"eb0ca397-b94f-4be3-a901-895083f0e31c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.education_tier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"education_tier\"},\"Name\":\"woman_level_master.education_tier\",\"NativeReferenceName\":\"education_tier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Education'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 428,
+      "y": 112,
+      "z": 200,
+      "width": 132,
+      "height": 64,
+      "config": "{\"name\":\"d65991ea-820b-4dd0-af5b-7c0c3767e5d8\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.occupation_group\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"occupation_group\"},\"Name\":\"woman_level_master.occupation_group\",\"NativeReferenceName\":\"occupation_group\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Occupation'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 568,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"23e5cadb-bbe9-45c9-bbce-260326f4dbea\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.religion\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"religion\"},\"Name\":\"woman_level_master.religion\",\"NativeReferenceName\":\"religion\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Religion'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 696,
+      "y": 112,
+      "z": 200,
+      "width": 108,
+      "height": 64,
+      "config": "{\"name\":\"2bf09053-eaca-42b3-bd84-ea5a13d5ecb0\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.wealth_tier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"wealth_tier\"},\"Name\":\"woman_level_master.wealth_tier\",\"NativeReferenceName\":\"wealth_tier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Wealth'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 812,
+      "y": 112,
+      "z": 200,
+      "width": 132,
+      "height": 64,
+      "config": "{\"name\":\"43a3ea81-ddf1-45e1-bfab-17a34b407e39\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"state_barrier_long.barrier_type\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_barrier_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"barrier_type\"},\"Name\":\"state_barrier_long.barrier_type\",\"NativeReferenceName\":\"barrier_type\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Barrier Type'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 952,
+      "y": 112,
+      "z": 200,
+      "width": 148,
+      "height": 64,
+      "config": "{\"name\":\"10ee7d57-a16e-4091-b968-123b3c658d67\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"stage2_outcome_long.outcome\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage2_outcome_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"outcome\"},\"Name\":\"stage2_outcome_long.outcome\",\"NativeReferenceName\":\"outcome\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Stage 2 Target'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1108,
+      "y": 112,
+      "z": 200,
+      "width": 156,
+      "height": 64,
+      "config": "{\"name\":\"e7a0b67d-4ac2-4360-9424-918b1145d38f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"cluster_summary.archetype_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"cluster_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"archetype_name\"},\"Name\":\"cluster_summary.archetype_name\",\"NativeReferenceName\":\"archetype_name\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Cluster'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 188,
+      "z": 10,
+      "width": 620,
+      "height": 280,
+      "config": "{\"name\":\"57077ed9-333b-4bee-ac5c-cf23e4de86d2\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"clusteredColumnChart\",\"projections\":{\"Category\":[{\"queryRef\":\"stage2_outcome_long.outcome\"}],\"Series\":[{\"queryRef\":\"stage2_outcome_long.metric_type\"}],\"Y\":[{\"queryRef\":\"stage2_outcome_long.value\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage2_outcome_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"outcome\"},\"Name\":\"stage2_outcome_long.outcome\",\"NativeReferenceName\":\"outcome\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"metric_type\"},\"Name\":\"stage2_outcome_long.metric_type\",\"NativeReferenceName\":\"metric_type\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"value\"},\"Name\":\"stage2_outcome_long.value\",\"NativeReferenceName\":\"value\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'ANC Gap vs Unmet FP \\u2014 Observed vs Predicted'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 652,
+      "y": 188,
+      "z": 10,
+      "width": 612,
+      "height": 280,
+      "config": "{\"name\":\"ffd2c38a-6197-4b09-a38d-faaad5bf2591\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Category\":[{\"queryRef\":\"stage2_outcome_long.outcome\"}],\"Series\":[{\"queryRef\":\"stage2_outcome_long.metric_type\"}],\"Y\":[{\"queryRef\":\"stage2_outcome_long.value\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage2_outcome_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"outcome\"},\"Name\":\"stage2_outcome_long.outcome\",\"NativeReferenceName\":\"outcome\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"metric_type\"},\"Name\":\"stage2_outcome_long.metric_type\",\"NativeReferenceName\":\"metric_type\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"value\"},\"Name\":\"stage2_outcome_long.value\",\"NativeReferenceName\":\"value\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Stage 2 Outcome Trends'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 484,
+      "z": 10,
+      "width": 1248,
+      "height": 212,
+      "config": "{\"name\":\"6ef56637-4735-474f-935f-f513451189f0\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"matrix\",\"projections\":{\"Rows\":[{\"queryRef\":\"stage2_outcome_long.state_name\"}],\"Columns\":[{\"queryRef\":\"stage2_outcome_long.metric_type\"}],\"Values\":[{\"queryRef\":\"stage2_outcome_long.value\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage2_outcome_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"state_name\"},\"Name\":\"stage2_outcome_long.state_name\",\"NativeReferenceName\":\"state_name\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"metric_type\"},\"Name\":\"stage2_outcome_long.metric_type\",\"NativeReferenceName\":\"metric_type\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"value\"},\"Name\":\"stage2_outcome_long.value\",\"NativeReferenceName\":\"value\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Heatmap \\u2014 State \\u00d7 Metric Type (Predicted / Observed)'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    }
+  ]
+}

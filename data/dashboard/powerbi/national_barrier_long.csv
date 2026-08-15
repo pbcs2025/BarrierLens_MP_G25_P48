@@ -1,7 +1,7 @@
 barrier_type,metric_type,value,data_rail
-Household Barrier,Observed Rate (NFHS-5),0.271556,Rail A — Observed Rate (NFHS-5)
-Household Barrier,BarrierLens AI Predicted Probability,0.479181,Rail B — BarrierLens AI Predicted Probability
-Logistical Barrier,Observed Rate (NFHS-5),0.316064,Rail A — Observed Rate (NFHS-5)
-Logistical Barrier,BarrierLens AI Predicted Probability,0.482193,Rail B — BarrierLens AI Predicted Probability
-Health Facility Barrier,Observed Rate (NFHS-5),0.460075,Rail A — Observed Rate (NFHS-5)
-Health Facility Barrier,BarrierLens AI Predicted Probability,0.497845,Rail B — BarrierLens AI Predicted Probability
+Household,Observed,0.271556,Rail A — Observed NFHS-5 Statistic
+Household,Predicted,0.479181,Rail B — BarrierLens OOF Prediction
+Logistic,Observed,0.316064,Rail A — Observed NFHS-5 Statistic
+Logistic,Predicted,0.482193,Rail B — BarrierLens OOF Prediction
+Facility,Observed,0.460075,Rail A — Observed NFHS-5 Statistic
+Facility,Predicted,0.497845,Rail B — BarrierLens OOF Prediction

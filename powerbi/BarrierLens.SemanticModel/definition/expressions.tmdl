@@ -1,5 +1,12 @@
-expression DashboardDataPath = "../data/dashboard/powerbi" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=false]
-	lineageTag: b2b7e7c3-6abc-4506-a440-f4e0c347a1bf
+expression DashboardDataPath = "C:/major project/BarrierLens_MP_G25_P48/data/dashboard/powerbi" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 90f2bfad-d932-444a-adbb-21254b29e08e
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression DashboardMasterPath = "C:/major project/BarrierLens_MP_G25_P48/data/dashboard" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 0c6cf747-8ca6-4738-a120-8dc0b9cd34bf
 
 	annotation PBI_NavigationStepName = Navigation
 

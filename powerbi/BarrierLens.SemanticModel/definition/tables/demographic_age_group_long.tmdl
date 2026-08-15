@@ -1,0 +1,35 @@
+table demographic_age_group_long
+	lineageTag: 601bcfcd-4e97-4856-9ae8-ea113b0069c1
+
+	column category
+		dataType: string
+		sourceColumn: category
+		summarizeBy: none
+
+	column metric_type
+		dataType: string
+		sourceColumn: metric_type
+		summarizeBy: none
+
+	column value
+		dataType: double
+		sourceColumn: value
+		summarizeBy: none
+
+	column N
+		dataType: int64
+		sourceColumn: N
+		summarizeBy: none
+
+	partition demographic_age_group_long = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(
+					File.Contents(DashboardDataPath & "/demographic_age_group_long.csv"),
+					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
+				),
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
+			in
+				#"Promoted Headers"
+

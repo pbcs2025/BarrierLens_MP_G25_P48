@@ -1,0 +1,261 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "Explainability",
+  "displayName": "7. Explainability",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F8FAFC'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualContainers": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 10000,
+      "width": 1280,
+      "height": 44,
+      "config": "{\"name\":\"2a1982a5-2125-40a0-820c-7cdbb5c9211f\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"Explainability \\u2014 SHAP & Model Comparison\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"16pt\",\"color\":\"#FFFFFF\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 48,
+      "z": 9999,
+      "width": 900,
+      "height": 24,
+      "config": "{\"name\":\"5906000a-9c4a-47e3-a6e1-90354d1c455e\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"Random Forest SHAP attributions | Stage 1 & Stage 2 model benchmarking\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"10pt\",\"color\":\"#A8DADC\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"9b9711be-3d52-49ff-92f8-7d6f20bc5395\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 National\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 192,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"a6e22ff6-645f-435f-b4b7-2de999580cfc\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 States\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 368,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"77b281fc-866a-4b9c-a8d8-a7fdfc9b71b3\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Demographics\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 544,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"0c5134b2-2262-4bd7-9777-432196fa734d\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Stage 2\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 720,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"6a9829c7-9087-4bfc-bfe1-50ac22cde00e\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Clusters\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 896,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"6919b1d8-177a-43ff-bdf7-81a44550c204\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 Models\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1072,
+      "y": 76,
+      "z": 9998,
+      "width": 168,
+      "height": 28,
+      "config": "{\"name\":\"f16875de-819f-411f-8244-34aae51b1450\",\"singleVisual\":{\"visualType\":\"textbox\",\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"\\u25b8 SHAP\",\"style\":{\"fontFamily\":\"Segoe UI\",\"fontSize\":\"9pt\",\"color\":\"#457B9D\"}}]}]}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 112,
+      "z": 200,
+      "width": 148,
+      "height": 64,
+      "config": "{\"name\":\"223e5827-6516-4ae1-8f65-be9ba3dbdfeb\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"state_level_summary.state_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_level_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"state_name\"},\"Name\":\"state_level_summary.state_name\",\"NativeReferenceName\":\"state_name\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'State'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 172,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"7038be82-0235-4261-b040-63f620caef94\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.residence\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"residence\"},\"Name\":\"woman_level_master.residence\",\"NativeReferenceName\":\"residence\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Residence'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 300,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"7a9add22-57d0-42cd-b92e-b4c03e186a8c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.education_tier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"education_tier\"},\"Name\":\"woman_level_master.education_tier\",\"NativeReferenceName\":\"education_tier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Education'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 428,
+      "y": 112,
+      "z": 200,
+      "width": 132,
+      "height": 64,
+      "config": "{\"name\":\"652d7d80-a1c7-45d6-b792-7796d106415f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.occupation_group\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"occupation_group\"},\"Name\":\"woman_level_master.occupation_group\",\"NativeReferenceName\":\"occupation_group\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Occupation'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 568,
+      "y": 112,
+      "z": 200,
+      "width": 120,
+      "height": 64,
+      "config": "{\"name\":\"1a25e4f4-d91a-4478-8f9b-491174b7779e\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.religion\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"religion\"},\"Name\":\"woman_level_master.religion\",\"NativeReferenceName\":\"religion\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Religion'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 696,
+      "y": 112,
+      "z": 200,
+      "width": 108,
+      "height": 64,
+      "config": "{\"name\":\"d154e02f-4f64-4bc9-aa06-309d345cda1f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"woman_level_master.wealth_tier\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"w\",\"Entity\":\"woman_level_master\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"w\"}},\"Property\":\"wealth_tier\"},\"Name\":\"woman_level_master.wealth_tier\",\"NativeReferenceName\":\"wealth_tier\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Wealth'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 812,
+      "y": 112,
+      "z": 200,
+      "width": 132,
+      "height": 64,
+      "config": "{\"name\":\"05f72698-d839-49d9-bd86-b0654eb90b3b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"state_barrier_long.barrier_type\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"state_barrier_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"barrier_type\"},\"Name\":\"state_barrier_long.barrier_type\",\"NativeReferenceName\":\"barrier_type\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Barrier Type'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 952,
+      "y": 112,
+      "z": 200,
+      "width": 148,
+      "height": 64,
+      "config": "{\"name\":\"f2a8e4f0-d543-41a6-8dcb-beafbd4acdca\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"stage2_outcome_long.outcome\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage2_outcome_long\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"outcome\"},\"Name\":\"stage2_outcome_long.outcome\",\"NativeReferenceName\":\"outcome\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Stage 2 Target'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 1108,
+      "y": 112,
+      "z": 200,
+      "width": 156,
+      "height": 64,
+      "config": "{\"name\":\"e5aa2b67-6a23-4381-8003-f3e922acbd62\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"cluster_summary.archetype_name\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"cluster_summary\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"archetype_name\"},\"Name\":\"cluster_summary.archetype_name\",\"NativeReferenceName\":\"archetype_name\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Cluster'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 188,
+      "z": 10,
+      "width": 620,
+      "height": 248,
+      "config": "{\"name\":\"ea86d07b-49ab-4a23-aeea-616786c9b3f6\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"barChart\",\"projections\":{\"Category\":[{\"queryRef\":\"shap_top20.feature\"}],\"Y\":[{\"queryRef\":\"shap_top20.mean_abs_shap\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"shap_top20\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"feature\"},\"Name\":\"shap_top20.feature\",\"NativeReferenceName\":\"feature\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"mean_abs_shap\"},\"Name\":\"shap_top20.mean_abs_shap\",\"NativeReferenceName\":\"mean_abs_shap\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Top 20 Features \\u2014 Mean |SHAP|'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 16,
+      "y": 448,
+      "z": 10,
+      "width": 620,
+      "height": 256,
+      "config": "{\"name\":\"92fd41c6-72d2-44dd-be84-2644b99f2b6f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"barChart\",\"projections\":{\"Category\":[{\"queryRef\":\"shap_importance.feature\"}],\"Y\":[{\"queryRef\":\"shap_importance.mean_abs_shap\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"shap_importance\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"feature\"},\"Name\":\"shap_importance.feature\",\"NativeReferenceName\":\"feature\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"mean_abs_shap\"},\"Name\":\"shap_importance.mean_abs_shap\",\"NativeReferenceName\":\"mean_abs_shap\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Feature Importance Ranking \\u2014 Full SHAP Table'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 652,
+      "y": 188,
+      "z": 10,
+      "width": 612,
+      "height": 140,
+      "config": "{\"name\":\"a3a17767-5bef-49d1-ba68-cafbb64167d1\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"model_comparison_table.Model\"},{\"queryRef\":\"model_comparison_table.Target\"},{\"queryRef\":\"model_comparison_table.Accuracy\"},{\"queryRef\":\"model_comparison_table.ROC-AUC\"},{\"queryRef\":\"model_comparison_table.F1-Score\"},{\"queryRef\":\"model_comparison_table.Barrier_Uplift\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"m\",\"Entity\":\"model_comparison_table\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"m\"}},\"Property\":\"Model\"},\"Name\":\"model_comparison_table.Model\",\"NativeReferenceName\":\"Model\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"m\"}},\"Property\":\"Target\"},\"Name\":\"model_comparison_table.Target\",\"NativeReferenceName\":\"Target\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"m\"}},\"Property\":\"Accuracy\"},\"Name\":\"model_comparison_table.Accuracy\",\"NativeReferenceName\":\"Accuracy\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"m\"}},\"Property\":\"ROC-AUC\"},\"Name\":\"model_comparison_table.ROC-AUC\",\"NativeReferenceName\":\"ROC-AUC\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"m\"}},\"Property\":\"F1-Score\"},\"Name\":\"model_comparison_table.F1-Score\",\"NativeReferenceName\":\"F1-Score\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"m\"}},\"Property\":\"Barrier_Uplift\"},\"Name\":\"model_comparison_table.Barrier_Uplift\",\"NativeReferenceName\":\"Barrier_Uplift\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Model Comparison Table \\u2014 Stage 2'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 652,
+      "y": 340,
+      "z": 10,
+      "width": 612,
+      "height": 100,
+      "config": "{\"name\":\"b5e53dd4-73fd-4945-936e-f2043c8e3f3c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":100,\"height\":100}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"stage1_model_comparison.Model\"},{\"queryRef\":\"stage1_model_comparison.Target\"},{\"queryRef\":\"stage1_model_comparison.ROC-AUC\"},{\"queryRef\":\"stage1_model_comparison.F1-Score\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"s\",\"Entity\":\"stage1_model_comparison\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"Model\"},\"Name\":\"stage1_model_comparison.Model\",\"NativeReferenceName\":\"Model\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"Target\"},\"Name\":\"stage1_model_comparison.Target\",\"NativeReferenceName\":\"Target\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"ROC-AUC\"},\"Name\":\"stage1_model_comparison.ROC-AUC\",\"NativeReferenceName\":\"ROC-AUC\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"s\"}},\"Property\":\"F1-Score\"},\"Name\":\"stage1_model_comparison.F1-Score\",\"NativeReferenceName\":\"F1-Score\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Model Comparison Table \\u2014 Stage 1'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 652,
+      "y": 456,
+      "z": 10,
+      "width": 612,
+      "height": 120,
+      "config": "{\"name\":\"71194ddf-9df3-4a1c-b55e-de6eb850197a\",\"singleVisual\":{\"visualType\":\"image\",\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"rf_shap_bar_target_unmet_fp.png\"}}}}}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'SHAP Bar \\u2014 Stage 2 RF'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 652,
+      "y": 588,
+      "z": 10,
+      "width": 300,
+      "height": 116,
+      "config": "{\"name\":\"ab826516-893f-4f7c-8088-80e46e5149ef\",\"singleVisual\":{\"visualType\":\"image\",\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"rf_shap_beeswarm_target_unmet_fp.png\"}}}}}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'SHAP Beeswarm'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    },
+    {
+      "x": 964,
+      "y": 588,
+      "z": 10,
+      "width": 300,
+      "height": 116,
+      "config": "{\"name\":\"023290bd-8294-4355-8c94-a895b1c3b94c\",\"singleVisual\":{\"visualType\":\"image\",\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"rf_shap_group_comparison_target_unmet_fp.png\"}}}}}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'SHAP Group Comparison'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#1D3557'\"}}}}}}}],\"dropShadow\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+      "filters": "[]"
+    }
+  ]
+}

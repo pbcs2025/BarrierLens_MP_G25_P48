@@ -1,5 +1,5 @@
 table national_kpi_summary
-	lineageTag: 400e4633-c923-4358-8437-4c9ac8866b0b
+	lineageTag: f00e5fc7-83e1-4570-a708-d827a02cb036
 
 	column total_women
 		dataType: int64
@@ -66,6 +66,16 @@ table national_kpi_summary
 		sourceColumn: stage2_anc_gap_N
 		summarizeBy: none
 
+	column stage2_anc_gap_observed_rate
+		dataType: string
+		sourceColumn: stage2_anc_gap_observed_rate
+		summarizeBy: none
+
+	column stage2_anc_gap_pred_prob
+		dataType: string
+		sourceColumn: stage2_anc_gap_pred_prob
+		summarizeBy: none
+
 	column data_note
 		dataType: string
 		sourceColumn: data_note
@@ -79,8 +89,7 @@ table national_kpi_summary
 					File.Contents(DashboardDataPath & "/national_kpi_summary.csv"),
 					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
 				),
-				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"total_women", Int64.Type}, {"observed_any_barrier_rate", type number}, {"observed_household_rate", type number}, {"observed_logistic_rate", type number}, {"observed_facility_rate", type number}, {"pred_household_prob", type number}, {"pred_logistic_prob", type number}, {"pred_facility_prob", type number}, {"pred_composite_barrier_score", type number}, {"stage2_unmet_fp_N", Int64.Type}, {"stage2_unmet_fp_observed_rate", type number}, {"stage2_unmet_fp_pred_prob", type number}, {"stage2_anc_gap_N", Int64.Type}, {"data_note", type text}})
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
 			in
-				#"Changed Type"
+				#"Promoted Headers"
 

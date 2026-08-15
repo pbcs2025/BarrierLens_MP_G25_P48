@@ -1,0 +1,7 @@
+category,metric_type,value,N
+Middle,Observed,0.586892,151505
+Middle,Predicted,0.481614,151505
+Poor,Observed,0.70887,310184
+Poor,Predicted,0.601916,310184
+Rich,Observed,0.45574,262426
+Rich,Predicted,0.352642,262426

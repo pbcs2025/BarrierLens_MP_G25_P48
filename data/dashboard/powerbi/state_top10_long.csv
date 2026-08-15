@@ -1,0 +1,11 @@
+rank_order,state_name,pred_composite_barrier_score,N
+1,Assam,0.571223,34979
+2,Arunachal Pradesh,0.566162,19765
+3,Nagaland,0.557339,9694
+4,Tripura,0.556973,7314
+5,Jharkhand,0.556666,26495
+6,Meghalaya,0.554801,13089
+7,Bihar,0.550142,42483
+8,Chhattisgarh,0.538053,28468
+9,Odisha,0.534835,27971
+10,West Bengal,0.52905,21408

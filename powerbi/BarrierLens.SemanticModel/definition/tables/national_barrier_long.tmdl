@@ -1,5 +1,5 @@
 table national_barrier_long
-	lineageTag: 731d6e3c-261c-41f1-b9d8-9924d7ab4d87
+	lineageTag: 50586cb2-8f04-4e37-becb-5d38f2244ffb
 
 	column barrier_type
 		dataType: string
@@ -29,8 +29,7 @@ table national_barrier_long
 					File.Contents(DashboardDataPath & "/national_barrier_long.csv"),
 					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
 				),
-				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"barrier_type", type text}, {"metric_type", type text}, {"value", type number}, {"data_rail", type text}})
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
 			in
-				#"Changed Type"
+				#"Promoted Headers"
 

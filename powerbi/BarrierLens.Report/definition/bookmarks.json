@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "Bookmark_Reset_Filters",
+      "displayName": "Reset All Filters"
+    },
+    {
+      "name": "Bookmark_National_Overview",
+      "displayName": "Go to National Overview"
+    },
+    {
+      "name": "Bookmark_State_Analysis",
+      "displayName": "Go to State Analysis"
+    },
+    {
+      "name": "Bookmark_Model_Performance",
+      "displayName": "Go to Model Performance"
+    }
+  ]
+}

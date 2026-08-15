@@ -29,40 +29,137 @@
           "name": "BarrierLensTheme.json",
           "path": "BarrierLensTheme.json",
           "type": "CustomTheme"
+        },
+        {
+          "name": "barrier_uplift_comparison.png",
+          "path": "barrier_uplift_comparison.png",
+          "type": "Image"
+        },
+        {
+          "name": "calibration_target_unmet_fp.png",
+          "path": "calibration_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "cluster_profiles.png",
+          "path": "cluster_profiles.png",
+          "type": "Image"
+        },
+        {
+          "name": "confusion_matrix_normalised_target_unmet_fp.png",
+          "path": "confusion_matrix_normalised_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "confusion_matrix_target_unmet_fp.png",
+          "path": "confusion_matrix_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "decision_threshold_target_unmet_fp.png",
+          "path": "decision_threshold_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "gain_curve_target_unmet_fp.png",
+          "path": "gain_curve_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "lift_curve_target_unmet_fp.png",
+          "path": "lift_curve_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "pr_curve_target_unmet_fp.png",
+          "path": "pr_curve_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_bar_facility.png",
+          "path": "rf_bar_facility.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_bar_household.png",
+          "path": "rf_bar_household.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_bar_logistic.png",
+          "path": "rf_bar_logistic.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_shap_bar_target_unmet_fp.png",
+          "path": "rf_shap_bar_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_shap_beeswarm_target_unmet_fp.png",
+          "path": "rf_shap_beeswarm_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_shap_group_comparison_target_unmet_fp.png",
+          "path": "rf_shap_group_comparison_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_summary_facility.png",
+          "path": "rf_summary_facility.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_summary_household.png",
+          "path": "rf_summary_household.png",
+          "type": "Image"
+        },
+        {
+          "name": "rf_summary_logistic.png",
+          "path": "rf_summary_logistic.png",
+          "type": "Image"
+        },
+        {
+          "name": "roc_curve_target_unmet_fp.png",
+          "path": "roc_curve_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "shap_bar_target_unmet_fp.png",
+          "path": "shap_bar_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "shap_dependence_target_unmet_fp.png",
+          "path": "shap_dependence_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "shap_heatmap_target_unmet_fp.png",
+          "path": "shap_heatmap_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "shap_summary_target_unmet_fp.png",
+          "path": "shap_summary_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "shap_waterfall_target_unmet_fp.png",
+          "path": "shap_waterfall_target_unmet_fp.png",
+          "type": "Image"
+        },
+        {
+          "name": "top20_features_target_unmet_fp.png",
+          "path": "top20_features_target_unmet_fp.png",
+          "type": "Image"
         }
       ]
     }
   ],
-  "bookmarks": [
-    {
-      "name": "Bookmark_ResetFilters",
-      "displayName": "Reset All Filters",
-      "options": {
-        "targetVisualNames": [],
-        "data": true,
-        "display": true,
-        "page": true
-      }
-    },
-    {
-      "name": "Bookmark_ExecutiveView",
-      "displayName": "Executive KPI View",
-      "options": {
-        "targetVisualNames": [],
-        "data": false,
-        "display": true,
-        "page": true
-      }
-    },
-    {
-      "name": "Bookmark_DetailedScorecard",
-      "displayName": "Detailed Scorecard View",
-      "options": {
-        "targetVisualNames": [],
-        "data": false,
-        "display": true,
-        "page": true
-      }
-    }
-  ]
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": 1
+  }
 }

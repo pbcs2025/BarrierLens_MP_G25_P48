@@ -1,5 +1,5 @@
 table demographic_comparison_long
-	lineageTag: f4d00ee1-28a0-4cb6-b2a3-5b6d04e93881
+	lineageTag: 60038384-57fb-41bb-b92f-59ef9ac4d343
 
 	column wealth_tier
 		dataType: string
@@ -59,8 +59,7 @@ table demographic_comparison_long
 					File.Contents(DashboardDataPath & "/demographic_comparison_long.csv"),
 					[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]
 				),
-				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"wealth_tier", type text}, {"education_tier", type text}, {"residence", type text}, {"caste_group", type text}, {"barrier_type", type text}, {"N", Int64.Type}, {"demographic_cell", type text}, {"metric_type", type text}, {"value", type number}, {"data_rail", type text}})
+				#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
 			in
-				#"Changed Type"
+				#"Promoted Headers"
 

@@ -1,0 +1,9 @@
+category,metric_type,value,N
+Higher,Observed,0.44713,101816
+Higher,Predicted,0.340948,101816
+No Education,Observed,0.678585,167304
+No Education,Predicted,0.575646,167304
+Primary,Observed,0.649906,84983
+Primary,Predicted,0.540947,84983
+Secondary,Observed,0.578654,370012
+Secondary,Predicted,0.473555,370012

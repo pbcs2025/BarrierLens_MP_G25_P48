@@ -1,0 +1,21 @@
+ranking_type,rank_order,state_name,pred_composite_barrier_score,N
+Top 10 High Risk,1,Assam,0.571223,34979
+Top 10 High Risk,2,Arunachal Pradesh,0.566162,19765
+Top 10 High Risk,3,Nagaland,0.557339,9694
+Top 10 High Risk,4,Tripura,0.556973,7314
+Top 10 High Risk,5,Jharkhand,0.556666,26495
+Top 10 High Risk,6,Meghalaya,0.554801,13089
+Top 10 High Risk,7,Bihar,0.550142,42483
+Top 10 High Risk,8,Chhattisgarh,0.538053,28468
+Top 10 High Risk,9,Odisha,0.534835,27971
+Top 10 High Risk,10,West Bengal,0.52905,21408
+Bottom 10 Low Risk,1,Tamil Nadu,0.414936,25650
+Bottom 10 Low Risk,2,Haryana,0.394741,21909
+Bottom 10 Low Risk,3,Mizoram,0.368599,7279
+Bottom 10 Low Risk,4,Punjab,0.358728,21771
+Bottom 10 Low Risk,5,Kerala,0.345315,10969
+Bottom 10 Low Risk,6,Puducherry,0.336091,3669
+Bottom 10 Low Risk,7,Nct Of Delhi,0.322286,11159
+Bottom 10 Low Risk,8,Lakshadweep,0.311867,1234
+Bottom 10 Low Risk,9,Chandigarh,0.311475,746
+Bottom 10 Low Risk,10,Goa,0.298613,2030

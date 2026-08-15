@@ -1,61 +1,41 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
-  "activePageName": "LandingPage",
+  "activePageName": "NationalOverview",
   "pages": [
     {
-      "name": "LandingPage",
-      "displayName": "0. BarrierLens \u2014 Executive Home",
+      "name": "NationalOverview",
+      "displayName": "1. National Overview",
       "ordinal": 0
     },
     {
-      "name": "NationalOverview",
-      "displayName": "1. National Barrier Overview",
+      "name": "StateAnalysis",
+      "displayName": "2. State Analysis",
       "ordinal": 1
     },
     {
-      "name": "BasePaperComparison",
-      "displayName": "2. Literature Benchmark & Base Paper Comparison",
+      "name": "DemographicAnalysis",
+      "displayName": "3. Demographic Analysis",
       "ordinal": 2
     },
     {
-      "name": "StateBarrierAnalysis",
-      "displayName": "3. State & Union Territory Barrier Analysis",
+      "name": "Stage2Outcomes",
+      "displayName": "4. Stage 2 Health Outcomes",
       "ordinal": 3
     },
     {
-      "name": "DemographicAnalysis",
-      "displayName": "4. Demographic & Socioeconomic Disparities",
+      "name": "ClusterAnalysis",
+      "displayName": "5. Cluster Analysis",
       "ordinal": 4
     },
     {
-      "name": "AIPrediction",
-      "displayName": "4b. AI Healthcare Access Prediction Dashboard",
+      "name": "ModelPerformance",
+      "displayName": "6. Model Performance",
       "ordinal": 5
     },
     {
-      "name": "RiskArchetypes",
-      "displayName": "5. Population Risk Archetypes & Clustering",
+      "name": "Explainability",
+      "displayName": "7. Explainability",
       "ordinal": 6
-    },
-    {
-      "name": "Stage2OutcomeImpact",
-      "displayName": "6. Reproductive Healthcare Outcome & Unmet Need Impact",
-      "ordinal": 7
-    },
-    {
-      "name": "ExplainabilityValidation",
-      "displayName": "7. AI Model Explainability & Feature Attribution",
-      "ordinal": 8
-    },
-    {
-      "name": "PolicyIntelligence",
-      "displayName": "10. Policy Intelligence & Decision Support",
-      "ordinal": 9
-    },
-    {
-      "name": "ExecutiveSummary",
-      "displayName": "11. Executive Summary & Policy Blueprint",
-      "ordinal": 10
     }
   ]
 }
