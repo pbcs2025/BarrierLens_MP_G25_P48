@@ -384,16 +384,122 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Responsive */
+/* Navigation Code Badges & Toggle */
+.nav-code {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.15);
+  color: #38bdf8;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+.nav-toggle-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid #475569;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+/* Responsive Breakpoints & Mobile Drawer */
+@media (max-width: 1024px) {
+  .header-nav {
+    flex-wrap: wrap;
+    padding: 14px 20px;
+  }
+  .nav-links {
+    gap: 4px;
+  }
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .header-nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    justify-content: space-between;
+    padding: 12px 16px;
+  }
+  .nav-toggle-btn {
+    display: block;
+  }
+  .nav-menu {
+    display: none;
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #334155;
+  }
+  .nav-menu.mobile-open {
+    display: block;
+  }
+  .nav-links {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 16px;
+    gap: 6px;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 0.9rem;
   }
   .container {
-    padding: 0 16px;
+    padding: 0 12px;
+    margin: 16px auto;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .kpi-card {
+    padding: 14px;
+  }
+  .kpi-value {
+    font-size: 1.4rem;
+  }
+  .card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .hero-banner {
+    padding: 24px 18px;
+  }
+  .hero-title {
+    font-size: 1.6rem;
+  }
+  .hero-description {
+    font-size: 0.95rem;
+  }
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-title {
+    font-size: 1.4rem;
   }
 }
 

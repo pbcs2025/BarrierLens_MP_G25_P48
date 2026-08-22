@@ -1,16 +1,16 @@
-// Shared Navigation Component for BarrierLens Dashboard
+// Shared Navigation Component for BarrierLens Dashboard (Member 4 Shell)
 document.addEventListener("DOMContentLoaded", function () {
   const pages = [
-    { name: "National Overview", path: "national_overview.html", id: "page-a" },
-    { name: "Base Paper Comparison", path: "base_paper_comparison.html", id: "page-b" },
-    { name: "State Analysis", path: "state_analysis.html", id: "page-c" },
-    { name: "Demographic Analysis", path: "demographic_analysis.html", id: "page-d" },
-    { name: "Rural-Urban Comparison", path: "rural_urban.html", id: "page-e" },
-    { name: "Empowerment", path: "empowerment.html", id: "page-f" },
-    { name: "Multiple Barriers", path: "multiple_barrier.html", id: "page-g" },
-    { name: "Risk Archetypes", path: "risk_archetypes.html", id: "page-h" },
-    { name: "Utilization Impact", path: "outcome_impact.html", id: "page-i" },
-    { name: "Explainability & Reg", path: "explainability.html", id: "page-j" },
+    { name: "National Overview", code: "A", path: "national_overview.html" },
+    { name: "Base Paper Comparison", code: "B", path: "base_paper_comparison.html" },
+    { name: "State-wise Barrier Analysis", code: "C", path: "state_analysis.html" },
+    { name: "Demographic & Socioeconomic", code: "D", path: "demographic_analysis.html" },
+    { name: "Rural–Urban Comparison", code: "E", path: "rural_urban.html" },
+    { name: "Household Empowerment", code: "F", path: "empowerment.html" },
+    { name: "Multiple Barrier Analysis", code: "G", path: "multiple_barrier.html" },
+    { name: "Risk Archetypes", code: "H", path: "risk_archetypes.html" },
+    { name: "Healthcare Utilization Impact", code: "I", path: "outcome_impact.html" },
+    { name: "Explainability & Regression", code: "J", path: "explainability.html" }
   ];
 
   const pathname = window.location.pathname.replace(/\\/g, "/");
@@ -29,14 +29,22 @@ document.addEventListener("DOMContentLoaded", function () {
         <a href="${homeHref}" class="brand-title">BarrierLens P48</a>
         <span class="brand-badge">NFHS-5</span>
       </div>
-      <nav>
+      <button class="nav-toggle-btn" id="nav-toggle-btn" aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <nav id="nav-menu" class="nav-menu">
         <ul class="nav-links">
           ${pages
             .map(
               (p) =>
-                `<li><a href="${pageHref(p.path)}" class="nav-link ${
+                `<li>
+                  <a href="${pageHref(p.path)}" class="nav-link ${
                   currentFile === p.path ? "active" : ""
-                }">${p.name}</a></li>`
+                }">
+                    <span class="nav-code">${p.code}</span>
+                    <span class="nav-text">${p.name}</span>
+                  </a>
+                </li>`
             )
             .join("")}
         </ul>
@@ -49,5 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
     headerElem.innerHTML = navHtml;
   } else {
     document.body.insertAdjacentHTML("afterbegin", navHtml);
+  }
+
+  // Mobile menu toggle logic
+  const toggleBtn = document.getElementById("nav-toggle-btn");
+  const navMenu = document.getElementById("nav-menu");
+  if (toggleBtn && navMenu) {
+    toggleBtn.addEventListener("click", function () {
+      navMenu.classList.toggle("mobile-open");
+    });
   }
 });
