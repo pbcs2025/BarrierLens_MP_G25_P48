@@ -67,4 +67,33 @@ document.addEventListener("DOMContentLoaded", function () {
       navMenu.classList.toggle("mobile-open");
     });
   }
+
+  // Add Member 1 & Member 3 Chatbot Layer
+  const chatbotScripts = [
+    'assets/js/chatbot-data.js',
+    'assets/js/intent-engine.js',
+    'assets/js/retrieval-engine.js',
+    'assets/js/calculation-engine.js',
+    'assets/js/evidence-engine.js',
+    'assets/js/response-engine.js',
+    'assets/js/i18n.js',
+    'assets/js/speech.js',
+    'assets/js/tts.js',
+    'assets/js/voice.js',
+    'assets/js/chatbot-ui.js'
+  ];
+
+  if (!window.BarrierLensChatbotUI) {
+    chatbotScripts.forEach(function (src) {
+      const fullSrc = inPagesDir ? '../' + src : src;
+      const scriptName = src.split('/').pop();
+      if (!document.querySelector('script[src*="' + scriptName + '"]')) {
+        const tag = document.createElement('script');
+        tag.src = fullSrc;
+        tag.async = false;
+        document.head.appendChild(tag);
+      }
+    });
+  }
 });
+
