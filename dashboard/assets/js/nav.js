@@ -67,4 +67,42 @@ document.addEventListener("DOMContentLoaded", function () {
       navMenu.classList.toggle("mobile-open");
     });
   }
+
+  // Add Member 1, Member 3 & Member 4 Intelligence, UI & Report Layer
+  const chatbotScripts = [
+    'assets/js/chatbot-data.js',
+    'assets/js/intent-engine.js',
+    'assets/js/retrieval-engine.js',
+    'assets/js/calculation-engine.js',
+    'assets/js/evidence-engine.js',
+    'assets/js/response-engine.js',
+    'assets/js/i18n.js',
+    'assets/js/speech.js',
+    'assets/js/tts.js',
+    'assets/js/voice.js',
+    'assets/js/report-template.js',
+    'assets/js/report-generator.js',
+    'assets/js/chatbot-ui.js'
+  ];
+
+  if (!document.querySelector('link[href*="report.css"]')) {
+    const reportCss = document.createElement('link');
+    reportCss.rel = 'stylesheet';
+    reportCss.href = inPagesDir ? '../assets/css/report.css' : 'assets/css/report.css';
+    document.head.appendChild(reportCss);
+  }
+
+  if (!window.BarrierLensChatbotUI) {
+    chatbotScripts.forEach(function (src) {
+      const fullSrc = inPagesDir ? '../' + src : src;
+      const scriptName = src.split('/').pop();
+      if (!document.querySelector('script[src*="' + scriptName + '"]')) {
+        const tag = document.createElement('script');
+        tag.src = fullSrc;
+        tag.async = false;
+        document.head.appendChild(tag);
+      }
+    });
+  }
 });
+
