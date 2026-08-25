@@ -419,6 +419,9 @@
               if (input) input.value = transcript;
             },
             onQuerySubmit: async (text, lang) => {
+              _lastQueryText = text;
+              if (input) input.value = '';
+              renderUserMessage(text);
               return await executeQuery(text, lang);
             },
             onResponse: (response) => {
@@ -817,11 +820,16 @@
    * Show Typing Indicator
    */
   function showTypingIndicator() {
+    const sendBtn = document.getElementById('bl-send-btn');
+    const input = document.getElementById('bl-chat-input');
+    if (sendBtn) sendBtn.disabled = true;
+    if (input) input.setAttribute('aria-busy', 'true');
+
     const container = document.getElementById('bl-chat-messages');
     if (!container || document.getElementById('bl-typing-loader')) return;
 
     const html = `
-      <div class="bl-message-row bl-bot-row" id="bl-typing-loader">
+      <div class="bl-message-row bl-bot-row" id="bl-typing-loader" role="status" aria-live="polite">
         <div class="bl-message-avatar bl-bot-avatar" aria-hidden="true">BL</div>
         <div class="bl-bubble-wrap">
           <div class="bl-typing-indicator" aria-label="Thinking...">
@@ -840,6 +848,11 @@
    * Hide Typing Indicator
    */
   function hideTypingIndicator() {
+    const sendBtn = document.getElementById('bl-send-btn');
+    const input = document.getElementById('bl-chat-input');
+    if (sendBtn) sendBtn.disabled = false;
+    if (input) input.removeAttribute('aria-busy');
+
     const loader = document.getElementById('bl-typing-loader');
     if (loader) loader.remove();
   }

@@ -68,7 +68,7 @@
       .replace(/`([^`]+)`/g, '$1') // inline code
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // markdown links
       .replace(/[*_#~]/g, '') // bold, italic, headers
-      .replace(/^[\s*-•]+/gm, '') // list bullets
+      .replace(/^[\s*•\-]+/gm, '') // list bullets (escaped hyphen)
       .replace(/\s+/g, ' ') // collapse whitespaces
       .trim();
   }
