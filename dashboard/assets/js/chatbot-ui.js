@@ -23,6 +23,7 @@
   let _isProcessing = false;
   let _messages = [];
   let _domMounted = false;
+  let _lastQueryText = '';
 
   // Module References (Browser / Node)
   function getI18n() {
@@ -45,6 +46,14 @@
     if (typeof window !== 'undefined' && window.BarrierLensResponse) return window.BarrierLensResponse;
     if (typeof require !== 'undefined') {
       try { return require('./response-engine.js'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getReportGenerator() {
+    if (typeof window !== 'undefined' && window.BarrierLensReportGenerator) return window.BarrierLensReportGenerator;
+    if (typeof require !== 'undefined') {
+      try { return require('./report-generator.js'); } catch (e) {}
     }
     return null;
   }
@@ -574,6 +583,7 @@
   async function sendUserMessage(text) {
     if (!text || !text.trim() || _isProcessing) return;
     const query = text.trim();
+    _lastQueryText = query;
 
     // Clear input
     const input = document.getElementById('bl-chat-input');
@@ -717,6 +727,25 @@
       `;
     }
 
+    // 4.5 Report Generation Actions
+    if (res.status === 'verified') {
+      const isComparison = res.intent === 'STATE_COMPARISON' || (res.calculations && res.calculations.length > 0);
+      structuredCardsHtml += `
+        <div class="bl-report-actions-block">
+          <div class="bl-report-block-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span>Generate Research Report:</span>
+          </div>
+          <div class="bl-report-btns-row">
+            <button class="bl-report-action-btn" data-report-type="executive" title="Executive Research Report">Executive</button>
+            <button class="bl-report-action-btn" data-report-type="topic" title="Topic Research Report">Topic</button>
+            ${isComparison ? `<button class="bl-report-action-btn bl-report-highlight" data-report-type="comparison" title="Comparison Research Report">Comparison</button>` : ''}
+            <button class="bl-report-action-btn" data-report-type="complete" title="Complete Study Report">Complete</button>
+          </div>
+        </div>
+      `;
+    }
+
     // 5. Research Disclaimer / Limitation Note
     if (res.disclaimer || res.limitationNote) {
       const note = res.disclaimer || res.limitationNote;
@@ -741,6 +770,22 @@
     `;
 
     container.insertAdjacentHTML('beforeend', html);
+
+    const lastRow = container.lastElementChild;
+    if (lastRow) {
+      lastRow.querySelectorAll('.bl-report-action-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const reportType = btn.getAttribute('data-report-type') || 'executive';
+          const gen = getReportGenerator();
+          if (gen) {
+            const reportPayload = Object.assign({}, res, { query: _lastQueryText || res.query || '' });
+            const report = gen.generateReport(reportType, reportPayload);
+            gen.openReportModal(report);
+          }
+        });
+      });
+    }
+
     scrollToBottom();
   }
 

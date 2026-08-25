@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Add Member 1 & Member 3 Chatbot Layer
+  // Add Member 1, Member 3 & Member 4 Intelligence, UI & Report Layer
   const chatbotScripts = [
     'assets/js/chatbot-data.js',
     'assets/js/intent-engine.js',
@@ -80,8 +80,17 @@ document.addEventListener("DOMContentLoaded", function () {
     'assets/js/speech.js',
     'assets/js/tts.js',
     'assets/js/voice.js',
+    'assets/js/report-template.js',
+    'assets/js/report-generator.js',
     'assets/js/chatbot-ui.js'
   ];
+
+  if (!document.querySelector('link[href*="report.css"]')) {
+    const reportCss = document.createElement('link');
+    reportCss.rel = 'stylesheet';
+    reportCss.href = inPagesDir ? '../assets/css/report.css' : 'assets/css/report.css';
+    document.head.appendChild(reportCss);
+  }
 
   if (!window.BarrierLensChatbotUI) {
     chatbotScripts.forEach(function (src) {

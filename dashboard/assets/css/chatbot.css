@@ -732,3 +732,60 @@
     height: 660px;
   }
 }
+
+/* ---------------------------------------------------------
+   Member 4 Report Generation Action Buttons
+   --------------------------------------------------------- */
+.bl-report-actions-block {
+  margin-top: 10px;
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.bl-report-block-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin-bottom: 8px;
+}
+
+.bl-report-btns-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bl-report-action-btn {
+  background: #ffffff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bl-report-action-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.bl-report-action-btn.bl-report-highlight {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fde68a;
+}
+
+.bl-report-action-btn.bl-report-highlight:hover {
+  background: #d97706;
+  color: #ffffff;
+  border-color: #d97706;
+}
