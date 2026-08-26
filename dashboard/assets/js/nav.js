@@ -74,6 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
     'assets/js/context-manager.js',
     'assets/js/session-store.js',
     'assets/js/intent-router.js',
+    'assets/js/mode-router.js',
+    'assets/js/guided-question-schema.js',
     'assets/js/barrier-data-map.js',
     'assets/js/evidence-engine.js',
     'assets/js/comparison-engine.js',
