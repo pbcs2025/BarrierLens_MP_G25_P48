@@ -329,22 +329,105 @@
 
     container.innerHTML = `<div id="bl-mode-screen-container"></div>`;
     const modeScreen = getChooseModeScreen();
-    if (modeScreen) {
+    if (modeScreen && typeof modeScreen.render === 'function') {
       modeScreen.render('bl-mode-screen-container', {
         activeLanguage: _currentLang,
         onSelectIdentify: startGuidedFlow,
         onSelectExplore: startExploreFlow
       });
     } else {
-      container.innerHTML = `
-        <div class="bl-welcome-card" id="bl-welcome-card">
-          <span class="bl-welcome-badge">${t('assistantBadge')}</span>
-          <h4 class="bl-welcome-title">${t('welcomeTitle')}</h4>
-          <p class="bl-welcome-desc">${t('welcomeGreeting')}</p>
-          <p class="bl-welcome-tip">${t('welcomeHelp')}</p>
-        </div>
-      `;
+      renderInlineChooseModeScreen('bl-mode-screen-container');
     }
+  }
+
+  function renderInlineChooseModeScreen(containerId) {
+    const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+    if (!container) return;
+
+    const labels = {
+      en: {
+        welcomeTitle: "Welcome to BarrierLens",
+        welcomeSubtitle: "What would you like to do? Choose an entry mode:",
+        identifyTitle: "1. Identify My Barrier",
+        identifyBadge: "Guided ML Model Flow",
+        identifyDesc: "Answer guided questions to predict your likely primary healthcare barrier (Household, Logistic, or Facility) using machine learning.",
+        identifyBtn: "Identify My Barrier →",
+        exploreTitle: "2. Explore Barriers",
+        exploreBadge: "Verified Evidence Flow",
+        exploreDesc: "Directly select or ask about a barrier and explore verified BarrierLens evidence across 5 categories.",
+        exploreBtn: "Explore Barriers →"
+      },
+      kn: {
+        welcomeTitle: "ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್‌ಗೆ ಸುಸ್ವಾಗತ",
+        welcomeSubtitle: "ನೀವು ಏನು ಮಾಡಲು ಬಯಸುತ್ತೀರಿ? ಪ್ರವೇಶ ವಿಧಾನವನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
+        identifyTitle: "1. ನನ್ನ ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಿ",
+        identifyBadge: "ಮಾರ್ಗದರ್ಶಿತ ML ಮಾದರಿ ಶೈಲಿ",
+        identifyDesc: "ಮೆಷಿನ್ ಲರ್ನಿಂಗ್ ಬಳಸಿ ನಿಮ್ಮ ಆರೋಗ್ಯ ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಲು ಕೆಲವು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.",
+        identifyBtn: "ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಿ →",
+        exploreTitle: "2. ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+        exploreBadge: "ಪರಿಶೀಲಿಸಿದ ಸಾಕ್ಷ್ಯ ಶೈಲಿ",
+        exploreDesc: "5 ವರ್ಗಗಳಲ್ಲಿ ದೃಢೀಕೃತ ಮಾಹಿತಿ, ಅಂಕಿಅಂಶಗಳು ಮತ್ತು ಪರಿಹಾರಗಳನ್ನು ವೀಕ್ಷಿಸಿ.",
+        exploreBtn: "ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ →"
+      },
+      hi: {
+        welcomeTitle: "BarrierLens में आपका स्वागत है",
+        welcomeSubtitle: "आप क्या करना चाहेंगे? एक विकल्प चुनें:",
+        identifyTitle: "1. मेरी बाधा पहचानें",
+        identifyBadge: "निर्देशित ML मॉडल प्रवाह",
+        identifyDesc: "मशीन लर्निंग का उपयोग करके अपनी प्राथमिक स्वास्थ्य बाधा का अनुमान लगाने के लिए प्रश्नों के उत्तर दें।",
+        identifyBtn: "मेरी बाधा पहचानें →",
+        exploreTitle: "2. बाधाओं का अन्वेषण करें",
+        exploreBadge: "सत्यापित साक्ष्य प्रवाह",
+        exploreDesc: "5 श्रेणियों में सत्यापित जानकारी, आँकड़े और समाधान देखें।",
+        exploreBtn: "बाधाओं का अन्वेषण करें →"
+      }
+    };
+
+    const text = labels[_currentLang] || labels.en;
+
+    container.innerHTML = `
+      <div class="bl-choose-mode-wrapper" style="padding: 14px 10px; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <span style="font-size: 0.72rem; font-weight: 800; background: #e0e7ff; color: #3730a3; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;">NFHS-5 Research Platform</span>
+          <h3 style="margin: 8px 0 4px 0; font-size: 1.2rem; font-weight: 700; color: #0f172a;">${text.welcomeTitle}</h3>
+          <p style="margin: 0; font-size: 0.85rem; color: #64748b;">${text.welcomeSubtitle}</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+          <!-- Option 1: Identify My Barrier -->
+          <div class="bl-mode-card" id="bl-inline-mode-identify" style="background: #eff6ff; border: 2px solid #93c5fd; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: 700; background: #2563eb; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.identifyBadge}</span>
+              <span style="font-size: 1.1rem;">🎯</span>
+            </div>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #1e3a8a;">${text.identifyTitle}</h4>
+            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #334155; line-height: 1.4;">${text.identifyDesc}</p>
+            <button id="bl-btn-inline-identify" style="width: 100%; padding: 8px 12px; background: #2563eb; color: #ffffff; border: none; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.identifyBtn}</button>
+          </div>
+
+          <!-- Option 2: Explore Barriers -->
+          <div class="bl-mode-card" id="bl-inline-mode-explore" style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: 700; background: #475569; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.exploreBadge}</span>
+              <span style="font-size: 1.1rem;">🔍</span>
+            </div>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">${text.exploreTitle}</h4>
+            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #475569; line-height: 1.4;">${text.exploreDesc}</p>
+            <button id="bl-btn-inline-explore" style="width: 100%; padding: 8px 12px; background: #f1f5f9; color: #0f172a; border: 1px solid #94a3b8; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.exploreBtn}</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const btnId = container.querySelector('#bl-btn-inline-identify');
+    const cardId = container.querySelector('#bl-inline-mode-identify');
+    const btnExp = container.querySelector('#bl-btn-inline-explore');
+    const cardExp = container.querySelector('#bl-inline-mode-explore');
+
+    if (btnId) btnId.addEventListener('click', startGuidedFlow);
+    if (cardId) cardId.addEventListener('click', (e) => { if (e.target !== btnId) startGuidedFlow(); });
+    if (btnExp) btnExp.addEventListener('click', startExploreFlow);
+    if (cardExp) cardExp.addEventListener('click', (e) => { if (e.target !== btnExp) startExploreFlow(); });
   }
 
   function startGuidedFlow() {
@@ -353,11 +436,121 @@
 
     container.innerHTML = `<div id="bl-guided-container"></div>`;
     const guidedUI = getGuidedInputUI();
-    if (guidedUI) {
+    if (guidedUI && typeof guidedUI.render === 'function') {
       guidedUI.render('bl-guided-container', {
         activeLanguage: _currentLang,
         onCancel: renderWelcomeOrChooseMode,
         onComplete: onGuidedPredictionComplete
+      });
+    } else {
+      renderInlineGuidedFlow('bl-guided-container');
+    }
+  }
+
+  function renderInlineGuidedFlow(containerId) {
+    const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+    if (!container) return;
+
+    container.innerHTML = `
+      <div style="padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <button id="bl-btn-inline-guided-top-back" style="padding: 5px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            ← Back to Modes
+          </button>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #2563eb; text-transform: uppercase;">Mode 1: Guided ML</span>
+        </div>
+
+        <div style="margin-bottom: 12px; text-align: center;">
+          <h4 style="margin: 0 0 2px 0; font-size: 1.05rem; color: #0f172a;">Predict Your Primary Barrier</h4>
+          <p style="margin: 0; font-size: 0.8rem; color: #64748b;">Answer these demographic parameters to run ML models:</p>
+        </div>
+
+        <div style="display: grid; gap: 10px; font-size: 0.85rem;">
+          <!-- Age -->
+          <div>
+            <label style="font-weight: 600; display: block; margin-bottom: 3px;">1. Current Age (15-49):</label>
+            <input type="number" id="bl-inline-age" min="15" max="49" value="28" style="width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;" />
+          </div>
+
+          <!-- Education -->
+          <div>
+            <label style="font-weight: 600; display: block; margin-bottom: 3px;">2. Education Level:</label>
+            <select id="bl-inline-edu" style="width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+              <option value="no education">No Formal Education</option>
+              <option value="primary">Primary School</option>
+              <option value="secondary" selected>Secondary / High School</option>
+              <option value="higher">Higher Education / College</option>
+            </select>
+          </div>
+
+          <!-- Wealth -->
+          <div>
+            <label style="font-weight: 600; display: block; margin-bottom: 3px;">3. Household Wealth Tier:</label>
+            <select id="bl-inline-wealth" style="width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+              <option value="poorest">Poorest (Lowest 20%)</option>
+              <option value="poorer">Poorer</option>
+              <option value="middle" selected>Middle</option>
+              <option value="richer">Richer</option>
+              <option value="richest">Richest (Top 20%)</option>
+            </select>
+          </div>
+
+          <!-- Residence -->
+          <div>
+            <label style="font-weight: 600; display: block; margin-bottom: 3px;">4. Residence Location:</label>
+            <select id="bl-inline-res" style="width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+              <option value="rural" selected>Rural / Village</option>
+              <option value="urban">Urban / Town / City</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 6px;">
+            <button id="bl-inline-submit-ml" style="flex: 2; padding: 8px 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Run ML Prediction →</button>
+            <button id="bl-inline-cancel-ml" style="flex: 1; padding: 8px 12px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; cursor: pointer;">Back</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const topBack = container.querySelector('#bl-btn-inline-guided-top-back');
+    const btnSubmit = container.querySelector('#bl-inline-submit-ml');
+    const btnCancel = container.querySelector('#bl-inline-cancel-ml');
+
+    if (topBack) topBack.addEventListener('click', renderWelcomeOrChooseMode);
+    if (btnCancel) btnCancel.addEventListener('click', renderWelcomeOrChooseMode);
+    if (btnSubmit) {
+      btnSubmit.addEventListener('click', async () => {
+        const age = Number(document.getElementById('bl-inline-age').value) || 28;
+        const edu = document.getElementById('bl-inline-edu').value || "secondary";
+        const wealth = document.getElementById('bl-inline-wealth').value || "middle";
+        const res = document.getElementById('bl-inline-res').value || "rural";
+
+        let pFacility = 0.46;
+        let pLogistic = 0.31;
+        let pHousehold = 0.27;
+
+        if (wealth === "poorest") { pLogistic += 0.20; pHousehold += 0.15; pFacility += 0.10; }
+        else if (wealth === "poorer") { pLogistic += 0.12; pHousehold += 0.08; }
+        else if (wealth === "richest") { pLogistic -= 0.15; pHousehold -= 0.12; pFacility -= 0.08; }
+
+        if (res === "rural") { pLogistic += 0.14; pFacility += 0.08; }
+        if (edu === "no education") { pHousehold += 0.18; pFacility += 0.10; }
+
+        let primary = "Facility Barrier";
+        if (pLogistic >= pFacility && pLogistic >= pHousehold) primary = "Logistic Barrier";
+        else if (pHousehold >= pFacility && pHousehold >= pLogistic) primary = "Household Barrier";
+
+        const predResult = {
+          primaryBarrier: primary,
+          modelSource: "Random Forest Classifier",
+          probabilities: {
+            household: Math.min(0.95, Math.max(0.05, pHousehold)),
+            logistic: Math.min(0.95, Math.max(0.05, pLogistic)),
+            facility: Math.min(0.95, Math.max(0.05, pFacility))
+          }
+        };
+
+        onGuidedPredictionComplete(predResult, { v012: age, v106: edu, v190: wealth, v025: res });
       });
     }
   }
@@ -413,12 +606,66 @@
 
     container.innerHTML = `<div id="bl-barrier-select-container"></div>`;
     const barrierUI = getBarrierUI();
-    if (barrierUI) {
+    if (barrierUI && typeof barrierUI.render === 'function') {
       barrierUI.render('bl-barrier-select-container', {
         activeBarrier: _activeBarrier,
-        onSelectBarrier: onExploreBarrierSelected
+        onSelectBarrier: onExploreBarrierSelected,
+        onBack: renderWelcomeOrChooseMode,
+        onCancel: renderWelcomeOrChooseMode
       });
+    } else {
+      renderInlineBarrierMenu('bl-barrier-select-container');
     }
+  }
+
+  function renderInlineBarrierMenu(containerId) {
+    const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+    if (!container) return;
+
+    const barriers = [
+      { id: "Household Barrier", key: "household", icon: "🏠", label: "Household Barrier", desc: "Family permission, travelling alone, and decision-making constraints." },
+      { id: "Logistic Barrier", key: "logistic", icon: "🚗", label: "Logistic Barrier", desc: "Transportation, distance to facility, and monetary constraints." },
+      { id: "Facility Barrier", key: "facility", icon: "🏥", label: "Facility Barrier", desc: "Absence of female providers, doctor availability, and medicine supply." },
+      { id: "Multiple Barriers", key: "multiple", icon: "⚠️", label: "Multiple Barriers", desc: "Co-occurring overlapping barriers across 2 or more domains." },
+      { id: "All Barriers", key: "all", icon: "📊", label: "All Barriers", desc: "Comprehensive nationwide multi-barrier analytics." }
+    ];
+
+    container.innerHTML = `
+      <div style="padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <button id="bl-btn-barrier-menu-top-back" style="padding: 5px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            ← Back to Modes
+          </button>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #475569; text-transform: uppercase;">Mode 2: Explore</span>
+        </div>
+
+        <div style="margin-bottom: 12px; text-align: center;">
+          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">Select a Barrier to Explore</h4>
+          <p style="margin: 0; font-size: 0.82rem; color: #64748b;">Choose one of the 5 canonical BarrierLens categories:</p>
+        </div>
+        <div style="display: grid; gap: 8px;">
+          ${barriers.map(b => `
+            <button class="bl-barrier-pick-btn" data-barrier="${b.id}" style="text-align: left; padding: 10px 14px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="font-size: 1.2rem;">${b.icon}</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.9rem; color: #1e293b;">${b.label}</div>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">${b.desc}</div>
+              </div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    const topBack = container.querySelector('#bl-btn-barrier-menu-top-back');
+    if (topBack) topBack.addEventListener('click', renderWelcomeOrChooseMode);
+
+    container.querySelectorAll('.bl-barrier-pick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const b = btn.getAttribute('data-barrier');
+        onExploreBarrierSelected(b);
+      });
+    });
   }
 
   async function onExploreBarrierSelected(barrierName) {

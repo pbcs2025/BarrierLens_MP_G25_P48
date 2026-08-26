@@ -142,6 +142,7 @@
     if (!container) return null;
 
     const onSelectBarrier = options.onSelectBarrier || function() {};
+    const onBack = options.onBack || options.onCancel || function() {};
     const activeBarrier = options.activeBarrier || "All Barriers";
 
     const buttonsHtml = BARRIER_OPTIONS.map(b => {
@@ -166,6 +167,12 @@
 
     container.innerHTML = `
       <div class="bl-barrier-ui-wrapper" style="padding: 14px; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <button id="bl-btn-barrier-ui-back" style="padding: 5px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            ← Back to Modes
+          </button>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Mode 2: Explore</span>
+        </div>
         <div style="margin-bottom: 12px; text-align: center;">
           <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">Explore Healthcare Access Barriers</h4>
           <p style="margin: 0; font-size: 0.825rem; color: #64748b;">Select a barrier category to view verified NFHS-5 evidence & solutions:</p>
@@ -175,6 +182,9 @@
         </div>
       </div>
     `;
+
+    const btnBack = container.querySelector('#bl-btn-barrier-ui-back');
+    if (btnBack) btnBack.addEventListener('click', onBack);
 
     container.querySelectorAll('.bl-barrier-select-btn').forEach(btn => {
       btn.addEventListener('click', () => {

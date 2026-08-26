@@ -90,7 +90,13 @@ document.addEventListener("DOMContentLoaded", function () {
     'assets/js/voice.js',
     'assets/js/report-template.js',
     'assets/js/report-generator.js',
+    'assets/js/api-service.js',
     'assets/js/barrier-ui.js',
+    'assets/js/language-selector.js',
+    'assets/js/choose-mode-screen.jsx',
+    'assets/js/guided-input-ui.jsx',
+    'assets/js/evidence-card.jsx',
+    'assets/js/solution-card.jsx',
     'assets/js/chatbot-ui.js'
   ];
 
