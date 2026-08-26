@@ -69,7 +69,12 @@
       }
     };
 
-    const text = labels[activeLanguage] || labels.en;
+    const rawLang = String(activeLanguage || 'en').toLowerCase();
+    const langKey = (rawLang.startsWith('kn') || rawLang.includes('kannada') || rawLang.includes('ಕನ್ನಡ')) ? 'kn'
+      : (rawLang.startsWith('hi') || rawLang.includes('hindi') || rawLang.includes('हिंदी') || rawLang.includes('हिन्दी')) ? 'hi'
+      : 'en';
+
+    const text = labels[langKey] || labels.en;
 
     const html = `
       <div class="bl-choose-mode-wrapper" id="bl-choose-mode-wrapper" style="padding: 16px; font-family: system-ui, -apple-system, sans-serif;">

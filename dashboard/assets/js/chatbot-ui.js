@@ -752,6 +752,19 @@
     }
 
     updateActiveBarrierHeader();
+
+    // Re-render the active screen dynamically when language changes
+    const modeContainer = document.getElementById('bl-mode-screen-container');
+    const barrierContainer = document.getElementById('bl-barrier-select-container');
+    const guidedContainer = document.getElementById('bl-guided-container');
+
+    if (modeContainer) {
+      renderWelcomeOrChooseMode();
+    } else if (barrierContainer) {
+      startExploreFlow();
+    } else if (guidedContainer) {
+      startGuidedFlow();
+    }
   }
 
   function bindEvents() {
