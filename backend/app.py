@@ -18,6 +18,7 @@ from flask import Flask, jsonify
 
 from backend.config.settings import settings
 from backend.routes.chat import chat_bp
+from backend.routes.predict import predict_bp
 
 logging.basicConfig(
     level=logging.DEBUG if settings.DEBUG else logging.INFO,
@@ -44,6 +45,7 @@ def create_app() -> Flask:
 
     # Register Blueprints
     app.register_blueprint(chat_bp, url_prefix="/api")
+    app.register_blueprint(predict_bp, url_prefix="/api")
 
     @app.errorhandler(404)
     def not_found(error):
