@@ -1,7 +1,8 @@
 /**
  * BARRIERLENS — MEMBER 1: RESPONSE ENGINE & CENTRAL PUBLIC INTERFACE
  * Formulates safe, deterministic response objects, handles page recommendations,
- * and exposes `processUserQuery(text, language)`.
+ * supports Mode 1 (ML Guided Prediction), Mode 2 (Explore Barriers), and exposes `processUserQuery(text, language)`.
+ * Dual environment support: Browser (window.BarrierLensResponse) & Node.js (module.exports).
  */
 
 (function (root, factory) {
@@ -165,6 +166,8 @@
     let RetrievalModule = options.RetrievalModule;
     let CalculationModule = options.CalculationModule;
     let EvidenceModule = options.EvidenceModule;
+    let ContextManager = options.ContextManager;
+    let BarrierSelector = options.BarrierSelector;
 
     if (!DataModule) {
       if (typeof window !== 'undefined' && window.BarrierLensData) DataModule = window.BarrierLensData;
@@ -191,29 +194,112 @@
       else if (typeof require !== 'undefined') EvidenceModule = require('./evidence-engine.js');
     }
 
+    if (!ContextManager) {
+      if (typeof window !== 'undefined' && window.BarrierLensContextManager) ContextManager = window.BarrierLensContextManager;
+      else if (typeof require !== 'undefined') {
+        try { ContextManager = require('./context-manager.js'); } catch (e) {}
+      }
+    }
+
+    if (!BarrierSelector) {
+      if (typeof window !== 'undefined' && window.BarrierLensBarrierSelector) BarrierSelector = window.BarrierLensBarrierSelector;
+      else if (typeof require !== 'undefined') {
+        try { BarrierSelector = require('./barrier-selector.js'); } catch (e) {}
+      }
+    }
+
     // 1. Load / Ensure Data Cache
     const basePath = options.basePath || '';
     const dataRegistry = options.dataRegistry || await DataModule.preloadChatbotData(basePath);
 
-    // 2. Normalize Query
+    const queryStr = (text || "").trim();
+    const lowerQuery = queryStr.toLowerCase();
+
+    // 2. Handle Mode 1 / Mode 2 / Greeting / Selection via Member 1 ContextManager
+    if (ContextManager && BarrierSelector) {
+      const sessionId = options.sessionId || "default-web-session";
+      const ctx = ContextManager.processUserQuery(text, language, options.barrierContext, sessionId, options);
+
+      // A. Greeting
+      if (ctx.intent === "greeting") {
+        return {
+          answer: `Hello! Welcome to **BarrierLens** (NFHS-5 Healthcare Access Research Assistant).\n\nWhat would you like to do?\n- Type **Explore Barriers** to browse verified research on Household, Logistic, and Facility barriers.\n- Type **Identify My Barrier** to predict your barrier domain using our Stage 1 ML models.`,
+          language: language || "en",
+          intent: "greeting",
+          confidence: 1.0,
+          entities: ctx.entities,
+          source: ["dashboard/assets/data/national_overview.json"],
+          relatedPage: INTENT_PAGE_MAP.NATIONAL_OVERVIEW,
+          status: "verified",
+          metrics: [],
+          evidence: [],
+          calculations: []
+        };
+      }
+
+      // B. Mode 2 Entry: Explore Barriers
+      if (ctx.intent === "explore_barrier" || (lowerQuery.includes("explore barrier") && !ctx.activeBarrier)) {
+        return {
+          answer: `Welcome to **Explore Barriers** (Mode 2)!\n\nPlease select one of the 5 healthcare barrier domains below to explore verified NFHS-5 evidence:\n\n1. **Household Barrier**: Family permission, autonomy, and socio-cultural constraints.\n2. **Logistic Barrier**: Distance to facility, transportation availability, and treatment costs.\n3. **Facility Barrier**: Absence of female providers, doctor availability, and medicine supply.\n4. **Multiple Barriers**: Overlapping vulnerability across 2 or more concurrent domains.\n5. **All Barriers**: Comprehensive nationwide analytical overview (59.16% any-barrier rate).\n\n👉 *Type the name of any barrier above to begin.*`,
+          language: language || "en",
+          intent: "explore_barrier",
+          confidence: 1.0,
+          entities: ctx.entities,
+          source: ["dashboard/assets/data/national_overview.json"],
+          relatedPage: INTENT_PAGE_MAP.NATIONAL_OVERVIEW,
+          status: "verified",
+          metrics: [],
+          evidence: [],
+          calculations: []
+        };
+      }
+
+      // C. Mode 1 Entry: Identify My Barrier
+      if (ctx.intent === "identify_barrier" || lowerQuery.includes("identify my barrier") || lowerQuery.includes("identify barrier")) {
+        return {
+          answer: `Welcome to **Identify My Barrier** (Mode 1)!\n\nOur Stage 1 Machine Learning models evaluate your demographic and household profile across 724,115 women to predict your primary barrier.\n\nTo begin, please tell us your:\n- **Age** (e.g. 28)\n- **Education level** (no education / primary / secondary / higher)\n- **Wealth tier** (poorest / poorer / middle / richer / richest)\n- **Residence** (rural / urban)`,
+          language: language || "en",
+          intent: "identify_barrier",
+          confidence: 1.0,
+          entities: ctx.entities,
+          source: ["saved_models/stage1/random_forest_logistic.pkl"],
+          relatedPage: INTENT_PAGE_MAP.REGRESSION,
+          status: "verified",
+          metrics: [],
+          evidence: [],
+          calculations: []
+        };
+      }
+
+      // D. Direct Barrier Selection
+      if (ctx.intent.startsWith("select_") || (BarrierSelector.isBarrierSelectionText(queryStr) && ctx.activeBarrier)) {
+        const ev = EvidenceModule.getBarrierEvidence(ctx.activeBarrier, { text: queryStr }, dataRegistry);
+        const barrierName = ctx.barrierContext ? ctx.barrierContext.barrier : "Active Barrier";
+        const explanation = ev.explanation || EvidenceModule.getBarrierExplanation(ctx.activeBarrier, dataRegistry);
+
+        return {
+          answer: `Active Barrier selected: **${barrierName}** (${ctx.barrierSource === "ml_prediction" ? "ML Model Prediction" : "User Selection"}).\n\n${explanation}\n\nYou can now ask follow-up questions without repeating the barrier, for example:\n- *"Which states are most affected?"*\n- *"Compare rural and urban areas"*\n- *"What are the statistics?"*\n- *"What can be done?"*`,
+          language: language || "en",
+          intent: ctx.intent,
+          confidence: 1.0,
+          entities: ctx.entities,
+          source: ev.provenance ? ev.provenance.dataSourcesUsed : ["dashboard/assets/data/national_overview.json"],
+          relatedPage: INTENT_PAGE_MAP.NATIONAL_OVERVIEW,
+          status: "verified",
+          metrics: ev.metrics || [],
+          evidence: ev.metrics || [],
+          calculations: []
+        };
+      }
+    }
+
+    // 3. Fallback to analytical NLU query pipeline
     const normalized = IntentModule.normalizeQuery(text);
-
-    // 3. Extract Entities
     const entities = IntentModule.extractEntities(normalized);
-
-    // 4. Detect Intent
     const intentResult = IntentModule.detectIntent(normalized, entities);
-
-    // 5. Retrieve Verified Evidence
     const retrieval = RetrievalModule.retrieveVerifiedEvidence(intentResult, entities, dataRegistry);
-
-    // 6. Compute Derived Calculations
     const calculations = CalculationModule.calculateDerivedValues(retrieval);
-
-    // 7. Construct Evidence Payload
     const evidencePayload = EvidenceModule.buildEvidencePayload(intentResult, entities, retrieval, calculations);
-
-    // 8. Formulate Safe Response & Dashboard Page Recommendation
     const answer = formatDeterministicAnswer(evidencePayload);
     const relatedPageObj = INTENT_PAGE_MAP[intentResult.intent] || null;
 

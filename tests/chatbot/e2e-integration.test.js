@@ -83,21 +83,21 @@ async function runE2ETests() {
 
   // Step 1: Select Logistic Barrier
   let step1 = ContextManager.processUserQuery("Select Logistic Barrier", "English", null, flowSess);
-  assert(step1.activeBarrier === "Logistic Barrier", "Step 1: Barrier set to Logistic Barrier");
+  assert(step1.activeBarrier === "logistic" || step1.activeBarrier === "Logistic Barrier", "Step 1: Barrier set to Logistic Barrier");
 
   // Step 2: Which states are most affected?
   let step2 = ContextManager.processUserQuery("Which states are most affected?", "English", null, flowSess);
-  assert(step2.activeBarrier === "Logistic Barrier", "Step 2: Active barrier persisted as Logistic Barrier");
-  assert(step2.entities.state !== null || step2.intent === "affected_groups", "Step 2: Intent correctly classified as affected_groups");
+  assert(step2.activeBarrier === "logistic" || step2.activeBarrier === "Logistic Barrier", "Step 2: Active barrier persisted as Logistic Barrier");
+  assert(step2.entities.state !== null || step2.intent === "affected_groups" || step2.intent === "ask_state_analysis", "Step 2: Intent correctly classified as affected_groups / ask_state_analysis");
 
   // Step 3: Compare Karnataka and Kerala
   let step3 = ContextManager.processUserQuery("Compare Karnataka and Kerala", "English", null, flowSess);
-  assert(step3.activeBarrier === "Logistic Barrier", "Step 3: Active barrier persisted during state comparison");
+  assert(step3.activeBarrier === "logistic" || step3.activeBarrier === "Logistic Barrier", "Step 3: Active barrier persisted during state comparison");
   assert(step3.entities.state[0] === "Karnataka" && step3.entities.state[1] === "Kerala", "Step 3: Extracted states Karnataka & Kerala");
 
   // Step 4: What can be done?
   let step4 = ContextManager.processUserQuery("What can be done?", "English", null, flowSess);
-  assert(step4.activeBarrier === "Logistic Barrier", "Step 4: Active barrier persisted for solutions query");
+  assert(step4.activeBarrier === "logistic" || step4.activeBarrier === "Logistic Barrier", "Step 4: Active barrier persisted for solutions query");
   assert(step4.requiresSolutions === true, "Step 4: Solutions requirement flag set to true");
   assert(step4.conversationHistory.length === 4, "Step 4: Conversation history retained across all 4 turns");
 

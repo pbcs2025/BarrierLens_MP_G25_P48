@@ -68,12 +68,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Add Member 1, Member 3 & Member 4 Intelligence, UI & Report Layer
+  // Add Member 1, Member 2, Member 3 & Member 4 Intelligence, UI & Report Layer
   const chatbotScripts = [
     'assets/js/chatbot-data.js',
+    'assets/js/barrier-data-map.js',
+    'assets/js/barrier-selector.js',
+    'assets/js/session-store.js',
+    'assets/js/intent-router.js',
+    'assets/js/mode-router.js',
+    'assets/js/guided-question-schema.js',
+    'assets/js/context-manager.js',
     'assets/js/intent-engine.js',
     'assets/js/retrieval-engine.js',
     'assets/js/calculation-engine.js',
+    'assets/js/comparison-engine.js',
     'assets/js/evidence-engine.js',
     'assets/js/response-engine.js',
     'assets/js/i18n.js',
