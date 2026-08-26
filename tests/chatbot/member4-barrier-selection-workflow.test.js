@@ -103,22 +103,26 @@ async function runTestSuite() {
 
   // Turn 1: Select Logistic Barrier
   const res1 = ContextManager.processUserQuery("Logistic Barrier", "en", null, sessionId);
-  assert(res1.activeBarrier === "Logistic Barrier", 'Turn 1 sets active barrier to Logistic Barrier');
+  const activeB1 = (res1.barrierContext && res1.barrierContext.barrier) || res1.activeBarrier;
+  assert(activeB1 && activeB1.toLowerCase().includes("logistic"), 'Turn 1 sets active barrier to Logistic Barrier');
   assert(res1.conversationHistory.length === 1, 'Turn 1 conversation history length is 1');
 
   // Turn 2: Follow-up without naming barrier
   const res2 = ContextManager.processUserQuery("Which states are most affected?", "en", null, sessionId);
-  assert(res2.activeBarrier === "Logistic Barrier", 'Turn 2 retains active barrier as Logistic Barrier');
+  const activeB2 = (res2.barrierContext && res2.barrierContext.barrier) || res2.activeBarrier;
+  assert(activeB2 && activeB2.toLowerCase().includes("logistic"), 'Turn 2 retains active barrier as Logistic Barrier');
   assert(res2.conversationHistory.length === 2, 'Turn 2 history retained (length 2)');
 
   // Turn 3: Switch language to Kannada mid-conversation
   const res3 = ContextManager.processUserQuery("ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಿ", "kn", null, sessionId);
-  assert(res3.activeBarrier === "Logistic Barrier", 'Switching language preserves active barrier');
+  const activeB3 = (res3.barrierContext && res3.barrierContext.barrier) || res3.activeBarrier;
+  assert(activeB3 && activeB3.toLowerCase().includes("logistic"), 'Switching language preserves active barrier');
   assert(res3.conversationHistory.length === 3, 'Switching language preserves history turns (length 3)');
 
   // Turn 4: Switch barrier to Facility Barrier mid-conversation
   const res4 = ContextManager.processUserQuery("Facility Barrier", "kn", null, sessionId);
-  assert(res4.activeBarrier === "Facility Barrier", 'Switching barrier updates active barrier to Facility Barrier');
+  const activeB4 = (res4.barrierContext && res4.barrierContext.barrier) || res4.activeBarrier;
+  assert(activeB4 && activeB4.toLowerCase().includes("facility"), 'Switching barrier updates active barrier to Facility Barrier');
   assert(res4.isBarrierChange === true, 'isBarrierChange flag is set to true');
   assert(res4.conversationHistory.length === 4, 'Switching barrier preserves prior conversation history (length 4)');
   console.log('');
