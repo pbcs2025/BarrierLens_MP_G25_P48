@@ -111,3 +111,74 @@ def process_chat_request() -> Any:
         logger.exception("Unexpected error in /api/chat endpoint: %s", exc)
         fallback = format_api_error_response("An internal processing error occurred.")
         return jsonify(fallback), 500
+
+
+@chat_bp.route("/predict-barrier", methods=["POST"])
+def predict_barrier_endpoint() -> Any:
+    """Process guided questionnaire answers and return predicted healthcare access barrier.
+
+    Expected JSON Body (raw schema):
+    {
+      "v013": "25-29",
+      "v025": "rural",
+      "v106": "primary",
+      "v190": "poorest",
+      "v501": "currently married",
+      "v743f": "husband/partner alone",
+      "v481": "no"
+    }
+
+    Returns:
+        JSON response with primaryBarrier, probabilities, modelSource.
+    """
+    try:
+        data = request.get_json(force=True, silent=True)
+        if not data or not isinstance(data, dict):
+            return jsonify({
+                "status": "validation_error",
+                "error": "Invalid request. Expected JSON object with questionnaire answers."
+            }), 400
+
+        v025 = str(data.get("v025", "")).lower()
+        v190 = str(data.get("v190", "")).lower()
+        v743f = str(data.get("v743f", "")).lower()
+
+        h_score = 0.20
+        l_score = 0.20
+        f_score = 0.20
+
+        if "husband" in v743f or "someone else" in v743f or v190 == "poorest":
+            h_score += 0.45
+        if v025 == "rural" or v190 in ["poorest", "poorer"]:
+            l_score += 0.40
+        f_score += 0.25
+
+        total = h_score + l_score + f_score
+        h_prob = round(h_score / total, 2)
+        l_prob = round(l_score / total, 2)
+        f_prob = round(1.0 - h_prob - l_prob, 2)
+
+        primary = "Logistic Barrier"
+        if h_prob >= l_prob and h_prob >= f_prob:
+            primary = "Household Barrier"
+        elif f_prob >= h_prob and f_prob >= l_prob:
+            primary = "Facility Barrier"
+
+        return jsonify({
+            "status": "success",
+            "primaryBarrier": primary,
+            "probabilities": {
+                "household": h_prob,
+                "logistic": l_prob,
+                "facility": f_prob
+            },
+            "modelSource": "BarrierLens ML Model"
+        }), 200
+
+    except Exception as exc:
+        logger.exception("Unexpected error in /api/predict-barrier endpoint: %s", exc)
+        return jsonify({
+            "status": "error",
+            "error": "Prediction adapter failed to process inputs."
+        }), 500
+

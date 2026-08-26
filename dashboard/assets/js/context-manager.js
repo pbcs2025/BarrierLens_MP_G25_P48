@@ -75,7 +75,9 @@
 
     // 2. Handle explicit barrierContext passed directly
     if (barrierContextInput) {
-      const bName = typeof barrierContextInput === 'object' ? barrierContextInput.barrier : barrierContextInput;
+      const bName = typeof barrierContextInput === 'object' 
+        ? (barrierContextInput.barrier || barrierContextInput.barrierContext || barrierContextInput.activeBarrier) 
+        : barrierContextInput;
       const normalizedB = BarrierSelector.normalizeBarrierName(bName);
       if (normalizedB) {
         if (activeBarrier && activeBarrier !== normalizedB) {

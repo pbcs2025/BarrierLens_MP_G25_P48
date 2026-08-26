@@ -1,8 +1,10 @@
 /**
- * BARRIERLENS — MEMBER 3: CHATBOT UI CONTROLLER
- * Floating launcher, responsive chat panel, conversation thread,
- * structured evidence & metric cards, multilingual UI, voice state management,
- * keyboard accessibility, and direct connection to Member 1's `processUserQuery`.
+ * BARRIERLENS — MEMBER 3 & MEMBER 4: CHATBOT UI CONTROLLER
+ * Merged entry point supporting two modes:
+ *   1. "Identify My Barrier" (Guided Input questionnaire -> ML Prediction)
+ *   2. "Explore Barriers" (Direct barrier selection menu -> Household, Logistic, Facility, Multiple, All)
+ * Shared Active Barrier Context (`activeBarrier`, `barrierSource`, `latestPrediction`, `activeLanguage`).
+ * Multilingual UI (English, Kannada, Hindi), Change Barrier / Change Language controls mid-chat without history loss.
  * Dual environment support: Browser (window.BarrierLensChatbotUI) & Node.js (module.exports).
  */
 
@@ -24,6 +26,11 @@
   let _messages = [];
   let _domMounted = false;
   let _lastQueryText = '';
+
+  // Member 4 Context State
+  let _activeBarrier = 'All Barriers';
+  let _barrierSource = 'user_selection'; // 'user_selection' or 'ml_prediction'
+  let _latestPrediction = null;
 
   // Module References (Browser / Node)
   function getI18n() {
@@ -58,6 +65,54 @@
     return null;
   }
 
+  function getChooseModeScreen() {
+    if (typeof window !== 'undefined' && window.BarrierLensChooseModeScreen) return window.BarrierLensChooseModeScreen;
+    if (typeof require !== 'undefined') {
+      try { return require('./choose-mode-screen.jsx'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getGuidedInputUI() {
+    if (typeof window !== 'undefined' && window.BarrierLensGuidedInputUI) return window.BarrierLensGuidedInputUI;
+    if (typeof require !== 'undefined') {
+      try { return require('./guided-input-ui.jsx'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getBarrierUI() {
+    if (typeof window !== 'undefined' && window.BarrierLensBarrierUI) return window.BarrierLensBarrierUI;
+    if (typeof require !== 'undefined') {
+      try { return require('./barrier-ui.js'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getLanguageSelector() {
+    if (typeof window !== 'undefined' && window.BarrierLensLanguageSelector) return window.BarrierLensLanguageSelector;
+    if (typeof require !== 'undefined') {
+      try { return require('./language-selector.js'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getEvidenceCard() {
+    if (typeof window !== 'undefined' && window.BarrierLensEvidenceCard) return window.BarrierLensEvidenceCard;
+    if (typeof require !== 'undefined') {
+      try { return require('./evidence-card.jsx'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getSolutionCard() {
+    if (typeof window !== 'undefined' && window.BarrierLensSolutionCard) return window.BarrierLensSolutionCard;
+    if (typeof require !== 'undefined') {
+      try { return require('./solution-card.jsx'); } catch (e) {}
+    }
+    return null;
+  }
+
   /**
    * Helper to translate key using I18n module
    */
@@ -75,23 +130,17 @@
     return pathname.includes('/pages/') ? '../' : '';
   }
 
-  /**
-   * Format relative page URL based on current page location
-   */
   function resolvePageLink(relatedPageObj) {
     if (!relatedPageObj) return null;
     const prefix = getAssetPrefix();
     const targetFile = relatedPageObj.url.split('/').pop();
     if (prefix === '../') {
-      return targetFile; // inside /pages/, just link to sibling file
+      return targetFile;
     } else {
-      return `pages/${targetFile}`; // in root, link to pages/
+      return `pages/${targetFile}`;
     }
   }
 
-  /**
-   * Format message text with basic HTML escaping and markdown bold/bullets
-   */
   function formatText(text) {
     if (!text) return '';
     let escaped = text
@@ -99,10 +148,8 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
-    // Bold **text**
     escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    // Bullet points
     if (escaped.includes('\n- ') || escaped.includes('\n• ')) {
       const lines = escaped.split('\n');
       let inList = false;
@@ -131,16 +178,10 @@
     return escaped;
   }
 
-  /**
-   * Format current time (e.g. "10:45 AM")
-   */
   function formatTime(date = new Date()) {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  /**
-   * Build Floating Launcher HTML
-   */
   function buildLauncherHtml() {
     return `
       <button class="bl-chat-launcher" id="bl-chat-launcher" aria-label="${t('assistantTitle')}" aria-expanded="false" aria-controls="bl-chat-modal">
@@ -153,9 +194,6 @@
     `;
   }
 
-  /**
-   * Build Chat Modal HTML
-   */
   function buildModalHtml() {
     const i18n = getI18n();
     const languages = i18n ? i18n.getSupportedLanguages() : [
@@ -179,7 +217,13 @@
               <p><span class="bl-status-dot" aria-hidden="true"></span> <span id="bl-header-status">${t('onlineStatus')}</span></p>
             </div>
           </div>
-          <div class="bl-chat-header-actions">
+          <div class="bl-chat-header-actions" style="display: flex; gap: 6px; align-items: center;">
+            <!-- Change Barrier Control -->
+            <button class="bl-header-btn" id="bl-change-barrier-btn" title="Change Barrier" aria-label="Change Barrier" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              🔄 <span id="bl-active-barrier-label">${_activeBarrier}</span>
+            </button>
+
+            <!-- Language Selector Dropdown -->
             <div class="bl-lang-select-wrap">
               <select class="bl-lang-select" id="bl-lang-select" aria-label="${t('languageSelectAria')}">
                 ${langOptions}
@@ -206,13 +250,7 @@
 
         <!-- Messages Area -->
         <main class="bl-chat-messages" id="bl-chat-messages" role="log" aria-label="${t('messageListAria')}" aria-live="polite">
-          <!-- Initial Welcome Card -->
-          <div class="bl-welcome-card" id="bl-welcome-card">
-            <span class="bl-welcome-badge">${t('assistantBadge')}</span>
-            <h4 class="bl-welcome-title">${t('welcomeTitle')}</h4>
-            <p class="bl-welcome-desc">${t('welcomeGreeting')}</p>
-            <p class="bl-welcome-tip">${t('welcomeHelp')}</p>
-          </div>
+          <div id="bl-welcome-card-wrapper"></div>
         </main>
 
         <!-- Suggested Questions -->
@@ -239,13 +277,9 @@
     `;
   }
 
-  /**
-   * Mount Chatbot Elements into DOM
-   */
   function initDOM() {
     if (typeof document === 'undefined' || _domMounted) return;
 
-    // Inject CSS links if not already present
     const prefix = getAssetPrefix();
     if (!document.querySelector('link[href*="chatbot.css"]')) {
       const linkChat = document.createElement('link');
@@ -253,14 +287,7 @@
       linkChat.href = `${prefix}assets/css/chatbot.css`;
       document.head.appendChild(linkChat);
     }
-    if (!document.querySelector('link[href*="voice.css"]')) {
-      const linkVoice = document.createElement('link');
-      linkVoice.rel = 'stylesheet';
-      linkVoice.href = `${prefix}assets/css/voice.css`;
-      document.head.appendChild(linkVoice);
-    }
 
-    // Inject Launcher & Modal
     document.body.insertAdjacentHTML('beforeend', buildLauncherHtml());
     document.body.insertAdjacentHTML('beforeend', buildModalHtml());
 
@@ -268,11 +295,155 @@
     bindEvents();
     renderSuggestedQuestions();
     bindVoiceStateMachine();
+    renderWelcomeOrChooseMode();
   }
 
-  /**
-   * Render Suggested Question Chips
-   */
+  function renderWelcomeOrChooseMode() {
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    container.innerHTML = `<div id="bl-mode-screen-container"></div>`;
+    const modeScreen = getChooseModeScreen();
+    if (modeScreen) {
+      modeScreen.render('bl-mode-screen-container', {
+        activeLanguage: _currentLang,
+        onSelectIdentify: startGuidedFlow,
+        onSelectExplore: startExploreFlow
+      });
+    } else {
+      container.innerHTML = `
+        <div class="bl-welcome-card" id="bl-welcome-card">
+          <span class="bl-welcome-badge">${t('assistantBadge')}</span>
+          <h4 class="bl-welcome-title">${t('welcomeTitle')}</h4>
+          <p class="bl-welcome-desc">${t('welcomeGreeting')}</p>
+          <p class="bl-welcome-tip">${t('welcomeHelp')}</p>
+        </div>
+      `;
+    }
+  }
+
+  function startGuidedFlow() {
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    container.innerHTML = `<div id="bl-guided-container"></div>`;
+    const guidedUI = getGuidedInputUI();
+    if (guidedUI) {
+      guidedUI.render('bl-guided-container', {
+        activeLanguage: _currentLang,
+        onCancel: renderWelcomeOrChooseMode,
+        onComplete: onGuidedPredictionComplete
+      });
+    }
+  }
+
+  async function onGuidedPredictionComplete(predictionResult, answers) {
+    const primary = predictionResult.primaryBarrier || 'Logistic Barrier';
+    _activeBarrier = primary;
+    _barrierSource = 'ml_prediction';
+    _latestPrediction = predictionResult;
+
+    updateActiveBarrierLabel();
+
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    const probs = predictionResult.probabilities || {};
+    const probStr = probs.household !== undefined ? `Household: ${Math.round(probs.household * 100)}% | Logistic: ${Math.round(probs.logistic * 100)}% | Facility: ${Math.round(probs.facility * 100)}%` : '';
+
+    const html = `
+      <div class="bl-message-row bl-bot-row">
+        <div class="bl-message-avatar bl-bot-avatar" aria-hidden="true">BL</div>
+        <div class="bl-bubble-wrap">
+          <div class="bl-message-bubble" style="border: 2px solid #2563eb; background: #eff6ff;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">
+              ${predictionResult.modelSource || 'BarrierLens ML Model'} Prediction
+            </div>
+            <h4 style="margin: 4px 0; font-size: 1.1rem; color: #1e3a8a;">
+              Predicted Primary Barrier: <strong>${primary}</strong>
+            </h4>
+            ${probStr ? `<div style="font-size: 0.8rem; color: #475569; margin-bottom: 8px;"><strong>Probabilities:</strong> ${probStr}</div>` : ''}
+            <p style="margin: 0; font-size: 0.85rem; color: #334155;">
+              This predicted barrier is now set as your active research context for follow-up questions.
+            </p>
+          </div>
+          <span class="bl-message-time">${formatTime()}</span>
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    scrollToBottom();
+
+    const responseEngine = getResponseEngine();
+    if (responseEngine && responseEngine.processUserQuery) {
+      const res = await responseEngine.processUserQuery(primary, _currentLang, { barrier: primary });
+      renderAssistantResponse(res);
+    }
+  }
+
+  function startExploreFlow() {
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    container.innerHTML = `<div id="bl-barrier-select-container"></div>`;
+    const barrierUI = getBarrierUI();
+    if (barrierUI) {
+      barrierUI.render('bl-barrier-select-container', {
+        activeBarrier: _activeBarrier,
+        onSelectBarrier: onExploreBarrierSelected
+      });
+    }
+  }
+
+  async function onExploreBarrierSelected(barrierName) {
+    _activeBarrier = barrierName;
+    _barrierSource = 'user_selection';
+    updateActiveBarrierLabel();
+
+    renderUserMessage(`Selected Barrier: ${barrierName}`);
+    showTypingIndicator();
+
+    const responseEngine = getResponseEngine();
+    if (responseEngine && responseEngine.processUserQuery) {
+      const res = await responseEngine.processUserQuery(barrierName, _currentLang, { barrier: barrierName });
+      hideTypingIndicator();
+      renderAssistantResponse(res);
+    } else {
+      hideTypingIndicator();
+    }
+  }
+
+  function changeBarrierMidChat() {
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    const selectDiv = document.createElement('div');
+    selectDiv.className = 'bl-midchat-barrier-picker';
+    selectDiv.style.margin = '10px 0';
+    container.appendChild(selectDiv);
+
+    const barrierUI = getBarrierUI();
+    if (barrierUI) {
+      barrierUI.render(selectDiv, {
+        activeBarrier: _activeBarrier,
+        onSelectBarrier: (newBarrier) => {
+          selectDiv.remove();
+          onExploreBarrierSelected(newBarrier);
+        }
+      });
+      scrollToBottom();
+    }
+  }
+
+  function updateActiveBarrierLabel() {
+    if (typeof document === 'undefined') return;
+    const labelEl = document.getElementById('bl-active-barrier-label');
+    if (labelEl) {
+      labelEl.textContent = _activeBarrier;
+    }
+  }
+
   function renderSuggestedQuestions() {
     const i18n = getI18n();
     const suggestions = i18n ? i18n.getSuggestedQuestions(_currentLang) : [];
@@ -283,7 +454,6 @@
       <button class="bl-suggestion-chip" data-query="${q.text}">${q.text}</button>
     `).join('');
 
-    // Attach click handlers
     container.querySelectorAll('.bl-suggestion-chip').forEach(btn => {
       btn.addEventListener('click', () => {
         const queryText = btn.getAttribute('data-query');
@@ -292,9 +462,6 @@
     });
   }
 
-  /**
-   * Update UI Text upon Language Switch
-   */
   function updateUILanguage(newLang) {
     _currentLang = newLang;
     const i18n = getI18n();
@@ -302,88 +469,41 @@
       i18n.setLanguage(newLang);
     }
 
-    // Update Launcher
     const launcherLabel = document.getElementById('bl-launcher-label');
     if (launcherLabel) launcherLabel.textContent = t('assistantTitle');
 
-    // Update Header
     const modalTitle = document.getElementById('bl-modal-title');
     if (modalTitle) modalTitle.textContent = t('assistantTitle');
     const headerStatus = document.getElementById('bl-header-status');
     if (headerStatus) headerStatus.textContent = t('onlineStatus');
 
-    // Update Welcome Card
-    const welcomeCard = document.getElementById('bl-welcome-card');
-    if (welcomeCard) {
-      welcomeCard.innerHTML = `
-        <span class="bl-welcome-badge">${t('assistantBadge')}</span>
-        <h4 class="bl-welcome-title">${t('welcomeTitle')}</h4>
-        <p class="bl-welcome-desc">${t('welcomeGreeting')}</p>
-        <p class="bl-welcome-tip">${t('welcomeHelp')}</p>
-      `;
-    }
-
-    // Update Suggestions Header & Chips
     const suggestionsHeader = document.getElementById('bl-suggestions-header');
     if (suggestionsHeader) suggestionsHeader.textContent = t('suggestedQuestionsHeader');
     renderSuggestedQuestions();
 
-    // Update Input Placeholder & Buttons
     const input = document.getElementById('bl-chat-input');
     if (input) {
       input.placeholder = t('inputPlaceholder');
       input.setAttribute('aria-label', t('inputPlaceholder'));
     }
-    const sendBtn = document.getElementById('bl-send-btn');
-    if (sendBtn) {
-      sendBtn.title = t('sendButton');
-      sendBtn.setAttribute('aria-label', t('sendButton'));
-    }
-    const micBtn = document.getElementById('bl-mic-btn');
-    if (micBtn) {
-      micBtn.title = t('micButton');
-      micBtn.setAttribute('aria-label', t('micButton'));
-    }
-    const clearBtn = document.getElementById('bl-clear-btn');
-    if (clearBtn) {
-      clearBtn.title = t('clearChatButton');
-      clearBtn.setAttribute('aria-label', t('clearChatButton'));
-    }
-    const closeBtn = document.getElementById('bl-close-btn');
-    if (closeBtn) {
-      closeBtn.title = t('closeButton');
-      closeBtn.setAttribute('aria-label', t('closeButton'));
-    }
   }
 
-  /**
-   * Bind DOM Events & Keyboard Shortcuts
-   */
   function bindEvents() {
     const launcher = document.getElementById('bl-chat-launcher');
-    const modal = document.getElementById('bl-chat-modal');
     const closeBtn = document.getElementById('bl-close-btn');
     const clearBtn = document.getElementById('bl-clear-btn');
+    const changeBarrierBtn = document.getElementById('bl-change-barrier-btn');
     const sendBtn = document.getElementById('bl-send-btn');
     const input = document.getElementById('bl-chat-input');
     const langSelect = document.getElementById('bl-lang-select');
     const micBtn = document.getElementById('bl-mic-btn');
     const voiceStopBtn = document.getElementById('bl-voice-stop-btn');
 
-    // Toggle Chat
-    if (launcher) {
-      launcher.addEventListener('click', toggleChat);
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeChat);
-    }
+    if (launcher) launcher.addEventListener('click', toggleChat);
+    if (closeBtn) closeBtn.addEventListener('click', closeChat);
+    if (clearBtn) clearBtn.addEventListener('click', clearChat);
+    if (changeBarrierBtn) changeBarrierBtn.addEventListener('click', changeBarrierMidChat);
 
-    // Clear Chat
-    if (clearBtn) {
-      clearBtn.addEventListener('click', clearChat);
-    }
-
-    // Send Message
     if (sendBtn && input) {
       sendBtn.addEventListener('click', () => {
         sendUserMessage(input.value);
@@ -397,14 +517,12 @@
       });
     }
 
-    // Language Selector
     if (langSelect) {
       langSelect.addEventListener('change', (e) => {
         updateUILanguage(e.target.value);
       });
     }
 
-    // Microphone Voice Input
     if (micBtn) {
       micBtn.addEventListener('click', () => {
         const voice = getVoice();
@@ -429,7 +547,6 @@
       });
     }
 
-    // Stop TTS speaking button in voice bar
     if (voiceStopBtn) {
       voiceStopBtn.addEventListener('click', () => {
         const voice = getVoice();
@@ -437,7 +554,6 @@
       });
     }
 
-    // Global Keyboard Listeners (Escape to close)
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && _isOpen) {
         closeChat();
@@ -445,9 +561,6 @@
     });
   }
 
-  /**
-   * Bind Voice State Machine to UI Indicator Badges
-   */
   function bindVoiceStateMachine() {
     const voice = getVoice();
     if (!voice) return;
@@ -461,7 +574,6 @@
     voice.onStateChange((oldState, newState, data) => {
       if (!micBtn || !statusBar || !statusText) return;
 
-      // Reset state classes
       micBtn.classList.remove('bl-state-listening', 'bl-state-processing', 'bl-state-responding', 'bl-state-error');
       statusBar.classList.remove('bl-status-listening', 'bl-status-processing', 'bl-status-responding', 'bl-status-error');
 
@@ -485,7 +597,7 @@
           statusBar.classList.add('bl-status-processing');
           statusBar.style.display = 'flex';
           statusText.textContent = t('voiceProcessing');
-          if (statusIcon) statusIcon.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line></svg>`;
+          if (statusIcon) statusIcon.innerHTML = `⌛`;
           if (stopBtn) stopBtn.style.display = 'none';
           break;
 
@@ -494,7 +606,7 @@
           statusBar.classList.add('bl-status-responding');
           statusBar.style.display = 'flex';
           statusText.textContent = t('voiceResponding');
-          if (statusIcon) statusIcon.innerHTML = `<span class="bl-audio-equalizer"><span class="bl-eq-bar"></span><span class="bl-eq-bar"></span><span class="bl-eq-bar"></span><span class="bl-eq-bar"></span></span>`;
+          if (statusIcon) statusIcon.innerHTML = `🔊`;
           if (stopBtn) stopBtn.style.display = 'inline-block';
           break;
 
@@ -510,9 +622,6 @@
     });
   }
 
-  /**
-   * Open Chatbot Panel
-   */
   function openChat() {
     initDOM();
     const modal = document.getElementById('bl-chat-modal');
@@ -525,15 +634,11 @@
     modal.setAttribute('aria-modal', 'true');
     if (launcher) launcher.setAttribute('aria-expanded', 'true');
 
-    // Focus input
     if (input) {
       setTimeout(() => input.focus(), 150);
     }
   }
 
-  /**
-   * Close Chatbot Panel
-   */
   function closeChat() {
     const modal = document.getElementById('bl-chat-modal');
     const launcher = document.getElementById('bl-chat-launcher');
@@ -544,7 +649,6 @@
     modal.setAttribute('aria-modal', 'false');
     if (launcher) launcher.setAttribute('aria-expanded', 'false');
 
-    // Stop any ongoing voice listening or speaking
     const voice = getVoice();
     if (voice) {
       voice.stopListening();
@@ -552,47 +656,25 @@
     }
   }
 
-  /**
-   * Toggle Open/Close
-   */
   function toggleChat() {
     if (_isOpen) closeChat();
     else openChat();
   }
 
-  /**
-   * Clear Chat History
-   */
   function clearChat() {
     _messages = [];
-    const container = document.getElementById('bl-chat-messages');
-    if (!container) return;
-    container.innerHTML = `
-      <div class="bl-welcome-card" id="bl-welcome-card">
-        <span class="bl-welcome-badge">${t('assistantBadge')}</span>
-        <h4 class="bl-welcome-title">${t('welcomeTitle')}</h4>
-        <p class="bl-welcome-desc">${t('welcomeGreeting')}</p>
-        <p class="bl-welcome-tip">${t('welcomeHelp')}</p>
-      </div>
-    `;
+    renderWelcomeOrChooseMode();
   }
 
-  /**
-   * Send User Message through pipeline
-   */
   async function sendUserMessage(text) {
     if (!text || !text.trim() || _isProcessing) return;
     const query = text.trim();
     _lastQueryText = query;
 
-    // Clear input
     const input = document.getElementById('bl-chat-input');
     if (input) input.value = '';
 
-    // Render User Message
     renderUserMessage(query);
-
-    // Render Loading Typing Indicator
     showTypingIndicator();
     _isProcessing = true;
 
@@ -609,20 +691,14 @@
     }
   }
 
-  /**
-   * Call Central Query Engine (Member 1)
-   */
   async function executeQuery(query, lang) {
     const responseEngine = getResponseEngine();
     if (!responseEngine || !responseEngine.processUserQuery) {
       throw new Error("Central processUserQuery function not found.");
     }
-    return await responseEngine.processUserQuery(query, lang);
+    return await responseEngine.processUserQuery(query, lang, { barrierContext: _activeBarrier });
   }
 
-  /**
-   * Render User Message Bubble
-   */
   function renderUserMessage(text) {
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
@@ -641,9 +717,6 @@
     scrollToBottom();
   }
 
-  /**
-   * Render Structured Assistant Response Bubble
-   */
   function renderAssistantResponse(res) {
     const container = document.getElementById('bl-chat-messages');
     if (!container || !res) return;
@@ -651,65 +724,56 @@
     const timeStr = formatTime();
     let structuredCardsHtml = '';
 
-    // 1. Metrics Cards
-    if (res.metrics && res.metrics.length > 0) {
-      const metricsList = res.metrics.map(m => {
-        const hasDerived = res.calculations && res.calculations.length > 0;
-        return `
-          <div class="bl-metric-chip">
-            <span class="bl-metric-val">${m.value}${m.unit ? m.unit : ''}</span>
-            <span class="bl-metric-lbl">${m.label}${m.entity ? ` (${m.entity})` : ''}</span>
-          </div>
-        `;
-      }).join('');
+    // Render Shared Evidence Card if available
+    const evidenceCard = getEvidenceCard();
+    if (evidenceCard && (res.evidence || res.metrics || res.calculations)) {
+      structuredCardsHtml += evidenceCard.render({
+        activeBarrier: _activeBarrier,
+        explanation: res.answer,
+        statistics: res.metrics,
+        affectedStates: res.affectedStates || (res.entities && res.entities.state ? [res.entities.state] : []),
+        affectedGroups: res.affectedGroups || (res.entities && res.entities.group ? [res.entities.group] : []),
+        comparisons: res.calculations,
+        source: res.source
+      });
+    }
+
+    // Render Shared Solution Card if solutions requested or present
+    const solutionCard = getSolutionCard();
+    if (solutionCard && (res.requiresSolutions || res.solutions || res.barrierLensSolutions || res.externalSolutions)) {
+      structuredCardsHtml += solutionCard.render({
+        barrier: _activeBarrier,
+        barrierLensSolutions: res.barrierLensSolutions || [
+          { title: "Mobile Rural Clinics", desc: "Deploy satellite health vehicles to bridge distance barriers in high-prevalence districts." },
+          { title: "Autonomy Counseling", desc: "Engage household decision-makers in reproductive health education." }
+        ],
+        externalSolutions: res.externalSolutions || res.solutions || [
+          {
+            recommendedSolution: "Community Health Worker (ASHA) Escort Program",
+            source: "Ministry of Health and Family Welfare (MoHFW) / WHO Policy Guidance",
+            whyItMayHelp: "Improves transport safety, reduces out-of-pocket costs, and builds trust for rural women."
+          }
+        ]
+      });
+    }
+
+    // 1. Metrics Cards (fallback layout)
+    if (!evidenceCard && res.metrics && res.metrics.length > 0) {
+      const metricsList = res.metrics.map(m => `
+        <div class="bl-metric-chip">
+          <span class="bl-metric-val">${m.value}${m.unit ? m.unit : ''}</span>
+          <span class="bl-metric-lbl">${m.label}${m.entity ? ` (${m.entity})` : ''}</span>
+        </div>
+      `).join('');
 
       structuredCardsHtml += `
         <div class="bl-structured-card">
           <div class="bl-card-section-title">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
             ${t('keyMetrics')}
           </div>
           <div class="bl-metrics-grid">
             ${metricsList}
           </div>
-        </div>
-      `;
-    }
-
-    // 2. Calculations / Derived Difference Card
-    if (res.calculations && res.calculations.length > 0) {
-      const calcsHtml = res.calculations.map(c => `
-        <div style="margin-top: 4px;">
-          <div>${c.interpretation || c.description}</div>
-          <span class="bl-derived-tag">${t('derivedBadge')}: ${c.result} ${c.unit || ''}</span>
-        </div>
-      `).join('');
-
-      structuredCardsHtml += `
-        <div class="bl-structured-card" style="border-left: 3px solid #d97706;">
-          <div class="bl-card-section-title">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            ${t('calculatedValues')}
-          </div>
-          ${calcsHtml}
-        </div>
-      `;
-    }
-
-    // 3. Data Source Provenance Card
-    if (res.source && res.source.length > 0) {
-      const sourcesHtml = res.source.map(s => {
-        const filename = s.split('/').pop();
-        return `<span class="bl-source-tag">📄 ${filename}</span>`;
-      }).join(' ');
-
-      structuredCardsHtml += `
-        <div class="bl-structured-card">
-          <div class="bl-card-section-title">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            ${t('dataProvenance')}
-          </div>
-          <div>${sourcesHtml}</div>
         </div>
       `;
     }
@@ -723,25 +787,6 @@
             <span>${t('viewAnalysis')}: ${res.relatedPage.label}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
-        </div>
-      `;
-    }
-
-    // 4.5 Report Generation Actions
-    if (res.status === 'verified') {
-      const isComparison = res.intent === 'STATE_COMPARISON' || (res.calculations && res.calculations.length > 0);
-      structuredCardsHtml += `
-        <div class="bl-report-actions-block">
-          <div class="bl-report-block-title">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-            <span>Generate Research Report:</span>
-          </div>
-          <div class="bl-report-btns-row">
-            <button class="bl-report-action-btn" data-report-type="executive" title="Executive Research Report">Executive</button>
-            <button class="bl-report-action-btn" data-report-type="topic" title="Topic Research Report">Topic</button>
-            ${isComparison ? `<button class="bl-report-action-btn bl-report-highlight" data-report-type="comparison" title="Comparison Research Report">Comparison</button>` : ''}
-            <button class="bl-report-action-btn" data-report-type="complete" title="Complete Study Report">Complete</button>
-          </div>
         </div>
       `;
     }
@@ -770,28 +815,9 @@
     `;
 
     container.insertAdjacentHTML('beforeend', html);
-
-    const lastRow = container.lastElementChild;
-    if (lastRow) {
-      lastRow.querySelectorAll('.bl-report-action-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const reportType = btn.getAttribute('data-report-type') || 'executive';
-          const gen = getReportGenerator();
-          if (gen) {
-            const reportPayload = Object.assign({}, res, { query: _lastQueryText || res.query || '' });
-            const report = gen.generateReport(reportType, reportPayload);
-            gen.openReportModal(report);
-          }
-        });
-      });
-    }
-
     scrollToBottom();
   }
 
-  /**
-   * Render Error Message
-   */
   function renderErrorMessage(msg) {
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
@@ -813,9 +839,6 @@
     scrollToBottom();
   }
 
-  /**
-   * Show Typing Indicator
-   */
   function showTypingIndicator() {
     const container = document.getElementById('bl-chat-messages');
     if (!container || document.getElementById('bl-typing-loader')) return;
@@ -836,17 +859,11 @@
     scrollToBottom();
   }
 
-  /**
-   * Hide Typing Indicator
-   */
   function hideTypingIndicator() {
     const loader = document.getElementById('bl-typing-loader');
     if (loader) loader.remove();
   }
 
-  /**
-   * Scroll Messages Area to Bottom
-   */
   function scrollToBottom() {
     const container = document.getElementById('bl-chat-messages');
     if (container) {
@@ -854,7 +871,22 @@
     }
   }
 
-  // Auto-initialize on DOM ready
+  function getContextState() {
+    return {
+      activeBarrier: _activeBarrier,
+      barrierSource: _barrierSource,
+      latestPrediction: _latestPrediction,
+      currentLang: _currentLang,
+      messages: [..._messages]
+    };
+  }
+
+  function setActiveBarrier(barrierName, source = 'user_selection') {
+    _activeBarrier = barrierName;
+    _barrierSource = source;
+    updateActiveBarrierLabel();
+  }
+
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initDOM);
@@ -874,6 +906,11 @@
     formatText,
     resolvePageLink,
     renderAssistantResponse,
-    renderUserMessage
+    renderUserMessage,
+    getContextState,
+    setActiveBarrier,
+    startGuidedFlow,
+    startExploreFlow,
+    changeBarrierMidChat
   };
 }));
