@@ -44,6 +44,15 @@ function assert(condition, message) {
 }
 
 async function runMember4IntegrationSuite() {
+  const BarrierLensBarrierSelector = require('../../dashboard/assets/js/barrier-selector.js');
+
+  function isSameBarrier(actual, expected) {
+    if (!actual || !expected) return false;
+    const normActual = BarrierLensBarrierSelector.normalizeBarrierName(actual) || actual;
+    const normExp = BarrierLensBarrierSelector.normalizeBarrierName(expected) || expected;
+    return normActual.toLowerCase() === normExp.toLowerCase();
+  }
+
   console.log("=========================================================================");
   console.log("BARRIERLENS MEMBER 4 — FRONTEND INTEGRATION & VALIDATION TEST SUITE");
   console.log("=========================================================================\n");
@@ -87,31 +96,30 @@ async function runMember4IntegrationSuite() {
   const selectedBarrier = "Logistic Barrier";
   BarrierLensChatbotUI.setActiveBarrier(selectedBarrier, 'user_selection');
   const stateAfterSelect = BarrierLensChatbotUI.getContextState();
-  assert(stateAfterSelect.activeBarrier === "Logistic Barrier", "activeBarrier set to Logistic Barrier");
+  assert(isSameBarrier(stateAfterSelect.activeBarrier, "Logistic Barrier"), "activeBarrier set to Logistic Barrier");
   assert(stateAfterSelect.barrierSource === "user_selection", "barrierSource set to user_selection");
 
   console.log("\n=== TEST 4: CONTEXT PERSISTENCE ACROSS FOLLOW-UP QUERIES ===");
   const followUpResult = await BarrierLensContextManager.processUserQuery("Which states are most affected?", "en", { barrierContext: "Logistic Barrier" });
-  console.log("  [DEBUG] followUpResult.intent:", followUpResult.intent);
-  assert(followUpResult.activeBarrier === "Logistic Barrier", "Follow-up question preserves active barrier context without repeating barrier name");
+  assert(isSameBarrier(followUpResult.activeBarrier, "Logistic Barrier"), "Follow-up question preserves active barrier context without repeating barrier name");
   assert(Boolean(followUpResult.intent), `Intent correctly detected for follow-up query: "${followUpResult.intent}"`);
 
   console.log("\n=== TEST 5: CHANGE BARRIER MID-CONVERSATION ===");
   const session1 = await BarrierLensContextManager.processUserQuery("Initial question for logistic barrier", "en", "Logistic Barrier", "test-session-1");
   const session2 = await BarrierLensContextManager.processUserQuery("Switch to Facility Barrier", "en", "Facility Barrier", "test-session-1");
-  assert(session2.activeBarrier === "Facility Barrier", "Active barrier successfully updated to Facility Barrier");
+  assert(isSameBarrier(session2.activeBarrier, "Facility Barrier"), "Active barrier successfully updated to Facility Barrier");
   assert(session2.conversationHistory.length >= 2, "Conversation history preserved across barrier change");
 
   console.log("\n=== TEST 6: CHANGE LANGUAGE PERSISTENCE (EN, KN, HI) ===");
   const langEn = await BarrierLensContextManager.processUserQuery("Explain healthcare barriers", "English", "Household Barrier", "test-lang-session");
   const langKn = await BarrierLensContextManager.processUserQuery("ವಿವರಣೆ ಕೊಡಿ", "Kannada", null, "test-lang-session");
   assert(langKn.activeLanguage === "kn" || langKn.activeLanguage === "Kannada", "Language updated to Kannada");
-  assert(langKn.activeBarrier === "Household Barrier", "Active barrier preserved when changing language to Kannada");
+  assert(isSameBarrier(langKn.activeBarrier, "Household Barrier"), "Active barrier preserved when changing language to Kannada");
   assert(langKn.conversationHistory.length >= 2, "Conversation history preserved when changing language");
 
   const langHi = await BarrierLensContextManager.processUserQuery("स्पष्टीकरण दें", "Hindi", null, "test-lang-session");
   assert(langHi.activeLanguage === "hi" || langHi.activeLanguage === "Hindi", "Language updated to Hindi");
-  assert(langHi.activeBarrier === "Household Barrier", "Active barrier preserved when changing language to Hindi");
+  assert(isSameBarrier(langHi.activeBarrier, "Household Barrier"), "Active barrier preserved when changing language to Hindi");
 
   console.log("\n=== TEST 7: EVIDENCE INTEGRITY (BARRIERLENS VS EXTERNAL EVIDENCE) ===");
   const evidenceHtml = BarrierLensEvidenceCard.render({
@@ -139,7 +147,7 @@ async function runMember4IntegrationSuite() {
   const canonicals = ["Household Barrier", "Logistic Barrier", "Facility Barrier", "Multiple Barriers", "All Barriers"];
   canonicals.forEach(barrier => {
     const res = BarrierLensContextManager.processUserQuery("Tell me about this barrier", "en", barrier);
-    assert(res.activeBarrier === barrier, `Category "${barrier}" successfully set and routed`);
+    assert(isSameBarrier(res.activeBarrier, barrier), `Category "${barrier}" successfully set and routed`);
   });
 
   console.log("\n=== TEST 9: API FAILURE & ERROR HANDLING ===");

@@ -1,7 +1,9 @@
 /**
  * BARRIERLENS — MEMBER 1: SESSION STORE & CONTEXT MANAGER
  * Maintains in-memory persistent session state across conversation turns,
- * including active barrier, active language, conversation history, and NLU metadata.
+ * including active barrier, barrier source (user_selection / ml_prediction), active language,
+ * active mode (identify / explore), latest ML prediction, guided answers, and conversation history.
+ * Dual environment support: Browser (window.BarrierLensSessionStore) & Node.js (module.exports).
  */
 
 (function (root, factory) {
@@ -33,10 +35,16 @@
     return {
       sessionId: sessionId,
       activeBarrier: null,
+      barrierSource: null,
       activeLanguage: "English",
+      activeMode: null,
       conversationHistory: [],
+      latestPrediction: null,
+      currentIntent: null,
       lastIntent: null,
-      lastEntities: null
+      lastEntities: null,
+      guidedAnswers: {},
+      guidedQuestionIndex: 0
     };
   }
 
@@ -69,16 +77,71 @@
     if (updates.activeBarrier !== undefined) {
       session.activeBarrier = updates.activeBarrier;
     }
+    if (updates.barrierSource !== undefined) {
+      session.barrierSource = updates.barrierSource;
+    }
     if (updates.activeLanguage !== undefined) {
       session.activeLanguage = updates.activeLanguage;
     }
-    if (updates.lastIntent !== undefined) {
+    if (updates.activeMode !== undefined) {
+      session.activeMode = updates.activeMode;
+    }
+    if (updates.latestPrediction !== undefined) {
+      session.latestPrediction = updates.latestPrediction;
+    }
+    if (updates.currentIntent !== undefined) {
+      session.currentIntent = updates.currentIntent;
+      session.lastIntent = updates.currentIntent;
+    } else if (updates.lastIntent !== undefined) {
       session.lastIntent = updates.lastIntent;
+      session.currentIntent = updates.lastIntent;
     }
     if (updates.lastEntities !== undefined) {
       session.lastEntities = updates.lastEntities;
     }
+    if (updates.guidedAnswers !== undefined) {
+      session.guidedAnswers = Object.assign({}, session.guidedAnswers, updates.guidedAnswers);
+    }
+    if (updates.guidedQuestionIndex !== undefined) {
+      session.guidedQuestionIndex = updates.guidedQuestionIndex;
+    }
 
+    return session;
+  }
+
+  /**
+   * Store ML-predicted barrier in the shared session context.
+   */
+  function setMLPrediction(sessionId, predictionResult) {
+    const session = getSession(sessionId);
+    if (!predictionResult) return session;
+
+    const primaryBarrier = predictionResult.primaryBarrier || predictionResult.barrier || "logistic";
+
+    session.latestPrediction = { ...predictionResult };
+    session.activeBarrier = primaryBarrier;
+    session.barrierSource = "ml_prediction";
+    session.activeMode = "identify";
+
+    return session;
+  }
+
+  /**
+   * Set user-selected active barrier in the shared session context.
+   */
+  function setActiveBarrier(sessionId, barrier, source = "user_selection") {
+    const session = getSession(sessionId);
+    session.activeBarrier = barrier;
+    session.barrierSource = source;
+    return session;
+  }
+
+  /**
+   * Set active conversation mode.
+   */
+  function setMode(sessionId, mode) {
+    const session = getSession(sessionId);
+    session.activeMode = mode;
     return session;
   }
 
@@ -91,14 +154,28 @@
       turnId: session.conversationHistory.length + 1,
       timestamp: new Date().toISOString(),
       userText: turnData.userText || "",
-      intent: turnData.intent || "unknown",
+      intent: turnData.intent || session.currentIntent || "unknown",
       activeBarrier: session.activeBarrier,
+      barrierSource: session.barrierSource,
       activeLanguage: session.activeLanguage,
-      entities: turnData.entities || null,
-      requiresSolutions: !!turnData.requiresSolutions
+      activeMode: session.activeMode,
+      entities: turnData.entities || session.lastEntities || null,
+      requiresSolutions: !!turnData.requiresSolutions,
+      requiresMLPrediction: !!turnData.requiresMLPrediction,
+      requiresEvidence: turnData.requiresEvidence !== undefined ? !!turnData.requiresEvidence : true
     };
 
     session.conversationHistory.push(turn);
+    return session;
+  }
+
+  /**
+   * Reset active barrier without clearing conversation history.
+   */
+  function resetBarrier(sessionId) {
+    const session = getSession(sessionId);
+    session.activeBarrier = null;
+    session.barrierSource = null;
     return session;
   }
 
@@ -125,7 +202,11 @@
     createDefaultSession,
     getSession,
     updateSession,
+    setMLPrediction,
+    setActiveBarrier,
+    setMode,
     addTurnToHistory,
+    resetBarrier,
     clearSession,
     clearAllSessions
   };

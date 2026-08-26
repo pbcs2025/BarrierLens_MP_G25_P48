@@ -45,3 +45,4 @@ docs/data/dashboard/woman_level_master.csv
 .env.*.local
 *.env
 
+/docs

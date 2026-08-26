@@ -113,17 +113,41 @@
     return null;
   }
 
-  /**
-   * Helper to translate key using I18n module
-   */
+  function getContextManager() {
+    if (typeof window !== 'undefined' && window.BarrierLensContextManager) return window.BarrierLensContextManager;
+    if (typeof require !== 'undefined') {
+      try { return require('./context-manager.js'); } catch (e) {}
+    }
+    return null;
+  }
+
   function t(key, lang = _currentLang) {
     const i18n = getI18n();
     return i18n ? i18n.t(key, lang) : key;
   }
 
-  /**
-   * Detect relative asset path based on whether current page is in /pages/ or root
-   */
+  function updateActiveBarrierHeader() {
+    if (typeof document === 'undefined') return;
+    const slot = document.getElementById('bl-active-barrier-header-slot');
+    const labelEl = document.getElementById('bl-active-barrier-label');
+    if (labelEl) {
+      labelEl.textContent = _activeBarrier;
+    }
+    if (!slot) return;
+    const barrierUI = getBarrierUI();
+    const ctx = getContextManager();
+    const active = ctx && ctx.getActiveBarrier ? ctx.getActiveBarrier() : _activeBarrier;
+
+    if (active && barrierUI && barrierUI.buildActiveBarrierBannerHtml) {
+      slot.innerHTML = barrierUI.buildActiveBarrierBannerHtml(active, _currentLang);
+      slot.style.display = 'block';
+      const changeBtn = slot.querySelector('#bl-change-barrier-btn');
+      if (changeBtn) {
+        changeBtn.addEventListener('click', changeBarrierMidChat);
+      }
+    }
+  }
+
   function getAssetPrefix() {
     if (typeof window === 'undefined' || !window.location) return '';
     const pathname = window.location.pathname.replace(/\\/g, '/');
@@ -218,12 +242,10 @@
             </div>
           </div>
           <div class="bl-chat-header-actions" style="display: flex; gap: 6px; align-items: center;">
-            <!-- Change Barrier Control -->
             <button class="bl-header-btn" id="bl-change-barrier-btn" title="Change Barrier" aria-label="Change Barrier" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
               🔄 <span id="bl-active-barrier-label">${_activeBarrier}</span>
             </button>
 
-            <!-- Language Selector Dropdown -->
             <div class="bl-lang-select-wrap">
               <select class="bl-lang-select" id="bl-lang-select" aria-label="${t('languageSelectAria')}">
                 ${langOptions}
@@ -238,6 +260,9 @@
             </button>
           </div>
         </header>
+
+        <!-- Active Barrier Header Banner Slot -->
+        <div id="bl-active-barrier-header-slot" style="display:none;"></div>
 
         <!-- Voice Status Banner -->
         <div class="bl-voice-status-bar" id="bl-voice-status-bar" style="display: none;" aria-live="polite">
@@ -343,7 +368,7 @@
     _barrierSource = 'ml_prediction';
     _latestPrediction = predictionResult;
 
-    updateActiveBarrierLabel();
+    updateActiveBarrierHeader();
 
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
@@ -399,7 +424,7 @@
   async function onExploreBarrierSelected(barrierName) {
     _activeBarrier = barrierName;
     _barrierSource = 'user_selection';
-    updateActiveBarrierLabel();
+    updateActiveBarrierHeader();
 
     renderUserMessage(`Selected Barrier: ${barrierName}`);
     showTypingIndicator();
@@ -433,14 +458,6 @@
         }
       });
       scrollToBottom();
-    }
-  }
-
-  function updateActiveBarrierLabel() {
-    if (typeof document === 'undefined') return;
-    const labelEl = document.getElementById('bl-active-barrier-label');
-    if (labelEl) {
-      labelEl.textContent = _activeBarrier;
     }
   }
 
@@ -486,6 +503,8 @@
       input.placeholder = t('inputPlaceholder');
       input.setAttribute('aria-label', t('inputPlaceholder'));
     }
+
+    updateActiveBarrierHeader();
   }
 
   function bindEvents() {
@@ -721,6 +740,14 @@
     const container = document.getElementById('bl-chat-messages');
     if (!container || !res) return;
 
+    const ctx = getContextManager();
+    if (res.activeBarrier) {
+      _activeBarrier = res.activeBarrier;
+    } else if (res.barrierContext && res.barrierContext.barrier) {
+      _activeBarrier = res.barrierContext.barrier;
+    }
+    updateActiveBarrierHeader();
+
     const timeStr = formatTime();
     let structuredCardsHtml = '';
 
@@ -757,8 +784,24 @@
       });
     }
 
-    // 1. Metrics Cards (fallback layout)
-    if (!evidenceCard && res.metrics && res.metrics.length > 0) {
+    // Render BarrierUI card fallbacks if specific card components not present
+    const barrierUI = getBarrierUI();
+    if (!evidenceCard && barrierUI && barrierUI.renderBarrierLensEvidenceCard) {
+      if (res.evidenceType === 'BarrierLens Evidence' || (res.metrics && res.metrics.length > 0 && !res.solutions)) {
+        structuredCardsHtml += barrierUI.renderBarrierLensEvidenceCard(res, _currentLang);
+      }
+      
+      if (res.solutions && Array.isArray(res.solutions)) {
+        res.solutions.forEach(sol => {
+          structuredCardsHtml += barrierUI.renderExternalSolutionCard(sol, _currentLang);
+        });
+      } else if (res.solution) {
+        structuredCardsHtml += barrierUI.renderExternalSolutionCard(res.solution, _currentLang);
+      }
+    }
+
+    // Fallback Metrics Cards
+    if (!evidenceCard && !barrierUI && res.metrics && res.metrics.length > 0) {
       const metricsList = res.metrics.map(m => `
         <div class="bl-metric-chip">
           <span class="bl-metric-val">${m.value}${m.unit ? m.unit : ''}</span>
@@ -778,7 +821,7 @@
       `;
     }
 
-    // 4. Related Page Link Action Button
+    // Related Page Link Action Button
     if (res.relatedPage) {
       const resolvedHref = resolvePageLink(res.relatedPage);
       structuredCardsHtml += `
@@ -791,7 +834,7 @@
       `;
     }
 
-    // 5. Research Disclaimer / Limitation Note
+    // Research Disclaimer / Limitation Note
     if (res.disclaimer || res.limitationNote) {
       const note = res.disclaimer || res.limitationNote;
       structuredCardsHtml += `
@@ -884,7 +927,7 @@
   function setActiveBarrier(barrierName, source = 'user_selection') {
     _activeBarrier = barrierName;
     _barrierSource = source;
-    updateActiveBarrierLabel();
+    updateActiveBarrierHeader();
   }
 
   if (typeof document !== 'undefined') {
