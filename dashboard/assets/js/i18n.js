@@ -63,6 +63,15 @@
 
       // Response Card Labels
       verifiedSource: "Verified Source",
+      barrierLensEvidence: "BarrierLens Evidence",
+      externalEvidence: "External Evidence",
+      recommendedSolution: "Recommended Solution",
+      solutionSource: "Source",
+      whyItMayHelp: "Why it may help",
+      selectBarrier: "Select Barrier",
+      activeBarrier: "Active Barrier",
+      changeBarrier: "Change Barrier",
+      changeLanguage: "Change Language",
       dataProvenance: "Data Provenance",
       keyMetrics: "Verified Metrics",
       calculatedValues: "Calculated Analysis",
@@ -131,6 +140,15 @@
 
       // Response Card Labels
       verifiedSource: "ದೃಢೀಕೃತ ಮೂಲ",
+      barrierLensEvidence: "ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ದೃಢೀಕೃತ ಆಧಾರ",
+      externalEvidence: "ಬಾಹ್ಯ ಅಧಿಕೃತ ಆಧಾರ",
+      recommendedSolution: "ಶಿಫಾರಸು ಮಾಡಿದ ಪರಿಹಾರ",
+      solutionSource: "ಮೂಲ / ಸಂಸ್ಥೆ",
+      whyItMayHelp: "ಇದು ಏಕೆ ನೆರವಾಗುತ್ತದೆ",
+      selectBarrier: "ಅಡಚಣೆಯನ್ನು ಆರಿಸಿ",
+      activeBarrier: "ಸಕ್ರಿಯ ಅಡಚಣೆ",
+      changeBarrier: "ಅಡಚಣೆ ಬದಲಾಯಿಸಿ",
+      changeLanguage: "ಭಾಷೆ ಬದಲಾಯಿಸಿ",
       dataProvenance: "ದತ್ತಾಂಶ ಮೂಲ ಮಾಹಿತಿ",
       keyMetrics: "ದೃಢೀಕೃತ ಅಂಕಿಅಂಶಗಳು",
       calculatedValues: "ಲೆಕ್ಕಹಾಕಿದ ವಿಶ್ಲೇಷಣೆ",
@@ -199,6 +217,15 @@
 
       // Response Card Labels
       verifiedSource: "सत्यापित स्रोत",
+      barrierLensEvidence: "बैरियर लेंस सत्यापित साक्ष्य",
+      externalEvidence: "बाह्य आधिकारिक साक्ष्य",
+      recommendedSolution: "अनुशंसित समाधान",
+      solutionSource: "स्रोतः",
+      whyItMayHelp: "यह क्यों सहायक है",
+      selectBarrier: "बाधा चुनें",
+      activeBarrier: "सक्रिय बाधा",
+      changeBarrier: "बाधा बदलें",
+      changeLanguage: "भाषा बदलें",
       dataProvenance: "डेटा स्रोत विवरण",
       keyMetrics: "सत्यापित मेट्रिक्स",
       calculatedValues: "परिकलित विश्लेषण",

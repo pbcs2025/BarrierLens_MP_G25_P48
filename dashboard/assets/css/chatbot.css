@@ -789,3 +789,254 @@
   color: #ffffff;
   border-color: #d97706;
 }
+
+/* ==========================================================================
+   BARRIERLENS — MEMBER 4: BARRIER SELECTION & EVIDENCE CARD STYLES
+   ========================================================================== */
+
+/* Active Barrier Banner Toolbar */
+.bl-active-barrier-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 0.8125rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bl-active-barrier-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bl-active-badge-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+.bl-active-lbl {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.bl-active-name {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.bl-change-barrier-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bl-change-barrier-btn:hover {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Guided Barrier Selection Grid */
+.bl-barrier-selection-container {
+  margin: 12px 0 16px 0;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.bl-barrier-selection-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.bl-barrier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.bl-barrier-grid-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bl-barrier-grid-card:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+.bl-barrier-grid-card.active {
+  border-color: #2563eb;
+  background: #dbeafe;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.bl-barrier-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: #1e3a8a;
+  margin-bottom: 4px;
+}
+
+.bl-barrier-icon {
+  font-size: 1rem;
+}
+
+.bl-barrier-desc {
+  font-size: 0.725rem;
+  color: #64748b;
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Visually Distinct Evidence Cards */
+.bl-evidence-card {
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 0.8125rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* BarrierLens Evidence Card (Verified Data) */
+.bl-evidence-card-barrierlens {
+  background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
+  border: 1.5px solid #a7f3d0;
+}
+
+.bl-badge-barrierlens {
+  background: #059669;
+  color: #ffffff;
+}
+
+.bl-chip-barrierlens {
+  background: #ffffff;
+  border-color: #a7f3d0;
+}
+
+/* External Evidence & Solution Card (WHO / Govt Sourced) */
+.bl-evidence-card-external {
+  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+  border: 1.5px solid #c4b5fd;
+}
+
+.bl-badge-external {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.bl-evidence-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.bl-evidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.bl-evidence-source-tag {
+  font-size: 0.725rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.bl-solution-source-pill {
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
+  border-radius: 9999px;
+  padding: 2px 8px;
+  font-size: 0.725rem;
+  font-weight: 700;
+}
+
+/* Recommended Solution -> Source -> Why format */
+.bl-solution-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.bl-solution-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bl-solution-field-lbl {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4c1d95;
+}
+
+.bl-solution-text {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1e1b4b;
+}
+
+.bl-solution-source-text {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #5b21b6;
+}
+
+.bl-why-box {
+  background: rgba(237, 233, 254, 0.5);
+  border-left: 3px solid #7c3aed;
+  padding: 8px 10px;
+  border-radius: 0 6px 6px 0;
+}
+
+.bl-solution-why-text {
+  margin: 0;
+  font-size: 0.775rem;
+  color: #3730a3;
+  line-height: 1.4;
+}
+

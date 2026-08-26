@@ -24,6 +24,7 @@
   let _messages = [];
   let _domMounted = false;
   let _lastQueryText = '';
+  let _activeBarrier = null;
 
   // Module References (Browser / Node)
   function getI18n() {
@@ -58,12 +59,100 @@
     return null;
   }
 
+  function getBarrierUI() {
+    if (typeof window !== 'undefined' && window.BarrierLensBarrierUI) return window.BarrierLensBarrierUI;
+    if (typeof require !== 'undefined') {
+      try { return require('./barrier-ui.js'); } catch (e) {}
+    }
+    return null;
+  }
+
+  function getContextManager() {
+    if (typeof window !== 'undefined' && window.BarrierLensContextManager) return window.BarrierLensContextManager;
+    if (typeof require !== 'undefined') {
+      try { return require('./context-manager.js'); } catch (e) {}
+    }
+    return null;
+  }
+
   /**
    * Helper to translate key using I18n module
    */
   function t(key, lang = _currentLang) {
     const i18n = getI18n();
     return i18n ? i18n.t(key, lang) : key;
+  }
+
+  /**
+   * Update active barrier banner in header
+   */
+  function updateActiveBarrierHeader() {
+    const slot = document.getElementById('bl-active-barrier-header-slot');
+    if (!slot) return;
+    const barrierUI = getBarrierUI();
+    const ctx = getContextManager();
+    const active = ctx && ctx.getActiveBarrier ? ctx.getActiveBarrier() : _activeBarrier;
+    
+    if (active && barrierUI) {
+      slot.innerHTML = barrierUI.buildActiveBarrierBannerHtml(active, _currentLang);
+      slot.style.display = 'block';
+      const changeBtn = slot.querySelector('#bl-change-barrier-btn');
+      if (changeBtn) {
+        changeBtn.addEventListener('click', promptChangeBarrier);
+      }
+    } else {
+      slot.innerHTML = '';
+      slot.style.display = 'none';
+    }
+  }
+
+  /**
+   * Prompt user to change barrier mid-conversation
+   */
+  function promptChangeBarrier() {
+    const barrierUI = getBarrierUI();
+    if (!barrierUI) return;
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    const html = `
+      <div class="bl-message-row bl-bot-row">
+        <div class="bl-message-avatar bl-bot-avatar" aria-hidden="true">BL</div>
+        <div class="bl-bubble-wrap">
+          <div class="bl-message-bubble">
+            ${barrierUI.buildBarrierSelectionGridHtml(_currentLang, _activeBarrier)}
+          </div>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+    bindBarrierGridEvents();
+    scrollToBottom();
+  }
+
+  /**
+   * Attach click handlers to barrier selection grid cards
+   */
+  function bindBarrierGridEvents() {
+    if (typeof document === 'undefined') return;
+    const gridCards = document.querySelectorAll('.bl-barrier-grid-card');
+    gridCards.forEach(card => {
+      if (card.getAttribute('data-bound')) return;
+      card.setAttribute('data-bound', 'true');
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const barrierId = card.getAttribute('data-barrier-id');
+        if (barrierId) {
+          const ctx = getContextManager();
+          if (ctx && ctx.setActiveBarrier) {
+            ctx.setActiveBarrier(barrierId);
+          }
+          _activeBarrier = barrierId;
+          updateActiveBarrierHeader();
+          sendUserMessage(barrierId);
+        }
+      });
+    });
   }
 
   /**
@@ -158,15 +247,18 @@
    */
   function buildModalHtml() {
     const i18n = getI18n();
+    const barrierUI = getBarrierUI();
     const languages = i18n ? i18n.getSupportedLanguages() : [
       { code: 'en', nativeName: 'English' },
       { code: 'kn', nativeName: 'ಕನ್ನಡ' },
-      { code: 'hi', nativeName: 'हिन्दी' }
+      { code: 'hi', nativeName: 'ಹಿನ್ದೀ' }
     ];
 
     const langOptions = languages.map(l => 
       `<option value="${l.code}" ${l.code === _currentLang ? 'selected' : ''}>${l.nativeName}</option>`
     ).join('');
+
+    const gridHtml = barrierUI ? barrierUI.buildBarrierSelectionGridHtml(_currentLang, _activeBarrier) : '';
 
     return `
       <div class="bl-chat-modal" id="bl-chat-modal" role="dialog" aria-modal="false" aria-labelledby="bl-modal-title">
@@ -195,6 +287,9 @@
           </div>
         </header>
 
+        <!-- Active Barrier Toolbar Slot -->
+        <div id="bl-active-barrier-header-slot" style="display: none;"></div>
+
         <!-- Voice Status Banner -->
         <div class="bl-voice-status-bar" id="bl-voice-status-bar" style="display: none;" aria-live="polite">
           <div class="bl-voice-status-content">
@@ -212,6 +307,7 @@
             <h4 class="bl-welcome-title">${t('welcomeTitle')}</h4>
             <p class="bl-welcome-desc">${t('welcomeGreeting')}</p>
             <p class="bl-welcome-tip">${t('welcomeHelp')}</p>
+            ${gridHtml}
           </div>
         </main>
 
@@ -266,6 +362,8 @@
 
     _domMounted = true;
     bindEvents();
+    bindBarrierGridEvents();
+    updateActiveBarrierHeader();
     renderSuggestedQuestions();
     bindVoiceStateMachine();
   }
@@ -651,13 +749,37 @@
     const container = document.getElementById('bl-chat-messages');
     if (!container || !res) return;
 
+    // Track active barrier from response context if present
+    const ctx = getContextManager();
+    if (res.activeBarrier) {
+      _activeBarrier = res.activeBarrier;
+    } else if (res.barrierContext && res.barrierContext.barrier) {
+      _activeBarrier = res.barrierContext.barrier;
+    }
+    updateActiveBarrierHeader();
+
+    const barrierUI = getBarrierUI();
     const timeStr = formatTime();
     let structuredCardsHtml = '';
 
-    // 1. Metrics Cards
-    if (res.metrics && res.metrics.length > 0) {
+    // 0. Visually Distinct Evidence Cards (BarrierLens Evidence vs External Evidence)
+    if (barrierUI) {
+      if (res.evidenceType === 'BarrierLens Evidence' || (res.metrics && res.metrics.length > 0 && !res.solutions)) {
+        structuredCardsHtml += barrierUI.renderBarrierLensEvidenceCard(res, _currentLang);
+      }
+      
+      if (res.solutions && Array.isArray(res.solutions)) {
+        res.solutions.forEach(sol => {
+          structuredCardsHtml += barrierUI.renderExternalSolutionCard(sol, _currentLang);
+        });
+      } else if (res.solution) {
+        structuredCardsHtml += barrierUI.renderExternalSolutionCard(res.solution, _currentLang);
+      }
+    }
+
+    // 1. Metrics Cards (if not already handled by BarrierLens evidence card)
+    if (!barrierUI && res.metrics && res.metrics.length > 0) {
       const metricsList = res.metrics.map(m => {
-        const hasDerived = res.calculations && res.calculations.length > 0;
         return `
           <div class="bl-metric-chip">
             <span class="bl-metric-val">${m.value}${m.unit ? m.unit : ''}</span>
