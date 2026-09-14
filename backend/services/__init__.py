@@ -1,1 +1,1 @@
-"""Backend services package for Claude integration and research safety."""
+"""Backend services package for Ollama integration and research safety."""

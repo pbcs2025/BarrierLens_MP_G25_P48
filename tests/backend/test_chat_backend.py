@@ -1,7 +1,8 @@
-"""Automated Test Suite for Member 2 — Claude Backend & Research-Safety Layer.
+"""Automated Test Suite for Member 2 — Ollama Backend & Research-Safety Layer.
 
 Verifies exact metric grounding, state comparisons, missing data handling, non-causal safety,
-medical disclaimer enforcement, multilingual preservation, API failure fallbacks, and secret safety.
+medical disclaimer enforcement, multilingual preservation, API failure fallbacks, Ollama error handling,
+and secret safety.
 """
 
 from __future__ import annotations
@@ -10,7 +11,7 @@ import os
 from pathlib import Path
 
 from backend.app import app
-from backend.services.claude_service import generate_llM_explanation
+from backend.services.ollama_service import generate_llm_explanation, format_ollama_error_response
 from backend.services.safety_validator import check_numerical_safety, sanitize_causal_language, check_medical_safety
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -226,3 +227,34 @@ def test_secret_protection_audit():
     for js_file in (PROJECT_ROOT / "dashboard" / "assets" / "js").glob("*.js"):
         text = js_file.read_text(encoding="utf-8")
         assert sample_key not in text, f"Secret key found in frontend JS: {js_file.name}"
+
+
+# ── Test 11: Ollama Error Response Handling ──────────────────────────────────
+def test_ollama_error_handling():
+    offline_resp = format_ollama_error_response("offline")
+    assert offline_resp["status"] == "api_error"
+    assert "Ollama" in offline_resp["answer"] or "unavailable" in offline_resp["answer"]
+
+    model_resp = format_ollama_error_response("model_missing")
+    assert model_resp["status"] == "api_error"
+    assert "llama3.2:3b" in model_resp["answer"] or "pull" in model_resp["answer"]
+
+    timeout_resp = format_ollama_error_response("timeout")
+    assert timeout_resp["status"] == "api_error"
+    assert "timed out" in timeout_resp["answer"]
+
+
+# ── Test 12: Multi-Turn Conversation History ──────────────────────────────────
+def test_conversation_history_handling(client):
+    payload = {
+        "message": "Why are they important?",
+        "history": [
+            {"role": "user", "content": "What are logistic barriers?"},
+            {"role": "assistant", "content": "Logistic barriers include distance to facilities and lack of transportation."}
+        ]
+    }
+    res = client.post("/api/chat", json=payload)
+    assert res.status_code == 200
+    data = res.get_json()
+    assert data["status"] in ("success", "api_error")
+    assert len(data.get("answer", "")) > 0

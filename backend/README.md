@@ -1,6 +1,6 @@
-# BarrierLens Research Intelligence Assistant — Claude Backend & Safety Service (Member 2)
+# BarrierLens Research Intelligence Assistant — Ollama Backend & Safety Service (Member 2)
 
-Member 2 owns the **secure LLM explanation backend** and **research-safety layer** for the BarrierLens platform.
+Member 2 owns the **secure LLM explanation backend** and **research-safety layer** for the BarrierLens platform, powered by local **Ollama** (`llama3.2:3b`).
 
 ---
 
@@ -17,10 +17,11 @@ Copy the example environment file:
 ```bash
 cp .env.example .env
 ```
-Edit `.env` and configure your Anthropic Claude API Key:
+Edit `.env` and configure your local Ollama connection:
 ```ini
-CLAUDE_API_KEY=sk-ant-api03-your-real-key-here
-CLAUDE_MODEL=claude-3-5-sonnet-20241022
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.2:3b
+OLLAMA_TIMEOUT=60
 PORT=5000
 HOST=0.0.0.0
 DEBUG=False
@@ -28,7 +29,7 @@ CORS_ORIGINS=*
 ```
 
 > [!IMPORTANT]
-> **Security Rule**: The `CLAUDE_API_KEY` resides strictly server-side in `.env`. Never commit `.env` or put API credentials in frontend JavaScript. `.env` is listed in `.gitignore`.
+> **Local LLM**: BarrierLens runs entirely on local Ollama. Ensure Ollama is running (`ollama serve`) and the model `llama3.2:3b` is pulled (`ollama pull llama3.2:3b`).
 
 ### Starting the Server
 ```bash
@@ -142,7 +143,7 @@ The backend server will run on `http://localhost:5000`.
 | :--- | :--- | :--- |
 | `200 OK` | `success` | Query successfully processed and grounded in verified evidence. |
 | `200 OK` | `unavailable` | Requested information is absent from NFHS-5 recode dataset. Safe fallback returned. |
-| `200 OK` | `api_error` | Claude API error / network failure. Graceful research disclaimer fallback returned without crashing dashboard. |
+| `200 OK` | `api_error` | Ollama service error / network failure. Graceful research disclaimer fallback returned without crashing dashboard. |
 | `400 Bad Request` | `validation_error` | Missing required parameters (e.g. empty `question` string or malformed JSON). |
 | `500 Error` | `api_error` | Internal server exception. Controlled JSON response returned without exposing internal stack traces. |
 

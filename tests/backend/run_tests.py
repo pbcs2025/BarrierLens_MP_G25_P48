@@ -19,13 +19,15 @@ from tests.backend.test_chat_backend import (
     test_hindi_language_preservation,
     test_invalid_request_handling,
     test_secret_protection_audit,
+    test_ollama_error_handling,
+    test_conversation_history_handling,
 )
 from backend.app import app
 
 
 def run_all_tests():
     print("=========================================================================")
-    print("BARRIERLENS MEMBER 2 - CLAUDE BACKEND & SAFETY SUITE TEST RUNNER")
+    print("BARRIERLENS MEMBER 2 - OLLAMA BACKEND & SAFETY SUITE TEST RUNNER")
     print("=========================================================================\n")
 
     app.config["TESTING"] = True
@@ -43,6 +45,8 @@ def run_all_tests():
         ("Test 8: Hindi Language Preservation", lambda c: test_hindi_language_preservation(c)),
         ("Test 9: Graceful API Error / Invalid Request", lambda c: test_invalid_request_handling(c)),
         ("Test 10: Secret Protection & Git Audit", lambda c: test_secret_protection_audit()),
+        ("Test 11: Ollama Error Response Handling", lambda: test_ollama_error_handling()),
+        ("Test 12: Multi-Turn Conversation History", lambda c: test_conversation_history_handling(c)),
     ]
 
     with app.test_client() as client:

@@ -121,6 +121,14 @@
     return null;
   }
 
+  function getAPIService() {
+    if (typeof window !== 'undefined' && window.BarrierLensAPIService) return window.BarrierLensAPIService;
+    if (typeof require !== 'undefined') {
+      try { return require('./api-service.js'); } catch (e) {}
+    }
+    return null;
+  }
+
   function t(key, lang = _currentLang) {
     const i18n = getI18n();
     return i18n ? i18n.t(key, lang) : key;
@@ -972,13 +980,50 @@
 
   async function executeQuery(query, lang) {
     const responseEngine = getResponseEngine();
-    if (!responseEngine || !responseEngine.processUserQuery) {
+    let localResult = null;
+    if (responseEngine && responseEngine.processUserQuery) {
+      localResult = await responseEngine.processUserQuery(query, lang, { barrierContext: _activeBarrier });
+    }
+
+    // Attempt backend Ollama API call with conversation history
+    const apiService = getAPIService();
+    if (apiService && typeof apiService.sendChatMessage === 'function') {
+      try {
+        const history = (_messages || []).slice(-6).map(m => ({
+          role: m.role || (m.sender === 'user' ? 'user' : 'assistant'),
+          content: m.content || m.text || ''
+        }));
+
+        const backendPayload = {
+          message: query,
+          question: query,
+          language: lang,
+          history: history,
+          evidence: localResult || undefined
+        };
+
+        const backendResp = await apiService.sendChatMessage(backendPayload);
+        if (backendResp) {
+          const ans = backendResp.response || backendResp.answer;
+          if (ans) {
+            backendResp.answer = ans;
+            backendResp.response = ans;
+            return Object.assign({}, localResult || {}, backendResp);
+          }
+        }
+      } catch (err) {
+        console.warn("[BarrierLensChatbotUI] Backend API call failed, using local engine:", err);
+      }
+    }
+
+    if (!localResult) {
       throw new Error("Central processUserQuery function not found.");
     }
-    return await responseEngine.processUserQuery(query, lang, { barrierContext: _activeBarrier });
+    return localResult;
   }
 
   function renderUserMessage(text) {
+    _messages.push({ role: 'user', content: text, sender: 'user', text: text });
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
 
@@ -997,6 +1042,7 @@
   }
 
   function renderAssistantResponse(res) {
+    _messages.push({ role: 'assistant', content: (res && res.answer) || '', sender: 'bot', text: (res && res.answer) || '' });
     const container = document.getElementById('bl-chat-messages');
     if (!container || !res) return;
 

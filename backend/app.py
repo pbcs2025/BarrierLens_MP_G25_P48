@@ -1,4 +1,4 @@
-"""BarrierLens Research Intelligence Assistant — Claude Backend Server.
+"""BarrierLens Research Intelligence Assistant — Ollama Backend Server.
 
 WSGI Application entry point exposing POST /api/chat.
 """
@@ -28,7 +28,7 @@ logger = logging.getLogger("barrierlens.app")
 
 
 def create_app() -> Flask:
-    """Application factory for BarrierLens Claude Backend."""
+    """Application factory for BarrierLens Ollama Backend."""
     app = Flask(__name__)
 
     # Configure CORS
@@ -81,5 +81,5 @@ def create_app() -> Flask:
 app = create_app()
 
 if __name__ == "__main__":
-    logger.info("Starting BarrierLens Claude Backend on %s:%d", settings.HOST, settings.PORT)
+    logger.info("Starting BarrierLens Ollama Backend on %s:%d", settings.HOST, settings.PORT)
     app.run(host=settings.HOST, port=settings.PORT, debug=settings.DEBUG)

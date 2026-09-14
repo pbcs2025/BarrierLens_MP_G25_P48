@@ -131,14 +131,14 @@ def check_medical_safety(answer: str) -> tuple[bool, str]:
     return is_personal, MEDICAL_DISCLAIMER
 
 
-def validate_claude_response(
+def validate_llm_response(
     raw_response: dict[str, Any],
     evidence_payload: dict[str, Any],
 ) -> dict[str, Any]:
-    """Perform full post-processing safety validation on Claude's structured response.
+    """Perform full post-processing safety validation on LLM structured response.
 
     Args:
-        raw_response: Claude output dict containing 'answer', 'claims', 'disclaimer'.
+        raw_response: LLM output dict containing 'answer', 'claims', 'disclaimer'.
         evidence_payload: Input verified evidence payload.
 
     Returns:
@@ -170,3 +170,7 @@ def validate_claude_response(
         "numerical_safety_passed": is_num_safe,
         "unsupported_numbers": unsupported if not is_num_safe else [],
     }
+
+
+# Backwards compatibility alias
+validate_claude_response = validate_llm_response

@@ -16,8 +16,8 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  // Base API configuration (configurable, default relative /api or localhost:5000/api)
-  let _apiBaseUrl = '/api';
+  // Base API configuration (always use localhost:5000 for development)
+  let _apiBaseUrl = 'http://localhost:5000/api';
 
   function setApiBaseUrl(url) {
     if (url && typeof url === 'string') {
@@ -124,22 +124,37 @@
    * Send Chat Message API call: POST /api/chat
    */
   async function sendChatMessage(payload) {
-    const endpoint = `${_apiBaseUrl}/chat`;
-    try {
-      if (typeof fetch === 'undefined') return null;
+    if (typeof fetch === 'undefined') return null;
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+    const endpoints = [
+      `${_apiBaseUrl}/chat`
+    ];
 
-      if (!response.ok) return null;
-      return await response.json();
-    } catch (err) {
-      console.warn(`[BarrierLensAPIService] /api/chat error: ${err.message}`);
-      return null;
+    if (_apiBaseUrl === '/api' && typeof window !== 'undefined' && window.location && window.location.hostname === 'localhost') {
+      endpoints.push('http://localhost:5000/api/chat');
+      endpoints.push('http://localhost:8000/api/chat');
     }
+
+    for (const endpoint of endpoints) {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(() => null);
+        if (data) return data;
+        if (response.ok) return {};
+      } catch (err) {
+        console.warn(`[BarrierLensAPIService] Notice: ${endpoint} unreachable (${err.message}).`);
+      }
+    }
+
+    return {
+      status: "api_error",
+      answer: "Unable to connect to the BarrierLens AI service. Please make sure the backend and Ollama are running."
+    };
   }
 
   return {

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Loading Test</title>
+    <style>
+        body { font-family: system-ui; padding: 20px; background: #f5f5f5; }
+        .test { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { border-left: 4px solid #10b981; }
+        .error { border-left: 4px solid #ef4444; }
+        .warning { border-left: 4px solid #f59e0b; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 BarrierLens Data Loading Test</h1>
+    <p>Testing if data files load correctly from the current location...</p>
+    <p><strong>Current URL:</strong> <code id="current-url"></code></p>
+    
+    <div id="results"></div>
+
+    <script src="assets/js/chatbot-data.js"></script>
+    <script>
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        const dataFiles = [
+            'national_overview',
+            'state_summary', 
+            'demographic_summary',
+            'rural_urban_summary',
+            'cluster_summary',
+            'regression_summary',
+            'outcome_impact_summary',
+            'empowerment_summary',
+            'multiple_barrier_summary',
+            'base_paper_reference',
+            'validation_report'
+        ];
+
+        async function testDataLoading() {
+            const results = document.getElementById('results');
+            
+            for (const fileKey of dataFiles) {
+                const testDiv = document.createElement('div');
+                testDiv.className = 'test';
+                
+                try {
+                    const data = await window.BarrierLensData.loadDataSource(fileKey);
+                    
+                    if (data) {
+                        testDiv.className += ' success';
+                        testDiv.innerHTML = `
+                            <h3>✓ ${fileKey}</h3>
+                            <p>Status: <strong style="color: #10b981">Loaded successfully</strong></p>
+                            <pre>${JSON.stringify(Object.keys(data || {}), null, 2)}</pre>
+                        `;
+                    } else {
+                        testDiv.className += ' warning';
+                        testDiv.innerHTML = `
+                            <h3>⚠ ${fileKey}</h3>
+                            <p>Status: <strong style="color: #f59e0b">Returned null (optional file)</strong></p>
+                        `;
+                    }
+                } catch (error) {
+                    testDiv.className += ' error';
+                    testDiv.innerHTML = `
+                        <h3>✗ ${fileKey}</h3>
+                        <p>Status: <strong style="color: #ef4444">Failed</strong></p>
+                        <pre>${error.message}</pre>
+                    `;
+                }
+                
+                results.appendChild(testDiv);
+            }
+            
+            // Summary
+            const summary = document.createElement('div');
+            summary.className = 'test';
+            summary.style.background = '#dbeafe';
+            summary.innerHTML = `
+                <h2>Test Complete</h2>
+                <p><strong>Success:</strong> ${document.querySelectorAll('.success').length} files</p>
+                <p><strong>Warnings:</strong> ${document.querySelectorAll('.warning').length} files (optional)</p>
+                <p><strong>Errors:</strong> ${document.querySelectorAll('.error').length} files</p>
+                <p>Open the browser console (F12) to see any additional warnings.</p>
+            `;
+            results.appendChild(summary);
+        }
+
+        // Run tests on load
+        testDataLoading();
+    </script>
+</body>
+</html>

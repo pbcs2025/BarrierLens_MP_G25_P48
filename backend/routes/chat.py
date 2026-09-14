@@ -1,7 +1,7 @@
-"""API Chat Route Handler for BarrierLens Claude Backend.
+"""API Chat Route Handler for BarrierLens Ollama Backend.
 
 Exposes `POST /api/chat` and `GET /api/health` endpoints.
-Accepts structured evidence from Member 1 and returns research-safe explanations.
+Accepts queries, conversation history, and evidence payloads to return research-safe explanations.
 """
 
 from __future__ import annotations
@@ -11,9 +11,9 @@ from typing import Any
 
 from flask import Blueprint, jsonify, request
 
-from backend.services.claude_service import (
+from backend.services.ollama_service import (
     format_api_error_response,
-    generate_llM_explanation,
+    generate_llm_explanation,
 )
 
 logger = logging.getLogger("barrierlens.routes.chat")
@@ -33,14 +33,15 @@ def health_check() -> Any:
 
 @chat_bp.route("/chat", methods=["POST"])
 def process_chat_request() -> Any:
-    """Process a research query with structured Member 1 evidence payload.
+    """Process a research query with optional history and evidence payload.
 
     Expected JSON Body:
     {
-      "question": "What is the most common barrier?",
+      "question": "What is BarrierLens?",     (or "message")
       "language": "en",
+      "history": [...],                       (optional multi-turn history)
       "intent": "NATIONAL_OVERVIEW",          (optional)
-      "evidence": { ... }                     (Member 1 evidence payload or full object)
+      "evidence": { ... }                     (optional Member 1 evidence payload)
     }
 
     Returns:
@@ -61,9 +62,10 @@ def process_chat_request() -> Any:
                 "disclaimer": None,
             }), 400
 
-        # Extract parameters
-        question = data.get("question", "").strip()
-        language = data.get("language", "en").strip()
+        # Extract parameters (supports both "question" and "message")
+        question = str(data.get("question") or data.get("message") or "").strip()
+        language = str(data.get("language", "en")).strip()
+        history = data.get("history") or data.get("messages") or []
 
         if not question:
             return jsonify({
@@ -95,16 +97,24 @@ def process_chat_request() -> Any:
                 "relatedPage": data.get("relatedPage"),
             }
         else:
-            # Missing or empty evidence
+            # General query without explicit evidence object
             evidence_payload = {
-                "status": "unavailable",
-                "intent": data.get("intent", "UNSUPPORTED"),
+                "status": "general_query",
+                "intent": data.get("intent", "GENERAL"),
                 "evidence": [],
-                "limitationNote": "No verified evidence object provided in request payload.",
+                "calculations": [],
+                "metrics": [],
+                "source": [],
+                "relatedPage": None,
             }
 
-        # Execute Claude Explanation Service
-        response_data = generate_llM_explanation(question, language, evidence_payload)
+        # Execute Ollama Explanation Service
+        response_data = generate_llm_explanation(
+            question=question,
+            language=language,
+            evidence_payload=evidence_payload,
+            history=history,
+        )
         return jsonify(response_data), 200
 
     except Exception as exc:
