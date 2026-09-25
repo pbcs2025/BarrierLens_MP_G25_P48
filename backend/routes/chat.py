@@ -23,11 +23,15 @@ chat_bp = Blueprint("chat", __name__)
 
 @chat_bp.route("/health", methods=["GET"])
 def health_check() -> Any:
-    """Return backend health status."""
+    """Return backend health status and active Ollama model info."""
+    from backend.config.settings import settings
     return jsonify({
         "status": "healthy",
         "service": "BarrierLens Research Intelligence Assistant Backend",
         "version": "1.0.0",
+        "ollama_available": settings.is_ollama_available,
+        "model": settings.OLLAMA_MODEL,
+        "max_tokens": settings.MAX_TOKENS,
     }), 200
 
 

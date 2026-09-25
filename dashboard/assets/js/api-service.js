@@ -127,25 +127,33 @@
     if (typeof fetch === 'undefined') return null;
 
     const endpoints = [
-      `${_apiBaseUrl}/chat`
+      `${_apiBaseUrl}/chat`,
+      'http://localhost:5000/api/chat',
+      'http://127.0.0.1:5000/api/chat'
     ];
 
-    if (_apiBaseUrl === '/api' && typeof window !== 'undefined' && window.location && window.location.hostname === 'localhost') {
-      endpoints.push('http://localhost:5000/api/chat');
-      endpoints.push('http://localhost:8000/api/chat');
-    }
+    const uniqueEndpoints = Array.from(new Set(endpoints));
 
-    for (const endpoint of endpoints) {
+    for (const endpoint of uniqueEndpoints) {
       try {
+        const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timeoutId = controller ? setTimeout(() => controller.abort(), 35000) : null;
+
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: controller ? controller.signal : undefined
         });
 
-        const data = await response.json().catch(() => null);
-        if (data) return data;
-        if (response.ok) return {};
+        if (timeoutId) clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.json().catch(() => null);
+          if (data && (data.answer || data.response)) {
+            return data;
+          }
+        }
       } catch (err) {
         console.warn(`[BarrierLensAPIService] Notice: ${endpoint} unreachable (${err.message}).`);
       }
@@ -153,6 +161,7 @@
 
     return {
       status: "api_error",
+      isOffline: true,
       answer: "Unable to connect to the BarrierLens AI service. Please make sure the backend and Ollama are running."
     };
   }

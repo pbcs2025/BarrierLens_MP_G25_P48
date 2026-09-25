@@ -309,11 +309,10 @@
     const calculations = CalculationModule.calculateDerivedValues(retrieval);
     const evidencePayload = EvidenceModule.buildEvidencePayload(intentResult, entities, retrieval, calculations);
 
-    // 4. Call Ollama backend API if available, otherwise use deterministic fallback
-    if (APIService && typeof APIService.sendChatMessage === 'function') {
+    // 4. Call Ollama backend API if available and not skipped, otherwise use deterministic fallback
+    if (!options.skipBackend && APIService && typeof APIService.sendChatMessage === 'function') {
       try {
         // Prepare request payload for backend API
-        // Don't send evidence if it's unavailable - let Ollama generate response from its knowledge
         const chatPayload = {
           question: queryStr,
           message: queryStr,
@@ -350,30 +349,8 @@
             claims: backendResponse.claims || []
           };
         }
-
-        // If backend returns unavailable or error status, fall through to deterministic answer
-        if (backendResponse && (backendResponse.status === "unavailable" || backendResponse.status === "api_error")) {
-          // Use backend error message if available
-          return {
-            answer: backendResponse.answer || formatDeterministicAnswer(evidencePayload),
-            language: backendResponse.language || language || "en",
-            intent: backendResponse.intent || intentResult.intent,
-            confidence: intentResult.confidence,
-            entities: entities,
-            source: backendResponse.source || evidencePayload.provenance.dataSourcesUsed || [],
-            relatedPage: backendResponse.relatedPage || INTENT_PAGE_MAP[intentResult.intent] || null,
-            status: backendResponse.status || evidencePayload.status,
-            metrics: backendResponse.metrics || evidencePayload.evidence.map(e => ({ label: e.label, value: e.value, unit: e.unit, entity: e.entity })),
-            evidence: evidencePayload.evidence,
-            calculations: evidencePayload.calculations,
-            methodologyNote: evidencePayload.methodologyNote,
-            limitationNote: evidencePayload.limitationNote,
-            disclaimer: backendResponse.disclaimer || (intentResult.intent === "LIMITATIONS" ? "Cross-sectional survey data; association does not establish clinical causality." : null)
-          };
-        }
       } catch (error) {
         console.warn('[BarrierLensResponse] Backend API call failed, using deterministic fallback:', error.message || error);
-        // Fall through to deterministic answer
       }
     }
 

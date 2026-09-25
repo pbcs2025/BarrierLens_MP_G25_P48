@@ -982,7 +982,14 @@
     const responseEngine = getResponseEngine();
     let localResult = null;
     if (responseEngine && responseEngine.processUserQuery) {
-      localResult = await responseEngine.processUserQuery(query, lang, { barrierContext: _activeBarrier });
+      try {
+        localResult = await responseEngine.processUserQuery(query, lang, { 
+          barrierContext: _activeBarrier,
+          skipBackend: true
+        });
+      } catch (err) {
+        console.warn("[BarrierLensChatbotUI] Local evidence extraction warning:", err);
+      }
     }
 
     // Attempt backend Ollama API call with conversation history
@@ -999,27 +1006,37 @@
           question: query,
           language: lang,
           history: history,
+          activeBarrier: _activeBarrier,
           evidence: localResult || undefined
         };
 
         const backendResp = await apiService.sendChatMessage(backendPayload);
-        if (backendResp) {
-          const ans = backendResp.response || backendResp.answer;
-          if (ans) {
-            backendResp.answer = ans;
-            backendResp.response = ans;
-            return Object.assign({}, localResult || {}, backendResp);
-          }
+        if (backendResp && backendResp.status === "success" && (backendResp.answer || backendResp.response)) {
+          const ans = backendResp.answer || backendResp.response;
+          return Object.assign({}, localResult || {}, backendResp, {
+            answer: ans,
+            response: ans
+          });
         }
       } catch (err) {
-        console.warn("[BarrierLensChatbotUI] Backend API call failed, using local engine:", err);
+        console.warn("[BarrierLensChatbotUI] Backend API call failed, falling back to local engine:", err);
       }
     }
 
-    if (!localResult) {
-      throw new Error("Central processUserQuery function not found.");
+    // Seamless offline fallback
+    if (localResult && localResult.answer) {
+      return localResult;
     }
-    return localResult;
+
+    return {
+      answer: "BarrierLens analyzes healthcare access barriers among 724,115 Indian women from the NFHS-5 dataset. Please ask any question about household, logistic, or facility barriers, disparities, or ML predictive models.",
+      status: "fallback",
+      language: lang,
+      intent: "GENERAL",
+      source: ["NFHS-5 (2019-21)"],
+      metrics: [],
+      evidence: []
+    };
   }
 
   function renderUserMessage(text) {
