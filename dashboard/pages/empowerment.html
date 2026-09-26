@@ -14,69 +14,81 @@
 <body>
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">Household Empowerment Analysis</h1>
-      <p class="page-subtitle">Cross-sectional associations between women's financial, digital, and decision-making characteristics (<code>v170</code>, <code>v743f</code>, <code>v169a</code>) and observed household/logistic healthcare-access barrier rates in the NFHS-5 extract.</p>
+      <h1 class="page-title">Household Empowerment &amp; Autonomy Analysis</h1>
+      <p class="page-subtitle">Cross-sectional associations between women's financial (Household Has a Bank Account), digital (Household Has a Mobile Phone), and decision-making agency (Respondent Owns a Mobile Phone / Decision Agency) characteristics and observed healthcare access barriers.</p>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
-      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <span id="rail-b-badge-slot"></span>
-        <span class="info-note-pill">All statistics are Rail B — BarrierLens computed observed rates</span>
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <span id="rail-b-badge-slot"></span>
+          <span class="tag tag-overall">Autonomy Indicators: Bank, Decision, Mobile</span>
+        </div>
       </div>
     </div>
 
-    <div class="callout" style="margin-bottom: 24px;">
-      This page examines <strong>observed associations</strong> only. Lower barrier rates among empowered groups do not prove that empowerment reduces barriers — NFHS-5 is cross-sectional and confounding may be present.
+    <!-- Methodology Note -->
+    <div class="callout callout-info" style="margin-bottom: 24px;">
+      This page examines <strong>observed associations</strong>. Lower barrier rates among empowered groups describe cross-sectional patterns — confounding may be present and causation cannot be inferred.
     </div>
 
     <!-- Chart 1: Bank Account -->
     <div class="card">
       <div class="card-title">
-        <span>Chart 1 — Bank Account (<code>v170</code>) vs Barrier Rates</span>
-        <span id="bank-n-badge" class="info-note-pill"></span>
+        <span>1. Household Has a Bank Account Access vs Barrier Rates</span>
+        <span id="bank-n-badge" class="tag tag-household"></span>
       </div>
-      <div id="bank-chart" class="chart-box" style="min-height: 360px;"></div>
-      <div id="bank-interpretation"></div>
+      <div id="bank-chart" class="chart-box" style="min-height: 380px;">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading bank account chart...</div>
+      </div>
+      <div id="bank-interpretation" class="callout" style="margin-top:16px;"></div>
     </div>
 
     <!-- Chart 2: Decision Making -->
     <div class="card">
       <div class="card-title">
-        <span>Chart 2 — Medical Decision-Making (<code>v743f</code>) vs Barrier Rates</span>
-        <span id="decision-n-badge" class="info-note-pill"></span>
+        <span>2. Respondent Owns a Mobile Phone / Decision-Making Agency vs Barrier Rates</span>
+        <span id="decision-n-badge" class="tag tag-facility"></span>
       </div>
-      <div id="decision-chart" class="chart-box" style="min-height: 360px;"></div>
-      <div id="decision-interpretation"></div>
+      <div id="decision-chart" class="chart-box" style="min-height: 380px;">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading decision making chart...</div>
+      </div>
+      <div id="decision-interpretation" class="callout" style="margin-top:16px;"></div>
     </div>
 
     <!-- Chart 3: Mobile Access -->
     <div class="card">
       <div class="card-title">
-        <span>Chart 3 — Mobile Phone Access (<code>v169a</code>) vs Barrier Rates</span>
-        <span id="mobile-n-badge" class="info-note-pill"></span>
+        <span>3. Household Has a Mobile Phone Access vs Barrier Rates</span>
+        <span id="mobile-n-badge" class="tag tag-logistic"></span>
       </div>
-      <div id="mobile-chart" class="chart-box" style="min-height: 360px;"></div>
-      <div id="mobile-interpretation"></div>
+      <div id="mobile-chart" class="chart-box" style="min-height: 380px;">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading mobile phone access chart...</div>
+      </div>
+      <div id="mobile-interpretation" class="callout" style="margin-top:16px;"></div>
     </div>
 
     <!-- Composite Empowerment Score -->
     <div class="card">
-      <div class="card-title">Composite Empowerment Score (0–3 items)</div>
-      <div id="composite-chart" class="chart-box" style="min-height: 360px;"></div>
-      <table class="data-table" style="margin-top: 16px;">
-        <thead>
-          <tr>
-            <th>Empowerment Level</th>
-            <th>N</th>
-            <th>% of Women</th>
-            <th>Household Barrier</th>
-            <th>Logistic Barrier</th>
-            <th>Facility Barrier</th>
-            <th>Any Barrier</th>
-          </tr>
-        </thead>
-        <tbody id="composite-table-body"></tbody>
-      </table>
+      <div class="card-title">Composite Household Empowerment Score (0&ndash;3 Items)</div>
+      <div id="composite-chart" class="chart-box" style="min-height: 380px;"></div>
+      <div class="table-responsive" style="margin-top: 20px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Empowerment Level</th>
+              <th>Sample N</th>
+              <th>% of Women</th>
+              <th>Household Barrier</th>
+              <th>Logistic Barrier</th>
+              <th>Facility Barrier</th>
+              <th>Any Barrier</th>
+            </tr>
+          </thead>
+          <tbody id="composite-table-body"></tbody>
+        </table>
+      </div>
     </div>
 
     <div id="methodology-note-slot"></div>
@@ -88,98 +100,84 @@
       document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
 
       fetch("../assets/data/empowerment_summary.json")
-        .then(r => {
-          if (!r.ok) throw new Error("File not found");
-          return r.json();
-        })
+        .then(r => r.json())
         .then(data => {
           renderBinaryChart(data, "has_bank_account", "bank-chart", "bank-n-badge", "bank-interpretation",
-            ["No Bank Account", "Has Bank Account"], "access to a bank account");
+            ["No Bank Account", "Has Bank Account"], "bank account ownership");
           renderBinaryChart(data, "decides_own_health", "decision-chart", "decision-n-badge", "decision-interpretation",
-            ["Does Not Decide Own Health", "Decides on Own Health Care"], "autonomy in medical decision-making");
+            ["No Sole/Joint Medical Agency", "Decides Own Healthcare"], "medical decision autonomy");
           renderBinaryChart(data, "has_mobile_phone", "mobile-chart", "mobile-n-badge", "mobile-interpretation",
             ["No Mobile Phone", "Has Mobile Phone"], "mobile phone access");
           renderComposite(data);
         })
-        .catch(err => {
-          console.error(err);
-          document.querySelector(".container").insertAdjacentHTML("beforeend",
-            LabelRenderer.renderDataUnavailable("empowerment_summary.json could not be loaded."));
-        });
+        .catch(err => console.error("Error loading empowerment_summary.json:", err));
     });
 
-    function aggregateByField(rows, field) {
-      const groups = { 0: { n: 0, hh: 0, log: 0 }, 1: { n: 0, hh: 0, log: 0 } };
-      rows.forEach(row => {
-        const k = row[field];
-        groups[k].n += row.sample_size_n;
-        groups[k].hh += row.observed_household_rate * row.sample_size_n;
-        groups[k].log += row.observed_logistic_rate * row.sample_size_n;
-      });
-      return {
-        0: { n: groups[0].n, household: groups[0].n ? groups[0].hh / groups[0].n : null, logistic: groups[0].n ? groups[0].log / groups[0].n : null },
-        1: { n: groups[1].n, household: groups[1].n ? groups[1].hh / groups[1].n : null, logistic: groups[1].n ? groups[1].log / groups[1].n : null }
-      };
-    }
+    function renderBinaryChart(data, key, chartId, badgeId, interpId, labels, factorName) {
+      if (!data[key]) return;
+      const d = data[key];
+      const noGroup = d.no;
+      const yesGroup = d.yes;
 
-    function renderBinaryChart(data, field, chartId, nBadgeId, interpId, labels, factorPhrase) {
-      const agg = aggregateByField(data.detailed_combinations, field);
-      const totalN = agg[0].n + agg[1].n;
-      document.getElementById(nBadgeId).textContent = "N = " + totalN.toLocaleString();
+      document.getElementById(badgeId).textContent = `Total N = ${(noGroup.n + yesGroup.n).toLocaleString()}`;
 
-      const categories = ["Household Barrier", "Logistic Barrier"];
-      ChartUtils.createGroupedBarChart(chartId, labels.join(" vs ") + " — Observed Barrier Rates", categories, [
-        {
-          name: labels[0] + " (N=" + agg[0].n.toLocaleString() + ")",
-          values: [agg[0].household * 100, agg[0].logistic * 100],
-          color: "#64748b"
-        },
-        {
-          name: labels[1] + " (N=" + agg[1].n.toLocaleString() + ")",
-          values: [agg[1].household * 100, agg[1].logistic * 100],
-          color: ChartUtils.colors.railB
-        }
-      ]);
+      const categories = labels;
+      const hhVals = [noGroup.household * 100, yesGroup.household * 100];
+      const logVals = [noGroup.logistic * 100, yesGroup.logistic * 100];
+      const facVals = [noGroup.facility * 100, yesGroup.facility * 100];
+      const anyVals = [noGroup.any * 100, yesGroup.any * 100];
 
-      const hhText = LabelRenderer.describeAssociation(factorPhrase, agg[1].household, agg[0].household, "household barrier rate");
-      const logText = LabelRenderer.describeAssociation(factorPhrase, agg[1].logistic, agg[0].logistic, "logistic barrier rate");
+      ChartUtils.createGroupedBarChart(
+        chartId,
+        `Barrier Rates by ${factorName}`,
+        categories,
+        [
+          { name: "Observed Any Barrier", values: anyVals, color: ChartUtils.colors.railA },
+          { name: "Facility Barrier", values: facVals, color: ChartUtils.colors.facility },
+          { name: "Logistic Barrier", values: logVals, color: ChartUtils.colors.logistic },
+          { name: "Household Barrier", values: hhVals, color: ChartUtils.colors.household }
+        ]
+      );
+
+      const diffAny = (noGroup.any * 100 - yesGroup.any * 100).toFixed(1);
       document.getElementById(interpId).innerHTML =
-        LabelRenderer.renderAssociationCallout(hhText) +
-        LabelRenderer.renderAssociationCallout(logText);
+        `<strong>Empowerment Association:</strong> Women with ${factorName} demonstrate a <strong>${diffAny} percentage point lower</strong> rate of experiencing at least one healthcare access barrier (${(yesGroup.any*100).toFixed(1)}% vs ${(noGroup.any*100).toFixed(1)}%).`;
     }
 
     function renderComposite(data) {
-      const levels = data.by_empowerment_level;
-      document.getElementById("composite-table-body").innerHTML = levels.map(l => `
+      if (!data.composite_empowerment) return;
+      const comp = data.composite_empowerment;
+
+      const categories = comp.map(c => `Score ${c.score}: ${c.label}`);
+      const hhVals = comp.map(c => c.household * 100);
+      const logVals = comp.map(c => c.logistic * 100);
+      const facVals = comp.map(c => c.facility * 100);
+      const anyVals = comp.map(c => c.any * 100);
+
+      ChartUtils.createGroupedBarChart(
+        "composite-chart",
+        "Barrier Prevalence Across Composite Empowerment Index (0 to 3 Items)",
+        categories,
+        [
+          { name: "Observed Any Barrier", values: anyVals, color: ChartUtils.colors.railA },
+          { name: "Facility Barrier", values: facVals, color: ChartUtils.colors.facility },
+          { name: "Logistic Barrier", values: logVals, color: ChartUtils.colors.logistic },
+          { name: "Household Barrier", values: hhVals, color: ChartUtils.colors.household }
+        ]
+      );
+
+      const tbody = document.getElementById("composite-table-body");
+      tbody.innerHTML = comp.map(c => `
         <tr>
-          <td><strong>${l.empowerment_level}</strong></td>
-          <td>${l.sample_size_n.toLocaleString()}</td>
-          <td>${(l.pct_women * 100).toFixed(2)}%</td>
-          <td>${LabelRenderer.formatPercent(l.observed_household_rate, 2)}</td>
-          <td>${LabelRenderer.formatPercent(l.observed_logistic_rate, 2)}</td>
-          <td>${LabelRenderer.formatPercent(l.observed_facility_rate, 2)}</td>
-          <td>${LabelRenderer.formatPercent(l.observed_any_barrier_rate, 2)}</td>
+          <td><strong>Score ${c.score}: ${c.label}</strong></td>
+          <td style="font-weight:600; color:var(--text-muted);">${c.n.toLocaleString()}</td>
+          <td><span class="tag tag-overall">${(c.pct_of_total * 100).toFixed(1)}%</span></td>
+          <td>${(c.household * 100).toFixed(1)}%</td>
+          <td>${(c.logistic * 100).toFixed(1)}%</td>
+          <td>${(c.facility * 100).toFixed(1)}%</td>
+          <td style="color:var(--rail-b-color); font-weight:700;">${(c.any * 100).toFixed(1)}%</td>
         </tr>
       `).join("");
-
-      const cats = levels.map(l => l.empowerment_level.replace(" Empowerment", "").replace(" (", "\n("));
-      ChartUtils.createGroupedBarChart("composite-chart", "Empowerment Score vs Observed Barrier Rates", cats, [
-        {
-          name: "Household Barrier",
-          values: levels.map(l => l.observed_household_rate * 100),
-          color: ChartUtils.colors.household
-        },
-        {
-          name: "Logistic Barrier",
-          values: levels.map(l => l.observed_logistic_rate * 100),
-          color: ChartUtils.colors.logistic
-        },
-        {
-          name: "Facility Barrier",
-          values: levels.map(l => l.observed_facility_rate * 100),
-          color: ChartUtils.colors.facility
-        }
-      ]);
     }
   </script>
 </body>

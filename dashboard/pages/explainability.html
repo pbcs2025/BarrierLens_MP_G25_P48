@@ -146,6 +146,41 @@
     let regressionData = null;
     let activeTarget = "household";
 
+    function fetchJson(filename) {
+      const paths = [
+        "../assets/data/" + filename,
+        "assets/data/" + filename,
+        "/assets/data/" + filename
+      ];
+
+      function tryNext(index) {
+        if (index >= paths.length) return Promise.resolve(null);
+        return fetch(paths[index])
+          .then(r => r.ok ? r.json() : tryNext(index + 1))
+          .catch(() => tryNext(index + 1));
+      }
+
+      return tryNext(0);
+    }
+
+    function ensurePlotlyThen(callback) {
+      if (window.Plotly) {
+        callback();
+      } else {
+        let attempts = 0;
+        const interval = setInterval(() => {
+          attempts++;
+          if (window.Plotly) {
+            clearInterval(interval);
+            callback();
+          } else if (attempts > 30) {
+            clearInterval(interval);
+            console.error("Plotly CDN initialization timed out.");
+          }
+        }, 100);
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("rail-b-stage1-badge").innerHTML = LabelRenderer.renderRailBadge("B_STAGE1");
       document.getElementById("rail-b-shap-badge").innerHTML = LabelRenderer.renderRailBadge("B_SHAP");
@@ -156,19 +191,16 @@
       renderShapGallery("stage2-xgb-shap-gallery", SHAP_MAP.stage2_xgb);
       renderShapGallery("stage2-xgb-extra-gallery", SHAP_MAP.stage2_xgb_extra);
 
-      fetch("../assets/data/regression_summary.json")
-        .then(r => r.ok ? r.json() : null)
-        .catch(() => null)
-        .then(data => {
-          regressionData = data;
-          if (!data) {
-            document.getElementById("lr-or-chart").innerHTML = LabelRenderer.renderDataUnavailable("regression_summary.json not available.");
-            return;
-          }
-          renderTarget(activeTarget);
-          renderTopPredictors(data);
-          renderInterpretation(data);
-        });
+      fetchJson("regression_summary.json").then(data => {
+        regressionData = data;
+        if (!data) {
+          document.getElementById("lr-or-chart").innerHTML = LabelRenderer.renderDataUnavailable("regression_summary.json not available.");
+          return;
+        }
+        renderTarget(activeTarget);
+        renderTopPredictors(data);
+        renderInterpretation(data);
+      });
     });
 
     function switchTarget(target, btn) {
@@ -192,39 +224,44 @@
       const topRisk = t.top_risk_factors.slice(0, 10);
       const topProt = t.top_protective_factors.slice(0, 10).reverse();
       const combined = topProt.concat(topRisk);
-      const features = combined.map(f => f.feature);
+      const features = combined.map(f => LabelRenderer.formatFeatureName(f.feature));
       const orValues = combined.map(f => f.odds_ratio);
       const colors = combined.map(f => f.odds_ratio > 1.05 ? "#e11d48" : f.odds_ratio < 0.95 ? "#0d9488" : "#64748b");
 
-      Plotly.newPlot("lr-or-chart", [{
-        x: orValues,
-        y: features,
-        type: "bar",
-        orientation: "h",
-        marker: { color: colors },
-        text: orValues.map(v => v.toFixed(3)),
-        textposition: "auto",
-        hovertemplate: "<b>%{y}</b><br>OR: %{x:.3f}<extra></extra>"
-      }], {
-        title: { text: label + " Barrier — Top LR Odds Ratios", font: { size: 16, color: "#0f172a" } },
-        shapes: [{ type: "line", x0: 1, x1: 1, y0: -0.5, y1: features.length - 0.5, line: { color: "#94a3b8", dash: "dash", width: 2 } }],
-        margin: { t: 50, b: 50, l: 220, r: 30 },
-        paper_bgcolor: "transparent",
-        plot_bgcolor: "transparent",
-        xaxis: { title: "Odds Ratio", gridcolor: "#f1f5f9", color: "#64748b" },
-        yaxis: { autorange: "reversed", color: "#0f172a" }
-      }, { responsive: true, displayModeBar: false });
-
+      // Populate Data Table
       document.getElementById("lr-table-body").innerHTML = combined.map(f => {
         const interp = LabelRenderer.interpretOddsRatio(f.odds_ratio);
+        const readableLabel = LabelRenderer.formatFeatureName(f.feature);
         return `<tr>
           <td>#${f.rank}</td>
-          <td>${f.feature}</td>
+          <td><strong>${readableLabel}</strong> <code style="font-size:0.75rem; color:#64748b;">(${f.feature})</code></td>
           <td>${f.coefficient.toFixed(4)}</td>
           <td>${f.odds_ratio.toFixed(4)}</td>
           <td class="${interp.cssClass}">${interp.label}</td>
         </tr>`;
       }).join("");
+
+      // Render Plotly Chart safely
+      ensurePlotlyThen(() => {
+        Plotly.newPlot("lr-or-chart", [{
+          x: orValues,
+          y: features,
+          type: "bar",
+          orientation: "h",
+          marker: { color: colors },
+          text: orValues.map(v => v.toFixed(3)),
+          textposition: "auto",
+          hovertemplate: "<b>%{y}</b><br>OR: %{x:.3f}<extra></extra>"
+        }], {
+          title: { text: label + " Barrier — Top LR Odds Ratios", font: { size: 16, color: "#0f172a" } },
+          shapes: [{ type: "line", x0: 1, x1: 1, y0: -0.5, y1: features.length - 0.5, line: { color: "#94a3b8", dash: "dash", width: 2 } }],
+          margin: { t: 50, b: 50, l: 320, r: 30 },
+          paper_bgcolor: "transparent",
+          plot_bgcolor: "transparent",
+          xaxis: { title: "Odds Ratio", gridcolor: "#f1f5f9", color: "#64748b" },
+          yaxis: { autorange: "reversed", color: "#0f172a" }
+        }, { responsive: true, displayModeBar: false });
+      });
     }
 
     function renderTopPredictors(data) {
@@ -244,7 +281,7 @@
 
       allFeatures.sort((a, b) => b.magnitude - a.magnitude);
       const top15 = allFeatures.slice(0, 15);
-      const labels = top15.map(f => f.feature + " (" + f.target + ")");
+      const labels = top15.map(f => LabelRenderer.formatFeatureName(f.feature) + " (" + f.target + ")");
       const mags = top15.map(f => f.magnitude);
 
       ChartUtils.createHorizontalBarChart(
@@ -281,8 +318,8 @@
 
       let educationNote = "";
       if (educationFeatures.length) {
-        const dirs = educationFeatures.map(f => `${f.feature}: OR ${f.odds_ratio.toFixed(3)}`).join("; ");
-        educationNote = `<p><strong>Education (v106) — Stage 1 household barrier:</strong> ${dirs}. In Stage 1 LR, several education categories show OR &gt; 1 (associated with higher odds of household barriers in this model specification). This differs from the base-paper narrative that higher education is protective. The BarrierLens result is reported as an empirical model finding, not adjusted to match the reference study.</p>`;
+        const dirs = educationFeatures.map(f => `${LabelRenderer.formatFeatureName(f.feature)}: OR ${f.odds_ratio.toFixed(3)}`).join("; ");
+        educationNote = `<p><strong>Highest Educational Level — Stage 1 household barrier:</strong> ${dirs}. In Stage 1 LR, several education categories show OR &gt; 1 (associated with higher odds of household barriers in this model specification). This differs from the base-paper narrative that higher education is protective. The BarrierLens result is reported as an empirical model finding, not adjusted to match the reference study.</p>`;
       }
 
       let wealthNote = "";
@@ -290,13 +327,13 @@
         const richest = wealthFeatures.find(f => f.feature.includes("richest"));
         const poorest = wealthFeatures.find(f => f.feature.includes("poorest"));
         if (richest && poorest) {
-          wealthNote = `<p><strong>Wealth index (v190):</strong> Poorest OR = ${poorest.odds_ratio.toFixed(3)} (higher odds); Richest OR = ${richest.odds_ratio.toFixed(3)} (lower odds). This direction aligns with the base-paper finding that poor wealth is a risk factor and rich wealth is protective — as an associational pattern in the Stage 1 model.</p>`;
+          wealthNote = `<p><strong>Wealth Index Quintile:</strong> Poorest OR = ${poorest.odds_ratio.toFixed(3)} (higher odds); Richest OR = ${richest.odds_ratio.toFixed(3)} (lower odds). This direction aligns with the base-paper finding that poor wealth is a risk factor and rich wealth is protective — as an associational pattern in the Stage 1 model.</p>`;
         }
       }
 
       document.getElementById("interpretation-content").innerHTML = `
         <div class="callout callout-warning" style="margin-bottom: 16px;">
-          <strong>Honesty rule:</strong> The faculty guide gives an example that education and wealth reduce barriers. However, Stage 1 LR shows education categories with OR &gt; 1 for household barriers, and Stage 2 logistic regression for <code>target_unmet_fp</code> reports <code>v106</code> with OR = 1.144 (positive coefficient). These differences are reported as empirical model results rather than being adjusted to match expected narratives.
+          <strong>Honesty rule:</strong> The faculty guide gives an example that education and wealth reduce barriers. However, Stage 1 LR shows education categories with OR &gt; 1 for household barriers, and Stage 2 logistic regression for <code>target_unmet_fp</code> reports <code>Highest Educational Level</code> with OR = 1.144 (positive coefficient). These differences are reported as empirical model results rather than being adjusted to match expected narratives.
         </div>
         ${educationNote}
         ${wealthNote}
@@ -305,7 +342,7 @@
       `;
 
       document.getElementById("key-takeaways").textContent =
-        "Poorest wealth (v190_poorest) ranks among the strongest risk factors across all three Stage 1 barrier targets. Richest wealth is consistently protective (OR < 1). Education effects in Stage 1 LR do not uniformly match the base-paper protective narrative — some education levels show OR > 1. SHAP plots confirm socioeconomic and barrier-probability features among top contributors in both Stage 1 barrier models and Stage 2 outcome models. All findings are predictive/associational.";
+        "Poorest wealth (Wealth Index: Poorest) ranks among the strongest risk factors across all three Stage 1 barrier targets. Richest wealth is consistently protective (OR < 1). Education effects in Stage 1 LR do not uniformly match the base-paper protective narrative — some education levels show OR > 1. SHAP plots confirm socioeconomic and barrier-probability features among top contributors in both Stage 1 barrier models and Stage 2 outcome models. All findings are predictive/associational.";
     }
   </script>
 </body>

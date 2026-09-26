@@ -15,79 +15,104 @@
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">Multiple Overlapping Barrier Analysis</h1>
-      <p class="page-subtitle">Evaluating compounded disadvantage across 0, 1, 2, and 3 concurrent healthcare access barrier domains (NFHS-5, N=724,115).</p>
+      <p class="page-subtitle">Evaluating compounded disadvantage across 0, 1, 2, and 3 concurrent healthcare access barrier domains (NFHS-5, N = 724,115).</p>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
-      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <span id="rail-a-badge-slot"></span>
-        <span id="rail-b-badge-slot"></span>
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <span id="rail-a-badge-slot"></span>
+          <span id="rail-b-badge-slot"></span>
+        </div>
+        <div class="tag tag-overall">Compounded Disadvantage Assessment</div>
       </div>
     </div>
 
     <!-- KPI Cards -->
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title">Total Sample Size</div>
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-header">
+          <div class="kpi-title">Total Sample Size</div>
+          <span class="tag tag-overall">N=724,115</span>
+        </div>
         <div class="kpi-value" id="kpi-total-n">724,115</div>
         <div class="kpi-subtext">Women Analysed</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Facing 2+ Barriers</div>
-        <div class="kpi-value" id="kpi-2plus-pct" style="color: #e11d48;">30.85%</div>
-        <div class="kpi-subtext">Compounded Disadvantage</div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-header">
+          <div class="kpi-title">Facing 2+ Barriers</div>
+          <span class="tag tag-facility">Severe Risk</span>
+        </div>
+        <div class="kpi-value" id="kpi-2plus-pct" style="color: var(--domain-facility);">30.85%</div>
+        <div class="kpi-subtext">Nearly 1 in 3 Women</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Mean Barrier Count</div>
-        <div class="kpi-value" id="kpi-mean-count">1.05</div>
-        <div class="kpi-subtext">Out of 3 Barrier Types</div>
+
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-header">
+          <div class="kpi-title">Mean Barrier Count</div>
+          <span class="tag tag-logistic">0 to 3</span>
+        </div>
+        <div class="kpi-value" id="kpi-mean-count" style="color: var(--domain-logistic);">1.05</div>
+        <div class="kpi-subtext">Average Barriers / Woman</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Zero Barriers</div>
-        <div class="kpi-value" id="kpi-zero-barrier" style="color: #0d9488;">39.32%</div>
-        <div class="kpi-subtext">Unimpeded Access</div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-header">
+          <div class="kpi-title">Zero Barriers</div>
+          <span class="tag tag-household">Unimpeded</span>
+        </div>
+        <div class="kpi-value" id="kpi-zero-barrier" style="color: var(--secondary-color);">39.32%</div>
+        <div class="kpi-subtext">No Barrier Reported</div>
       </div>
     </div>
 
-    <!-- Overall Distribution Chart -->
+    <!-- Overall Distribution Chart Card -->
     <div class="card">
-      <div class="card-title">National Distribution of Concurrent Barrier Counts (0–3 Barriers)</div>
-      <div id="overall-distribution-chart" class="chart-box"></div>
+      <div class="card-title">
+        <span>National Distribution of Concurrent Barrier Counts (0&ndash;3 Barriers)</span>
+      </div>
+      <div id="overall-distribution-chart" class="chart-box" style="min-height: 400px;">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading barrier count distribution...</div>
+      </div>
     </div>
 
-    <!-- Wealth Tier Breakdown Chart -->
+    <!-- Wealth Tier Breakdown Chart Card -->
     <div class="card">
-      <div class="card-title">Compounded Disadvantage by Wealth Tier (Stacked 0–3 Barriers)</div>
-      <div id="wealth-stacked-chart" class="chart-box"></div>
+      <div class="card-title">
+        <span>Compounded Disadvantage by Wealth Tier (Stacked 0&ndash;3 Barriers)</span>
+      </div>
+      <div id="wealth-stacked-chart" class="chart-box" style="min-height: 440px;"></div>
     </div>
 
-    <!-- Residence Breakdown Chart -->
+    <!-- Residence Breakdown Chart Card -->
     <div class="card">
-      <div class="card-title">Multiple Barrier Pattern by Residence (Rural vs Urban)</div>
-      <div id="residence-stacked-chart" class="chart-box"></div>
+      <div class="card-title">
+        <span>Multiple Barrier Pattern by Residence (Rural vs Urban)</span>
+      </div>
+      <div id="residence-stacked-chart" class="chart-box" style="min-height: 400px;"></div>
     </div>
 
     <!-- Executive Insights Card -->
     <div class="insights-card">
       <div class="insights-card-header">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <div class="insights-card-title">Compounded Disadvantage Insights</div>
       </div>
       <p class="insights-card-body" id="interpretation-text">
-        The coexistence of household, logistic, and facility-level barriers highlights compounded disadvantage among vulnerable women — nearly 1 in 3 Indian women (30.85%) faces 2 or more concurrent healthcare access barriers. Severe multi-barrier exposure is disproportionately concentrated in the poorest wealth quintile (45.2% facing 2+ barriers) compared to the richest quintile (14.8%).
+        The coexistence of household, logistic, and facility-level barriers highlights compounded disadvantage among vulnerable women &mdash; nearly 1 in 3 Indian women (30.85%) faces 2 or more concurrent healthcare access barriers. Severe multi-barrier exposure is disproportionately concentrated in the poorest wealth quintile (45.2% facing 2+ barriers) compared to the richest quintile (14.8%).
       </p>
     </div>
 
-    <!-- Data & Methodology Notes -->
     <div id="methodology-note-slot"></div>
   </div>
 
-
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Badges
       document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
       document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
+      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
 
       fetch("../assets/data/multiple_barrier_summary.json")
         .then(res => res.json())
@@ -99,53 +124,71 @@
           
           const zeroObj = overall.distribution.find(d => d.barrier_count === 0);
           if (zeroObj) {
-            document.getElementById("kpi-zero-barrier").textContent = (zeroObj.pct_women * 100).toFixed(2) + "%";
+            document.getElementById("kpi-zero-barrier").textContent = (zeroObj.pct * 100).toFixed(2) + "%";
           }
 
-          // 1. Overall Distribution Bar Chart
-          const distLabels = overall.distribution.map(d => d.label);
-          const distVals = overall.distribution.map(d => d.pct_women * 100);
-
-          const overallData = [{
-            x: distLabels,
-            y: distVals,
-            type: 'bar',
-            marker: { color: ['#0d9488', '#2563eb', '#d97706', '#e11d48'] },
-            text: distVals.map(v => v.toFixed(1) + '%'),
-            textposition: 'auto'
-          }];
-
-          Plotly.newPlot("overall-distribution-chart", overallData, {
-            title: { text: "Percentage of Women by Number of Healthcare Access Barriers Faced", font: { size: 15 } },
-            margin: { t: 40, b: 40, l: 50, r: 20 },
-            xaxis: { title: "Barrier Count" },
-            yaxis: { title: "Percentage of Women (%)", gridcolor: '#f1f5f9' },
-            paper_bgcolor: 'transparent',
-            plot_bgcolor: 'transparent'
-          }, { responsive: true, displayModeBar: false });
-
-          // 2. Wealth Stacked Bar Chart
-          const wealthTiers = data.by_wealth_tier.map(w => w.wealth_tier);
-          const seriesWealth = [
-            { name: "0 Barriers", values: data.by_wealth_tier.map(w => w.distribution.count_0_pct * 100), color: "#0d9488" },
-            { name: "1 Barrier", values: data.by_wealth_tier.map(w => w.distribution.count_1_pct * 100), color: "#2563eb" },
-            { name: "2 Barriers", values: data.by_wealth_tier.map(w => w.distribution.count_2_pct * 100), color: "#d97706" },
-            { name: "3 Barriers", values: data.by_wealth_tier.map(w => w.distribution.count_3_pct * 100), color: "#e11d48" }
-          ];
-          ChartUtils.createStackedBarChart("wealth-stacked-chart", "Barrier Count Breakdown Across Wealth Tiers", wealthTiers, seriesWealth);
-
-          // 3. Residence Stacked Bar Chart
-          const resTiers = data.by_residence.map(r => r.residence);
-          const seriesRes = [
-            { name: "0 Barriers", values: data.by_residence.map(r => r.distribution.count_0_pct * 100), color: "#0d9488" },
-            { name: "1 Barrier", values: data.by_residence.map(r => r.distribution.count_1_pct * 100), color: "#2563eb" },
-            { name: "2 Barriers", values: data.by_residence.map(r => r.distribution.count_2_pct * 100), color: "#d97706" },
-            { name: "3 Barriers", values: data.by_residence.map(r => r.distribution.count_3_pct * 100), color: "#e11d48" }
-          ];
-          ChartUtils.createStackedBarChart("residence-stacked-chart", "Barrier Count Breakdown: Rural vs Urban", resTiers, seriesRes);
+          renderOverallChart(overall.distribution);
+          renderWealthChart(data.by_wealth_tier);
+          renderResidenceChart(data.by_residence);
         })
         .catch(err => console.error("Error loading multiple_barrier_summary.json:", err));
     });
+
+    function renderOverallChart(dist) {
+      const categories = dist.map(d => `${d.barrier_count} Barrier${d.barrier_count === 1 ? '' : 's'}`);
+      const values = dist.map(d => d.pct * 100);
+
+      ChartUtils.createRankedBarChart(
+        "overall-distribution-chart",
+        "National Barrier Count Distribution (0 to 3 Concurrent Barriers)",
+        categories,
+        values,
+        ChartUtils.colors.railA,
+        "Percentage of Women (%)"
+      );
+    }
+
+    function renderWealthChart(wealthData) {
+      if (!wealthData) return;
+      const categories = wealthData.map(w => w.tier);
+      const b0 = wealthData.map(w => w.b0 * 100);
+      const b1 = wealthData.map(w => w.b1 * 100);
+      const b2 = wealthData.map(w => w.b2 * 100);
+      const b3 = wealthData.map(w => w.b3 * 100);
+
+      ChartUtils.createStackedBarChart(
+        "wealth-stacked-chart",
+        "Barrier Count Stacked Breakdown by Wealth Quintile",
+        categories,
+        [
+          { name: "0 Barriers (Unimpeded)", values: b0, color: ChartUtils.colors.basePaper },
+          { name: "1 Barrier Domain", values: b1, color: ChartUtils.colors.household },
+          { name: "2 Barrier Domains", values: b2, color: ChartUtils.colors.logistic },
+          { name: "3 Barrier Domains (Severe)", values: b3, color: ChartUtils.colors.facility }
+        ]
+      );
+    }
+
+    function renderResidenceChart(resData) {
+      if (!resData) return;
+      const categories = resData.map(r => r.type);
+      const b0 = resData.map(r => r.b0 * 100);
+      const b1 = resData.map(r => r.b1 * 100);
+      const b2 = resData.map(r => r.b2 * 100);
+      const b3 = resData.map(r => r.b3 * 100);
+
+      ChartUtils.createStackedBarChart(
+        "residence-stacked-chart",
+        "Barrier Count Stacked Breakdown by Place of Residence",
+        categories,
+        [
+          { name: "0 Barriers (Unimpeded)", values: b0, color: ChartUtils.colors.basePaper },
+          { name: "1 Barrier Domain", values: b1, color: ChartUtils.colors.household },
+          { name: "2 Barrier Domains", values: b2, color: ChartUtils.colors.logistic },
+          { name: "3 Barrier Domains (Severe)", values: b3, color: ChartUtils.colors.facility }
+        ]
+      );
+    }
   </script>
 </body>
 </html>

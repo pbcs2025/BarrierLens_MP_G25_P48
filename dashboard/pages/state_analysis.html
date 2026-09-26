@@ -15,72 +15,121 @@
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">State-Wise Healthcare Access Barrier Analysis</h1>
-      <p class="page-subtitle">Geographical and regional disparity analysis across 36 Indian States and Union Territories (NFHS-5, N=724,115).</p>
+      <p class="page-subtitle">Geographical and regional disparity analysis across 36 Indian States and Union Territories (NFHS-5, Sample N = 724,115).</p>
     </div>
 
-    <!-- Rail Badges Header -->
-    <div class="card" style="margin-bottom: 20px;">
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
       <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
         <span id="rail-a-badge-slot"></span>
         <span id="rail-b-badge-slot"></span>
+        <span class="tag tag-overall">36 States &amp; UTs</span>
       </div>
     </div>
 
     <!-- KPI Cards -->
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title">Total States & UTs</div>
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-header">
+          <div class="kpi-title">Coverage</div>
+          <span class="tag tag-overall">36 UTs/States</span>
+        </div>
         <div class="kpi-value">36</div>
-        <div class="kpi-subtext">Nationwide Coverage</div>
+        <div class="kpi-subtext">Nationwide Scope</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Highest Barrier State</div>
-        <div class="kpi-value" id="kpi-max-state" style="color: #e11d48;">-</div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-header">
+          <div class="kpi-title">Highest Barrier State</div>
+          <span class="tag tag-facility">Max Risk</span>
+        </div>
+        <div class="kpi-value" id="kpi-max-state" style="color: var(--domain-facility);">-</div>
         <div class="kpi-subtext" id="kpi-max-rate">Loading...</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Lowest Barrier State</div>
-        <div class="kpi-value" id="kpi-min-state" style="color: #0d9488;">-</div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-header">
+          <div class="kpi-title">Lowest Barrier State</div>
+          <span class="tag tag-household">Min Risk</span>
+        </div>
+        <div class="kpi-value" id="kpi-min-state" style="color: var(--secondary-color);">-</div>
         <div class="kpi-subtext" id="kpi-min-rate">Loading...</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Highest Facility Barrier</div>
-        <div class="kpi-value" id="kpi-facility-max-state" style="color: #d97706;">-</div>
+
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-header">
+          <div class="kpi-title">Highest Facility State</div>
+          <span class="tag tag-logistic">Facility Max</span>
+        </div>
+        <div class="kpi-value" id="kpi-facility-max-state" style="color: var(--domain-logistic);">-</div>
         <div class="kpi-subtext" id="kpi-facility-max-rate">Loading...</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">National Avg (≥1 Barrier)</div>
+
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-header">
+          <div class="kpi-title">National Average</div>
+          <span class="tag tag-overall">Baseline</span>
+        </div>
         <div class="kpi-value">60.68%</div>
         <div class="kpi-subtext">724,115 Women</div>
       </div>
     </div>
 
-    <!-- Interactive Controls Card -->
-    <div class="card">
-      <div class="card-title">
-        <span>State Analysis Options & Controls</span>
+    <!-- Interactive Controls Bar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">Barrier Target:</span>
+        <select id="barrier-select" class="select-input">
+          <option value="observed_any_barrier_rate">Any Barrier (Observed &ge;1)</option>
+          <option value="observed_facility_rate">Facility-Level Barrier</option>
+          <option value="observed_logistic_rate">Logistic Barrier</option>
+          <option value="observed_household_rate">Household Barrier</option>
+          <option value="predicted_composite_score">Predicted Composite Score (Rail B)</option>
+        </select>
       </div>
-      <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 12px;">
-        <div>
-          <label for="barrier-select" style="font-weight: 600; font-size: 0.875rem; color: #475569; display: block; margin-bottom: 4px;">Barrier Domain:</label>
-          <select id="barrier-select" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.9rem;">
-            <option value="observed_any_barrier_rate">Any Barrier (Observed ≥1)</option>
-            <option value="observed_facility_rate">Facility-Level Barrier</option>
-            <option value="observed_logistic_rate">Logistic Barrier</option>
-            <option value="observed_household_rate">Household Barrier</option>
-            <option value="predicted_composite_score">Predicted Composite Score (Rail B)</option>
-          </select>
+
+      <div class="filter-group">
+        <span class="filter-label">Sort Order:</span>
+        <select id="sort-order" class="select-input">
+          <option value="desc">Highest to Lowest</option>
+          <option value="asc">Lowest to Highest</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">State Inspector:</span>
+        <select id="state-inspector-select" class="select-input" style="min-width: 180px;">
+          <option value="">-- Select State to Detail --</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- State Detailed Inspector Panel -->
+    <div id="state-detail-panel" class="card" style="display: none; background: #f0f9ff; border-color: #bae6fd;">
+      <div class="card-title" style="color: #0369a1;">
+        <span id="detail-state-name">State Detail Profile</span>
+        <button id="close-state-detail" style="background:none; border:none; color:#0369a1; cursor:pointer; font-size:1.2rem;">&times;</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-top: 12px;">
+        <div style="background:#ffffff; padding:12px; border-radius:var(--radius-md); border:1px solid #cbd5e1;">
+          <div style="font-size:0.75rem; color:#64748b; font-weight:700;">TOTAL SAMPLE N</div>
+          <div style="font-size:1.3rem; font-weight:800; color:#0f172a;" id="detail-sample-n">-</div>
         </div>
-        <div>
-          <label for="sort-order" style="font-weight: 600; font-size: 0.875rem; color: #475569; display: block; margin-bottom: 4px;">Sort Order:</label>
-          <select id="sort-order" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.9rem;">
-            <option value="desc">Highest to Lowest Barrier</option>
-            <option value="asc">Lowest to Highest Barrier</option>
-          </select>
+        <div style="background:#ffffff; padding:12px; border-radius:var(--radius-md); border:1px solid #cbd5e1;">
+          <div style="font-size:0.75rem; color:#64748b; font-weight:700;">ANY BARRIER RATE</div>
+          <div style="font-size:1.3rem; font-weight:800; color:#0284c7;" id="detail-any-rate">-</div>
         </div>
-        <div>
-          <label for="state-search" style="font-weight: 600; font-size: 0.875rem; color: #475569; display: block; margin-bottom: 4px;">Search State:</label>
-          <input type="text" id="state-search" placeholder="Type state name..." style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem; width: 200px;">
+        <div style="background:#ffffff; padding:12px; border-radius:var(--radius-md); border:1px solid #cbd5e1;">
+          <div style="font-size:0.75rem; color:#64748b; font-weight:700;">FACILITY BARRIER</div>
+          <div style="font-size:1.3rem; font-weight:800; color:#e11d48;" id="detail-fac-rate">-</div>
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:var(--radius-md); border:1px solid #cbd5e1;">
+          <div style="font-size:0.75rem; color:#64748b; font-weight:700;">LOGISTIC BARRIER</div>
+          <div style="font-size:1.3rem; font-weight:800; color:#d97706;" id="detail-log-rate">-</div>
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:var(--radius-md); border:1px solid #cbd5e1;">
+          <div style="font-size:0.75rem; color:#64748b; font-weight:700;">HOUSEHOLD BARRIER</div>
+          <div style="font-size:1.3rem; font-weight:800; color:#2563eb;" id="detail-hh-rate">-</div>
         </div>
       </div>
     </div>
@@ -90,38 +139,39 @@
       <div class="card-title">
         <span id="chart-card-title">State-wise Ranked Barrier Prevalence</span>
       </div>
-      <div id="state-ranked-chart" class="chart-box" style="min-height: 550px;"></div>
+      <div id="state-ranked-chart" class="chart-box" style="min-height: 550px;">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading state rankings...</div>
+      </div>
     </div>
 
-    <!-- State-wise Treemap Card (Proportional Rectangles) -->
+    <!-- State-wise Treemap Card -->
     <div class="card">
       <div class="card-title">
         <span id="treemap-card-title">State-wise Healthcare Barrier Treemap</span>
       </div>
-      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px;">Visualizing state barrier prevalence as proportional rectangular tiles. Larger tiles represent higher barrier values.</p>
-      <div id="state-treemap-chart" class="chart-box" style="min-height: 580px;"></div>
+      <div id="state-treemap-chart" class="chart-box" style="min-height: 480px;"></div>
     </div>
 
-    <!-- Data Table Card -->
+    <!-- State Summary Data Table -->
     <div class="card">
-      <div class="card-title">Complete State-wise Healthcare Barrier Data Table</div>
-      <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 12px;">
+      <div class="card-title">
+        <span>Complete State Data Summary Table</span>
+        <input type="text" id="state-search" class="search-input" placeholder="Filter state..." style="width: 200px;" />
+      </div>
+      <div class="table-responsive">
+        <table class="data-table">
           <thead>
-            <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem;">
-              <th style="padding: 10px;">State / UT</th>
-              <th style="padding: 10px;">Sample (N)</th>
-              <th style="padding: 10px;">Household (Rail A)</th>
-              <th style="padding: 10px;">Logistic (Rail A)</th>
-              <th style="padding: 10px;">Facility (Rail A)</th>
-              <th style="padding: 10px;">Any Barrier (Rail A)</th>
-              <th style="padding: 10px;">Pred Composite (Rail B)</th>
-              <th style="padding: 10px;">Dominant Domain</th>
+            <tr>
+              <th>State / UT Name</th>
+              <th>Observed Any Barrier</th>
+              <th>Facility Barrier</th>
+              <th>Logistic Barrier</th>
+              <th>Household Barrier</th>
+              <th>Predicted Composite (Rail B)</th>
+              <th>Sample N</th>
             </tr>
           </thead>
-          <tbody id="state-table-body" style="font-size: 0.9rem;">
-            <!-- Dynamically populated -->
-          </tbody>
+          <tbody id="state-table-body"></tbody>
         </table>
       </div>
     </div>
@@ -129,122 +179,224 @@
     <!-- Executive Insights Card -->
     <div class="insights-card">
       <div class="insights-card-header">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <div class="insights-card-title">Regional Disparity & State Insights</div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="insights-card-title">Geographical Insights &amp; Spatial Disparity</div>
       </div>
-      <p class="insights-card-body" id="summary-banner-text">
-        State-level analysis reveals substantial geographical heterogeneity across India's 36 States and Union Territories. Facility-level barriers remain the dominant constraint in the vast majority of high-prevalence states, whereas household financial and decision-making barriers vary significantly by state socioeconomic indicators. Machine learning composite risk scores (Rail B) strongly correlate with observed state-level vulnerability rates.
+      <p class="insights-card-body">
+        State-level analysis reveals severe regional inequalities across India's 36 States and Union Territories. States such as Chhattisgarh, Arunachal Pradesh, and Nagaland exhibit the highest combined barrier burden, driven primarily by facility-level constraints and terrain-based logistic barriers. Conversely, Southern and Western states like Kerala and Goa demonstrate lower barrier rates due to denser healthcare infrastructure and higher female literacy.
       </p>
     </div>
 
-    <!-- Data & Methodology Notes -->
     <div id="methodology-note-slot"></div>
   </div>
 
-
   <script>
-    let rawStateData = [];
+    let stateDataGlobal = null;
 
-    document.addEventListener("DOMContentLoaded", function() {
-      // Render Rail Badges & Callout
+    document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
       document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
       document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
 
       fetch("../assets/data/state_summary.json")
-        .then(res => res.json())
+        .then(r => r.json())
         .then(data => {
-          rawStateData = data.states;
-          updateKPIs();
-          renderChartAndTable();
+          stateDataGlobal = data;
+          populateStateDropdown(data.states);
+          renderStateKPIs(data);
+          renderAllCharts();
+          renderStateTable();
         })
-        .catch(err => console.error("Error loading state_summary.json:", err));
+      fetch("../assets/data/state_summary.json")
+        .then(r => r.json())
+        .then(data => {
+          stateDataGlobal = data;
+          populateStateDropdown(data.states);
+          renderStateKPIs(data);
 
-      document.getElementById("barrier-select").addEventListener("change", renderChartAndTable);
-      document.getElementById("sort-order").addEventListener("change", renderChartAndTable);
-      document.getElementById("state-search").addEventListener("input", filterTable);
+          // Check URL parameters for state or barrier
+          const urlParams = new URLSearchParams(window.location.search);
+          const stateParam = urlParams.get("state");
+          const barrierParam = urlParams.get("barrier");
+
+          if (barrierParam && document.getElementById("barrier-select")) {
+            document.getElementById("barrier-select").value = barrierParam;
+          }
+
+          if (stateParam) {
+            const searchInput = document.getElementById("state-search");
+            if (searchInput) searchInput.value = stateParam;
+            showStateDetail(stateParam);
+          }
+
+          renderAllCharts();
+          renderStateTable(stateParam ? stateParam.toLowerCase().trim() : "");
+        })
+        .catch(err => {
+          console.error("Error loading state_summary.json:", err);
+        });
+
+      document.getElementById("barrier-select").addEventListener("change", () => renderAllCharts());
+      document.getElementById("sort-order").addEventListener("change", () => renderAllCharts());
+
+      const searchInput = document.getElementById("state-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", function() {
+          const q = this.value.trim();
+          renderStateTable(q.toLowerCase());
+          renderAllCharts(q);
+          if (q) {
+            const match = stateDataGlobal ? stateDataGlobal.states.find(s => s.state_name.toLowerCase() === q.toLowerCase()) : null;
+            if (match) showStateDetail(match.state_name);
+          }
+        });
+      }
+
+      const inspectorSelect = document.getElementById("state-inspector-select");
+      if (inspectorSelect) {
+        inspectorSelect.addEventListener("change", function() {
+          if (this.value) {
+            if (searchInput) searchInput.value = this.value;
+            showStateDetail(this.value);
+            renderAllCharts(this.value);
+            renderStateTable(this.value.toLowerCase());
+          } else {
+            document.getElementById("state-detail-panel").style.display = "none";
+            renderAllCharts();
+            renderStateTable();
+          }
+        });
+      }
+
+      const closeDetailBtn = document.getElementById("close-state-detail");
+      if (closeDetailBtn) {
+        closeDetailBtn.addEventListener("click", function() {
+          document.getElementById("state-detail-panel").style.display = "none";
+        });
+      }
     });
 
-    function updateKPIs() {
-      if (!rawStateData.length) return;
-      
-      // Sort by any barrier rate
-      const sortedAny = [...rawStateData].sort((a, b) => b.observed_any_barrier_rate - a.observed_any_barrier_rate);
-      const maxAny = sortedAny[0];
-      const minAny = sortedAny[sortedAny.length - 1];
+    function populateStateDropdown(states) {
+      const select = document.getElementById("state-inspector-select");
+      const sorted = [...states].sort((a,b) => a.state_name.localeCompare(b.state_name));
+      sorted.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.state_name;
+        opt.textContent = s.state_name;
+        select.appendChild(opt);
+      });
+    }
 
-      // Sort by facility rate
-      const sortedFacility = [...rawStateData].sort((a, b) => b.observed_facility_rate - a.observed_facility_rate);
-      const maxFacility = sortedFacility[0];
+    function showStateDetail(stateName) {
+      const panel = document.getElementById("state-detail-panel");
+      if (!stateName || !stateDataGlobal) {
+        panel.style.display = "none";
+        return;
+      }
+
+      const st = stateDataGlobal.states.find(s => s.state_name.toLowerCase() === stateName.toLowerCase());
+      if (!st) return;
+
+      document.getElementById("detail-state-name").textContent = st.state_name + " — Detailed Profile";
+      document.getElementById("detail-sample-n").textContent = st.sample_size_n.toLocaleString();
+      document.getElementById("detail-any-rate").textContent = (st.observed_any_barrier_rate * 100).toFixed(2) + "%";
+      document.getElementById("detail-fac-rate").textContent = (st.observed_facility_rate * 100).toFixed(2) + "%";
+      document.getElementById("detail-log-rate").textContent = (st.observed_logistic_rate * 100).toFixed(2) + "%";
+      document.getElementById("detail-hh-rate").textContent = (st.observed_household_rate * 100).toFixed(2) + "%";
+      panel.style.display = "block";
+    }
+
+    function renderStateKPIs(data) {
+      const sortedByAny = [...data.states].sort((a, b) => b.observed_any_barrier_rate - a.observed_any_barrier_rate);
+      const maxAny = sortedByAny[0];
+      const minAny = sortedByAny[sortedByAny.length - 1];
+
+      const sortedByFac = [...data.states].sort((a, b) => b.observed_facility_rate - a.observed_facility_rate);
+      const maxFac = sortedByFac[0];
 
       document.getElementById("kpi-max-state").textContent = maxAny.state_name;
-      document.getElementById("kpi-max-rate").textContent = (maxAny.observed_any_barrier_rate * 100).toFixed(1) + "% (" + maxAny.sample_size_n.toLocaleString() + " N)";
+      document.getElementById("kpi-max-rate").textContent = (maxAny.observed_any_barrier_rate * 100).toFixed(1) + "% Any Barrier";
 
       document.getElementById("kpi-min-state").textContent = minAny.state_name;
-      document.getElementById("kpi-min-rate").textContent = (minAny.observed_any_barrier_rate * 100).toFixed(1) + "% (" + minAny.sample_size_n.toLocaleString() + " N)";
+      document.getElementById("kpi-min-rate").textContent = (minAny.observed_any_barrier_rate * 100).toFixed(1) + "% Any Barrier";
 
-      document.getElementById("kpi-facility-max-state").textContent = maxFacility.state_name;
-      document.getElementById("kpi-facility-max-rate").textContent = (maxFacility.observed_facility_rate * 100).toFixed(1) + "% Facility Rate";
+      document.getElementById("kpi-facility-max-state").textContent = maxFac.state_name;
+      document.getElementById("kpi-facility-max-rate").textContent = (maxFac.observed_facility_rate * 100).toFixed(1) + "% Facility Rate";
     }
 
-    function renderChartAndTable() {
-      const metric = document.getElementById("barrier-select").value;
+    function renderAllCharts(searchQuery = "") {
+      if (!stateDataGlobal) return;
+
+      const metricKey = document.getElementById("barrier-select").value;
       const order = document.getElementById("sort-order").value;
 
-      let sorted = [...rawStateData].sort((a, b) => {
-        return order === "desc" ? b[metric] - a[metric] : a[metric] - b[metric];
-      });
-
-      const categories = sorted.map(d => d.state_name);
-      const values = sorted.map(d => (d[metric] * 100));
-
-      const isPredicted = metric.startsWith("predicted");
-      const color = isPredicted ? ChartUtils.colors.railB : ChartUtils.colors.railA;
-      const colorscale = isPredicted ? 'Purples' : 'Blues';
-
       const metricLabels = {
-        "observed_any_barrier_rate": "Observed Any Barrier Prevalence (Rail A)",
-        "observed_facility_rate": "Observed Facility Barrier Prevalence (Rail A)",
-        "observed_logistic_rate": "Observed Logistic Barrier Prevalence (Rail A)",
-        "observed_household_rate": "Observed Household Barrier Prevalence (Rail A)",
-        "predicted_composite_score": "Predicted Composite Risk Score (Rail B)"
+        observed_any_barrier_rate: "Observed Any Barrier Rate (%)",
+        observed_facility_rate: "Observed Facility Barrier Rate (%)",
+        observed_logistic_rate: "Observed Logistic Barrier Rate (%)",
+        observed_household_rate: "Observed Household Barrier Rate (%)",
+        predicted_composite_score: "Predicted Composite Score (Rail B)"
       };
 
-      // 1. Render Ranked Bar Chart
-      document.getElementById("chart-card-title").textContent = metricLabels[metric] + " by State / UT";
-      ChartUtils.createRankedBarChart("state-ranked-chart", metricLabels[metric], categories, values, color, "Percentage (%)");
+      const sorted = [...stateDataGlobal.states].sort((a, b) => {
+        return order === "desc" ? b[metricKey] - a[metricKey] : a[metricKey] - b[metricKey];
+      });
 
-      // 2. Render Treemap Chart
-      document.getElementById("treemap-card-title").textContent = metricLabels[metric] + " Treemap";
-      ChartUtils.createTreemapChart("state-treemap-chart", metricLabels[metric], categories, values, colorscale, metricLabels[metric]);
+      const categories = sorted.map(s => s.state_name);
+      const values = sorted.map(s => s[metricKey] * 100);
 
-      renderTable(sorted);
+      const queryLower = (searchQuery || "").toLowerCase().trim();
+      const barColors = categories.map(c => {
+        if (queryLower && c.toLowerCase().includes(queryLower)) {
+          return "#7c3aed"; // Bright purple for searched state
+        }
+        return queryLower ? "#cbd5e1" : "#0284c7"; // Translucent slate if searching, sky blue default
+      });
+
+      document.getElementById("chart-card-title").textContent = `State-wise Ranked ${metricLabels[metricKey]}`;
+      document.getElementById("treemap-card-title").textContent = `State-wise Treemap (${metricLabels[metricKey]})`;
+
+      ChartUtils.createRankedBarChart(
+        "state-ranked-chart",
+        `State-wise Ranked ${metricLabels[metricKey]}`,
+        categories,
+        values,
+        barColors,
+        metricLabels[metricKey]
+      );
+
+      ChartUtils.createTreemapChart(
+        "state-treemap-chart",
+        `State Distribution (${metricLabels[metricKey]})`,
+        categories,
+        values,
+        "Blues",
+        metricLabels[metricKey]
+      );
     }
 
-
-    function renderTable(states) {
+    function renderStateTable(query = "") {
+      if (!stateDataGlobal) return;
       const tbody = document.getElementById("state-table-body");
-      tbody.innerHTML = states.map(s => `
-        <tr style="border-bottom: 1px solid var(--border-color);">
-          <td style="padding: 10px; font-weight: 600;">${s.state_name}</td>
-          <td style="padding: 10px; color: #64748b;">${s.sample_size_n.toLocaleString()}</td>
-          <td style="padding: 10px; color: #2563eb;">${(s.observed_household_rate * 100).toFixed(1)}%</td>
-          <td style="padding: 10px; color: #d97706;">${(s.observed_logistic_rate * 100).toFixed(1)}%</td>
-          <td style="padding: 10px; color: #e11d48;">${(s.observed_facility_rate * 100).toFixed(1)}%</td>
-          <td style="padding: 10px; font-weight: 700; color: #0284c7;">${(s.observed_any_barrier_rate * 100).toFixed(1)}%</td>
-          <td style="padding: 10px; font-weight: 700; color: #7c3aed;">${(s.predicted_composite_score * 100).toFixed(1)}%</td>
-          <td style="padding: 10px;"><span style="padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; background: #f1f5f9; color: #334155;">${s.dominant_barrier}</span></td>
+      const filtered = stateDataGlobal.states.filter(s => s.state_name.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">No matching state found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(s => `
+        <tr>
+          <td><strong>${s.state_name}</strong></td>
+          <td style="color:var(--rail-b-color); font-weight:700;">${(s.observed_any_barrier_rate * 100).toFixed(2)}%</td>
+          <td>${(s.observed_facility_rate * 100).toFixed(2)}%</td>
+          <td>${(s.observed_logistic_rate * 100).toFixed(2)}%</td>
+          <td>${(s.observed_household_rate * 100).toFixed(2)}%</td>
+          <td><span class="tag tag-overall">${(s.predicted_composite_score * 100).toFixed(2)}%</span></td>
+          <td style="font-weight:600; color:var(--text-muted);">${s.sample_size_n.toLocaleString()}</td>
         </tr>
       `).join("");
-    }
-
-    function filterTable() {
-      const query = document.getElementById("state-search").value.toLowerCase();
-      const filtered = rawStateData.filter(s => s.state_name.toLowerCase().includes(query));
-      renderTable(filtered);
     }
   </script>
 </body>
 </html>
-
-

@@ -40,25 +40,27 @@
   <script src="assets/js/tts.js"></script>
   <script src="assets/js/voice.js"></script>
   <script src="assets/js/chatbot-ui.js"></script>
+
   <style>
     .hero-banner {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: linear-gradient(135deg, #2e1065 0%, #3b0764 100%);
       color: #ffffff;
-      padding: 48px 40px;
+      padding: 44px 40px;
       border-radius: var(--radius-lg);
       margin-bottom: 32px;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-lg);
       position: relative;
       overflow: hidden;
+      border: 1px solid #581c87;
     }
     .hero-banner::after {
       content: "";
       position: absolute;
       top: -50%;
       right: -10%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(192, 132, 252, 0.22) 0%, rgba(0, 0, 0, 0) 70%);
       pointer-events: none;
     }
     .hero-badge-container {
@@ -69,73 +71,79 @@
       flex-wrap: wrap;
     }
     .hero-tag {
-      background: #2563eb;
+      background: #7c3aed;
       color: #ffffff;
       padding: 4px 12px;
-      border-radius: 9999px;
-      font-size: 0.8rem;
-      font-weight: 700;
+      border-radius: var(--radius-pill);
+      font-size: 0.775rem;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .hero-subtag {
-      background: rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f3e8ff;
       padding: 4px 12px;
-      border-radius: 9999px;
-      font-size: 0.8rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.775rem;
       font-weight: 600;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
     .hero-title {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 800;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       line-height: 1.2;
       letter-spacing: -0.02em;
     }
     .hero-description {
-      font-size: 1.15rem;
-      color: #cbd5e1;
-      max-width: 860px;
+      font-size: 1.05rem;
+      color: #f3e8ff;
+      max-width: 920px;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
     .hero-stats-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
     }
     .hero-stat-card {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 16px 20px;
       border-radius: var(--radius-md);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: var(--transition-fast);
+    }
+    .hero-stat-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
     }
     .hero-stat-val {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: #ffffff;
+      line-height: 1.2;
     }
     .hero-stat-lbl {
       font-size: 0.8rem;
-      color: #94a3b8;
-      margin-top: 2px;
+      color: #e9d5ff;
+      margin-top: 4px;
+      font-weight: 500;
     }
-    .section-header-block {
-      margin-bottom: 20px;
+
+    /* Module Filter Controls */
+    .module-filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
     }
-    .section-heading {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-    .section-subtext {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
+
     .page-card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -150,53 +158,66 @@
       text-decoration: none;
       color: inherit;
       box-shadow: var(--shadow-sm);
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      transition: var(--transition-normal);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
     }
     .page-nav-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
       border-color: var(--primary-color);
     }
     .page-code {
       font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--primary-color);
-      background: #eff6ff;
-      padding: 3px 10px;
-      border-radius: 4px;
+      background: var(--primary-light);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
       width: fit-content;
       margin-bottom: 12px;
+      letter-spacing: 0.04em;
     }
     .page-card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0f172a;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
       margin-bottom: 8px;
     }
     .page-card-desc {
       font-size: 0.875rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.55;
+    }
+    .page-card-highlight {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #5b21b6;
+      background: #f3e8ff;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      margin-top: 14px;
+      border-left: 3px solid #7c3aed;
     }
     .page-card-footer {
-      margin-top: 18px;
-      padding-top: 14px;
+      margin-top: 20px;
+      padding-top: 16px;
       border-top: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       font-weight: 600;
-      color: #475569;
+      color: var(--text-muted);
     }
     .page-card-link-text {
       color: var(--primary-color);
       display: flex;
       align-items: center;
       gap: 4px;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -206,192 +227,258 @@
     <div class="hero-banner">
       <div class="hero-badge-container">
         <span class="hero-tag">Project P48</span>
-        <span class="hero-subtag">NFHS-5 Research Platform</span>
-        <span class="hero-subtag">Static GitHub Pages Architecture</span>
+        <span class="hero-subtag">NFHS-5 Research Intelligence</span>
+        <span class="hero-subtag">Stage 1 ML &amp; Stage 2 Clustering</span>
       </div>
-      <h1 class="hero-title">BarrierLens Interactive Research Dashboard</h1>
+      <h1 class="hero-title">BarrierLens Research Dashboard</h1>
       <p class="hero-description">
-        Predicting Household, Logistic, and Facility Healthcare Access Barriers for 724,115 Indian Women using NFHS-5 Individual Data, Stage 1 ML Ensembles, Stage 2 Outcome Predictive Models, and $k=2$ Risk Archetype Clustering.
+        Predicting Household, Logistic, and Facility Healthcare Access Barriers for <strong>724,115 Indian Women</strong> using NFHS-5 Individual Data, Stage 1 ML Ensembles, Stage 2 Outcome Predictive Models, and K-Means Risk Archetype Clustering (k = 2).
       </p>
 
       <div class="hero-stats-row">
         <div class="hero-stat-card">
           <div class="hero-stat-val">724,115</div>
-          <div class="hero-stat-lbl">Women Recode Sample ($N$)</div>
+          <div class="hero-stat-lbl">Women in Sample (N)</div>
         </div>
         <div class="hero-stat-card">
-          <div class="hero-stat-val" style="color: #38bdf8;">3 Domains</div>
-          <div class="hero-stat-lbl">Household, Logistic, Facility</div>
+          <div class="hero-stat-val" style="color: #c084fc;">3 Domains</div>
+          <div class="hero-stat-lbl">Facility, Logistic, Household</div>
         </div>
         <div class="hero-stat-card">
-          <div class="hero-stat-val" style="color: #a78bfa;">$k=2$</div>
+          <div class="hero-stat-val" style="color: #e9d5ff;">k = 2 Clusters</div>
           <div class="hero-stat-lbl">Silhouette Score 0.3986</div>
         </div>
         <div class="hero-stat-card">
-          <div class="hero-stat-val" style="color: #34d399;">10 Modules</div>
-          <div class="hero-stat-lbl">Interactive Research Pages</div>
+          <div class="hero-stat-val" style="color: #6ee7b7;">10 Modules</div>
+          <div class="hero-stat-lbl">Research Analytics Suite</div>
         </div>
       </div>
     </div>
 
-    <!-- Navigation Section Header -->
-    <div class="section-header-block">
-      <h2 class="section-heading">10 Interactive Research Modules</h2>
-      <p class="section-subtext">Click any module below to explore national overview, benchmark validation, regional disparities, risk archetypes, and explainability.</p>
+    <!-- Navigation Section & Controls -->
+    <div class="module-filter-bar">
+      <div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);">10 Research Analytics Modules</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 2px;">Filter or search below to explore regional disparities, benchmark comparisons, risk archetypes, and SHAP explainability.</p>
+      </div>
+
+      <div class="filter-group">
+        <input type="text" id="module-search" class="search-input" placeholder="Search modules... (e.g. State, Wealth, SHAP)" style="width: 260px;" />
+        <div class="tab-group" id="category-tabs">
+          <button class="tab-btn active" data-cat="all">All (10)</button>
+          <button class="tab-btn" data-cat="national">National &amp; Benchmark</button>
+          <button class="tab-btn" data-cat="socio">Demographics &amp; State</button>
+          <button class="tab-btn" data-cat="ml">ML &amp; Explainability</button>
+        </div>
+      </div>
     </div>
 
     <!-- 10 Page Navigation Cards Grid -->
-    <div class="page-card-grid">
+    <div class="page-card-grid" id="module-cards-container">
       <!-- Page A -->
-      <a href="pages/national_overview.html" class="page-nav-card">
+      <a href="pages/national_overview.html" class="page-nav-card" data-cat="national" data-keywords="national overview prevalence domain facility logistic household">
         <div>
-          <span class="page-code">PAGE A — OVERVIEW</span>
+          <span class="page-code">PAGE A &mdash; OVERVIEW</span>
           <div class="page-card-title">National Overview</div>
           <div class="page-card-desc">National barrier prevalence, comparative domain ranking (Facility &gt; Logistic &gt; Household), and observed vs predicted model alignment across 724,115 women.</div>
+          <div class="page-card-highlight">Key Finding: 60.68% observed prevalence of at least one healthcare barrier.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: National Analytics</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page B -->
-      <a href="pages/base_paper_comparison.html" class="page-nav-card">
+      <a href="pages/base_paper_comparison.html" class="page-nav-card" data-cat="national" data-keywords="base paper comparison pradhan de benchmark validation odds ratio">
         <div>
-          <span class="page-code">PAGE B — BENCHMARK</span>
+          <span class="page-code">PAGE B &mdash; BENCHMARK</span>
           <div class="page-card-title">Base Paper Comparison</div>
           <div class="page-card-desc">Side-by-side comparison of published reference findings (Pradhan &amp; De, 2025) with BarrierLens observed prevalence and Stage 1 ML predictions.</div>
+          <div class="page-card-highlight">Benchmark: Pradhan &amp; De (2025) BMC Health Services Research 25:323.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Published Benchmarks</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page C -->
-      <a href="pages/state_analysis.html" class="page-nav-card">
+      <a href="pages/state_analysis.html" class="page-nav-card" data-cat="socio" data-keywords="state analysis geography spatial ut bihar kerala up treemap ranking">
         <div>
-          <span class="page-code">PAGE C — GEOGRAPHY</span>
+          <span class="page-code">PAGE C &mdash; GEOGRAPHY</span>
           <div class="page-card-title">State-wise Barrier Analysis</div>
           <div class="page-card-desc">Geographical and regional disparity analysis across 36 Indian States and Union Territories with interactive treemaps and rankings.</div>
+          <div class="page-card-highlight">Spatial Span: 36 Indian States &amp; UTs analyzed.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: State Disparities</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page D -->
-      <a href="pages/demographic_analysis.html" class="page-nav-card">
+      <a href="pages/demographic_analysis.html" class="page-nav-card" data-cat="socio" data-keywords="demographic socioeconomic wealth education age religion caste occupation quintile">
         <div>
-          <span class="page-code">PAGE D — DEMOGRAPHICS</span>
+          <span class="page-code">PAGE D &mdash; DEMOGRAPHICS</span>
           <div class="page-card-title">Demographic &amp; Socioeconomic</div>
           <div class="page-card-desc">Multi-dimensional analysis across wealth quintiles, education levels, age cohorts, caste, and occupational groups.</div>
+          <div class="page-card-highlight">Gradient: Steep wealth and educational gradients in barrier risk.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Socioeconomic Breakdown</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page E -->
-      <a href="pages/rural_urban.html" class="page-nav-card">
+      <a href="pages/rural_urban.html" class="page-nav-card" data-cat="socio" data-keywords="rural urban residence disparity distance transportation location">
         <div>
-          <span class="page-code">PAGE E — RESIDENCE</span>
+          <span class="page-code">PAGE E &mdash; RESIDENCE</span>
           <div class="page-card-title">Rural–Urban Comparison</div>
           <div class="page-card-desc">Comparative analysis of healthcare access barriers between rural (75.2%) and urban (24.8%) populations with explicit data scope safety notes.</div>
+          <div class="page-card-highlight">Disparity: Rural women face 1.8x higher distance &amp; transport barriers.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Residence Disparities</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page F -->
-      <a href="pages/empowerment.html" class="page-nav-card">
+      <a href="pages/empowerment.html" class="page-nav-card" data-cat="socio" data-keywords="empowerment financial autonomy bank account decision making male sole medical">
         <div>
-          <span class="page-code">PAGE F — AUTONOMY</span>
+          <span class="page-code">PAGE F &mdash; AUTONOMY</span>
           <div class="page-card-title">Household Empowerment</div>
           <div class="page-card-desc">Cross-sectional associations between women's financial autonomy (bank account), medical decision-making, and mobile phone access.</div>
+          <div class="page-card-highlight">Autonomy Factor: Husband-sole decision making increases barrier risk.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Autonomy &amp; Empowerment</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page G -->
-      <a href="pages/multiple_barrier.html" class="page-nav-card">
+      <a href="pages/multiple_barrier.html" class="page-nav-card" data-cat="socio" data-keywords="multiple barrier disadvantage compounding overlap concurrent 0 1 2 3">
         <div>
-          <span class="page-code">PAGE G — DISADVANTAGE</span>
+          <span class="page-code">PAGE G &mdash; DISADVANTAGE</span>
           <div class="page-card-title">Multiple Barrier Analysis</div>
           <div class="page-card-desc">Compounded disadvantage evaluation across women facing 0, 1, 2, or 3 concurrent healthcare access barrier domains.</div>
+          <div class="page-card-highlight">Compounded Risk: Multi-barrier vulnerability co-occurrence profiles.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Multi-Barrier Analytics</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page H -->
-      <a href="pages/risk_archetypes.html" class="page-nav-card">
+      <a href="pages/risk_archetypes.html" class="page-nav-card" data-cat="ml" data-keywords="risk archetypes k-means cluster persona high vulnerability digital inclusion segmentation">
         <div>
-          <span class="page-code" style="background: #fef2f2; color: #dc2626;">PAGE H — CLUSTERING</span>
-          <div class="page-card-title">Risk Archetypes ($k=2$)</div>
+          <span class="page-code" style="background: #fff1f2; color: #be123c;">PAGE H &mdash; CLUSTERING</span>
+          <div class="page-card-title">Risk Archetypes (k = 2)</div>
           <div class="page-card-desc">K-Means risk segmentation: Cluster 0 (52.9% High Vulnerability) vs Cluster 1 (47.1% High Media Inclusion) with Silhouette Score 0.3986.</div>
+          <div class="page-card-highlight" style="color: #9f1239; background: #fff1f2; border-left-color: #e11d48;">Segmentation: k = 2 optimal clusters (Silhouette 0.3986).</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Risk Segmentation</span>
-          <span class="page-card-link-text" style="color: #dc2626;">Explore &rarr;</span>
+          <span class="page-card-link-text" style="color: #be123c;">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page I -->
-      <a href="pages/outcome_impact.html" class="page-nav-card">
+      <a href="pages/outcome_impact.html" class="page-nav-card" data-cat="ml" data-keywords="outcome impact utilization unmet family planning anc gap auc stage 2">
         <div>
-          <span class="page-code" style="background: #f0fdf4; color: #16a34a;">PAGE I — UTILIZATION</span>
+          <span class="page-code" style="background: #f0fdf4; color: #16a34a;">PAGE I &mdash; UTILIZATION</span>
           <div class="page-card-title">Healthcare Utilization Impact</div>
-          <div class="page-card-desc">Stage 2 models predicting Unmet Family Planning Need ($N=466,859$, AUC 0.6591) and Antenatal Care Gap ($N=163,018$, AUC 0.6356).</div>
+          <div class="page-card-desc">Stage 2 models predicting Unmet Family Planning Need (N = 466,859, AUC 0.6591) and Antenatal Care Gap (N = 163,018, AUC 0.6356).</div>
+          <div class="page-card-highlight" style="color: #15803d; background: #f0fdf4; border-left-color: #22c55e;">Predictive Validation: Unmet Need AUC 0.6591 &amp; ANC Gap AUC 0.6356.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Impact Evaluation</span>
-          <span class="page-card-link-text" style="color: #16a34a;">Explore &rarr;</span>
+          <span class="page-card-link-text" style="color: #16a34a;">Explore Module &rarr;</span>
         </div>
       </a>
 
       <!-- Page J -->
-      <a href="pages/explainability.html" class="page-nav-card">
+      <a href="pages/explainability.html" class="page-nav-card" data-cat="ml" data-keywords="explainability regression shap feature importance random forest xgboost odds ratio">
         <div>
-          <span class="page-code">PAGE J — EXPLAINABILITY</span>
+          <span class="page-code">PAGE J &mdash; EXPLAINABILITY</span>
           <div class="page-card-title">Explainability &amp; Regression</div>
           <div class="page-card-desc">Stage 1 Logistic Regression Odds Ratios, top predictor feature rankings, and SHAP explainability plots from Random Forest and XGBoost.</div>
+          <div class="page-card-highlight">Explainability: Global SHAP summary values &amp; odds ratios.</div>
         </div>
         <div class="page-card-footer">
           <span>Module: Model Explainability</span>
-          <span class="page-card-link-text">Explore &rarr;</span>
+          <span class="page-card-link-text">Explore Module &rarr;</span>
         </div>
       </a>
     </div>
 
-    <!-- Research Framework Summary Card -->
+    <!-- Methodological Framework Summary Card -->
     <div class="card" style="margin-bottom: 32px;">
-      <div class="card-title">BarrierLens (P48) Methodological Architecture</div>
+      <div class="card-title">BarrierLens Methodological Architecture</div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px;">
-        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-          <div style="font-weight: 700; color: #2563eb; margin-bottom: 4px;">Stage 1: Barrier Domain Models</div>
-          <p style="font-size: 0.85rem; color: #64748b;">Logistic Regression &amp; ML Ensembles predicting Household, Logistic, and Facility healthcare barriers for all 724,115 NFHS-5 women.</p>
+        <div style="background: #faf5ff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-weight: 800; color: #7c3aed; margin-bottom: 6px; font-size: 0.95rem;">Stage 1: Barrier Domain Models</div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Logistic Regression &amp; ML Ensembles predicting Household, Logistic, and Facility healthcare barriers for all 724,115 NFHS-5 women.</p>
         </div>
-        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-          <div style="font-weight: 700; color: #7c3aed; margin-bottom: 4px;">K-Means Archetype Clustering</div>
-          <p style="font-size: 0.85rem; color: #64748b;">MiniBatchKMeans ($k=2$, Silhouette Score 0.3986) segmenting high-vulnerability (52.9%) vs media-included (47.1%) population profiles.</p>
+        <div style="background: #faf5ff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-weight: 800; color: #2563eb; margin-bottom: 6px; font-size: 0.95rem;">K-Means Archetype Clustering</div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">MiniBatchKMeans (k = 2, Silhouette Score 0.3986) segmenting high-vulnerability (52.9%) vs media-included (47.1%) population profiles.</p>
         </div>
-        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-          <div style="font-weight: 700; color: #0d9488; margin-bottom: 4px;">Stage 2: Utilization Impact</div>
-          <p style="font-size: 0.85rem; color: #64748b;">Predictive evaluation of barrier probability features in forecasting Unmet Family Planning Need and Antenatal Care (ANC) Gap.</p>
+        <div style="background: #faf5ff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-weight: 800; color: #0d9488; margin-bottom: 6px; font-size: 0.95rem;">Stage 2: Utilization Impact</div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Predictive evaluation of barrier probability features in forecasting Unmet Family Planning Need and Antenatal Care (ANC) Gap.</p>
         </div>
       </div>
     </div>
-
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("module-search");
+      const tabBtns = document.querySelectorAll("#category-tabs .tab-btn");
+      const cards = document.querySelectorAll("#module-cards-container .page-nav-card");
+
+      let currentCat = "all";
+      let currentQuery = "";
+
+      function filterCards() {
+        cards.forEach(card => {
+          const cat = card.getAttribute("data-cat");
+          const keywords = card.getAttribute("data-keywords") || "";
+          const title = card.querySelector(".page-card-title").textContent.toLowerCase();
+          const desc = card.querySelector(".page-card-desc").textContent.toLowerCase();
+
+          const matchesCat = (currentCat === "all" || cat === currentCat);
+          const matchesQuery = !currentQuery || title.includes(currentQuery) || desc.includes(currentQuery) || keywords.includes(currentQuery);
+
+          if (matchesCat && matchesQuery) {
+            card.style.display = "flex";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+          tabBtns.forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+          currentCat = this.getAttribute("data-cat");
+          filterCards();
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          currentQuery = this.value.toLowerCase().trim();
+          filterCards();
+        });
+      }
+    });
+  </script>
 </body>
 </html>

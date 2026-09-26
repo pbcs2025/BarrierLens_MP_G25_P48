@@ -1081,13 +1081,39 @@
       `;
     }
 
+    // Live Dashboard Reactivity Trigger & Action Links
+    if (res.entities && res.entities.state) {
+      const stateName = res.entities.state;
+      const stateSearch = document.getElementById("state-search");
+      if (stateSearch) {
+        stateSearch.value = stateName;
+        stateSearch.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      if (!res.relatedPage) {
+        res.relatedPage = {
+          label: `Explore ${stateName} Profile`,
+          url: `pages/state_analysis.html?state=${encodeURIComponent(stateName)}`
+        };
+      }
+    }
+
+    if (res.activeBarrier || (res.barrierContext && res.barrierContext.barrier)) {
+      const domainName = res.activeBarrier || res.barrierContext.barrier;
+      const domainFilter = document.getElementById("domain-filter");
+      if (domainFilter) {
+        const cleanDomain = domainName.replace(" Barrier", "");
+        domainFilter.value = cleanDomain;
+        domainFilter.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
+
     // Related Page Link Action Button
     if (res.relatedPage) {
       const resolvedHref = resolvePageLink(res.relatedPage);
       structuredCardsHtml += `
-        <div>
-          <a href="${resolvedHref}" class="bl-page-action-btn">
-            <span>${t('viewAnalysis')}: ${res.relatedPage.label}</span>
+        <div style="margin-top: 10px;">
+          <a href="${resolvedHref}" class="bl-page-action-btn" style="display:inline-flex; align-items:center; gap:6px; background:#7c3aed; color:#ffffff; padding:6px 12px; border-radius:6px; text-decoration:none; font-weight:700; font-size:0.8rem;">
+            <span>${res.relatedPage.label}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
         </div>

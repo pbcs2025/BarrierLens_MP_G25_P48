@@ -25,42 +25,29 @@
       box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
+      transition: var(--transition-normal);
     }
-    .archetype-card.vulnerable {
-      border-top: 4px solid #e11d48;
+    .archetype-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
-    .archetype-card.empowered {
-      border-top: 4px solid #0284c7;
-    }
+    .archetype-card.vulnerable { border-top: 5px solid var(--domain-facility); }
+    .archetype-card.empowered { border-top: 5px solid var(--domain-overall); }
+    
     .archetype-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 12px;
     }
-    .archetype-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 9999px;
-      text-transform: uppercase;
-    }
-    .tag-vulnerable {
-      background: #ffe4e6;
-      color: #be123c;
-    }
-    .tag-empowered {
-      background: #e0f2fe;
-      color: #0369a1;
-    }
     .archetype-title {
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-size: 1.25rem;
+      font-weight: 800;
       color: var(--text-main);
       margin-bottom: 4px;
     }
     .archetype-stat {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       margin-top: 8px;
     }
@@ -72,7 +59,7 @@
     .metric-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       margin-top: 16px;
       padding-top: 16px;
       border-top: 1px solid var(--border-color);
@@ -83,162 +70,128 @@
       justify-content: space-between;
       align-items: center;
     }
-    .metric-label {
-      color: var(--text-muted);
-    }
-    .metric-val {
-      font-weight: 700;
-    }
+    .metric-label { color: var(--text-muted); }
+    .metric-val { font-weight: 800; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">Risk Archetypes (K-Means Clustering)</h1>
-      <p class="page-subtitle">Segmentation analysis across 724,115 Indian women using MiniBatchKMeans ($k=2$, Silhouette Score $0.3986$). Identifies high-vulnerability vs digitally-included population sub-groups.</p>
+      <h1 class="page-title">Risk Archetypes (K-Means Clustering, k = 2)</h1>
+      <p class="page-subtitle">Segmentation analysis across 724,115 Indian women using MiniBatchKMeans (k = 2, Silhouette Score 0.3986). Identifies high-vulnerability vs digitally-included population sub-groups.</p>
     </div>
 
-    <!-- Rail Badges Header -->
-    <div class="card" style="margin-bottom: 20px;">
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
       <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
           <span id="rail-b-badge-slot"></span>
+          <span class="tag tag-overall">MiniBatchKMeans k=2</span>
+          <span class="tag tag-household">Silhouette Score: 0.3986</span>
         </div>
-        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">
-          Optimal Cluster Model: $k=2$ (Silhouette = 0.3986)
-        </div>
+        <div class="tag tag-overall">Total N = 724,115</div>
       </div>
     </div>
 
-    <!-- KPI Summary Grid -->
-    <div class="kpi-grid" style="margin-bottom: 24px;">
-      <div class="kpi-card">
-        <div class="kpi-title">Clustering Sample Size</div>
-        <div class="kpi-value" id="kpi-sample-size">724,115</div>
-        <div class="kpi-subtext">NFHS-5 Women Recode</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Confirmed Clusters ($k$)</div>
-        <div class="kpi-value" style="color: #7c3aed;">2</div>
-        <div class="kpi-subtext">Optimal $k$ via Silhouette Evaluation</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Silhouette Score</div>
-        <div class="kpi-value" style="color: #0284c7;">0.3986</div>
-        <div class="kpi-subtext">Highest score across $k=2..10$</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Dominant Archetype</div>
-        <div class="kpi-value" style="color: #e11d48;">52.9%</div>
-        <div class="kpi-subtext">Cluster 0: High Vulnerability</div>
-      </div>
-    </div>
-
-    <!-- Cluster Archetype Profile Cards -->
+    <!-- Cluster Persona Cards Grid -->
     <div class="archetype-cards-grid">
-      <!-- Cluster 0 Card -->
+      <!-- Cluster 0 -->
       <div class="archetype-card vulnerable">
         <div class="archetype-header">
-          <span class="archetype-tag tag-vulnerable">Cluster 0 — High Risk</span>
-          <span style="font-size: 0.8rem; font-weight: 700; color: #be123c;">52.9% of Sample</span>
+          <div>
+            <span class="tag tag-facility">CLUSTER 0 &mdash; ARCHETYPE 1</span>
+            <div class="archetype-title" style="margin-top: 8px;">High Vulnerability &amp; Barrier Exposure</div>
+          </div>
         </div>
-        <div class="archetype-title">High Vulnerability, High Barrier Exposure</div>
-        <div class="archetype-stat" style="color: #e11d48;">383,077 <span style="font-size: 1rem; font-weight: 500; color: #64748b;">women</span></div>
-        <div class="archetype-subtext">Characterized by low media exposure, low digital access, and elevated predicted access barriers across all three domains.</div>
+        <div class="archetype-stat" style="color: var(--domain-facility);">52.9%</div>
+        <div class="archetype-substat">383,077 Women (Majority Sub-population)</div>
+        
         <div class="metric-list">
           <div class="metric-row">
-            <span class="metric-label">Vulnerability Score</span>
-            <span class="metric-val" style="color: #e11d48;">0.7694</span>
+            <span class="metric-label">Predicted Household Barrier Prob:</span>
+            <span class="metric-val" style="color: var(--domain-facility);">59.07%</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Media Exposure Index</span>
-            <span class="metric-val">0.3493</span>
+            <span class="metric-label">Predicted Logistic Barrier Prob:</span>
+            <span class="metric-val" style="color: var(--domain-facility);">59.57%</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Digital Inclusion Index</span>
-            <span class="metric-val">0.0794</span>
+            <span class="metric-label">Predicted Facility Barrier Prob:</span>
+            <span class="metric-val" style="color: var(--domain-facility);">57.41%</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Predicted Household Barrier</span>
-            <span class="metric-val">59.07%</span>
+            <span class="metric-label">Composite Vulnerability Score:</span>
+            <span class="metric-val" style="color: var(--domain-facility);">0.7694</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Predicted Logistic Barrier</span>
-            <span class="metric-val">59.57%</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Predicted Facility Barrier</span>
-            <span class="metric-val">57.41%</span>
+            <span class="metric-label">Digital Inclusion Index:</span>
+            <span class="metric-val" style="color: var(--text-muted);">0.0794 (Very Low)</span>
           </div>
         </div>
       </div>
 
-      <!-- Cluster 1 Card -->
+      <!-- Cluster 1 -->
       <div class="archetype-card empowered">
         <div class="archetype-header">
-          <span class="archetype-tag tag-empowered">Cluster 1 — Lower Risk</span>
-          <span style="font-size: 0.8rem; font-weight: 700; color: #0369a1;">47.1% of Sample</span>
+          <div>
+            <span class="tag tag-overall">CLUSTER 1 &mdash; ARCHETYPE 2</span>
+            <div class="archetype-title" style="margin-top: 8px;">High Media &amp; Digital Inclusion</div>
+          </div>
         </div>
-        <div class="archetype-title">High Media & Digital Inclusion</div>
-        <div class="archetype-stat" style="color: #0284c7;">341,038 <span style="font-size: 1rem; font-weight: 500; color: #64748b;">women</span></div>
-        <div class="archetype-subtext">Characterized by high media exposure, higher internet literacy, and substantially lower predicted barrier probabilities.</div>
+        <div class="archetype-stat" style="color: var(--domain-overall);">47.1%</div>
+        <div class="archetype-substat">341,038 Women (Lower Barrier Exposure)</div>
+        
         <div class="metric-list">
           <div class="metric-row">
-            <span class="metric-label">Vulnerability Score</span>
-            <span class="metric-val" style="color: #0d9488;">0.2623</span>
+            <span class="metric-label">Predicted Household Barrier Prob:</span>
+            <span class="metric-val" style="color: var(--domain-overall);">35.57%</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Media Exposure Index</span>
-            <span class="metric-val">0.9149</span>
+            <span class="metric-label">Predicted Logistic Barrier Prob:</span>
+            <span class="metric-val" style="color: var(--domain-overall);">35.88%</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Digital Inclusion Index</span>
-            <span class="metric-val">0.1225</span>
+            <span class="metric-label">Predicted Facility Barrier Prob:</span>
+            <span class="metric-val" style="color: var(--domain-overall);">41.37%</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Predicted Household Barrier</span>
-            <span class="metric-val">35.57%</span>
+            <span class="metric-label">Composite Vulnerability Score:</span>
+            <span class="metric-val" style="color: var(--domain-overall);">0.2623</span>
           </div>
           <div class="metric-row">
-            <span class="metric-label">Predicted Logistic Barrier</span>
-            <span class="metric-val">35.88%</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Predicted Facility Barrier</span>
-            <span class="metric-val">41.37%</span>
+            <span class="metric-label">Digital Inclusion Index:</span>
+            <span class="metric-val" style="color: var(--secondary-color);">0.1225 (Higher)</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Plotly Visualization Card -->
+    <!-- Archetype Domain Comparison Chart -->
     <div class="card">
       <div class="card-title">
-        <span>Predicted Barrier Domain Probabilities by Cluster Archetype</span>
+        <span>Predicted Barrier Probabilities Across Archetypes (k = 2)</span>
       </div>
-      <div id="cluster-bar-chart" class="chart-box" style="min-height: 400px;"></div>
+      <div id="archetype-chart" class="chart-box" style="min-height: 440px;">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading archetype chart...</div>
+      </div>
     </div>
 
-    <!-- Structured Data Table Card -->
+    <!-- Cluster Feature Comparison Table Card -->
     <div class="card">
-      <div class="card-title">Detailed K-Means Cluster Archetype Comparison</div>
-      <div style="overflow-x: auto;">
+      <div class="card-title">
+        <span>Cluster Archetype Feature Profile Breakdown</span>
+      </div>
+      <div class="table-responsive">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Cluster ID</th>
-              <th>Archetype Name</th>
-              <th>Sample Size (N)</th>
-              <th>Population Share</th>
-              <th>Vulnerability Index</th>
-              <th>Media Exposure</th>
-              <th>Digital Access</th>
-              <th>Composite Barrier Prob</th>
+              <th>Feature Profile / Index</th>
+              <th>Cluster 0 (High Vulnerability)</th>
+              <th>Cluster 1 (High Media/Digital)</th>
+              <th>Absolute Delta</th>
             </tr>
           </thead>
-          <tbody id="cluster-table-body">
-            <!-- Dynamically populated -->
-          </tbody>
+          <tbody id="archetype-table-body"></tbody>
         </table>
       </div>
     </div>
@@ -246,68 +199,77 @@
     <!-- Executive Insights Card -->
     <div class="insights-card">
       <div class="insights-card-header">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <div class="insights-card-title">Research Interpretation & Policy Implications</div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="insights-card-title">Risk Archetype Insights</div>
       </div>
       <p class="insights-card-body">
-        The K-Means clustering algorithm ($k=2$, Silhouette Score $0.3986$) bifurcates the national population into two distinct behavioral archetypes. <strong>Cluster 0 (52.9% of women)</strong> exhibits severe structural disadvantage: low media penetration (0.349), limited digital literacy (0.079), and high vulnerability scores (0.769), which correspond to high predicted barrier probabilities across Household (59.1%), Logistic (59.6%), and Facility (57.4%) domains. Conversely, <strong>Cluster 1 (47.1% of women)</strong> benefits from high media exposure (0.915) and reduced vulnerability (0.262), translating to 20+ percentage-point reductions in predicted healthcare access barriers. Interventions aiming to increase healthcare utilization must specifically target Cluster 0 through localized, non-digital outreach strategies.
+        Unsupervised K-Means clustering (k = 2, Silhouette Score 0.3986) partitions the 724,115 women into two primary sub-populations. <strong>Cluster 0 (52.9%)</strong> represents high vulnerability women experiencing elevated barrier probabilities across all three domains (~59% predicted probability for household and logistic barriers). <strong>Cluster 1 (47.1%)</strong> benefits from significantly higher media exposure and digital inclusion, reducing predicted household barrier probabilities down to 35.57%.
       </p>
     </div>
 
-    <!-- Methodology Note -->
     <div id="methodology-note-slot"></div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B_CLUSTER");
+      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
       document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
 
       fetch("../assets/data/cluster_summary.json")
-        .then(r => r.ok ? r.json() : Promise.reject("HTTP " + r.status))
+        .then(r => r.json())
         .then(data => {
-          const tbody = document.getElementById("cluster-table-body");
-          tbody.innerHTML = data.clusters.map(c => `
-            <tr>
-              <td style="font-weight: 700;">Cluster #${c.cluster_id}</td>
-              <td style="font-weight: 600; color: ${c.cluster_id === 0 ? '#e11d48' : '#0284c7'};">${c.archetype_name}</td>
-              <td>${c.sample_size_n.toLocaleString()}</td>
-              <td style="font-weight: 700;">${(c.pct_total_women * 100).toFixed(1)}%</td>
-              <td>${c.vulnerability_score.toFixed(4)}</td>
-              <td>${c.media_exposure_index.toFixed(4)}</td>
-              <td>${c.digital_inclusion_index.toFixed(4)}</td>
-              <td style="font-weight: 700; color: #7c3aed;">${(c.predicted_composite_score * 100).toFixed(1)}%</td>
-            </tr>
-          `).join("");
-
-          const labels = data.clusters.map(c => c.archetype_name);
-          const c0 = data.clusters[0];
-          const c1 = data.clusters[1];
-
-          ChartUtils.createGroupedBarChart(
-            "cluster-bar-chart",
-            "Predicted Barrier Probabilities: High Vulnerability (Cluster 0) vs High Media Inclusion (Cluster 1)",
-            ["Household Barrier", "Logistic Barrier", "Facility Barrier"],
-            [
-              {
-                name: c0.archetype_name + " (Cluster 0)",
-                values: [c0.predicted_household_prob * 100, c0.predicted_logistic_prob * 100, c0.predicted_facility_prob * 100],
-                color: "#e11d48"
-              },
-              {
-                name: c1.archetype_name + " (Cluster 1)",
-                values: [c1.predicted_household_prob * 100, c1.predicted_logistic_prob * 100, c1.predicted_facility_prob * 100],
-                color: "#0284c7"
-              }
-            ]
-          );
+          renderChart(data);
+          renderTable(data);
         })
-        .catch(err => {
-          console.error("Error loading cluster_summary.json:", err);
-          document.querySelector(".container").insertAdjacentHTML("beforeend",
-            LabelRenderer.renderDataUnavailable("cluster_summary.json could not be loaded. Please check browser console."));
-        });
+        .catch(err => console.error("Error loading cluster_summary.json:", err));
     });
+
+    function renderChart(data) {
+      if (!data.clusters) return;
+      const c0 = data.clusters.find(c => c.cluster_id === 0);
+      const c1 = data.clusters.find(c => c.cluster_id === 1);
+
+      const categories = ["Household Barrier", "Logistic Barrier", "Facility Barrier", "Composite Score"];
+      const c0Vals = [c0.predicted_household_prob * 100, c0.predicted_logistic_prob * 100, c0.predicted_facility_prob * 100, c0.predicted_composite_score * 100];
+      const c1Vals = [c1.predicted_household_prob * 100, c1.predicted_logistic_prob * 100, c1.predicted_facility_prob * 100, c1.predicted_composite_score * 100];
+
+      ChartUtils.createGroupedBarChart(
+        "archetype-chart",
+        "Predicted Barrier Probabilities: Cluster 0 vs Cluster 1",
+        categories,
+        [
+          { name: "Cluster 0 (High Vulnerability - 52.9%)", values: c0Vals, color: ChartUtils.colors.facility },
+          { name: "Cluster 1 (High Media/Digital - 47.1%)", values: c1Vals, color: ChartUtils.colors.railA }
+        ]
+      );
+    }
+
+    function renderTable(data) {
+      if (!data.clusters) return;
+      const c0 = data.clusters.find(c => c.cluster_id === 0);
+      const c1 = data.clusters.find(c => c.cluster_id === 1);
+
+      const rows = [
+        { label: "Sample Size N", c0: c0.sample_size_n.toLocaleString(), c1: c1.sample_size_n.toLocaleString(), delta: "-" },
+        { label: "% of Total Women", c0: (c0.pct_total_women*100).toFixed(1) + "%", c1: (c1.pct_total_women*100).toFixed(1) + "%", delta: "5.8 pp" },
+        { label: "Media Exposure Index", c0: c0.media_exposure_index.toFixed(4), c1: c1.media_exposure_index.toFixed(4), delta: "+" + (c1.media_exposure_index - c0.media_exposure_index).toFixed(4) },
+        { label: "Digital Inclusion Index", c0: c0.digital_inclusion_index.toFixed(4), c1: c1.digital_inclusion_index.toFixed(4), delta: "+" + (c1.digital_inclusion_index - c0.digital_inclusion_index).toFixed(4) },
+        { label: "Vulnerability Score", c0: c0.vulnerability_score.toFixed(4), c1: c1.vulnerability_score.toFixed(4), delta: "-" + (c0.vulnerability_score - c1.vulnerability_score).toFixed(4) },
+        { label: "Predicted Household Barrier", c0: (c0.predicted_household_prob*100).toFixed(2) + "%", c1: (c1.predicted_household_prob*100).toFixed(2) + "%", delta: "-" + (c0.predicted_household_prob*100 - c1.predicted_household_prob*100).toFixed(2) + " pp" },
+        { label: "Predicted Logistic Barrier", c0: (c0.predicted_logistic_prob*100).toFixed(2) + "%", c1: (c1.predicted_logistic_prob*100).toFixed(2) + "%", delta: "-" + (c0.predicted_logistic_prob*100 - c1.predicted_logistic_prob*100).toFixed(2) + " pp" },
+        { label: "Predicted Facility Barrier", c0: (c0.predicted_facility_prob*100).toFixed(2) + "%", c1: (c1.predicted_facility_prob*100).toFixed(2) + "%", delta: "-" + (c0.predicted_facility_prob*100 - c1.predicted_facility_prob*100).toFixed(2) + " pp" }
+      ];
+
+      const tbody = document.getElementById("archetype-table-body");
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td><strong>${r.label}</strong></td>
+          <td style="color:var(--domain-facility); font-weight:700;">${r.c0}</td>
+          <td style="color:var(--domain-overall); font-weight:700;">${r.c1}</td>
+          <td><span class="tag tag-overall">${r.delta}</span></td>
+        </tr>
+      `).join("");
+    }
   </script>
 </body>
 </html>

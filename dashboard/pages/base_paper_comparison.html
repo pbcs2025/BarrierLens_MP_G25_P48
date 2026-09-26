@@ -14,121 +14,160 @@
 <body>
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">Base Paper vs BarrierLens</h1>
+      <h1 class="page-title">Base Paper vs BarrierLens Benchmark</h1>
       <p class="page-subtitle">Side-by-side comparison of published NFHS-5 reference findings (Pradhan &amp; De, 2025) with BarrierLens observed prevalence and Stage 1 ML predictions. All values are associational — not causal.</p>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
       <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
         <span id="rail-a-badge-slot"></span>
         <span id="rail-b-badge-slot"></span>
+        <span class="tag tag-overall">Benchmark: BMC Health Services Research 25:323</span>
       </div>
     </div>
 
     <!-- Base Paper KPI Cards (Rail A) -->
     <div class="kpi-grid" id="base-paper-kpis">
-      <div class="kpi-card">
-        <div class="kpi-title">≥1 Barrier (Base Paper)</div>
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-header">
+          <div class="kpi-title">&ge;1 Barrier (Base Paper)</div>
+          <span class="tag tag-overall">Rail A</span>
+        </div>
         <div class="kpi-value" id="kpi-bp-any">84.0%</div>
-        <div class="kpi-subtext">Rail A — Published Reference</div>
+        <div class="kpi-subtext">Published Benchmark Reference</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Facility Barrier</div>
-        <div class="kpi-value" id="kpi-bp-facility" style="color: #e11d48;">55.3%</div>
-        <div class="kpi-subtext">Rail A — Observed Reference</div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-header">
+          <div class="kpi-title">Facility Barrier (Base Paper)</div>
+          <span class="tag tag-facility">Rail A</span>
+        </div>
+        <div class="kpi-value" id="kpi-bp-facility" style="color: var(--domain-facility);">55.3%</div>
+        <div class="kpi-subtext">Published Facility Concern</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Logistic Barrier</div>
-        <div class="kpi-value" id="kpi-bp-logistic" style="color: #d97706;">50.5%</div>
-        <div class="kpi-subtext">Rail A — Observed Reference</div>
+
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-header">
+          <div class="kpi-title">Logistic Barrier (Base Paper)</div>
+          <span class="tag tag-logistic">Rail A</span>
+        </div>
+        <div class="kpi-value" id="kpi-bp-logistic" style="color: var(--domain-logistic);">50.5%</div>
+        <div class="kpi-subtext">Published Distance Constraint</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Household Barrier</div>
-        <div class="kpi-value" id="kpi-bp-household" style="color: #2563eb;">24.6%</div>
-        <div class="kpi-subtext">Rail A — Observed Reference</div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-header">
+          <div class="kpi-title">Household Barrier (Base Paper)</div>
+          <span class="tag tag-household">Rail A</span>
+        </div>
+        <div class="kpi-value" id="kpi-bp-household" style="color: var(--domain-household);">24.6%</div>
+        <div class="kpi-subtext">Published Household Constraint</div>
       </div>
     </div>
 
     <!-- BarrierLens KPI Cards (Rail B) -->
     <div class="kpi-grid" id="barrierlens-kpis">
-      <div class="kpi-card">
-        <div class="kpi-title">≥1 Barrier (BarrierLens Observed)</div>
-        <div class="kpi-value" id="kpi-bl-any">—</div>
-        <div class="kpi-subtext">Rail B — NFHS-5 Full Extract (N = 724,115)</div>
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-header">
+          <div class="kpi-title">&ge;1 Barrier (BarrierLens)</div>
+          <span class="tag tag-overall">Rail B</span>
+        </div>
+        <div class="kpi-value" id="kpi-bl-any">&mdash;</div>
+        <div class="kpi-subtext">NFHS-5 Full Extract (N = 724,115)</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Facility (Observed / Predicted)</div>
-        <div class="kpi-value" id="kpi-bl-facility" style="color: #e11d48;">—</div>
-        <div class="kpi-subtext" id="kpi-bl-facility-sub">Rail B — Model Result</div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-header">
+          <div class="kpi-title">Facility (Observed / Predicted)</div>
+          <span class="tag tag-facility">Rail B</span>
+        </div>
+        <div class="kpi-value" id="kpi-bl-facility" style="color: var(--domain-facility);">&mdash;</div>
+        <div class="kpi-subtext" id="kpi-bl-facility-sub">Model Result</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Logistic (Observed / Predicted)</div>
-        <div class="kpi-value" id="kpi-bl-logistic" style="color: #d97706;">—</div>
-        <div class="kpi-subtext" id="kpi-bl-logistic-sub">Rail B — Model Result</div>
+
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-header">
+          <div class="kpi-title">Logistic (Observed / Predicted)</div>
+          <span class="tag tag-logistic">Rail B</span>
+        </div>
+        <div class="kpi-value" id="kpi-bl-logistic" style="color: var(--domain-logistic);">&mdash;</div>
+        <div class="kpi-subtext" id="kpi-bl-logistic-sub">Model Result</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Household (Observed / Predicted)</div>
-        <div class="kpi-value" id="kpi-bl-household" style="color: #2563eb;">—</div>
-        <div class="kpi-subtext" id="kpi-bl-household-sub">Rail B — Model Result</div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-header">
+          <div class="kpi-title">Household (Observed / Predicted)</div>
+          <span class="tag tag-household">Rail B</span>
+        </div>
+        <div class="kpi-value" id="kpi-bl-household" style="color: var(--domain-household);">&mdash;</div>
+        <div class="kpi-subtext" id="kpi-bl-household-sub">Model Result</div>
       </div>
     </div>
 
-    <!-- National Comparison Chart -->
+    <!-- National Comparison Chart Card -->
     <div class="card">
       <div class="card-title">
-        <span>National Barrier Prevalence — Base Paper vs BarrierLens</span>
+        <span>National Barrier Prevalence &mdash; Base Paper vs BarrierLens</span>
         <span id="chart-rail-legend"></span>
       </div>
-      <div id="national-comparison-chart" class="chart-box"></div>
-      <div id="any-barrier-note" class="callout" style="margin-top: 12px;"></div>
+      <div id="national-comparison-chart" class="chart-box">
+        <div style="padding:40px; text-align:center; color:#64748b;">Loading benchmark comparison...</div>
+      </div>
+      <div id="any-barrier-note" class="callout callout-info" style="margin-top: 16px;"></div>
     </div>
 
-    <!-- State Comparison -->
+    <!-- State Comparison Table -->
     <div class="card">
-      <div class="card-title">State-Level Comparison — Highest &amp; Lowest Barrier States</div>
-      <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 16px;">
+      <div class="card-title">
+        <span>State-Level Comparison &mdash; Highest &amp; Lowest Barrier States</span>
+        <input type="text" id="state-search" class="search-input" placeholder="Search state name..." style="width:220px;" />
+      </div>
+      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
         Base paper identifies Chhattisgarh, Arunachal Pradesh, and Nagaland among the highest-barrier states, and Kerala as the lowest. Below, BarrierLens observed rates are shown where state-level data is available.
       </p>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>State</th>
-            <th>Reference Category</th>
-            <th>Rail A (Base Paper)</th>
-            <th>Rail B — Observed Any Barrier</th>
-            <th>Rail B — Observed Household</th>
-            <th>Rail B — Observed Logistic</th>
-            <th>Rail B — Observed Facility</th>
-            <th>N</th>
-          </tr>
-        </thead>
-        <tbody id="state-comparison-body"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>State</th>
+              <th>Reference Category</th>
+              <th>Rail A (Base Paper)</th>
+              <th>Rail B &mdash; Observed Any Barrier</th>
+              <th>Rail B &mdash; Household</th>
+              <th>Rail B &mdash; Logistic</th>
+              <th>Rail B &mdash; Facility</th>
+              <th>Sample N</th>
+            </tr>
+          </thead>
+          <tbody id="state-comparison-body"></tbody>
+        </table>
+      </div>
       <div id="kerala-reference-note" class="callout" style="margin-top: 16px;"></div>
     </div>
 
-    <!-- Protective & Risk Factors -->
+    <!-- Protective & Risk Factors Grid -->
     <div class="card">
-      <div class="card-title">Protective vs Risk Factors — Base Paper vs BarrierLens LR</div>
+      <div class="card-title">Protective vs Risk Factors &mdash; Base Paper vs BarrierLens LR</div>
       <div class="factor-grid">
-        <div>
-          <h3 style="font-size: 1rem; margin-bottom: 8px;">Rail A — Base Paper Protective Factors (AOR &lt; 1)</h3>
+        <div style="background:#f8fafc; padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <h3 style="font-size: 0.95rem; font-weight:800; color:#0369a1; margin-bottom: 10px;">Rail A &mdash; Base Paper Protective Factors (AOR &lt; 1)</h3>
           <ul class="factor-list" id="bp-protective-list"></ul>
         </div>
-        <div>
-          <h3 style="font-size: 1rem; margin-bottom: 8px;">Rail A — Base Paper Risk Factors (AOR &gt; 1)</h3>
+        <div style="background:#f8fafc; padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <h3 style="font-size: 0.95rem; font-weight:800; color:#b91c1c; margin-bottom: 10px;">Rail A &mdash; Base Paper Risk Factors (AOR &gt; 1)</h3>
           <ul class="factor-list" id="bp-risk-list"></ul>
         </div>
-        <div>
-          <h3 style="font-size: 1rem; margin-bottom: 8px;">Rail B — Stage 1 LR Top Protective (Household Target)</h3>
+        <div style="background:#f8fafc; padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <h3 style="font-size: 0.95rem; font-weight:800; color:#1d4ed8; margin-bottom: 10px;">Rail B &mdash; Stage 1 LR Top Protective (Household)</h3>
           <ul class="factor-list" id="bl-protective-list"></ul>
         </div>
-        <div>
-          <h3 style="font-size: 1rem; margin-bottom: 8px;">Rail B — Stage 1 LR Top Risk (Household Target)</h3>
+        <div style="background:#f8fafc; padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <h3 style="font-size: 0.95rem; font-weight:800; color:#c2410c; margin-bottom: 10px;">Rail B &mdash; Stage 1 LR Top Risk (Household)</h3>
           <ul class="factor-list" id="bl-risk-list"></ul>
         </div>
       </div>
-      <div class="callout callout-warning" style="margin-top: 16px;">
+      <div class="callout callout-warning" style="margin-top: 20px;">
         <strong>Interpretation note:</strong> Base-paper AOR directions describe adjusted associations in the published study. BarrierLens Stage 1 logistic regression odds ratios are model results on the full extract and may differ in direction or magnitude for specific predictors. Neither source establishes causation.
       </div>
     </div>
@@ -137,6 +176,25 @@
   </div>
 
   <script>
+    let rawStateRows = [];
+
+    function fetchJson(filename) {
+      const paths = [
+        "../assets/data/" + filename,
+        "assets/data/" + filename,
+        "/assets/data/" + filename
+      ];
+
+      function tryNext(index) {
+        if (index >= paths.length) return Promise.resolve(null);
+        return fetch(paths[index])
+          .then(r => r.ok ? r.json() : tryNext(index + 1))
+          .catch(() => tryNext(index + 1));
+      }
+
+      return tryNext(0);
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
       document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
@@ -144,10 +202,10 @@
       document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
 
       Promise.all([
-        fetch("../assets/data/base_paper_reference.json").then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch("../assets/data/national_overview.json").then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch("../assets/data/state_summary.json").then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch("../assets/data/regression_summary.json").then(r => r.ok ? r.json() : null).catch(() => null)
+        fetchJson("base_paper_reference.json"),
+        fetchJson("national_overview.json"),
+        fetchJson("state_summary.json"),
+        fetchJson("regression_summary.json")
       ]).then(([basePaper, national, states, regression]) => {
         if (!basePaper) {
           document.querySelector(".container").insertAdjacentHTML("beforeend", LabelRenderer.renderDataUnavailable("Could not load base_paper_reference.json."));
@@ -161,15 +219,23 @@
           renderBarrierLensKPIs(national);
           renderNationalChart(basePaper, national);
         } else {
-          document.getElementById("national-comparison-chart").innerHTML = LabelRenderer.renderDataUnavailable("national_overview.json not available — BarrierLens comparison chart cannot be rendered.");
+          document.getElementById("national-comparison-chart").innerHTML = LabelRenderer.renderDataUnavailable("national_overview.json not available.");
         }
 
         if (states) {
-          renderStateComparison(basePaper, states);
+          buildStateRows(basePaper, states);
+          renderStateComparison();
         } else {
           document.getElementById("state-comparison-body").innerHTML = `<tr><td colspan="8">${LabelRenderer.renderDataUnavailable("state_summary.json not available.")}</td></tr>`;
         }
       });
+
+      const stateSearch = document.getElementById("state-search");
+      if (stateSearch) {
+        stateSearch.addEventListener("input", function() {
+          renderStateComparison(this.value.toLowerCase().trim());
+        });
+      }
     });
 
     function renderBasePaperKPIs(bp) {
@@ -189,9 +255,6 @@
         LabelRenderer.formatPercent(k.observed_logistic_rate, 2) + " / " + LabelRenderer.formatPercent(k.predicted_logistic_prob, 2);
       document.getElementById("kpi-bl-household").textContent =
         LabelRenderer.formatPercent(k.observed_household_rate, 2) + " / " + LabelRenderer.formatPercent(k.predicted_household_prob, 2);
-      document.getElementById("kpi-bl-facility-sub").textContent = "Observed / Stage 1 Predicted";
-      document.getElementById("kpi-bl-logistic-sub").textContent = "Observed / Stage 1 Predicted";
-      document.getElementById("kpi-bl-household-sub").textContent = "Observed / Stage 1 Predicted";
     }
 
     function renderNationalChart(bp, national) {
@@ -206,25 +269,24 @@
 
       ChartUtils.createGroupedBarChart(
         "national-comparison-chart",
-        "National Barrier Prevalence — Base Paper vs BarrierLens",
+        "National Barrier Prevalence &mdash; Base Paper vs BarrierLens",
         categories,
         [
-          { name: "Rail A — Base Paper Reference", values: basePaperVals, color: ChartUtils.colors.basePaper },
-          { name: "Rail B — BarrierLens Observed", values: observedVals, color: ChartUtils.colors.railA },
-          { name: "Rail B — BarrierLens Predicted (Stage 1)", values: predictedVals, color: ChartUtils.colors.railB }
+          { name: "Rail A &mdash; Base Paper Reference", values: basePaperVals, color: ChartUtils.colors.basePaper },
+          { name: "Rail B &mdash; BarrierLens Observed", values: observedVals, color: ChartUtils.colors.railA },
+          { name: "Rail B &mdash; BarrierLens Predicted (Stage 1)", values: predictedVals, color: ChartUtils.colors.railB }
         ]
       );
 
       const bpAny = bp.national_prevalence.at_least_one_barrier * 100;
       const blAny = national.kpis.observed_any_barrier_rate * 100;
       document.getElementById("any-barrier-note").innerHTML =
-        `<strong>≥1 Barrier comparison:</strong> Base paper reports ${bpAny.toFixed(1)}% (Rail A). BarrierLens observed rate is ${blAny.toFixed(2)}% (Rail B) on the full NFHS-5 extract. Differences reflect sample scope and indicator availability — not proof of model superiority.`;
+        `<strong>&ge;1 Barrier comparison:</strong> Base paper reports ${bpAny.toFixed(1)}% (Rail A). BarrierLens observed rate is ${blAny.toFixed(2)}% (Rail B) on the full NFHS-5 extract ($N=724,115$). Differences reflect sample scope and indicator availability.`;
     }
 
-    function renderStateComparison(bp, states) {
-      const tbody = document.getElementById("state-comparison-body");
+    function buildStateRows(bp, states) {
       const highlightStates = bp.highest_barrier_states.concat([bp.lowest_barrier_state.state_name]);
-      const rows = [];
+      rawStateRows = [];
 
       highlightStates.forEach(name => {
         const st = states.states.find(s => s.state_name === name);
@@ -232,56 +294,67 @@
         const category = isLowest ? "Lowest (Base Paper)" : "Highest (Base Paper)";
 
         if (st) {
-          rows.push(`<tr>
-            <td><strong>${st.state_name}</strong></td>
-            <td>${category}</td>
-            <td>${isLowest
-              ? `HH ${LabelRenderer.formatPercent(bp.lowest_barrier_state.household_barrier)} · Log ${LabelRenderer.formatPercent(bp.lowest_barrier_state.logistic_barrier)} · Fac ${LabelRenderer.formatPercent(bp.lowest_barrier_state.facility_barrier)}`
-              : "Among highest-barrier states (base paper)"}</td>
-            <td style="color:#7c3aed;font-weight:600;">${LabelRenderer.formatPercent(st.observed_any_barrier_rate, 2)}</td>
-            <td>${LabelRenderer.formatPercent(st.observed_household_rate, 2)}</td>
-            <td>${LabelRenderer.formatPercent(st.observed_logistic_rate, 2)}</td>
-            <td>${LabelRenderer.formatPercent(st.observed_facility_rate, 2)}</td>
-            <td>${st.sample_size_n.toLocaleString()}</td>
-          </tr>`);
-        } else {
-          rows.push(`<tr>
-            <td><strong>${name}</strong></td>
-            <td>${category}</td>
-            <td>Base paper reference</td>
-            <td colspan="5">${LabelRenderer.renderDataUnavailable("State-level BarrierLens data not found for this state.")}</td>
-          </tr>`);
+          rawStateRows.push({
+            name: st.state_name,
+            category: category,
+            railA: isLowest ? `HH ${LabelRenderer.formatPercent(bp.lowest_barrier_state.household_barrier)} · Log ${LabelRenderer.formatPercent(bp.lowest_barrier_state.logistic_barrier)} · Fac ${LabelRenderer.formatPercent(bp.lowest_barrier_state.facility_barrier)}` : "Among highest-barrier states (base paper)",
+            any: LabelRenderer.formatPercent(st.observed_any_barrier_rate, 2),
+            hh: LabelRenderer.formatPercent(st.observed_household_rate, 2),
+            log: LabelRenderer.formatPercent(st.observed_logistic_rate, 2),
+            fac: LabelRenderer.formatPercent(st.observed_facility_rate, 2),
+            n: st.sample_size_n.toLocaleString()
+          });
         }
       });
 
-      tbody.innerHTML = rows.join("");
-
       const ker = bp.lowest_barrier_state;
       document.getElementById("kerala-reference-note").innerHTML =
-        `<strong>Kerala (base paper reference — Rail A):</strong> Household ${LabelRenderer.formatPercent(ker.household_barrier)}, Logistic ${LabelRenderer.formatPercent(ker.logistic_barrier)}, Facility ${LabelRenderer.formatPercent(ker.facility_barrier)}. BarrierLens observed rates for Kerala are shown in the table above where available.`;
+        `<strong>Kerala (base paper reference &mdash; Rail A):</strong> Household ${LabelRenderer.formatPercent(ker.household_barrier)}, Logistic ${LabelRenderer.formatPercent(ker.logistic_barrier)}, Facility ${LabelRenderer.formatPercent(ker.facility_barrier)}.`;
+    }
+
+    function renderStateComparison(query = "") {
+      const tbody = document.getElementById("state-comparison-body");
+      const filtered = rawStateRows.filter(r => r.name.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:#64748b;">No matching states found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => `
+        <tr>
+          <td><strong>${r.name}</strong></td>
+          <td><span class="tag ${r.category.includes('Lowest') ? 'tag-household' : 'tag-facility'}">${r.category}</span></td>
+          <td>${r.railA}</td>
+          <td style="color:var(--rail-b-color); font-weight:700;">${r.any}</td>
+          <td>${r.hh}</td>
+          <td>${r.log}</td>
+          <td>${r.fac}</td>
+          <td style="font-weight:600; color:var(--text-muted);">${r.n}</td>
+        </tr>
+      `).join("");
     }
 
     function renderFactorLists(bp, regression) {
       document.getElementById("bp-protective-list").innerHTML = bp.protective_factors.map(f =>
-        `<li><strong>${f.factor}</strong> — ${f.reported_direction}</li>`
+        `<li><strong>${f.factor}</strong> &mdash; ${f.reported_direction}</li>`
       ).join("");
       document.getElementById("bp-risk-list").innerHTML = bp.risk_factors.map(f =>
-        `<li><strong>${f.factor}</strong> — ${f.reported_direction}</li>`
+        `<li><strong>${f.factor}</strong> &mdash; ${f.reported_direction}</li>`
       ).join("");
 
       if (regression && regression.targets && regression.targets.household) {
         const hh = regression.targets.household;
         document.getElementById("bl-protective-list").innerHTML = hh.top_protective_factors.slice(0, 7).map(f => {
           const interp = LabelRenderer.interpretOddsRatio(f.odds_ratio);
-          return `<li><strong>${f.feature}</strong> — OR ${f.odds_ratio.toFixed(3)} <span class="${interp.cssClass}">(${interp.label})</span></li>`;
+          const label = LabelRenderer.formatFeatureName(f.feature);
+          return `<li><strong>${label}</strong> <code style="font-size:0.75rem; color:#64748b;">(${f.feature})</code> &mdash; OR ${f.odds_ratio.toFixed(3)} <span class="${interp.cssClass}">(${interp.label})</span></li>`;
         }).join("");
         document.getElementById("bl-risk-list").innerHTML = hh.top_risk_factors.slice(0, 7).map(f => {
           const interp = LabelRenderer.interpretOddsRatio(f.odds_ratio);
-          return `<li><strong>${f.feature}</strong> — OR ${f.odds_ratio.toFixed(3)} <span class="${interp.cssClass}">(${interp.label})</span></li>`;
+          const label = LabelRenderer.formatFeatureName(f.feature);
+          return `<li><strong>${label}</strong> <code style="font-size:0.75rem; color:#64748b;">(${f.feature})</code> &mdash; OR ${f.odds_ratio.toFixed(3)} <span class="${interp.cssClass}">(${interp.label})</span></li>`;
         }).join("");
-      } else {
-        document.getElementById("bl-protective-list").innerHTML = `<li>${LabelRenderer.renderDataUnavailable("regression_summary.json not available.")}</li>`;
-        document.getElementById("bl-risk-list").innerHTML = `<li>${LabelRenderer.renderDataUnavailable("regression_summary.json not available.")}</li>`;
       }
     }
   </script>
