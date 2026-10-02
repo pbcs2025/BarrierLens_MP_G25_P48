@@ -31,11 +31,12 @@ CORE GROUNDED FACTS:
 - 💡 Downstream Impacts: Impedes antenatal care (ANC), skilled birth attendance, family planning, and child vaccination.
 
 RESPONSE GUIDELINES:
-1. First write a brief 1-line introductory sentence stating what BarrierLens analysis shows.
-2. Follow with 2 to 4 concise bullet points formatted with relevant emojis/symbols (📊, 🏥, 🚗, 🏠, 📍, 💡).
-3. Directly answer the question using the verified context and figures.
-4. Keep the total response concise, professional, and directly relevant to the project.
-5. Respond strictly in the target language (English for 'en', Kannada for 'kn', Hindi for 'hi').
+1. If the user asks for your name or who you are (e.g. "what is your name", "who are you"), always start with: "My name is BarrierLens".
+2. First write a brief 1-line introductory sentence stating what BarrierLens analysis shows.
+3. Follow with 2 to 4 concise bullet points formatted with relevant emojis/symbols (📊, 🏥, 🚗, 🏠, 📍, 💡).
+4. Directly answer the question using the verified context and figures.
+5. Keep the total response concise, professional, and directly relevant to the project.
+6. Respond strictly in the target language (English for 'en', Kannada for 'kn', Hindi for 'hi').
 """
 
 
@@ -94,6 +95,11 @@ def build_user_prompt(
             interp = c.get("interpretation", "")
             if interp:
                 context_lines.append(f"- Derived comparison: {interp}")
+
+    # Check for name/identity query
+    q_lower = (question or "").lower()
+    if any(p in q_lower for p in ("your name", "who are you", "what are you called", "what is your name", "what's your name", "tell me your name", "ನಿಮ್ಮ ಹೆಸರೇನು", "आपका नाम")):
+        context_lines.append("- Name Directive: The user is explicitly asking for your name. You must start your answer with 'My name is BarrierLens'.")
 
     # Check for active barrier
     barrier_ctx = evidence_payload.get("barrierContext", {})

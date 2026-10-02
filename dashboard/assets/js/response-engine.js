@@ -245,6 +245,30 @@
         };
       }
 
+      // A2. Identity / Name Query
+      if (lowerQuery.includes("your name") || lowerQuery.includes("who are you") || lowerQuery.includes("what is your name") || lowerQuery.includes("what's your name") || lowerQuery.includes("ನಿಮ್ಮ ಹೆಸರೇನು") || lowerQuery.includes("आपका नाम")) {
+        let nameAnswer = "My name is **BarrierLens** (Project Code: P48), an AI research intelligence assistant analyzing women's healthcare access barriers across India based on the NFHS-5 dataset (N = 724,115 respondents).\n\n• 🏥 **Facility Barriers (46.01%)**: Absence of providers & medication shortages\n• 🚗 **Logistic Barriers (31.61%)**: Distance & transport costs\n• 🏠 **Household Barriers (27.16%)**: Family permission & autonomy constraints";
+        if (language === "kn") {
+          nameAnswer = "ನನ್ನ ಹೆಸರು **BarrierLens** (ಪ್ರಾಜೆಕ್ಟ್ ಕೋಡ್: P48). ನಾನು NFHS-5 ಸಮೀಕ್ಷೆಯ ಆಧಾರದ ಮೇಲೆ ಭಾರತದಾದ್ಯಂತ ಮಹಿಳೆಯರ ಆರೋಗ್ಯ ಸೇವಾ ಅಡೆತಡೆಗಳನ್ನು ವಿಶ್ಲೇಷಿಸುವ ಸಂಶೋಧನಾ AI ಸಹಾಯಕ.";
+        } else if (language === "hi") {
+          nameAnswer = "मेरा नाम **BarrierLens** (प्रोजेक्ट कोड: P48) है। मैं NFHS-5 डेटासेट के आधार पर पूरे भारत में महिलाओं की स्वास्थ्य सेवा पहुंच बाधाओं का विश्लेषण करने वाला एक AI अनुसंधान सहायक हूँ।";
+        }
+        return {
+          answer: nameAnswer,
+          response: nameAnswer,
+          language: language || "en",
+          intent: "IDENTITY",
+          confidence: 1.0,
+          entities: ctx.entities,
+          source: ["BarrierLens Project P48"],
+          relatedPage: INTENT_PAGE_MAP.NATIONAL_OVERVIEW,
+          status: "verified",
+          metrics: [],
+          evidence: [],
+          calculations: []
+        };
+      }
+
       // B. Mode 2 Entry: Explore Barriers
       if (ctx.intent === "explore_barrier" || (lowerQuery.includes("explore barrier") && !ctx.activeBarrier)) {
         return {

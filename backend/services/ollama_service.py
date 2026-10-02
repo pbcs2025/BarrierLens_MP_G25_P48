@@ -285,6 +285,12 @@ def generate_llm_explanation(
             if fallback.get("answer"):
                 return fallback
 
+        # Ensure identity response begins with "My name is BarrierLens" if user asked for name
+        q_lower = (question or "").lower()
+        if any(p in q_lower for p in ("your name", "who are you", "what are you called", "what is your name", "what's your name", "tell me your name", "ನಿಮ್ಮ ಹೆಸರೇನು", "आपका नाम")):
+            if "my name is barrierlens" not in ans.lower() and "my name is barrier lens" not in ans.lower():
+                ans = "My name is **BarrierLens** (Project Code: P48), an AI research intelligence assistant analyzing women's healthcare access barriers across India based on the NFHS-5 dataset.\n\n" + ans
+
         return {
             "status": "success",
             "answer": ans,
@@ -334,6 +340,29 @@ def generate_offline_fallback(
     ev_items = evidence_payload.get("evidence", [])
     calcs = evidence_payload.get("calculations", [])
     q_lower = (question or "").lower()
+
+    # Identity / Name queries
+    if any(phrase in q_lower for phrase in ("what is your name", "what's your name", "who are you", "what are you called", "your name", "ನಿಮ್ಮ ಹೆಸರೇನು", "आपका नाम")):
+        if language == "kn":
+            intro = "ನನ್ನ ಹೆಸರು **BarrierLens** (ಪ್ರಾಜೆಕ್ಟ್ ಕೋಡ್: P48). ನಾನು NFHS-5 ಸಮೀಕ್ಷೆಯ ಆಧಾರದ ಮೇಲೆ ಭಾರತದಾದ್ಯಂತ ಮಹಿಳೆಯರ ಆರೋಗ್ಯ ಸೇವಾ ಅಡೆತಡೆಗಳನ್ನು ವಿಶ್ಲೇಷಿಸುವ ಸಂಶೋಧನಾ AI ಸಹಾಯಕ."
+        elif language == "hi":
+            intro = "मेरा नाम **BarrierLens** (प्रोजेक्ट कोड: P48) है। मैं NFHS-5 डेटासेट के आधार पर पूरे भारत में महिलाओं की स्वास्थ्य सेवा पहुंच बाधाओं का विश्लेषण करने वाला एक AI अनुसंधान सहायक हूँ।"
+        else:
+            intro = "My name is **BarrierLens** (Project Code: P48), an AI research intelligence assistant analyzing women's healthcare access barriers across India based on the NFHS-5 dataset (N = 724,115 respondents).\n\n• 🏥 **Facility Barriers (46.01%)**: Absence of providers & medication shortages\n• 🚗 **Logistic Barriers (31.61%)**: Distance & transport costs\n• 🏠 **Household Barriers (27.16%)**: Family permission & autonomy constraints"
+
+        return {
+            "status": "success",
+            "answer": intro,
+            "response": intro,
+            "language": language,
+            "intent": "IDENTITY",
+            "source": ["BarrierLens Project P48"],
+            "metrics": [],
+            "evidence_used": [],
+            "relatedPage": {"label": "National Overview Analytics", "url": "pages/national_overview.html"},
+            "disclaimer": None,
+            "claims": [],
+        }
 
     answer_parts: list[str] = []
 
