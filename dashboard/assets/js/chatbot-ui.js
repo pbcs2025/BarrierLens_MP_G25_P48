@@ -182,17 +182,18 @@
 
     escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    if (escaped.includes('\n- ') || escaped.includes('\n• ')) {
+    if (escaped.includes('- ') || escaped.includes('• ') || escaped.includes('* ')) {
       const lines = escaped.split('\n');
       let inList = false;
       let outLines = [];
       lines.forEach(line => {
-        if (line.trim().startsWith('- ') || line.trim().startsWith('• ')) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('- ') || trimmed.startsWith('• ') || trimmed.startsWith('* ')) {
           if (!inList) {
             outLines.push('<ul style="margin: 6px 0; padding-left: 20px;">');
             inList = true;
           }
-          outLines.push(`<li>${line.trim().substring(2)}</li>`);
+          outLines.push(`<li>${trimmed.substring(2)}</li>`);
         } else {
           if (inList) {
             outLines.push('</ul>');

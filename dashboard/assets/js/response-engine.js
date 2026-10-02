@@ -231,7 +231,7 @@
       // A. Greeting
       if (ctx.intent === "greeting") {
         return {
-          answer: `Hello! Welcome to **BarrierLens** (NFHS-5 Healthcare Access Research Assistant).\n\nWhat would you like to do?\n- Click or type **Explore Barriers** to browse verified research on Household, Logistic, and Facility barriers.\n- Ask any question about healthcare access barriers, national disparities, or ML models to converse directly!\n\n*(Note: To predict your personalized barrier risk, visit the **AI Risk Assessment** tool directly on the dashboard).*`,
+          answer: `👋 **Welcome to BarrierLens AI!**\n\n• 🔍 **Explore Barriers**: Browse verified NFHS-5 evidence across 5 categories.\n• 💬 **Chat with AI**: Ask open research questions about healthcare access disparities.\n• 📊 **Risk Predictor**: Visit the *AI Risk Assessment* module on the dashboard for personal predictions.`,
           language: language || "en",
           intent: "greeting",
           confidence: 1.0,
@@ -248,7 +248,7 @@
       // B. Mode 2 Entry: Explore Barriers
       if (ctx.intent === "explore_barrier" || (lowerQuery.includes("explore barrier") && !ctx.activeBarrier)) {
         return {
-          answer: `Welcome to **Explore Barriers** (Mode 2)!\n\nPlease select one of the 5 healthcare barrier domains below to explore verified NFHS-5 evidence:\n\n1. **Household Barrier**: Family permission, autonomy, and socio-cultural constraints.\n2. **Logistic Barrier**: Distance to facility, transportation availability, and treatment costs.\n3. **Facility Barrier**: Absence of female providers, doctor availability, and medicine supply.\n4. **Multiple Barriers**: Overlapping vulnerability across 2 or more concurrent domains.\n5. **All Barriers**: Comprehensive nationwide analytical overview (59.16% any-barrier rate).\n\n👉 *Type the name of any barrier above to begin.*`,
+          answer: `🔍 **Select a Barrier Category to Explore:**\n\n• 🏥 **Facility Barrier (46.01%)**: Provider absence, medicine shortages\n• 🚗 **Logistic Barrier (31.61%)**: Distance to facilities & transport costs\n• 🏠 **Household Barrier (27.16%)**: Family permission & autonomy constraints\n• ⚠️ **Multiple Barriers (38.80%)**: Overlapping multi-domain vulnerability\n• 📊 **All Barriers (59.16%)**: Comprehensive national multi-barrier summary\n\n👉 *Click or type any barrier above to begin!*`,
           language: language || "en",
           intent: "explore_barrier",
           confidence: 1.0,
@@ -265,7 +265,7 @@
       // C. Barrier Assessment Query -> Direct to Dashboard AI Risk Assessment
       if (ctx.intent === "identify_barrier" || lowerQuery.includes("identify my barrier") || lowerQuery.includes("identify barrier") || lowerQuery.includes("check my barrier") || lowerQuery.includes("check which barrier")) {
         return {
-          answer: `To check and evaluate your personalized barrier risk using our ML models, please visit the **AI Risk Assessment** tool directly on the dashboard ([Risk Prediction](pages/risk_prediction.html)).\n\nHere in the chatbot, you can **explore barrier categories** (Household, Logistic, Facility, Multiple, All) or ask me any question about healthcare access barriers and NFHS-5 research!`,
+          answer: `🎯 **AI Risk Assessment is on the Dashboard!**\n\n• 📊 Test personal profiles on the [AI Risk Assessment](pages/risk_prediction.html) page.\n• 🔍 Use the chatbot here to explore barrier categories or ask open research questions.`,
           language: language || "en",
           intent: "identify_barrier",
           confidence: 1.0,

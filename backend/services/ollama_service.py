@@ -102,6 +102,24 @@ def format_api_error_response(
     return format_ollama_error_response("general", error_msg, language)
 
 
+def clean_truncated_response(text: str) -> str:
+    """Trim incomplete trailing sentence or bullet if cut off by token limit."""
+    cleaned = text.strip()
+    lines = cleaned.splitlines()
+    if len(lines) <= 1:
+        return cleaned
+
+    last_line = lines[-1].strip()
+    terminal_chars = ('.', '!', '?', ':', ')', '`', '*', '"', '।')
+    if last_line and not last_line.endswith(terminal_chars):
+        remaining = lines[:-1]
+        while remaining and not remaining[-1].strip():
+            remaining.pop()
+        if remaining:
+            return "\n".join(remaining).strip()
+    return cleaned
+
+
 def parse_llm_json_response(response_text: str) -> dict[str, Any]:
     """Extract and parse structured JSON or clean markdown from LLM output."""
     cleaned = response_text.strip()
@@ -121,6 +139,8 @@ def parse_llm_json_response(response_text: str) -> dict[str, Any]:
     # Strip any enclosing quotes if model returned raw quoted string
     if cleaned.startswith('"') and cleaned.endswith('"') and len(cleaned) > 2:
         cleaned = cleaned[1:-1].strip()
+
+    cleaned = clean_truncated_response(cleaned)
 
     return {
         "answer": cleaned,
@@ -304,61 +324,72 @@ def generate_offline_fallback(
 
     answer_parts: list[str] = []
 
-    if intent == "NATIONAL_OVERVIEW" or "overview" in q_lower or "what is barrierlens" in q_lower:
-        answer_parts.append(
-            "BarrierLens analyzes NFHS-5 survey data across 724,115 Indian women. Nationwide, 59.16% of women face at least one healthcare access barrier."
-        )
-        answer_parts.append(
-            "Facility barriers are most common (46.01%), followed by Logistic distance barriers (31.61%) and Household permission barriers (27.16%)."
-        )
+    if intent == "NATIONAL_OVERVIEW" or "overview" in q_lower or "what is barrierlens" in q_lower or "objective" in q_lower:
+        answer_parts.extend([
+            "📊 **BarrierLens Overview (NFHS-5, N=724,115):**",
+            "• 🎯 **59.16%** of Indian women experience ≥1 healthcare access barrier.",
+            "• 🏥 **Facility Barrier (46.01%)**: Rank 1 (provider absence, drug shortages).",
+            "• 🚗 **Logistic Barrier (31.61%)**: Rank 2 (travel distance, lack of transport).",
+            "• 🏠 **Household Barrier (27.16%)**: Rank 3 (family permission, fund constraints).",
+        ])
     elif intent == "STATE_ANALYSIS" or "state" in q_lower:
         states = evidence_payload.get("entities", {}).get("states", [])
         state_name = states[0] if states else "the requested state"
         any_ev = next((e for e in ev_items if isinstance(e, dict) and "Any Barrier" in e.get("label", "")), None)
-        if any_ev:
-            answer_parts.append(f"In {state_name}, the verified observed any barrier rate is {any_ev['value']}%.")
-        else:
-            answer_parts.append(f"State-level barrier analysis retrieved for {state_name}.")
+        rate_str = f"{any_ev['value']}%" if any_ev else "documented in NFHS-5"
+        answer_parts.extend([
+            f"📍 **State Profile: {state_name}**",
+            f"• 📊 **Observed Rate**: {rate_str} encounter healthcare barriers.",
+            "• 🔍 Detailed district metrics are available in the State Analysis module.",
+        ])
     elif intent == "STATE_COMPARISON" or "compare" in q_lower:
         states = evidence_payload.get("entities", {}).get("states", [])
         s1 = states[0] if len(states) > 0 else "State A"
         s2 = states[1] if len(states) > 1 else "State B"
-        answer_parts.append(f"Comparison of healthcare access barriers between {s1} and {s2}:")
+        answer_parts.append(f"📊 **Barrier Comparison: {s1} vs {s2}**")
         for e in ev_items:
             if isinstance(e, dict) and "Any Barrier" in e.get("label", ""):
-                answer_parts.append(f"- {e.get('entity')}: Observed Any Barrier Rate is {e.get('value')}%.")
+                answer_parts.append(f"• 📍 **{e.get('entity')}**: {e.get('value')}% observed rate")
         if calcs:
-            answer_parts.append(f"Calculated gap: {calcs[0].get('interpretation', '')}")
+            answer_parts.append(f"• 📈 **Disparity Gap**: {calcs[0].get('interpretation', '')}")
     elif intent == "RURAL_URBAN" or "rural" in q_lower or "urban" in q_lower:
-        answer_parts.append(
-            "Rural women experience a significantly higher healthcare barrier rate (63.49%) compared to Urban women (46.03%), representing a 17.46 percentage point gap."
-        )
+        answer_parts.extend([
+            "📍 **Rural vs Urban Disparity (NFHS-5):**",
+            "• 🏡 **Rural Rate**: 63.49% face healthcare barriers.",
+            "• 🏙️ **Urban Rate**: 46.03% face healthcare barriers.",
+            "• 📈 **Disparity Gap**: 17.46 percentage points higher in rural areas.",
+        ])
         if calcs:
-            answer_parts.append(f"Derived gap: {calcs[0].get('interpretation', '')}")
+            answer_parts.append(f"• 💡 **Derived**: {calcs[0].get('interpretation', '')}")
     elif intent == "RISK_ARCHETYPE" or "cluster" in q_lower or "archetype" in q_lower:
-        answer_parts.append(
-            "BarrierLens identifies 2 primary K-Means risk archetypes across India (N=724,115, silhouette score = 0.3986):"
-        )
-        answer_parts.append(
-            "1. Cluster 0 ('High Vulnerability, High Barrier Exposure'): 52.9% of women, mean composite score = 0.5868."
-        )
-        answer_parts.append(
-            "2. Cluster 1 ('High Media & Digital Inclusion'): 47.1% of women, mean composite score = 0.3761."
-        )
+        answer_parts.extend([
+            "👥 **K-Means Risk Archetypes (silhouette = 0.3986):**",
+            "• ⚠️ **Cluster 0 (52.9%)**: High Vulnerability & Barrier Exposure (score = 0.5868).",
+            "• 📱 **Cluster 1 (47.1%)**: Media & Digital Inclusion (score = 0.3761).",
+        ])
     elif intent == "SHAP" or "model" in q_lower or "feature" in q_lower or "xgboost" in q_lower:
-        answer_parts.append(
-            "SHAP attributions from Stage 1 Machine Learning models identify poorest wealth quintile (OR=1.26) and no formal education (OR=1.20) as top barrier risk factors."
-        )
+        answer_parts.extend([
+            "🤖 **ML Model Insights & SHAP Drivers:**",
+            "• 📉 **Poorest Wealth**: Top risk factor (OR = 1.26).",
+            "• 🎓 **No Formal Education**: Second leading risk driver (OR = 1.20).",
+            "• 🛡️ **Richest Wealth**: Strongest protective buffer (OR = 0.78).",
+        ])
     elif intent == "LIMITATIONS" or "causation" in q_lower:
-        answer_parts.append(
-            "BarrierLens uses cross-sectional NFHS-5 survey data. Observational machine learning identifies strong statistical associations and predictive patterns, but does not establish clinical causality."
-        )
+        answer_parts.extend([
+            "⚠️ **Methodological Scope & Limitations:**",
+            "• 📋 Observational NFHS-5 data identifies statistical associations, not causality.",
+            "• 🚫 Waiting times and clinical fees are not surveyed.",
+        ])
     else:
-        answer_parts.append(
-            "BarrierLens provides data-driven research on women's healthcare access in India (NFHS-5, N=724,115). 59.16% of women face at least one barrier across Facility (46.01%), Logistic (31.61%), and Household (27.16%) domains."
-        )
+        answer_parts.extend([
+            "📊 **BarrierLens Summary (NFHS-5, N=724,115):**",
+            "• 🎯 **59.16%** of women face healthcare access barriers.",
+            "• 🏥 **Rank 1**: Facility Barriers (46.01%).",
+            "• 🚗 **Rank 2**: Logistic Barriers (31.61%).",
+            "• 🏠 **Rank 3**: Household Barriers (27.16%).",
+        ])
 
-    answer_text = " ".join(answer_parts)
+    answer_text = "\n".join(answer_parts)
     evidence_sources = [
         f"{e.get('source')}:{e.get('path')}"
         for e in ev_items
