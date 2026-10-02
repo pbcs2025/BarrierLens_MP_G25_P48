@@ -112,6 +112,12 @@ def process_chat_request() -> Any:
                 "relatedPage": None,
             }
 
+        # Check if requested information is unavailable in NFHS-5 dataset
+        if evidence_payload.get("status") == "unavailable":
+            from backend.services.ollama_service import format_unavailable_response
+            unavailable_resp = format_unavailable_response(evidence_payload, language)
+            return jsonify(unavailable_resp), 200
+
         # Execute Ollama Explanation Service
         response_data = generate_llm_explanation(
             question=question,

@@ -27,9 +27,9 @@ def format_unavailable_response(
     intent = evidence_payload.get("intent", "UNSUPPORTED")
 
     lang_messages = {
-        "en": "This information is not directly captured in the NFHS-5 dataset recode columns.",
-        "kn": "ಈ ಮಾಹಿತಿಯು NFHS-5 ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ನೇರವಾಗಿ ಲಭ್ಯವಿಲ್ಲ.",
-        "hi": "यह जानकारी NFHS-5 डेटासेट में सीधे उपलब्ध नहीं है।",
+        "en": "This information is unavailable or not directly captured in the NFHS-5 dataset recode columns.",
+        "kn": "ಈ ಮಾಹಿತಿಯು ಅಲಭ್ಯವಾಗಿದೆ ಅಥವಾ NFHS-5 ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ನೇರವಾಗಿ ಲಭ್ಯವಿಲ್ಲ.",
+        "hi": "यह जानकारी उपलब्ध नहीं है या NFHS-5 डेटासेट में सीधे उपलब्ध नहीं है।",
     }
 
     base_msg = lang_messages.get(language, lang_messages["en"])
@@ -63,6 +63,13 @@ def format_ollama_error_response(
             "hi": "AI सहायक सेवा वर्तमान में ऑफ़लाइन है। कृपया सुनिश्चित करें कि Ollama चल रहा है।",
         }
         disclaimer = f"Service Notice: Unable to reach Ollama at {settings.OLLAMA_BASE_URL}."
+    elif error_type in ("model_missing", "model"):
+        msg_map = {
+            "en": f"Ollama model '{settings.OLLAMA_MODEL}' is missing. Please run 'ollama pull {settings.OLLAMA_MODEL}' to install.",
+            "kn": f"Ollama ಮಾಡೆಲ್ '{settings.OLLAMA_MODEL}' ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು 'ollama pull {settings.OLLAMA_MODEL}' ಚಲಾಯಿಸಿ.",
+            "hi": f"Ollama मॉडल '{settings.OLLAMA_MODEL}' गायब है। कृपया 'ollama pull {settings.OLLAMA_MODEL}' चलाएं।",
+        }
+        disclaimer = f"Service Notice: Model {settings.OLLAMA_MODEL} not found."
     elif error_type == "timeout":
         msg_map = {
             "en": "The request timed out. Generating concise response.",
@@ -302,61 +309,103 @@ def generate_offline_fallback(
     calcs = evidence_payload.get("calculations", [])
     q_lower = (question or "").lower()
 
+    lang = str(language or "en").lower()
+    lang_code = "kn" if ("kn" in lang or "kannada" in lang) else ("hi" if ("hi" in lang or "hindi" in lang) else "en")
+
     answer_parts: list[str] = []
 
     if intent == "NATIONAL_OVERVIEW" or "overview" in q_lower or "what is barrierlens" in q_lower:
-        answer_parts.append(
-            "BarrierLens analyzes NFHS-5 survey data across 724,115 Indian women. Nationwide, 59.16% of women face at least one healthcare access barrier."
-        )
-        answer_parts.append(
-            "Facility barriers are most common (46.01%), followed by Logistic distance barriers (31.61%) and Household permission barriers (27.16%)."
-        )
+        if lang_code == "kn":
+            answer_parts.append("ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ 7,24,115 ಭಾರತೀಯ ಮಹಿಳೆಯರ NFHS-5 ಸಮೀಕ್ಷಾ ದತ್ತಾಂಶವನ್ನು ವಿಶ್ಲೇಷಿಸುತ್ತದೆ. ದೇಶಾದ್ಯಂತ, 59.16% ಮಹಿಳೆಯರು ಕನಿಷ್ಠ ಒಂದು ಆರೋಗ್ಯ ಅಡಚಣೆಯನ್ನು ಎದುರಿಸುತ್ತಾರೆ.")
+            answer_parts.append("ಆಸ್ಪತ್ರೆ/ಸೌಲಭ್ಯ ಅಡಚಣೆ ಅತ್ಯಂತ ಸಾಮಾನ್ಯವಾಗಿದೆ (46.01%), ನಂತರ ಸಾರಿಗೆ/ವೆಚ್ಚ ಅಡಚಣೆ (31.61%) ಮತ್ತು ಮನೆ/ಕುಟುಂಬದ ಅಡಚಣೆ (27.16%).")
+        elif lang_code == "hi":
+            answer_parts.append("बैरियरलेंस 7,24,115 भारतीय महिलाओं के NFHS-5 सर्वेक्षण डेटा का विश्लेषण करता है। देश भर में, 59.16% महिलाएं कम से कम एक स्वास्थ्य देखभाल बाधा का सामना करती हैं।")
+            answer_parts.append("अस्पताल बाधाएं सबसे आम हैं (46.01%), इसके बाद परिवहन बाधाएं (31.61%) और घरेलू अनुमति बाधाएं (27.16%) हैं।")
+        else:
+            answer_parts.append("BarrierLens analyzes NFHS-5 survey data across 724,115 Indian women. Nationwide, 59.16% of women face at least one healthcare access barrier.")
+            answer_parts.append("Facility barriers are most common (46.01%), followed by Logistic distance barriers (31.61%) and Household permission barriers (27.16%).")
     elif intent == "STATE_ANALYSIS" or "state" in q_lower:
         states = evidence_payload.get("entities", {}).get("states", [])
         state_name = states[0] if states else "the requested state"
         any_ev = next((e for e in ev_items if isinstance(e, dict) and "Any Barrier" in e.get("label", "")), None)
         if any_ev:
-            answer_parts.append(f"In {state_name}, the verified observed any barrier rate is {any_ev['value']}%.")
+            if lang_code == "kn":
+                answer_parts.append(f"{state_name} ನಲ್ಲಿ, ಪರಿಶೀಲಿಸಿದ ಯಾವುದೇ ಅಡಚಣೆ ದರವು {any_ev['value']}% ಆಗಿದೆ.")
+            elif lang_code == "hi":
+                answer_parts.append(f"{state_name} में, सत्यापित किसी भी बाधा की दर {any_ev['value']}% है।")
+            else:
+                answer_parts.append(f"In {state_name}, the verified observed any barrier rate is {any_ev['value']}%.")
         else:
-            answer_parts.append(f"State-level barrier analysis retrieved for {state_name}.")
+            if lang_code == "kn":
+                answer_parts.append(f"{state_name} ಗಾಗಿ ರಾಜ್ಯ ಮಟ್ಟದ ಅಡಚಣೆ ವಿಶ್ಲೇಷಣೆ ಲಭ್ಯವಿದೆ.")
+            elif lang_code == "hi":
+                answer_parts.append(f"{state_name} के लिए राज्य-स्तरीय बाधा विश्लेषण प्राप्त हुआ।")
+            else:
+                answer_parts.append(f"State-level barrier analysis retrieved for {state_name}.")
     elif intent == "STATE_COMPARISON" or "compare" in q_lower:
         states = evidence_payload.get("entities", {}).get("states", [])
         s1 = states[0] if len(states) > 0 else "State A"
         s2 = states[1] if len(states) > 1 else "State B"
-        answer_parts.append(f"Comparison of healthcare access barriers between {s1} and {s2}:")
+        if lang_code == "kn":
+            answer_parts.append(f"{s1} ಮತ್ತು {s2} ನಡುವಿನ ಆರೋಗ್ಯ ಅಡಚಣೆಗಳ ಹೋಲಿಕೆ:")
+        elif lang_code == "hi":
+            answer_parts.append(f"{s1} और {s2} के बीच स्वास्थ्य बाधाओं की तुलना:")
+        else:
+            answer_parts.append(f"Comparison of healthcare access barriers between {s1} and {s2}:")
         for e in ev_items:
             if isinstance(e, dict) and "Any Barrier" in e.get("label", ""):
-                answer_parts.append(f"- {e.get('entity')}: Observed Any Barrier Rate is {e.get('value')}%.")
+                if lang_code == "kn":
+                    answer_parts.append(f"- {e.get('entity')}: ಯಾವುದೇ ಅಡಚಣೆ ದರವು {e.get('value')}% ಆಗಿದೆ.")
+                elif lang_code == "hi":
+                    answer_parts.append(f"- {e.get('entity')}: किसी भी बाधा की दर {e.get('value')}% है।")
+                else:
+                    answer_parts.append(f"- {e.get('entity')}: Observed Any Barrier Rate is {e.get('value')}%.")
         if calcs:
-            answer_parts.append(f"Calculated gap: {calcs[0].get('interpretation', '')}")
+            if lang_code == "kn":
+                answer_parts.append(f"ಲೆಕ್ಕಹಾಕಿದ ವ್ಯತ್ಯಾಸ: {calcs[0].get('interpretation', '')}")
+            elif lang_code == "hi":
+                answer_parts.append(f"परिकलित अंतर: {calcs[0].get('interpretation', '')}")
+            else:
+                answer_parts.append(f"Calculated gap: {calcs[0].get('interpretation', '')}")
     elif intent == "RURAL_URBAN" or "rural" in q_lower or "urban" in q_lower:
-        answer_parts.append(
-            "Rural women experience a significantly higher healthcare barrier rate (63.49%) compared to Urban women (46.03%), representing a 17.46 percentage point gap."
-        )
+        if lang_code == "kn":
+            answer_parts.append("ಗ್ರಾಮೀಣ ಮಹಿಳೆಯರು ನಗರ ಮಹಿಳೆಯರಿಗಿಂತ (46.03%) ಗಮನಾರ್ಹವಾಗಿ ಹೆಚ್ಚಿನ ಆರೋಗ್ಯ ಅಡಚಣೆ ದರವನ್ನು (63.49%) ಎದುರಿಸುತ್ತಾರೆ, ಇದು 17.46 ಶೇಕಡಾವಾರು ಅಂಕಗಳ ವ್ಯತ್ಯಾಸವಾಗಿದೆ.")
+        elif lang_code == "hi":
+            answer_parts.append("ग्रामीण महिलाओं में स्वास्थ्य संबंधी बाधा दर (63.49%) शहरी महिलाओं (46.03%) की तुलना में काफी अधिक है, जो 17.46 प्रतिशत अंक का अंतर दर्शाती है।")
+        else:
+            answer_parts.append("Rural women experience a significantly higher healthcare barrier rate (63.49%) compared to Urban women (46.03%), representing a 17.46 percentage point gap.")
         if calcs:
             answer_parts.append(f"Derived gap: {calcs[0].get('interpretation', '')}")
     elif intent == "RISK_ARCHETYPE" or "cluster" in q_lower or "archetype" in q_lower:
-        answer_parts.append(
-            "BarrierLens identifies 2 primary K-Means risk archetypes across India (N=724,115, silhouette score = 0.3986):"
-        )
-        answer_parts.append(
-            "1. Cluster 0 ('High Vulnerability, High Barrier Exposure'): 52.9% of women, mean composite score = 0.5868."
-        )
-        answer_parts.append(
-            "2. Cluster 1 ('High Media & Digital Inclusion'): 47.1% of women, mean composite score = 0.3761."
-        )
+        if lang_code == "kn":
+            answer_parts.append("ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಭಾರತದಾದ್ಯಂತ 2 ಮುಖ್ಯ ಅಪಾಯದ ಮಾದರಿಗಳನ್ನು ಗುರುತಿಸುತ್ತದೆ: 1. ಕ್ಲಸ್ಟರ್ 0 (ಹೆಚ್ಚಿನ ಹಾನಿಗೊಳಗಾಗುವಿಕೆ, 52.9% ಮಹಿಳೆಯರು). 2. ಕ್ಲಸ್ಟರ್ 1 (ಮಾಧ್ಯಮ ಮತ್ತು ಡಿಜಿಟಲ್ ಒಳಗೊಳ್ಳುವಿಕೆ, 47.1% ಮಹಿಳೆಯರು).")
+        elif lang_code == "hi":
+            answer_parts.append("बैरियरलेंस भारत भर में 2 मुख्य जोखिम प्रारूपों की पहचान करता है: 1. क्लस्टर 0 (उच्च भेद्यता, 52.9% महिलाएं)। 2. क्लस्टर 1 (उच्च डिजिटल समावेशन, 47.1% महिलाएं)।")
+        else:
+            answer_parts.append("BarrierLens identifies 2 primary K-Means risk archetypes across India (N=724,115, silhouette score = 0.3986):")
+            answer_parts.append("1. Cluster 0 ('High Vulnerability, High Barrier Exposure'): 52.9% of women, mean composite score = 0.5868.")
+            answer_parts.append("2. Cluster 1 ('High Media & Digital Inclusion'): 47.1% of women, mean composite score = 0.3761.")
     elif intent == "SHAP" or "model" in q_lower or "feature" in q_lower or "xgboost" in q_lower:
-        answer_parts.append(
-            "SHAP attributions from Stage 1 Machine Learning models identify poorest wealth quintile (OR=1.26) and no formal education (OR=1.20) as top barrier risk factors."
-        )
+        if lang_code == "kn":
+            answer_parts.append("ಹಂತ 1 ML ಮಾಡೆಲ್‌ಗಳಿಂದ ಪಡೆದ SHAP ವಿಶ್ಲೇಷಣೆಯು ಅತ್ಯಂತ ಬಡ ಆರ್ಥಿಕ ಸ್ಥಿತಿ (OR=1.26) ಮತ್ತು ಔಪಚಾರಿಕ ಶಿಕ್ಷಣ ಇಲ್ಲದಿರುವುದನ್ನು (OR=1.20) ಪ್ರಮುಖ ಅಡಚಣೆ ಅಪಾಯದ ಅಂಶಗಳಾಗಿ ಗುರುತಿಸುತ್ತದೆ.")
+        elif lang_code == "hi":
+            answer_parts.append("चरण 1 ML मॉडलों का SHAP विश्लेषण अति निर्धन वर्ग (OR=1.26) और शिक्षा की कमी (OR=1.20) को प्राथमिक जोखिम कारक मानता है।")
+        else:
+            answer_parts.append("SHAP attributions from Stage 1 Machine Learning models identify poorest wealth quintile (OR=1.26) and no formal education (OR=1.20) as top barrier risk factors.")
     elif intent == "LIMITATIONS" or "causation" in q_lower:
-        answer_parts.append(
-            "BarrierLens uses cross-sectional NFHS-5 survey data. Observational machine learning identifies strong statistical associations and predictive patterns, but does not establish clinical causality."
-        )
+        if lang_code == "kn":
+            answer_parts.append("ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ NFHS-5 ಸಮೀಕ್ಷಾ ದತ್ತಾಂಶವನ್ನು ಬಳಸುತ್ತದೆ. ಮೆಷಿನ್ ಲರ್ನಿಂಗ್ ಮಾಡೆಲ್‌ಗಳು ಸಂಭಾವ್ಯ ಸಂಬಂಧಗಳನ್ನು ಗುರುತಿಸುತ್ತವೆ, ಆದರೆ ನೇರ ವೈದ್ಯಕೀಯ ಕಾರಣಾತ್ಮಕತೆಯನ್ನು ಸಾಬೀತುಪಡಿಸುವುದಿಲ್ಲ.")
+        elif lang_code == "hi":
+            answer_parts.append("बैरियरलेंस NFHS-5 सर्वेक्षण डेटा का उपयोग करता है। मशीन लर्निंग मॉडल सांख्यिकीय संबंधों की पहचान करते हैं, लेकिन प्रत्यक्ष चिकित्सीय कारण संबंध स्थापित नहीं करते हैं।")
+        else:
+            answer_parts.append("BarrierLens uses cross-sectional NFHS-5 survey data. Observational machine learning identifies strong statistical associations and predictive patterns, but does not establish clinical causality.")
     else:
-        answer_parts.append(
-            "BarrierLens provides data-driven research on women's healthcare access in India (NFHS-5, N=724,115). 59.16% of women face at least one barrier across Facility (46.01%), Logistic (31.61%), and Household (27.16%) domains."
-        )
+        if lang_code == "kn":
+            answer_parts.append("ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಭಾರತೀಯ ಮಹಿಳೆಯರ ಆರೋಗ್ಯ ಅಡಚಣೆಗಳ ಕುರಿತು (NFHS-5, N=7,24,115) ಮಾಹಿತಿ ಆಧಾರಿತ ಸಂಶೋಧನೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ. ಶೇಕಡಾ 59.16 ಮಹಿಳೆಯರು ಕನಿಷ್ಠ ಒಂದು ಅಡಚಣೆಯನ್ನು ಎದುರಿಸುತ್ತಾರೆ (ಸೌಲಭ್ಯ 46.01%, ಸಾರಿಗೆ 31.61%, ಮನೆ 27.16%).")
+        elif lang_code == "hi":
+            answer_parts.append("बैरियरलेंस भारत में महिलाओं की स्वास्थ्य पहुंच (NFHS-5, N=7,24,115) पर डेटा-संचालित अनुसंधान प्रदान करता है। 59.16% महिलाएं कम से कम एक बाधा का सामना करती हैं (अस्पताल 46.01%, परिवहन 31.61%, घरेलू 27.16%)।")
+        else:
+            answer_parts.append("BarrierLens provides data-driven research on women's healthcare access in India (NFHS-5, N=724,115). 59.16% of women face at least one barrier across Facility (46.01%), Logistic (31.61%), and Household (27.16%) domains.")
 
     answer_text = " ".join(answer_parts)
     evidence_sources = [
@@ -369,7 +418,7 @@ def generate_offline_fallback(
         "status": "success",
         "answer": answer_text,
         "response": answer_text,
-        "language": language,
+        "language": lang_code,
         "intent": intent,
         "source": evidence_payload.get("source", ["NFHS-5 (2019-21)"]),
         "metrics": evidence_payload.get("metrics", []),

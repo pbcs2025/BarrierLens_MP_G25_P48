@@ -15,6 +15,9 @@ env/
 # OS/editor artifacts
 .DS_Store
 Thumbs.db
+~$*.docx
+~$*.doc
+docs.zip
 
 # Project-large artifacts (local only)
 data/raw/*

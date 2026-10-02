@@ -145,21 +145,54 @@
     const onBack = options.onBack || options.onCancel || function() {};
     const activeBarrier = options.activeBarrier || "All Barriers";
 
-    const buttonsHtml = BARRIER_OPTIONS.map(b => {
-      const isSelected = b.name.toLowerCase() === activeBarrier.toLowerCase();
+    const activeLanguage = options.activeLanguage || options.lang || 'en';
+    const rawLang = String(activeLanguage).toLowerCase();
+    const langKey = (rawLang.startsWith('kn') || rawLang.includes('kannada') || rawLang.includes('ಕನ್ನಡ')) ? 'kn'
+      : (rawLang.startsWith('hi') || rawLang.includes('hindi') || rawLang.includes('हिंदी') || rawLang.includes('हिन्दी')) ? 'hi'
+      : 'en';
+
+    const headerTexts = {
+      en: {
+        back: "← Back to Modes",
+        modeTag: "Mode 2: Explore",
+        title: "Explore Healthcare Access Barriers",
+        subtitle: "Select a barrier category to view verified NFHS-5 evidence & solutions:",
+        activeBadge: "Active"
+      },
+      kn: {
+        back: "← ಪ್ರವೇಶ ವಿಧಾನಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
+        modeTag: "ವಿಧಾನ 2: ಅನ್ವೇಷಣೆ",
+        title: "ಆರೋಗ್ಯ ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+        subtitle: "ದೃಢೀಕೃತ NFHS-5 ಮಾಹಿತಿ ಮತ್ತು ಪರಿಹಾರಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಒಂದು ಅಡಚಣೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
+        activeBadge: "ಸಕ್ರಿಯ"
+      },
+      hi: {
+        back: "← मोड पर वापस जाएं",
+        modeTag: "मोड 2: अन्वेषण",
+        title: "स्वास्थ्य देखभाल बाधाओं का अन्वेषण करें",
+        subtitle: "सत्यापित NFHS-5 साक्ष्य और समाधान देखने के लिए एक श्रेणी चुनें:",
+        activeBadge: "सक्रिय"
+      }
+    };
+    const tHeader = headerTexts[langKey] || headerTexts.en;
+
+    const buttonsHtml = BARRIER_DEFINITIONS.map(b => {
+      const isSelected = b.id.toLowerCase() === activeBarrier.toLowerCase();
       const bg = isSelected ? '#eff6ff' : '#ffffff';
       const border = isSelected ? '#2563eb' : '#e2e8f0';
       const textColor = isSelected ? '#1e40af' : '#0f172a';
+      const titleText = b.title[langKey] || b.title.en;
+      const descText = b.desc[langKey] || b.desc.en;
 
       return `
-        <button class="bl-barrier-select-btn" data-barrier="${b.name}" style="width: 100%; text-align: left; padding: 12px 14px; background: ${bg}; border: 1.5px solid ${border}; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: flex-start; gap: 10px;">
+        <button class="bl-barrier-select-btn" data-barrier="${b.id}" style="width: 100%; text-align: left; padding: 12px 14px; background: ${bg}; border: 1.5px solid ${border}; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: flex-start; gap: 10px;">
           <span style="font-size: 1.25rem;">${b.icon}</span>
           <div style="flex: 1;">
             <div style="font-weight: 700; font-size: 0.925rem; color: ${textColor}; display: flex; justify-content: space-between; align-items: center;">
-              <span>${b.name}</span>
-              ${isSelected ? '<span style="font-size: 0.75rem; background: #2563eb; color: #fff; padding: 2px 6px; border-radius: 4px;">Active</span>' : ''}
+              <span>${titleText}</span>
+              ${isSelected ? `<span style="font-size: 0.75rem; background: #2563eb; color: #fff; padding: 2px 6px; border-radius: 4px;">${tHeader.activeBadge}</span>` : ''}
             </div>
-            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">${b.desc}</div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">${descText}</div>
           </div>
         </button>
       `;
@@ -169,13 +202,13 @@
       <div class="bl-barrier-ui-wrapper" style="padding: 14px; font-family: system-ui, -apple-system, sans-serif;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
           <button id="bl-btn-barrier-ui-back" style="padding: 5px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-            ← Back to Modes
+            ${tHeader.back}
           </button>
-          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Mode 2: Explore</span>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">${tHeader.modeTag}</span>
         </div>
         <div style="margin-bottom: 12px; text-align: center;">
-          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">Explore Healthcare Access Barriers</h4>
-          <p style="margin: 0; font-size: 0.825rem; color: #64748b;">Select a barrier category to view verified NFHS-5 evidence & solutions:</p>
+          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">${tHeader.title}</h4>
+          <p style="margin: 0; font-size: 0.825rem; color: #64748b;">${tHeader.subtitle}</p>
         </div>
         <div class="bl-barrier-buttons-list">
           ${buttonsHtml}

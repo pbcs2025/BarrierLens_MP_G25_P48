@@ -26,100 +26,128 @@
     {
       id: "q1",
       field: "v013",
-      label: "Age Category",
-      helpText: "Select the age group of the respondent",
+      labels: { en: "Age Category", kn: "ವಯಸ್ಸಿನ ವರ್ಗ", hi: "आयु श्रेणी" },
+      helpTexts: {
+        en: "Select the age group of the respondent",
+        kn: "ಪ್ರತಿಕ್ರಿಯಿಸಿದವರ ವಯಸ್ಸಿನ ಗುಂಪನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+        hi: "उत्तरदाता के आयु वर्ग का चयन करें"
+      },
       type: "buttons",
       required: true,
       options: [
-        { label: "15–19 years", value: "15-19" },
-        { label: "20–24 years", value: "20-24" },
-        { label: "25–29 years", value: "25-29" },
-        { label: "30–34 years", value: "30-34" },
-        { label: "35–39 years", value: "35-39" },
-        { label: "40–44 years", value: "40-44" },
-        { label: "45–49 years", value: "45-49" }
+        { labels: { en: "15–19 years", kn: "15–19 ವರ್ಷಗಳು", hi: "15-19 वर्ष" }, value: "15-19" },
+        { labels: { en: "20–24 years", kn: "20–24 ವರ್ಷಗಳು", hi: "20-24 वर्ष" }, value: "20-24" },
+        { labels: { en: "25–29 years", kn: "25–29 ವರ್ಷಗಳು", hi: "25-29 वर्ष" }, value: "25-29" },
+        { labels: { en: "30–34 years", kn: "30–34 ವರ್ಷಗಳು", hi: "30-34 वर्ष" }, value: "30-34" },
+        { labels: { en: "35–39 years", kn: "35–39 ವರ್ಷಗಳು", hi: "35-39 वर्ष" }, value: "35-39" },
+        { labels: { en: "40–44 years", kn: "40–44 ವರ್ಷಗಳು", hi: "40-44 वर्ष" }, value: "40-44" },
+        { labels: { en: "45–49 years", kn: "45–49 ವರ್ಷಗಳು", hi: "45-49 वर्ष" }, value: "45-49" }
       ]
     },
     {
       id: "q2",
       field: "v025",
-      label: "Place of Residence",
-      helpText: "Is the respondent residing in an urban or rural area?",
+      labels: { en: "Place of Residence", kn: "ವಾಸಸ್ಥಳ", hi: "निवास स्थान" },
+      helpTexts: {
+        en: "Is the respondent residing in an urban or rural area?",
+        kn: "ಪ್ರತಿಕ್ರಿಯಿಸಿದವರು ನಗರ ಅಥವಾ ಗ್ರಾಮೀಣ ಪ್ರದೇಶದಲ್ಲಿ ವಾಸಿಸುತ್ತಿದ್ದಾರೆಯೇ?",
+        hi: "क्या उत्तरदाता शहरी या ग्रामीण क्षेत्र में रहता है?"
+      },
       type: "buttons",
       required: true,
       options: [
-        { label: "Urban", value: "urban" },
-        { label: "Rural", value: "rural" }
+        { labels: { en: "Urban", kn: "ನಗರ", hi: "शहरी" }, value: "urban" },
+        { labels: { en: "Rural", kn: "ಗ್ರಾಮೀಣ", hi: "ग्रामीण" }, value: "rural" }
       ]
     },
     {
       id: "q3",
       field: "v106",
-      label: "Highest Educational Level",
-      helpText: "Highest level of formal schooling completed",
+      labels: { en: "Highest Educational Level", kn: "ಗರಿಷ್ಠ ಶಿಕ್ಷಣ ಮಟ್ಟ", hi: "उच्चतम शिक्षा स्तर" },
+      helpTexts: {
+        en: "Highest level of formal schooling completed",
+        kn: "ಪೂರ್ಣಗೊಳಿಸಿದ ಔಪಚಾರಿಕ ಶಿಕ್ಷಣದ ಗರಿಷ್ಠ ಮಟ್ಟ",
+        hi: "पूरी की गई औपचारिक शिक्षा का उच्चतम स्तर"
+      },
       type: "buttons",
       required: true,
       options: [
-        { label: "No Education", value: "no education" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Higher", value: "higher" }
+        { labels: { en: "No Education", kn: "ಶಿಕ್ಷಣವಿಲ್ಲ", hi: "कोई शिक्षा नहीं" }, value: "no education" },
+        { labels: { en: "Primary", kn: "ಪ್ರಾಥಮಿಕ", hi: "प्राथमिक" }, value: "primary" },
+        { labels: { en: "Secondary", kn: "ಪ್ರೌಢಶಿಕ್ಷಣ", hi: "माध्यमिक" }, value: "secondary" },
+        { labels: { en: "Higher", kn: "ಉನ್ನತ ಶಿಕ್ಷಣ", hi: "उच्च शिक्षा" }, value: "higher" }
       ]
     },
     {
       id: "q4",
       field: "v190",
-      label: "Household Wealth Index",
-      helpText: "Household wealth quintile based on NFHS asset index",
+      labels: { en: "Household Wealth Index", kn: "ಮನೆಯ ಆರ್ಥಿಕ ಸಂಪತ್ತಿನ ಸೂಚ್ಯಂಕ", hi: "घरेलू संपत्ति सूचकांक" },
+      helpTexts: {
+        en: "Household wealth quintile based on NFHS asset index",
+        kn: "NFHS ಆಸ್ತಿ ಸೂಚ್ಯಂಕದ ಆಧಾರದ ಮೇಲೆ ಮನೆಯ ಆರ್ಥಿಕ ಹಂತ",
+        hi: "NFHS संपत्ति सूचकांक के आधार पर घरेलू संपत्ति वर्ग"
+      },
       type: "buttons",
       required: true,
       options: [
-        { label: "Poorest (Lowest 20%)", value: "poorest" },
-        { label: "Poorer", value: "poorer" },
-        { label: "Middle", value: "middle" },
-        { label: "Richer", value: "richer" },
-        { label: "Richest (Top 20%)", value: "richest" }
+        { labels: { en: "Poorest (Lowest 20%)", kn: "ಅತ್ಯಂತ ಬಡ (ಕೆಳಗಿನ 20%)", hi: "अति निर्धन (न्यूनतम 20%)" }, value: "poorest" },
+        { labels: { en: "Poorer", kn: "ಬಡ", hi: "निर्धन" }, value: "poorer" },
+        { labels: { en: "Middle", kn: "ಮಧ್ಯಮ", hi: "मध्यम" }, value: "middle" },
+        { labels: { en: "Richer", kn: "ಶ್ರೀಮಂತ", hi: "धनी" }, value: "richer" },
+        { labels: { en: "Richest (Top 20%)", kn: "ಅತ್ಯಂತ ಶ್ರೀಮಂತ (ಮೇಲಿನ 20%)", hi: "ಅತಿ ಧನಿ (शीर्ष 20%)" }, value: "richest" }
       ]
     },
     {
       id: "q5",
       field: "v501",
-      label: "Marital Status",
-      helpText: "Current marital status of respondent",
+      labels: { en: "Marital Status", kn: "ವೈವಾಹಿಕ ಸ್ಥಿತಿ", hi: "वैवाहिक स्थिति" },
+      helpTexts: {
+        en: "Current marital status of respondent",
+        kn: "ಪ್ರತಿಕ್ರಿಯಿಸಿದವರ ಪ್ರಸ್ತುತ ವೈವಾಹಿಕ ಸ್ಥಿತಿ",
+        hi: "उत्तरदाता की वर्तमान वैवाहिक स्थिति"
+      },
       type: "dropdown",
       required: true,
       options: [
-        { label: "Currently Married", value: "currently married" },
-        { label: "Never Married", value: "never married" },
-        { label: "Widowed", value: "widowed" },
-        { label: "Divorced", value: "divorced" },
-        { label: "Separated", value: "separated" }
+        { labels: { en: "Currently Married", kn: "ವಿವಾಹಿತ", hi: "वर्तमान में विवाहित" }, value: "currently married" },
+        { labels: { en: "Never Married", kn: "ಅವಿವಾಹಿತ", hi: "अविवाहित" }, value: "never married" },
+        { labels: { en: "Widowed", kn: "ವಿಧವೆ", hi: "विधवा" }, value: "widowed" },
+        { labels: { en: "Divorced", kn: "ವಿಚ್ಛೇದಿತ", hi: "तलाकशुदा" }, value: "divorced" },
+        { labels: { en: "Separated", kn: "ಪ್ರತ್ಯೇಕಗೊಂಡಿದ್ದಾರೆ", hi: "अलग" }, value: "separated" }
       ]
     },
     {
       id: "q6",
       field: "v743f",
-      label: "Healthcare Decision Autonomy",
-      helpText: "Who usually makes decisions regarding respondent's medical care?",
+      labels: { en: "Healthcare Decision Autonomy", kn: "ಆರೋಗ್ಯ ರಕ್ಷಣೆಯ ನಿರ್ಧಾರ ಸ್ವಾಯತ್ತತೆ", hi: "स्वास्थ्य निर्णय स्वायत्तता" },
+      helpTexts: {
+        en: "Who usually makes decisions regarding respondent's medical care?",
+        kn: "ವೈದ್ಯಕೀಯ ಚಿಕಿತ್ಸೆಯ ಬಗ್ಗೆ ಸಾಮಾನ್ಯವಾಗಿ ಯಾರು ನಿರ್ಧಾರಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳುತ್ತಾರೆ?",
+        hi: "चिकित्सा देखभाल के संबंध में आमतौर पर निर्णय कौन लेता है?"
+      },
       type: "dropdown",
       required: true,
       options: [
-        { label: "Respondent Alone", value: "respondent alone" },
-        { label: "Respondent & Husband/Partner Jointly", value: "respondent and husband/partner" },
-        { label: "Husband/Partner Alone", value: "husband/partner alone" },
-        { label: "Someone Else / Family", value: "someone else" }
+        { labels: { en: "Respondent Alone", kn: "ನಾನೇ ಸ್ವತಃ", hi: "उत्तरदाता स्वयं" }, value: "respondent alone" },
+        { labels: { en: "Respondent & Husband/Partner Jointly", kn: "ನಾನು ಮತ್ತು ಪತಿ ಇಬ್ಬರೂ ಸೇರಿ", hi: "उत्तरदाता और पति/साथी संयुक्त रूप से" }, value: "respondent and husband/partner" },
+        { labels: { en: "Husband/Partner Alone", kn: "ಪತಿ ಮಾತ್ರ", hi: "केवल पति/साथी" }, value: "husband/partner alone" },
+        { labels: { en: "Someone Else / Family", kn: "ಕುಟುಂಬದ ಹಿರಿಯರು / ಇತರರು", hi: "कोई अन्य / परिवार" }, value: "someone else" }
       ]
     },
     {
       id: "q7",
       field: "v481",
-      label: "Health Insurance / Scheme Coverage",
-      helpText: "Is the respondent covered by any health scheme or insurance?",
+      labels: { en: "Health Insurance / Scheme Coverage", kn: "ಆರೋಗ್ಯ ವಿಮೆ / ಯೋಜನೆಯ ರಕ್ಷಣೆ", hi: "स्वास्थ्य बीमा / योजना कवरेज" },
+      helpTexts: {
+        en: "Is the respondent covered by any health scheme or insurance?",
+        kn: "ಯಾವುದೇ ಆರೋಗ್ಯ ಯೋಜನೆ ಅಥವಾ ವಿಮೆಯಿಂದ ರಕ್ಷಣೆ ಹೊಂದಿದ್ದಾರೆಯೇ?",
+        hi: "क्या उत्तरदाता किसी स्वास्थ्य योजना या बीमा के तहत कवर है?"
+      },
       type: "buttons",
       required: true,
       options: [
-        { label: "Yes", value: "yes" },
-        { label: "No", value: "no" }
+        { labels: { en: "Yes", kn: "ಹೌದು", hi: "हाँ" }, value: "yes" },
+        { labels: { en: "No", kn: "ಇಲ್ಲ", hi: "नहीं" }, value: "no" }
       ]
     }
   ];
@@ -299,8 +327,25 @@
     }
   ];
 
-  function getQuestions() {
-    return JSON.parse(JSON.stringify(GUIDED_QUESTIONS));
+  function getQuestions(lang = 'en') {
+    const code = normalizeLang(lang);
+    return GUIDED_QUESTIONS.map(q => {
+      const label = (q.labels && q.labels[code]) || (q.labels && q.labels.en) || q.label || q.id;
+      const helpText = (q.helpTexts && q.helpTexts[code]) || (q.helpTexts && q.helpTexts.en) || q.helpText || "";
+      const options = q.options ? q.options.map(opt => {
+        const optLabel = (opt.labels && opt.labels[code]) || (opt.labels && opt.labels.en) || opt.label || opt.value;
+        return {
+          value: opt.value,
+          label: optLabel
+        };
+      }) : [];
+      return {
+        ...q,
+        label,
+        helpText,
+        options
+      };
+    });
   }
 
   function normalizeLang(lang) {

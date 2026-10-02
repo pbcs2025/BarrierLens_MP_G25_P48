@@ -20,6 +20,40 @@
   function render(evidencePayload, options = {}) {
     if (!evidencePayload) return '';
 
+    const activeLang = options.activeLanguage || options.lang || evidencePayload.language || "en";
+    const rawLang = String(activeLang).toLowerCase();
+    const langKey = (rawLang.startsWith('kn') || rawLang.includes('kannada') || rawLang.includes('ಕನ್ನಡ')) ? 'kn'
+      : (rawLang.startsWith('hi') || rawLang.includes('hindi') || rawLang.includes('हिंदी') || rawLang.includes('हिन्दी')) ? 'hi'
+      : 'en';
+
+    const cardLabels = {
+      en: {
+        evidenceTag: "BarrierLens Evidence",
+        statistics: "Verified Statistics",
+        highestStates: "Highest Prevalence States:",
+        mostAffected: "Most Affected Groups:",
+        disparityTitle: "Calculated Disparity Analysis:",
+        source: "Source:"
+      },
+      kn: {
+        evidenceTag: "ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಸಾಕ್ಷ್ಯ",
+        statistics: "ದೃಢೀಕೃತ ಅಂಕಿಅಂಶಗಳು",
+        highestStates: "ಅತಿ ಹೆಚ್ಚು ಅಡಚಣೆ ಇರುವ ರಾಜ್ಯಗಳು:",
+        mostAffected: "ಹೆಚ್ಚು ಪ್ರಭಾವಿತ ಗುಂಪುಗಳು:",
+        disparityTitle: "ಲೆಕ್ಕಹಾಕಿದ ವ್ಯತ್ಯಾಸ ವಿಶ್ಲೇಷಣೆ:",
+        source: "ಮೂಲ ದತ್ತಾಂಶ:"
+      },
+      hi: {
+        evidenceTag: "बैरियरलेंस साक्ष्य",
+        statistics: "सत्यापित आँकड़े",
+        highestStates: "उच्चतम दर वाले राज्य:",
+        mostAffected: "सर्वाधिक प्रभावित समूह:",
+        disparityTitle: "परिकलित अंतर विश्लेषण:",
+        source: "स्रोत:"
+      }
+    };
+    const tCard = cardLabels[langKey] || cardLabels.en;
+
     const barrierName = evidencePayload.activeBarrier || evidencePayload.barrier || "Healthcare Access Barrier";
     const barrierExplanation = evidencePayload.explanation || evidencePayload.summary || "Verified evidence from NFHS-5 national recode dataset (N=724,115 Indian women).";
     const statistics = evidencePayload.statistics || evidencePayload.metrics || [];
@@ -31,7 +65,7 @@
     // Render Metrics Badges
     const metricsHtml = statistics.length > 0 ? `
       <div style="margin: 10px 0;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase;">Verified Statistics</div>
+        <div style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase;">${tCard.statistics}</div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
           ${statistics.map(s => `
             <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; text-align: center;">
@@ -50,13 +84,13 @@
         <div style="margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.825rem;">
           ${affectedStates.length > 0 ? `
             <div style="margin-bottom: 6px;">
-              <strong style="color: #0f172a;">Highest Prevalence States:</strong>
+              <strong style="color: #0f172a;">${tCard.highestStates}</strong>
               <span style="color: #334155;"> ${affectedStates.join(', ')}</span>
             </div>
           ` : ''}
           ${affectedGroups.length > 0 ? `
             <div>
-              <strong style="color: #0f172a;">Most Affected Groups:</strong>
+              <strong style="color: #0f172a;">${tCard.mostAffected}</strong>
               <span style="color: #334155;"> ${affectedGroups.join(', ')}</span>
             </div>
           ` : ''}
@@ -67,7 +101,7 @@
     // Render Derived Comparisons
     const comparisonsHtml = comparisons.length > 0 ? `
       <div style="margin: 10px 0; font-size: 0.825rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px;">
-        <strong style="color: #166534;">Calculated Disparity Analysis:</strong>
+        <strong style="color: #166534;">${tCard.disparityTitle}</strong>
         <ul style="margin: 4px 0 0 16px; padding: 0; color: #15803d;">
           ${comparisons.map(c => `<li>${c.interpretation || c.label || c}</li>`).join('')}
         </ul>
@@ -82,7 +116,7 @@
         <!-- Title Badge -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span style="font-size: 0.75rem; font-weight: 800; background: #2563eb; color: #ffffff; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">
-            BarrierLens Evidence
+            ${tCard.evidenceTag}
           </span>
           <span style="font-size: 0.75rem; font-weight: 600; color: #2563eb;">${barrierName}</span>
         </div>
@@ -99,7 +133,7 @@
         <!-- Source Attribution Footer -->
         <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 0.75rem; color: #64748b; display: flex; align-items: center; gap: 4px;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-          <span>Source: <strong>${sourcesText}</strong></span>
+          <span>${tCard.source} <strong>${sourcesText}</strong></span>
         </div>
       </div>
     `;

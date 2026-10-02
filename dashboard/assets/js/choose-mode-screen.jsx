@@ -69,10 +69,15 @@
       }
     };
 
-    const rawLang = String(activeLanguage || 'en').toLowerCase();
-    const langKey = (rawLang.startsWith('kn') || rawLang.includes('kannada') || rawLang.includes('ಕನ್ನಡ')) ? 'kn'
-      : (rawLang.startsWith('hi') || rawLang.includes('hindi') || rawLang.includes('हिंदी') || rawLang.includes('हिन्दी')) ? 'hi'
-      : 'en';
+    let langKey = 'en';
+    if (typeof window !== 'undefined' && window.BarrierLensI18n && typeof window.BarrierLensI18n.normalizeLanguageCode === 'function') {
+      langKey = window.BarrierLensI18n.normalizeLanguageCode(activeLanguage);
+    } else {
+      const rawLang = String(activeLanguage || 'en').toLowerCase();
+      langKey = (rawLang.startsWith('kn') || rawLang.includes('kannada') || rawLang.includes('ಕನ್ನಡ')) ? 'kn'
+        : (rawLang.startsWith('hi') || rawLang.includes('hindi') || rawLang.includes('हिंदी') || rawLang.includes('हिन्दी')) ? 'hi'
+        : 'en';
+    }
 
     const text = labels[langKey] || labels.en;
 

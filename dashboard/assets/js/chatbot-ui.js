@@ -31,6 +31,7 @@
   let _activeBarrier = 'All Barriers';
   let _barrierSource = 'user_selection'; // 'user_selection' or 'ml_prediction'
   let _latestPrediction = null;
+  let _guidedSession = null; // { answers, step } — preserved across language changes
 
   // Module References (Browser / Node)
   function getI18n() {
@@ -134,12 +135,35 @@
     return i18n ? i18n.t(key, lang) : key;
   }
 
+  function resolveLangKey(lang = _currentLang) {
+    const i18n = getI18n();
+    if (i18n && typeof i18n.normalizeLanguageCode === 'function') {
+      return i18n.normalizeLanguageCode(lang);
+    }
+    const raw = String(lang || 'en').toLowerCase();
+    if (raw.startsWith('kn') || raw.includes('kannada') || raw.includes('ಕನ್ನಡ')) return 'kn';
+    if (raw.startsWith('hi') || raw.includes('hindi') || raw.includes('हिंदी') || raw.includes('हिन्दी')) return 'hi';
+    return 'en';
+  }
+
+  function getLocalizedBarrierTitle(barrierName, lang = _currentLang) {
+    const langKey = resolveLangKey(lang);
+    const barrierUI = getBarrierUI();
+    if (barrierUI && typeof barrierUI.getBarrierInfo === 'function') {
+      const info = barrierUI.getBarrierInfo(barrierName);
+      if (info && info.title) {
+        return info.title[langKey] || info.title.en || barrierName;
+      }
+    }
+    return barrierName;
+  }
+
   function updateActiveBarrierHeader() {
     if (typeof document === 'undefined') return;
     const slot = document.getElementById('bl-active-barrier-header-slot');
     const labelEl = document.getElementById('bl-active-barrier-label');
     if (labelEl) {
-      labelEl.textContent = _activeBarrier;
+      labelEl.textContent = getLocalizedBarrierTitle(_activeBarrier);
     }
     if (!slot) return;
     const barrierUI = getBarrierUI();
@@ -250,8 +274,8 @@
             </div>
           </div>
           <div class="bl-chat-header-actions" style="display: flex; gap: 6px; align-items: center;">
-            <button class="bl-header-btn" id="bl-change-barrier-btn" title="Change Barrier" aria-label="Change Barrier" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-              🔄 <span id="bl-active-barrier-label">${_activeBarrier}</span>
+            <button class="bl-header-btn" id="bl-change-barrier-btn" title="${t('changeBarrier')}" aria-label="${t('changeBarrier')}" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              🔄 <span id="bl-active-barrier-label">${getLocalizedBarrierTitle(_activeBarrier)}</span>
             </button>
 
             <div class="bl-lang-select-wrap">
@@ -325,6 +349,10 @@
     document.body.insertAdjacentHTML('beforeend', buildModalHtml());
 
     _domMounted = true;
+    const i18n = getI18n();
+    if (i18n) {
+      i18n.setLanguage(_currentLang);
+    }
     bindEvents();
     renderSuggestedQuestions();
     bindVoiceStateMachine();
@@ -447,7 +475,15 @@
     if (guidedUI && typeof guidedUI.render === 'function') {
       guidedUI.render('bl-guided-container', {
         activeLanguage: _currentLang,
-        onCancel: renderWelcomeOrChooseMode,
+        initialAnswers: _guidedSession ? _guidedSession.answers : undefined,
+        initialStep: _guidedSession ? _guidedSession.step : undefined,
+        onProgress: (state) => {
+          _guidedSession = state;
+        },
+        onCancel: () => {
+          _guidedSession = null;
+          renderWelcomeOrChooseMode();
+        },
         onComplete: onGuidedPredictionComplete
       });
     } else {
@@ -564,6 +600,7 @@
   }
 
   async function onGuidedPredictionComplete(predictionResult, answers) {
+    _guidedSession = null;
     const primary = predictionResult.primaryBarrier || 'Logistic Barrier';
     _activeBarrier = primary;
     _barrierSource = 'ml_prediction';
@@ -574,8 +611,43 @@
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
 
+    const langKey = resolveLangKey(_currentLang);
+    const predLabels = {
+      en: {
+        badge: (src) => `${src || 'BarrierLens ML Model'} Prediction`,
+        title: 'Predicted Primary Barrier:',
+        probs: 'Probabilities:',
+        household: 'Household',
+        logistic: 'Logistic',
+        facility: 'Facility',
+        footer: 'This predicted barrier is now set as your active research context for follow-up questions.'
+      },
+      kn: {
+        badge: (src) => `${src || 'ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ML ಮಾದರಿ'} ಮುನ್ಸೂಚನೆ`,
+        title: 'ಮುನ್ಸೂಚಿಸಿದ ಪ್ರಮುಖ ಅಡಚಣೆ:',
+        probs: 'ಸಾಧ್ಯತೆಗಳು:',
+        household: 'ಮನೆ/ಕುಟುಂಬ',
+        logistic: 'ಸಾರಿಗೆ',
+        facility: 'ಆಸ್ಪತ್ರೆ/ಸೌಲಭ್ಯ',
+        footer: 'ಈ ಮುನ್ಸೂಚಿತ ಅಡಚಣೆಯನ್ನು ನಿಮ್ಮ ಸಂಶೋಧನಾ ಸಂದರ್ಭವಾಗಿ ಹೊಂದಿಸಲಾಗಿದೆ. ಮುಂದಿನ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಬಹುದು.'
+      },
+      hi: {
+        badge: (src) => `${src || 'बैरियरलेंस ML मॉडल'} पूर्वानुमान`,
+        title: 'अनुमानित प्राथमिक बाधा:',
+        probs: 'संभावनाएँ:',
+        household: 'घरेलू',
+        logistic: 'परिवहन',
+        facility: 'अस्पताल/सुविधा',
+        footer: 'यह अनुमानित बाधा अब आपके शोध संदर्भ के रूप में सेट है। आप अनुवर्ती प्रश्न पूछ सकते हैं।'
+      }
+    };
+    const tPred = predLabels[langKey] || predLabels.en;
+    const primaryDisplay = getLocalizedBarrierTitle(primary);
+
     const probs = predictionResult.probabilities || {};
-    const probStr = probs.household !== undefined ? `Household: ${Math.round(probs.household * 100)}% | Logistic: ${Math.round(probs.logistic * 100)}% | Facility: ${Math.round(probs.facility * 100)}%` : '';
+    const probStr = probs.household !== undefined
+      ? `${tPred.household}: ${Math.round(probs.household * 100)}% | ${tPred.logistic}: ${Math.round(probs.logistic * 100)}% | ${tPred.facility}: ${Math.round(probs.facility * 100)}%`
+      : '';
 
     const html = `
       <div class="bl-message-row bl-bot-row">
@@ -583,14 +655,14 @@
         <div class="bl-bubble-wrap">
           <div class="bl-message-bubble" style="border: 2px solid #2563eb; background: #eff6ff;">
             <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">
-              ${predictionResult.modelSource || 'BarrierLens ML Model'} Prediction
+              ${tPred.badge(predictionResult.modelSource)}
             </div>
             <h4 style="margin: 4px 0; font-size: 1.1rem; color: #1e3a8a;">
-              Predicted Primary Barrier: <strong>${primary}</strong>
+              ${tPred.title} <strong>${primaryDisplay}</strong>
             </h4>
-            ${probStr ? `<div style="font-size: 0.8rem; color: #475569; margin-bottom: 8px;"><strong>Probabilities:</strong> ${probStr}</div>` : ''}
+            ${probStr ? `<div style="font-size: 0.8rem; color: #475569; margin-bottom: 8px;"><strong>${tPred.probs}</strong> ${probStr}</div>` : ''}
             <p style="margin: 0; font-size: 0.85rem; color: #334155;">
-              This predicted barrier is now set as your active research context for follow-up questions.
+              ${tPred.footer}
             </p>
           </div>
           <span class="bl-message-time">${formatTime()}</span>
@@ -617,6 +689,7 @@
     if (barrierUI && typeof barrierUI.render === 'function') {
       barrierUI.render('bl-barrier-select-container', {
         activeBarrier: _activeBarrier,
+        activeLanguage: _currentLang,
         onSelectBarrier: onExploreBarrierSelected,
         onBack: renderWelcomeOrChooseMode,
         onCancel: renderWelcomeOrChooseMode
@@ -681,7 +754,13 @@
     _barrierSource = 'user_selection';
     updateActiveBarrierHeader();
 
-    renderUserMessage(`Selected Barrier: ${barrierName}`);
+    const selLabels = {
+      en: 'Selected Barrier:',
+      kn: 'ಆಯ್ಕೆ ಮಾಡಿದ ಅಡಚಣೆ:',
+      hi: 'चयनित बाधा:'
+    };
+    const langKey = resolveLangKey(_currentLang);
+    renderUserMessage(`${selLabels[langKey] || selLabels.en} ${getLocalizedBarrierTitle(barrierName)}`);
     showTypingIndicator();
 
     const responseEngine = getResponseEngine();
@@ -707,6 +786,7 @@
     if (barrierUI) {
       barrierUI.render(selectDiv, {
         activeBarrier: _activeBarrier,
+        activeLanguage: _currentLang,
         onSelectBarrier: (newBarrier) => {
           selectDiv.remove();
           onExploreBarrierSelected(newBarrier);
@@ -735,10 +815,15 @@
   }
 
   function updateUILanguage(newLang) {
-    _currentLang = newLang;
+    _currentLang = resolveLangKey(newLang);
     const i18n = getI18n();
     if (i18n) {
-      i18n.setLanguage(newLang);
+      i18n.setLanguage(_currentLang);
+    }
+
+    const langSelect = document.getElementById('bl-lang-select');
+    if (langSelect && langSelect.value !== _currentLang) {
+      langSelect.value = _currentLang;
     }
 
     const launcherLabel = document.getElementById('bl-launcher-label');
@@ -979,11 +1064,12 @@
   }
 
   async function executeQuery(query, lang) {
+    const langCode = resolveLangKey(lang);
     const responseEngine = getResponseEngine();
     let localResult = null;
     if (responseEngine && responseEngine.processUserQuery) {
       try {
-        localResult = await responseEngine.processUserQuery(query, lang, { 
+        localResult = await responseEngine.processUserQuery(query, langCode, { 
           barrierContext: _activeBarrier,
           skipBackend: true
         });
@@ -1004,7 +1090,7 @@
         const backendPayload = {
           message: query,
           question: query,
-          language: lang,
+          language: langCode,
           history: history,
           activeBarrier: _activeBarrier,
           evidence: localResult || undefined
@@ -1031,7 +1117,7 @@
     return {
       answer: "BarrierLens analyzes healthcare access barriers among 724,115 Indian women from the NFHS-5 dataset. Please ask any question about household, logistic, or facility barriers, disparities, or ML predictive models.",
       status: "fallback",
-      language: lang,
+      language: langCode,
       intent: "GENERAL",
       source: ["NFHS-5 (2019-21)"],
       metrics: [],
@@ -1076,23 +1162,25 @@
 
     // Render Shared Evidence Card if available
     const evidenceCard = getEvidenceCard();
+    const cardLangOpts = { activeLanguage: _currentLang, lang: _currentLang };
     if (evidenceCard && (res.evidence || res.metrics || res.calculations)) {
       structuredCardsHtml += evidenceCard.render({
-        activeBarrier: _activeBarrier,
+        activeBarrier: getLocalizedBarrierTitle(_activeBarrier),
         explanation: res.answer,
         statistics: res.metrics,
         affectedStates: res.affectedStates || (res.entities && res.entities.state ? [res.entities.state] : []),
         affectedGroups: res.affectedGroups || (res.entities && res.entities.group ? [res.entities.group] : []),
         comparisons: res.calculations,
-        source: res.source
-      });
+        source: res.source,
+        language: _currentLang
+      }, cardLangOpts);
     }
 
     // Render Shared Solution Card if solutions requested or present
     const solutionCard = getSolutionCard();
     if (solutionCard && (res.requiresSolutions || res.solutions || res.barrierLensSolutions || res.externalSolutions)) {
       structuredCardsHtml += solutionCard.render({
-        barrier: _activeBarrier,
+        barrier: getLocalizedBarrierTitle(_activeBarrier),
         barrierLensSolutions: res.barrierLensSolutions || [
           { title: "Mobile Rural Clinics", desc: "Deploy satellite health vehicles to bridge distance barriers in high-prevalence districts." },
           { title: "Autonomy Counseling", desc: "Engage household decision-makers in reproductive health education." }
@@ -1103,8 +1191,9 @@
             source: "Ministry of Health and Family Welfare (MoHFW) / WHO Policy Guidance",
             whyItMayHelp: "Improves transport safety, reduces out-of-pocket costs, and builds trust for rural women."
           }
-        ]
-      });
+        ],
+        language: _currentLang
+      }, cardLangOpts);
     }
 
     // Render BarrierUI card fallbacks if specific card components not present
