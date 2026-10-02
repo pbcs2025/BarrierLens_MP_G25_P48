@@ -164,13 +164,35 @@
 
   function resolvePageLink(relatedPageObj) {
     if (!relatedPageObj) return null;
+    const urlStr = typeof relatedPageObj === 'string' ? relatedPageObj : (relatedPageObj.url || relatedPageObj.relativeUrl || '');
+    if (!urlStr) return null;
     const prefix = getAssetPrefix();
-    const targetFile = relatedPageObj.url.split('/').pop();
+    const queryPart = urlStr.includes('?') ? '?' + urlStr.split('?')[1] : '';
+    const cleanUrl = urlStr.split('?')[0];
+    const targetFile = cleanUrl.split('/').pop();
     if (prefix === '../') {
-      return targetFile;
+      return `${targetFile}${queryPart}`;
     } else {
-      return `pages/${targetFile}`;
+      return `pages/${targetFile}${queryPart}`;
     }
+  }
+
+  function getPageLabel(relatedPageObj) {
+    if (!relatedPageObj) return "View Dashboard Module";
+    if (typeof relatedPageObj === 'object' && relatedPageObj.label) return relatedPageObj.label;
+    const urlStr = typeof relatedPageObj === 'string' ? relatedPageObj : (relatedPageObj.url || '');
+    if (urlStr.includes("national_overview")) return "National Overview & Analytics";
+    if (urlStr.includes("state_analysis")) return "State Disparity Analysis";
+    if (urlStr.includes("rural_urban")) return "Rural vs Urban Analysis";
+    if (urlStr.includes("demographic_analysis")) return "Socio-Demographic Disparities";
+    if (urlStr.includes("risk_archetypes")) return "Risk Archetypes & Clustering";
+    if (urlStr.includes("empowerment")) return "Empowerment & Autonomy";
+    if (urlStr.includes("multiple_barrier")) return "Multiple Overlapping Barriers";
+    if (urlStr.includes("outcome_impact")) return "Healthcare Utilization Impact";
+    if (urlStr.includes("explainability")) return "Model Explainability & SHAP";
+    if (urlStr.includes("base_paper")) return "Base Paper Benchmark Comparison";
+    if (urlStr.includes("risk_prediction")) return "AI Risk Assessment Predictor";
+    return "Explore on Dashboard";
   }
 
   function formatText(text) {
@@ -1083,77 +1105,7 @@
     const timeStr = formatTime();
     let structuredCardsHtml = '';
 
-    // Render Shared Evidence Card if available
-    const evidenceCard = getEvidenceCard();
-    if (evidenceCard && (res.evidence || res.metrics || res.calculations)) {
-      structuredCardsHtml += evidenceCard.render({
-        activeBarrier: _activeBarrier,
-        explanation: res.answer,
-        statistics: res.metrics,
-        affectedStates: res.affectedStates || (res.entities && res.entities.state ? [res.entities.state] : []),
-        affectedGroups: res.affectedGroups || (res.entities && res.entities.group ? [res.entities.group] : []),
-        comparisons: res.calculations,
-        source: res.source
-      });
-    }
-
-    // Render Shared Solution Card if solutions requested or present
-    const solutionCard = getSolutionCard();
-    if (solutionCard && (res.requiresSolutions || res.solutions || res.barrierLensSolutions || res.externalSolutions)) {
-      structuredCardsHtml += solutionCard.render({
-        barrier: _activeBarrier,
-        barrierLensSolutions: res.barrierLensSolutions || [
-          { title: "Mobile Rural Clinics", desc: "Deploy satellite health vehicles to bridge distance barriers in high-prevalence districts." },
-          { title: "Autonomy Counseling", desc: "Engage household decision-makers in reproductive health education." }
-        ],
-        externalSolutions: res.externalSolutions || res.solutions || [
-          {
-            recommendedSolution: "Community Health Worker (ASHA) Escort Program",
-            source: "Ministry of Health and Family Welfare (MoHFW) / WHO Policy Guidance",
-            whyItMayHelp: "Improves transport safety, reduces out-of-pocket costs, and builds trust for rural women."
-          }
-        ]
-      });
-    }
-
-    // Render BarrierUI card fallbacks if specific card components not present
-    const barrierUI = getBarrierUI();
-    if (!evidenceCard && barrierUI && barrierUI.renderBarrierLensEvidenceCard) {
-      if (res.evidenceType === 'BarrierLens Evidence' || (res.metrics && res.metrics.length > 0 && !res.solutions)) {
-        structuredCardsHtml += barrierUI.renderBarrierLensEvidenceCard(res, _currentLang);
-      }
-      
-      if (res.solutions && Array.isArray(res.solutions)) {
-        res.solutions.forEach(sol => {
-          structuredCardsHtml += barrierUI.renderExternalSolutionCard(sol, _currentLang);
-        });
-      } else if (res.solution) {
-        structuredCardsHtml += barrierUI.renderExternalSolutionCard(res.solution, _currentLang);
-      }
-    }
-
-    // Fallback Metrics Cards
-    if (!evidenceCard && !barrierUI && res.metrics && res.metrics.length > 0) {
-      const metricsList = res.metrics.map(m => `
-        <div class="bl-metric-chip">
-          <span class="bl-metric-val">${m.value}${m.unit ? m.unit : ''}</span>
-          <span class="bl-metric-lbl">${m.label}${m.entity ? ` (${m.entity})` : ''}</span>
-        </div>
-      `).join('');
-
-      structuredCardsHtml += `
-        <div class="bl-structured-card">
-          <div class="bl-card-section-title">
-            ${t('keyMetrics')}
-          </div>
-          <div class="bl-metrics-grid">
-            ${metricsList}
-          </div>
-        </div>
-      `;
-    }
-
-    // Live Dashboard Reactivity Trigger & Action Links
+    // Live Dashboard Reactivity Trigger & State Auto-Search
     if (res.entities && res.entities.state) {
       const stateName = res.entities.state;
       const stateSearch = document.getElementById("state-search");
@@ -1163,7 +1115,7 @@
       }
       if (!res.relatedPage) {
         res.relatedPage = {
-          label: `Explore ${stateName} Profile`,
+          label: `State Profile: ${stateName}`,
           url: `pages/state_analysis.html?state=${encodeURIComponent(stateName)}`
         };
       }
@@ -1179,17 +1131,50 @@
       }
     }
 
-    // Related Page Link Action Button
+    // Auto-detect relevant dashboard module if not explicitly set
+    if (!res.relatedPage) {
+      const q = (_lastQueryText || '').toLowerCase();
+      const ans = ((res.answer || '') + ' ' + (res.intent || '')).toLowerCase();
+
+      if (q.includes('state') || ans.includes('state_analysis') || ans.includes('state-level') || ans.includes('state profile')) {
+        res.relatedPage = { label: 'State-Level Disparity Analysis', url: 'pages/state_analysis.html' };
+      } else if (q.includes('rural') || q.includes('urban') || ans.includes('rural') || ans.includes('urban')) {
+        res.relatedPage = { label: 'Rural vs Urban Disparity Analysis', url: 'pages/rural_urban.html' };
+      } else if (q.includes('predict') || q.includes('my barrier') || (q.includes('risk') && q.includes('check')) || ans.includes('risk_prediction')) {
+        res.relatedPage = { label: 'AI Risk Assessment Predictor', url: 'pages/risk_prediction.html' };
+      } else if (q.includes('cluster') || q.includes('archetype') || ans.includes('risk_archetypes') || ans.includes('k-means')) {
+        res.relatedPage = { label: 'Risk Archetypes & Clustering (K-Means)', url: 'pages/risk_archetypes.html' };
+      } else if (q.includes('model') || q.includes('shap') || q.includes('xgboost') || q.includes('regression') || ans.includes('explainability')) {
+        res.relatedPage = { label: 'Model Explainability & SHAP Drivers', url: 'pages/explainability.html' };
+      } else if (q.includes('wealth') || q.includes('education') || q.includes('demographic') || ans.includes('demographic')) {
+        res.relatedPage = { label: 'Socio-Demographic Disparities', url: 'pages/demographic_analysis.html' };
+      } else if (q.includes('empower') || q.includes('autonomy') || q.includes('decision') || ans.includes('empowerment')) {
+        res.relatedPage = { label: 'Empowerment & Autonomy Analytics', url: 'pages/empowerment.html' };
+      } else if (q.includes('multiple') || q.includes('overlap') || ans.includes('multiple_barrier')) {
+        res.relatedPage = { label: 'Multiple Overlapping Barriers', url: 'pages/multiple_barrier.html' };
+      } else if (q.includes('impact') || q.includes('outcome') || q.includes('anc') || q.includes('vaccin') || ans.includes('outcome_impact')) {
+        res.relatedPage = { label: 'Healthcare Utilization Impact', url: 'pages/outcome_impact.html' };
+      } else if (q.includes('paper') || q.includes('benchmark') || q.includes('base') || ans.includes('base_paper')) {
+        res.relatedPage = { label: 'Base Paper Benchmark Comparison', url: 'pages/base_paper_comparison.html' };
+      } else if (q.includes('national') || q.includes('overview') || q.includes('prevalence') || q.includes('barrierlens') || q.includes('objective')) {
+        res.relatedPage = { label: 'National Overview Analytics', url: 'pages/national_overview.html' };
+      }
+    }
+
+    // Relevant Dashboard Page Redirection Button
     if (res.relatedPage) {
       const resolvedHref = resolvePageLink(res.relatedPage);
-      structuredCardsHtml += `
-        <div style="margin-top: 10px;">
-          <a href="${resolvedHref}" class="bl-page-action-btn" style="display:inline-flex; align-items:center; gap:6px; background:#7c3aed; color:#ffffff; padding:6px 12px; border-radius:6px; text-decoration:none; font-weight:700; font-size:0.8rem;">
-            <span>${res.relatedPage.label}</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
-      `;
+      const pageTitle = getPageLabel(res.relatedPage);
+      if (resolvedHref) {
+        structuredCardsHtml += `
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(226, 232, 240, 0.7);">
+            <a href="${resolvedHref}" class="bl-page-action-btn" style="display: inline-flex; align-items: center; gap: 7px; background: #2563eb; color: #ffffff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.8rem; box-shadow: 0 1px 2px rgba(37,99,235,0.2); transition: background 0.15s ease;">
+              <span>📊 View on Dashboard: ${pageTitle}</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        `;
+      }
     }
 
     // Research Disclaimer / Limitation Note
