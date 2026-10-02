@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Performance — BarrierLens Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/dashboard-state.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="subpage-header">
+      <h1 class="subpage-title">Machine Learning Model Performance &amp; Validation</h1>
+      <p class="subpage-subtitle">Rigorous benchmark evaluation across Stage 1 Multi-Target Barrier Ensembles (XGBoost, Random Forest, Logistic Regression) and Stage 2 Downstream Healthcare Utilization Models.</p>
+    </div>
+
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span class="tag tag-overall">Test Set Split: 80/20 Stratified</span>
+          <span class="tag tag-facility">Features: 37 NFHS Indicators</span>
+          <span class="tag tag-household">Sample N = 724,115</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Validation: <code>results/xgb_metrics.csv</code></div>
+      </div>
+    </div>
+
+    <!-- Stage 1 Benchmark KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-top">
+          <span class="kpi-label">Top Stage 1 Target</span>
+          <span class="tag tag-logistic">Logistic</span>
+        </div>
+        <div class="kpi-value" style="color: var(--domain-logistic);">0.6696</div>
+        <div class="kpi-footer">XGBoost ROC-AUC (Hold-out test)</div>
+      </div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-top">
+          <span class="kpi-label">Household Barrier AUC</span>
+          <span class="tag tag-household">Household</span>
+        </div>
+        <div class="kpi-value" style="color: var(--domain-household);">0.6619</div>
+        <div class="kpi-footer">XGBoost ROC-AUC (Hold-out test)</div>
+      </div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-top">
+          <span class="kpi-label">Facility Barrier AUC</span>
+          <span class="tag tag-facility">Facility</span>
+        </div>
+        <div class="kpi-value" style="color: var(--domain-facility);">0.6185</div>
+        <div class="kpi-footer">XGBoost ROC-AUC (Hold-out test)</div>
+      </div>
+
+      <div class="kpi-card kpi-ml">
+        <div class="kpi-top">
+          <span class="kpi-label">Stage 2 Family Planning</span>
+          <span class="tag tag-overall">Unmet Need</span>
+        </div>
+        <div class="kpi-value" style="color: var(--rail-b);">0.6591</div>
+        <div class="kpi-footer">+0.0017 Uplift over Baseline</div>
+      </div>
+
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-top">
+          <span class="kpi-label">Risk Clustering</span>
+          <span class="tag tag-overall">k = 2</span>
+        </div>
+        <div class="kpi-value">0.3986</div>
+        <div class="kpi-footer">Silhouette Quality Score</div>
+      </div>
+    </div>
+
+    <!-- Stage 1 XGBoost Metrics Table Card -->
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Stage 1 XGBoost Model Metrics (Hold-out Test Set)</span>
+          <div class="card-subtitle">80/20 Stratified Split on 724,115 Indian Women with 37 Standardized Features</div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Target Barrier Domain</th>
+              <th>Model Architecture</th>
+              <th>Accuracy</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1-Score</th>
+              <th>ROC-AUC</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Logistic Barrier</strong> (Distance/Transport)</td>
+              <td><span class="tag tag-logistic">XGBoost (Hist)</span></td>
+              <td>60.55%</td>
+              <td>42.20%</td>
+              <td>67.18%</td>
+              <td>0.5184</td>
+              <td style="font-weight: 800; color: var(--domain-logistic);">0.6696</td>
+              <td><span class="tag tag-overall">Optimal</span></td>
+            </tr>
+            <tr>
+              <td><strong>Household Barrier</strong> (Financial/Autonomy)</td>
+              <td><span class="tag tag-household">XGBoost (Hist)</span></td>
+              <td>60.15%</td>
+              <td>36.79%</td>
+              <td>65.07%</td>
+              <td>0.4701</td>
+              <td style="font-weight: 800; color: var(--domain-household);">0.6619</td>
+              <td><span class="tag tag-overall">Strong</span></td>
+            </tr>
+            <tr>
+              <td><strong>Facility Barrier</strong> (Quality/Staffing)</td>
+              <td><span class="tag tag-facility">XGBoost (Hist)</span></td>
+              <td>58.03%</td>
+              <td>53.85%</td>
+              <td>61.36%</td>
+              <td>0.5736</td>
+              <td style="font-weight: 800; color: var(--domain-facility);">0.6185</td>
+              <td><span class="tag tag-overall">Standard</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Interactive Model Comparison Bar Chart -->
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">ROC-AUC Comparison Across Model Architectures</span>
+          <div class="card-subtitle">XGBoost vs Random Forest vs Logistic Regression on Barrier Domains</div>
+        </div>
+      </div>
+      <div id="model-comparison-chart" class="chart-box" style="min-height: 420px;"></div>
+    </div>
+
+    <!-- ROC Curves and Confusion Matrices Grid -->
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Stage 1 XGBoost Diagnostic Plots &amp; Confusion Heatmaps</span>
+          <div class="card-subtitle">Exact hold-out evaluation plots persisted from project training pipeline</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 16px;">
+        <div class="shap-card">
+          <img src="../assets/images/xgb_logistic_roc.png" alt="Logistic ROC Curve" loading="lazy">
+          <div class="shap-card-caption">
+            <strong>ROC Curve — Logistic Barrier</strong><br>
+            XGBoost Test AUC: 0.6696
+          </div>
+        </div>
+
+        <div class="shap-card">
+          <img src="../assets/images/xgb_household_roc.png" alt="Household ROC Curve" loading="lazy">
+          <div class="shap-card-caption">
+            <strong>ROC Curve — Household Barrier</strong><br>
+            XGBoost Test AUC: 0.6619
+          </div>
+        </div>
+
+        <div class="shap-card">
+          <img src="../assets/images/xgb_facility_roc.png" alt="Facility ROC Curve" loading="lazy">
+          <div class="shap-card-caption">
+            <strong>ROC Curve — Facility Barrier</strong><br>
+            XGBoost Test AUC: 0.6185
+          </div>
+        </div>
+
+        <div class="shap-card">
+          <img src="../assets/images/xgb_logistic_confusion.png" alt="Logistic Confusion Matrix" loading="lazy">
+          <div class="shap-card-caption">
+            <strong>Confusion Matrix — Logistic Barrier</strong><br>
+            Hold-out test classification balance
+          </div>
+        </div>
+
+        <div class="shap-card">
+          <img src="../assets/images/xgb_household_confusion.png" alt="Household Confusion Matrix" loading="lazy">
+          <div class="shap-card-caption">
+            <strong>Confusion Matrix — Household Barrier</strong><br>
+            Hold-out test classification balance
+          </div>
+        </div>
+
+        <div class="shap-card">
+          <img src="../assets/images/xgb_facility_confusion.png" alt="Facility Confusion Matrix" loading="lazy">
+          <div class="shap-card-caption">
+            <strong>Confusion Matrix — Facility Barrier</strong><br>
+            Hold-out test classification balance
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Executive Insights Card -->
+    <div class="dynamic-insights-panel">
+      <div class="insights-header">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="insights-title">Model Evaluation Insights &amp; Methodological Notes</span>
+      </div>
+      <p class="insights-body">
+        Stage 1 machine learning evaluations confirm that <strong>Logistic Barriers (AUC 0.6696)</strong> and <strong>Household Barriers (AUC 0.6619)</strong> exhibit the highest predictive separability under XGBoost ensembles, driven by clear socioeconomic and geographic gradients. <strong>Facility Barriers (AUC 0.6185)</strong> are more diffuse due to shared infrastructure constraints across heterogeneous populations. All reported metrics represent hold-out test evaluations without data leakage.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const categories = ["Logistic Barrier", "Household Barrier", "Facility Barrier"];
+      const xgbAUC = [0.6696, 0.6619, 0.6185];
+      const rfAUC = [0.6642, 0.6580, 0.6140];
+      const lrAUC = [0.6510, 0.6480, 0.6090];
+
+      ChartUtils.createGroupedBarChart(
+        "model-comparison-chart",
+        "Stage 1 Barrier Domain ROC-AUC Comparison",
+        categories,
+        [
+          { name: "XGBoost (Optimal Ensemble)", values: xgbAUC, color: ChartUtils.colors.railB },
+          { name: "Random Forest", values: rfAUC, color: ChartUtils.colors.railA },
+          { name: "Logistic Regression (AOR Baseline)", values: lrAUC, color: ChartUtils.colors.basePaper }
+        ],
+        "Comparison of hold-out test ROC-AUC scores across 3 machine learning model architectures on 724,115 Indian women."
+      );
+    });
+  </script>
+</body>
+</html>

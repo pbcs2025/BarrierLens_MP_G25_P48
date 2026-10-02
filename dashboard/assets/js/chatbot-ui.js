@@ -1,8 +1,8 @@
 /**
  * BARRIERLENS — MEMBER 3 & MEMBER 4: CHATBOT UI CONTROLLER
  * Merged entry point supporting two modes:
- *   1. "Identify My Barrier" (Guided Input questionnaire -> ML Prediction)
- *   2. "Explore Barriers" (Direct barrier selection menu -> Household, Logistic, Facility, Multiple, All)
+ *   1. "Explore Barriers" (Direct barrier selection menu -> Household, Logistic, Facility, Multiple, All)
+ *   2. "Chat with Assistant" (Conversational open research assistant)
  * Shared Active Barrier Context (`activeBarrier`, `barrierSource`, `latestPrediction`, `activeLanguage`).
  * Multilingual UI (English, Kannada, Hindi), Change Barrier / Change Language controls mid-chat without history loss.
  * Dual environment support: Browser (window.BarrierLensChatbotUI) & Node.js (module.exports).
@@ -31,7 +31,6 @@
   let _activeBarrier = 'All Barriers';
   let _barrierSource = 'user_selection'; // 'user_selection' or 'ml_prediction'
   let _latestPrediction = null;
-  let _guidedSession = null; // { answers, step } — preserved across language changes
 
   // Module References (Browser / Node)
   function getI18n() {
@@ -188,13 +187,35 @@
 
   function resolvePageLink(relatedPageObj) {
     if (!relatedPageObj) return null;
+    const urlStr = typeof relatedPageObj === 'string' ? relatedPageObj : (relatedPageObj.url || relatedPageObj.relativeUrl || '');
+    if (!urlStr) return null;
     const prefix = getAssetPrefix();
-    const targetFile = relatedPageObj.url.split('/').pop();
+    const queryPart = urlStr.includes('?') ? '?' + urlStr.split('?')[1] : '';
+    const cleanUrl = urlStr.split('?')[0];
+    const targetFile = cleanUrl.split('/').pop();
     if (prefix === '../') {
-      return targetFile;
+      return `${targetFile}${queryPart}`;
     } else {
-      return `pages/${targetFile}`;
+      return `pages/${targetFile}${queryPart}`;
     }
+  }
+
+  function getPageLabel(relatedPageObj) {
+    if (!relatedPageObj) return "View Dashboard Module";
+    if (typeof relatedPageObj === 'object' && relatedPageObj.label) return relatedPageObj.label;
+    const urlStr = typeof relatedPageObj === 'string' ? relatedPageObj : (relatedPageObj.url || '');
+    if (urlStr.includes("national_overview")) return "National Overview & Analytics";
+    if (urlStr.includes("state_analysis")) return "State Disparity Analysis";
+    if (urlStr.includes("rural_urban")) return "Rural vs Urban Analysis";
+    if (urlStr.includes("demographic_analysis")) return "Socio-Demographic Disparities";
+    if (urlStr.includes("risk_archetypes")) return "Risk Archetypes & Clustering";
+    if (urlStr.includes("empowerment")) return "Empowerment & Autonomy";
+    if (urlStr.includes("multiple_barrier")) return "Multiple Overlapping Barriers";
+    if (urlStr.includes("outcome_impact")) return "Healthcare Utilization Impact";
+    if (urlStr.includes("explainability")) return "Model Explainability & SHAP";
+    if (urlStr.includes("base_paper")) return "Base Paper Benchmark Comparison";
+    if (urlStr.includes("risk_prediction")) return "AI Risk Assessment Predictor";
+    return "Explore on Dashboard";
   }
 
   function formatText(text) {
@@ -206,17 +227,18 @@
 
     escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    if (escaped.includes('\n- ') || escaped.includes('\n• ')) {
+    if (escaped.includes('- ') || escaped.includes('• ') || escaped.includes('* ')) {
       const lines = escaped.split('\n');
       let inList = false;
       let outLines = [];
       lines.forEach(line => {
-        if (line.trim().startsWith('- ') || line.trim().startsWith('• ')) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('- ') || trimmed.startsWith('• ') || trimmed.startsWith('* ')) {
           if (!inList) {
             outLines.push('<ul style="margin: 6px 0; padding-left: 20px;">');
             inList = true;
           }
-          outLines.push(`<li>${line.trim().substring(2)}</li>`);
+          outLines.push(`<li>${trimmed.substring(2)}</li>`);
         } else {
           if (inList) {
             outLines.push('</ul>');
@@ -274,8 +296,8 @@
             </div>
           </div>
           <div class="bl-chat-header-actions" style="display: flex; gap: 6px; align-items: center;">
-            <button class="bl-header-btn" id="bl-change-barrier-btn" title="${t('changeBarrier')}" aria-label="${t('changeBarrier')}" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-              🔄 <span id="bl-active-barrier-label">${getLocalizedBarrierTitle(_activeBarrier)}</span>
+            <button class="bl-header-btn" id="bl-change-barrier-btn" title="Change Barrier" aria-label="Change Barrier" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              🔄 <span id="bl-active-barrier-label">${_activeBarrier}</span>
             </button>
 
             <div class="bl-lang-select-wrap">
@@ -349,10 +371,6 @@
     document.body.insertAdjacentHTML('beforeend', buildModalHtml());
 
     _domMounted = true;
-    const i18n = getI18n();
-    if (i18n) {
-      i18n.setLanguage(_currentLang);
-    }
     bindEvents();
     renderSuggestedQuestions();
     bindVoiceStateMachine();
@@ -368,11 +386,19 @@
     if (modeScreen && typeof modeScreen.render === 'function') {
       modeScreen.render('bl-mode-screen-container', {
         activeLanguage: _currentLang,
-        onSelectIdentify: startGuidedFlow,
-        onSelectExplore: startExploreFlow
+        onSelectExplore: startExploreFlow,
+        onStartChat: focusChatInput
       });
     } else {
       renderInlineChooseModeScreen('bl-mode-screen-container');
+    }
+  }
+
+  function focusChatInput() {
+    const input = document.getElementById('bl-chat-input');
+    if (input) {
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -383,39 +409,39 @@
     const labels = {
       en: {
         welcomeTitle: "Welcome to BarrierLens",
-        welcomeSubtitle: "What would you like to do? Choose an entry mode:",
-        identifyTitle: "1. Identify My Barrier",
-        identifyBadge: "Guided ML Model Flow",
-        identifyDesc: "Answer guided questions to predict your likely primary healthcare barrier (Household, Logistic, or Facility) using machine learning.",
-        identifyBtn: "Identify My Barrier →",
-        exploreTitle: "2. Explore Barriers",
+        welcomeSubtitle: "What would you like to do? Choose an option:",
+        exploreTitle: "1. Explore Barriers",
         exploreBadge: "Verified Evidence Flow",
         exploreDesc: "Directly select or ask about a barrier and explore verified BarrierLens evidence across 5 categories.",
-        exploreBtn: "Explore Barriers →"
+        exploreBtn: "Explore Barriers →",
+        chatTitle: "2. Chat with AI Assistant",
+        chatBadge: "Conversational AI",
+        chatDesc: "Ask any open question about healthcare access barriers, national disparities, or ML models to converse directly.",
+        chatBtn: "Start Conversation ↓"
       },
       kn: {
         welcomeTitle: "ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್‌ಗೆ ಸುಸ್ವಾಗತ",
-        welcomeSubtitle: "ನೀವು ಏನು ಮಾಡಲು ಬಯಸುತ್ತೀರಿ? ಪ್ರವೇಶ ವಿಧಾನವನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
-        identifyTitle: "1. ನನ್ನ ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಿ",
-        identifyBadge: "ಮಾರ್ಗದರ್ಶಿತ ML ಮಾದರಿ ಶೈಲಿ",
-        identifyDesc: "ಮೆಷಿನ್ ಲರ್ನಿಂಗ್ ಬಳಸಿ ನಿಮ್ಮ ಆರೋಗ್ಯ ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಲು ಕೆಲವು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.",
-        identifyBtn: "ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಿ →",
-        exploreTitle: "2. ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+        welcomeSubtitle: "ನೀವು ಏನು ಮಾಡಲು ಬಯಸುತ್ತೀರಿ? ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ:",
+        exploreTitle: "1. ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
         exploreBadge: "ಪರಿಶೀಲಿಸಿದ ಸಾಕ್ಷ್ಯ ಶೈಲಿ",
         exploreDesc: "5 ವರ್ಗಗಳಲ್ಲಿ ದೃಢೀಕೃತ ಮಾಹಿತಿ, ಅಂಕಿಅಂಶಗಳು ಮತ್ತು ಪರಿಹಾರಗಳನ್ನು ವೀಕ್ಷಿಸಿ.",
-        exploreBtn: "ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ →"
+        exploreBtn: "ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ →",
+        chatTitle: "2. ಸಹಾಯಕನೊಂದಿಗೆ ಮಾತನಾಡಿ",
+        chatBadge: "AI ಸಂಭಾಷಣೆ",
+        chatDesc: "ಆರೋಗ್ಯ ಅಡಚಣೆಗಳು, ರಾಷ್ಟ್ರೀಯ ಅಂಕಿಅಂಶಗಳು ಅಥವಾ ML ಮಾದರಿಗಳ ಬಗ್ಗೆ ಯಾವುದೇ ಪ್ರಶ್ನೆ ಕೇಳಿ.",
+        chatBtn: "ಸಂಭಾಷಣೆ ಪ್ರಾರಂಭಿಸಿ ↓"
       },
       hi: {
         welcomeTitle: "BarrierLens में आपका स्वागत है",
         welcomeSubtitle: "आप क्या करना चाहेंगे? एक विकल्प चुनें:",
-        identifyTitle: "1. मेरी बाधा पहचानें",
-        identifyBadge: "निर्देशित ML मॉडल प्रवाह",
-        identifyDesc: "मशीन लर्निंग का उपयोग करके अपनी प्राथमिक स्वास्थ्य बाधा का अनुमान लगाने के लिए प्रश्नों के उत्तर दें।",
-        identifyBtn: "मेरी बाधा पहचानें →",
-        exploreTitle: "2. बाधाओं का अन्वेषण करें",
+        exploreTitle: "1. बाधाओं का अन्वेषण करें",
         exploreBadge: "सत्यापित साक्ष्य प्रवाह",
         exploreDesc: "5 श्रेणियों में सत्यापित जानकारी, आँकड़े और समाधान देखें।",
-        exploreBtn: "बाधाओं का अन्वेषण करें →"
+        exploreBtn: "बाधाओं का अन्वेषण करें →",
+        chatTitle: "2. एआई सहायक से चैट करें",
+        chatBadge: "संवादात्मक एआई",
+        chatDesc: "स्वास्थ्य पहुंच बाधाओं, राष्ट्रीय विश्लेषण या ML मॉडल के बारे में कोई भी प्रश्न पूछें।",
+        chatBtn: "बातचीत शुरू करें ↓"
       }
     };
 
@@ -430,40 +456,40 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
-          <!-- Option 1: Identify My Barrier -->
-          <div class="bl-mode-card" id="bl-inline-mode-identify" style="background: #eff6ff; border: 2px solid #93c5fd; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
+          <!-- Option 1: Explore Barriers -->
+          <div class="bl-mode-card" id="bl-inline-mode-explore" style="background: #eff6ff; border: 2px solid #93c5fd; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 0.7rem; font-weight: 700; background: #2563eb; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.identifyBadge}</span>
-              <span style="font-size: 1.1rem;">🎯</span>
-            </div>
-            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #1e3a8a;">${text.identifyTitle}</h4>
-            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #334155; line-height: 1.4;">${text.identifyDesc}</p>
-            <button id="bl-btn-inline-identify" style="width: 100%; padding: 8px 12px; background: #2563eb; color: #ffffff; border: none; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.identifyBtn}</button>
-          </div>
-
-          <!-- Option 2: Explore Barriers -->
-          <div class="bl-mode-card" id="bl-inline-mode-explore" style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 0.7rem; font-weight: 700; background: #475569; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.exploreBadge}</span>
+              <span style="font-size: 0.7rem; font-weight: 700; background: #2563eb; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.exploreBadge}</span>
               <span style="font-size: 1.1rem;">🔍</span>
             </div>
-            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">${text.exploreTitle}</h4>
-            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #475569; line-height: 1.4;">${text.exploreDesc}</p>
-            <button id="bl-btn-inline-explore" style="width: 100%; padding: 8px 12px; background: #f1f5f9; color: #0f172a; border: 1px solid #94a3b8; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.exploreBtn}</button>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #1e3a8a;">${text.exploreTitle}</h4>
+            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #334155; line-height: 1.4;">${text.exploreDesc}</p>
+            <button id="bl-btn-inline-explore" style="width: 100%; padding: 8px 12px; background: #2563eb; color: #ffffff; border: none; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.exploreBtn}</button>
+          </div>
+
+          <!-- Option 2: Chat with AI Assistant -->
+          <div class="bl-mode-card" id="bl-inline-mode-chat" style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: 700; background: #475569; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.chatBadge}</span>
+              <span style="font-size: 1.1rem;">💬</span>
+            </div>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">${text.chatTitle}</h4>
+            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #475569; line-height: 1.4;">${text.chatDesc}</p>
+            <button id="bl-btn-inline-chat" style="width: 100%; padding: 8px 12px; background: #f1f5f9; color: #0f172a; border: 1px solid #94a3b8; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.chatBtn}</button>
           </div>
         </div>
       </div>
     `;
 
-    const btnId = container.querySelector('#bl-btn-inline-identify');
-    const cardId = container.querySelector('#bl-inline-mode-identify');
     const btnExp = container.querySelector('#bl-btn-inline-explore');
     const cardExp = container.querySelector('#bl-inline-mode-explore');
+    const btnChat = container.querySelector('#bl-btn-inline-chat');
+    const cardChat = container.querySelector('#bl-inline-mode-chat');
 
-    if (btnId) btnId.addEventListener('click', startGuidedFlow);
-    if (cardId) cardId.addEventListener('click', (e) => { if (e.target !== btnId) startGuidedFlow(); });
     if (btnExp) btnExp.addEventListener('click', startExploreFlow);
     if (cardExp) cardExp.addEventListener('click', (e) => { if (e.target !== btnExp) startExploreFlow(); });
+    if (btnChat) btnChat.addEventListener('click', focusChatInput);
+    if (cardChat) cardChat.addEventListener('click', focusChatInput);
   }
 
   function startGuidedFlow() {
@@ -475,15 +501,7 @@
     if (guidedUI && typeof guidedUI.render === 'function') {
       guidedUI.render('bl-guided-container', {
         activeLanguage: _currentLang,
-        initialAnswers: _guidedSession ? _guidedSession.answers : undefined,
-        initialStep: _guidedSession ? _guidedSession.step : undefined,
-        onProgress: (state) => {
-          _guidedSession = state;
-        },
-        onCancel: () => {
-          _guidedSession = null;
-          renderWelcomeOrChooseMode();
-        },
+        onCancel: renderWelcomeOrChooseMode,
         onComplete: onGuidedPredictionComplete
       });
     } else {
@@ -600,7 +618,6 @@
   }
 
   async function onGuidedPredictionComplete(predictionResult, answers) {
-    _guidedSession = null;
     const primary = predictionResult.primaryBarrier || 'Logistic Barrier';
     _activeBarrier = primary;
     _barrierSource = 'ml_prediction';
@@ -611,43 +628,8 @@
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
 
-    const langKey = resolveLangKey(_currentLang);
-    const predLabels = {
-      en: {
-        badge: (src) => `${src || 'BarrierLens ML Model'} Prediction`,
-        title: 'Predicted Primary Barrier:',
-        probs: 'Probabilities:',
-        household: 'Household',
-        logistic: 'Logistic',
-        facility: 'Facility',
-        footer: 'This predicted barrier is now set as your active research context for follow-up questions.'
-      },
-      kn: {
-        badge: (src) => `${src || 'ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ML ಮಾದರಿ'} ಮುನ್ಸೂಚನೆ`,
-        title: 'ಮುನ್ಸೂಚಿಸಿದ ಪ್ರಮುಖ ಅಡಚಣೆ:',
-        probs: 'ಸಾಧ್ಯತೆಗಳು:',
-        household: 'ಮನೆ/ಕುಟುಂಬ',
-        logistic: 'ಸಾರಿಗೆ',
-        facility: 'ಆಸ್ಪತ್ರೆ/ಸೌಲಭ್ಯ',
-        footer: 'ಈ ಮುನ್ಸೂಚಿತ ಅಡಚಣೆಯನ್ನು ನಿಮ್ಮ ಸಂಶೋಧನಾ ಸಂದರ್ಭವಾಗಿ ಹೊಂದಿಸಲಾಗಿದೆ. ಮುಂದಿನ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಬಹುದು.'
-      },
-      hi: {
-        badge: (src) => `${src || 'बैरियरलेंस ML मॉडल'} पूर्वानुमान`,
-        title: 'अनुमानित प्राथमिक बाधा:',
-        probs: 'संभावनाएँ:',
-        household: 'घरेलू',
-        logistic: 'परिवहन',
-        facility: 'अस्पताल/सुविधा',
-        footer: 'यह अनुमानित बाधा अब आपके शोध संदर्भ के रूप में सेट है। आप अनुवर्ती प्रश्न पूछ सकते हैं।'
-      }
-    };
-    const tPred = predLabels[langKey] || predLabels.en;
-    const primaryDisplay = getLocalizedBarrierTitle(primary);
-
     const probs = predictionResult.probabilities || {};
-    const probStr = probs.household !== undefined
-      ? `${tPred.household}: ${Math.round(probs.household * 100)}% | ${tPred.logistic}: ${Math.round(probs.logistic * 100)}% | ${tPred.facility}: ${Math.round(probs.facility * 100)}%`
-      : '';
+    const probStr = probs.household !== undefined ? `Household: ${Math.round(probs.household * 100)}% | Logistic: ${Math.round(probs.logistic * 100)}% | Facility: ${Math.round(probs.facility * 100)}%` : '';
 
     const html = `
       <div class="bl-message-row bl-bot-row">
@@ -655,14 +637,14 @@
         <div class="bl-bubble-wrap">
           <div class="bl-message-bubble" style="border: 2px solid #2563eb; background: #eff6ff;">
             <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">
-              ${tPred.badge(predictionResult.modelSource)}
+              ${predictionResult.modelSource || 'BarrierLens ML Model'} Prediction
             </div>
             <h4 style="margin: 4px 0; font-size: 1.1rem; color: #1e3a8a;">
-              ${tPred.title} <strong>${primaryDisplay}</strong>
+              Predicted Primary Barrier: <strong>${primary}</strong>
             </h4>
-            ${probStr ? `<div style="font-size: 0.8rem; color: #475569; margin-bottom: 8px;"><strong>${tPred.probs}</strong> ${probStr}</div>` : ''}
+            ${probStr ? `<div style="font-size: 0.8rem; color: #475569; margin-bottom: 8px;"><strong>Probabilities:</strong> ${probStr}</div>` : ''}
             <p style="margin: 0; font-size: 0.85rem; color: #334155;">
-              ${tPred.footer}
+              This predicted barrier is now set as your active research context for follow-up questions.
             </p>
           </div>
           <span class="bl-message-time">${formatTime()}</span>
@@ -689,7 +671,6 @@
     if (barrierUI && typeof barrierUI.render === 'function') {
       barrierUI.render('bl-barrier-select-container', {
         activeBarrier: _activeBarrier,
-        activeLanguage: _currentLang,
         onSelectBarrier: onExploreBarrierSelected,
         onBack: renderWelcomeOrChooseMode,
         onCancel: renderWelcomeOrChooseMode
@@ -754,13 +735,7 @@
     _barrierSource = 'user_selection';
     updateActiveBarrierHeader();
 
-    const selLabels = {
-      en: 'Selected Barrier:',
-      kn: 'ಆಯ್ಕೆ ಮಾಡಿದ ಅಡಚಣೆ:',
-      hi: 'चयनित बाधा:'
-    };
-    const langKey = resolveLangKey(_currentLang);
-    renderUserMessage(`${selLabels[langKey] || selLabels.en} ${getLocalizedBarrierTitle(barrierName)}`);
+    renderUserMessage(`Selected Barrier: ${barrierName}`);
     showTypingIndicator();
 
     const responseEngine = getResponseEngine();
@@ -786,7 +761,6 @@
     if (barrierUI) {
       barrierUI.render(selectDiv, {
         activeBarrier: _activeBarrier,
-        activeLanguage: _currentLang,
         onSelectBarrier: (newBarrier) => {
           selectDiv.remove();
           onExploreBarrierSelected(newBarrier);
@@ -815,15 +789,10 @@
   }
 
   function updateUILanguage(newLang) {
-    _currentLang = resolveLangKey(newLang);
+    _currentLang = newLang;
     const i18n = getI18n();
     if (i18n) {
-      i18n.setLanguage(_currentLang);
-    }
-
-    const langSelect = document.getElementById('bl-lang-select');
-    if (langSelect && langSelect.value !== _currentLang) {
-      langSelect.value = _currentLang;
+      i18n.setLanguage(newLang);
     }
 
     const launcherLabel = document.getElementById('bl-launcher-label');
@@ -1064,12 +1033,11 @@
   }
 
   async function executeQuery(query, lang) {
-    const langCode = resolveLangKey(lang);
     const responseEngine = getResponseEngine();
     let localResult = null;
     if (responseEngine && responseEngine.processUserQuery) {
       try {
-        localResult = await responseEngine.processUserQuery(query, langCode, { 
+        localResult = await responseEngine.processUserQuery(query, lang, { 
           barrierContext: _activeBarrier,
           skipBackend: true
         });
@@ -1090,7 +1058,7 @@
         const backendPayload = {
           message: query,
           question: query,
-          language: langCode,
+          language: lang,
           history: history,
           activeBarrier: _activeBarrier,
           evidence: localResult || undefined
@@ -1098,7 +1066,16 @@
 
         const backendResp = await apiService.sendChatMessage(backendPayload);
         if (backendResp && backendResp.status === "success" && (backendResp.answer || backendResp.response)) {
-          const ans = backendResp.answer || backendResp.response;
+          let ans = (backendResp.answer || backendResp.response).trim();
+          // Strip any stray defensive refusal preambles
+          ans = ans.replace(/^(?:I(?:'m| am)? (?:sorry,?\s*)?)?I (?:can't|cannot|am unable to) (?:help|provide|assist)[^\n]*?(?:\.|\n)+/i, '').trim();
+          ans = ans.replace(/^(?:As an AI[^\n]*?,?\s*)?I (?:can't|cannot|do not have)[^\n]*?(?:\.|\n)+/i, '').trim();
+          ans = ans.replace(/^I can't provide information that would violate[^\n]*?(?:\.|\n)+/i, '').trim();
+
+          if (!ans || /^(?:I (?:can't|cannot) (?:help|provide))/i.test(ans)) {
+            ans = (localResult && localResult.answer) ? localResult.answer : ans;
+          }
+
           return Object.assign({}, localResult || {}, backendResp, {
             answer: ans,
             response: ans
@@ -1117,7 +1094,7 @@
     return {
       answer: "BarrierLens analyzes healthcare access barriers among 724,115 Indian women from the NFHS-5 dataset. Please ask any question about household, logistic, or facility barriers, disparities, or ML predictive models.",
       status: "fallback",
-      language: langCode,
+      language: lang,
       intent: "GENERAL",
       source: ["NFHS-5 (2019-21)"],
       metrics: [],
@@ -1160,90 +1137,76 @@
     const timeStr = formatTime();
     let structuredCardsHtml = '';
 
-    // Render Shared Evidence Card if available
-    const evidenceCard = getEvidenceCard();
-    const cardLangOpts = { activeLanguage: _currentLang, lang: _currentLang };
-    if (evidenceCard && (res.evidence || res.metrics || res.calculations)) {
-      structuredCardsHtml += evidenceCard.render({
-        activeBarrier: getLocalizedBarrierTitle(_activeBarrier),
-        explanation: res.answer,
-        statistics: res.metrics,
-        affectedStates: res.affectedStates || (res.entities && res.entities.state ? [res.entities.state] : []),
-        affectedGroups: res.affectedGroups || (res.entities && res.entities.group ? [res.entities.group] : []),
-        comparisons: res.calculations,
-        source: res.source,
-        language: _currentLang
-      }, cardLangOpts);
-    }
-
-    // Render Shared Solution Card if solutions requested or present
-    const solutionCard = getSolutionCard();
-    if (solutionCard && (res.requiresSolutions || res.solutions || res.barrierLensSolutions || res.externalSolutions)) {
-      structuredCardsHtml += solutionCard.render({
-        barrier: getLocalizedBarrierTitle(_activeBarrier),
-        barrierLensSolutions: res.barrierLensSolutions || [
-          { title: "Mobile Rural Clinics", desc: "Deploy satellite health vehicles to bridge distance barriers in high-prevalence districts." },
-          { title: "Autonomy Counseling", desc: "Engage household decision-makers in reproductive health education." }
-        ],
-        externalSolutions: res.externalSolutions || res.solutions || [
-          {
-            recommendedSolution: "Community Health Worker (ASHA) Escort Program",
-            source: "Ministry of Health and Family Welfare (MoHFW) / WHO Policy Guidance",
-            whyItMayHelp: "Improves transport safety, reduces out-of-pocket costs, and builds trust for rural women."
-          }
-        ],
-        language: _currentLang
-      }, cardLangOpts);
-    }
-
-    // Render BarrierUI card fallbacks if specific card components not present
-    const barrierUI = getBarrierUI();
-    if (!evidenceCard && barrierUI && barrierUI.renderBarrierLensEvidenceCard) {
-      if (res.evidenceType === 'BarrierLens Evidence' || (res.metrics && res.metrics.length > 0 && !res.solutions)) {
-        structuredCardsHtml += barrierUI.renderBarrierLensEvidenceCard(res, _currentLang);
+    // Live Dashboard Reactivity Trigger & State Auto-Search
+    if (res.entities && res.entities.state) {
+      const stateName = res.entities.state;
+      const stateSearch = document.getElementById("state-search");
+      if (stateSearch) {
+        stateSearch.value = stateName;
+        stateSearch.dispatchEvent(new Event("input", { bubbles: true }));
       }
-      
-      if (res.solutions && Array.isArray(res.solutions)) {
-        res.solutions.forEach(sol => {
-          structuredCardsHtml += barrierUI.renderExternalSolutionCard(sol, _currentLang);
-        });
-      } else if (res.solution) {
-        structuredCardsHtml += barrierUI.renderExternalSolutionCard(res.solution, _currentLang);
+      if (!res.relatedPage) {
+        res.relatedPage = {
+          label: `State Profile: ${stateName}`,
+          url: `pages/state_analysis.html?state=${encodeURIComponent(stateName)}`
+        };
       }
     }
 
-    // Fallback Metrics Cards
-    if (!evidenceCard && !barrierUI && res.metrics && res.metrics.length > 0) {
-      const metricsList = res.metrics.map(m => `
-        <div class="bl-metric-chip">
-          <span class="bl-metric-val">${m.value}${m.unit ? m.unit : ''}</span>
-          <span class="bl-metric-lbl">${m.label}${m.entity ? ` (${m.entity})` : ''}</span>
-        </div>
-      `).join('');
-
-      structuredCardsHtml += `
-        <div class="bl-structured-card">
-          <div class="bl-card-section-title">
-            ${t('keyMetrics')}
-          </div>
-          <div class="bl-metrics-grid">
-            ${metricsList}
-          </div>
-        </div>
-      `;
+    if (res.activeBarrier || (res.barrierContext && res.barrierContext.barrier)) {
+      const domainName = res.activeBarrier || res.barrierContext.barrier;
+      const domainFilter = document.getElementById("domain-filter");
+      if (domainFilter) {
+        const cleanDomain = domainName.replace(" Barrier", "");
+        domainFilter.value = cleanDomain;
+        domainFilter.dispatchEvent(new Event("change", { bubbles: true }));
+      }
     }
 
-    // Related Page Link Action Button
+    // Auto-detect relevant dashboard module if not explicitly set
+    if (!res.relatedPage) {
+      const q = (_lastQueryText || '').toLowerCase();
+      const ans = ((res.answer || '') + ' ' + (res.intent || '')).toLowerCase();
+
+      if (q.includes('state') || ans.includes('state_analysis') || ans.includes('state-level') || ans.includes('state profile')) {
+        res.relatedPage = { label: 'State-Level Disparity Analysis', url: 'pages/state_analysis.html' };
+      } else if (q.includes('rural') || q.includes('urban') || ans.includes('rural') || ans.includes('urban')) {
+        res.relatedPage = { label: 'Rural vs Urban Disparity Analysis', url: 'pages/rural_urban.html' };
+      } else if (q.includes('predict') || q.includes('my barrier') || (q.includes('risk') && q.includes('check')) || ans.includes('risk_prediction')) {
+        res.relatedPage = { label: 'AI Risk Assessment Predictor', url: 'pages/risk_prediction.html' };
+      } else if (q.includes('cluster') || q.includes('archetype') || ans.includes('risk_archetypes') || ans.includes('k-means')) {
+        res.relatedPage = { label: 'Risk Archetypes & Clustering (K-Means)', url: 'pages/risk_archetypes.html' };
+      } else if (q.includes('model') || q.includes('shap') || q.includes('xgboost') || q.includes('regression') || ans.includes('explainability')) {
+        res.relatedPage = { label: 'Model Explainability & SHAP Drivers', url: 'pages/explainability.html' };
+      } else if (q.includes('wealth') || q.includes('education') || q.includes('demographic') || ans.includes('demographic')) {
+        res.relatedPage = { label: 'Socio-Demographic Disparities', url: 'pages/demographic_analysis.html' };
+      } else if (q.includes('empower') || q.includes('autonomy') || q.includes('decision') || ans.includes('empowerment')) {
+        res.relatedPage = { label: 'Empowerment & Autonomy Analytics', url: 'pages/empowerment.html' };
+      } else if (q.includes('multiple') || q.includes('overlap') || ans.includes('multiple_barrier')) {
+        res.relatedPage = { label: 'Multiple Overlapping Barriers', url: 'pages/multiple_barrier.html' };
+      } else if (q.includes('impact') || q.includes('outcome') || q.includes('anc') || q.includes('vaccin') || ans.includes('outcome_impact')) {
+        res.relatedPage = { label: 'Healthcare Utilization Impact', url: 'pages/outcome_impact.html' };
+      } else if (q.includes('paper') || q.includes('benchmark') || q.includes('base') || ans.includes('base_paper')) {
+        res.relatedPage = { label: 'Base Paper Benchmark Comparison', url: 'pages/base_paper_comparison.html' };
+      } else if (q.includes('national') || q.includes('overview') || q.includes('prevalence') || q.includes('barrierlens') || q.includes('objective')) {
+        res.relatedPage = { label: 'National Overview Analytics', url: 'pages/national_overview.html' };
+      }
+    }
+
+    // Relevant Dashboard Page Redirection Button
     if (res.relatedPage) {
       const resolvedHref = resolvePageLink(res.relatedPage);
-      structuredCardsHtml += `
-        <div>
-          <a href="${resolvedHref}" class="bl-page-action-btn">
-            <span>${t('viewAnalysis')}: ${res.relatedPage.label}</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
-      `;
+      const pageTitle = getPageLabel(res.relatedPage);
+      if (resolvedHref) {
+        structuredCardsHtml += `
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(226, 232, 240, 0.7);">
+            <a href="${resolvedHref}" class="bl-page-action-btn" style="display: inline-flex; align-items: center; gap: 7px; background: #2563eb; color: #ffffff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.8rem; box-shadow: 0 1px 2px rgba(37,99,235,0.2); transition: background 0.15s ease;">
+              <span>📊 View on Dashboard: ${pageTitle}</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        `;
+      }
     }
 
     // Research Disclaimer / Limitation Note

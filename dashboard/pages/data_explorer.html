@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Explorer — BarrierLens Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/dashboard-state.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="subpage-header">
+      <h1 class="subpage-title">NFHS-5 Multi-Dimensional Data Explorer</h1>
+      <p class="subpage-subtitle">Interactive querying, sorting, filtering, and summary exploration across 724,115 Indian women surveyed in NFHS-5. Search across 36 States/UTs and socio-demographic strata.</p>
+    </div>
+
+    <!-- Data Controls Bar -->
+    <div class="global-filter-panel">
+      <div class="filter-panel-header">
+        <div class="filter-panel-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+          <span>Select Dataset Stratification</span>
+        </div>
+        <div class="filter-panel-actions">
+          <button id="btn-export-csv" class="chart-btn" style="font-weight: 700;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export Table as CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+        <div class="tab-group" id="dataset-strata-tabs">
+          <button class="tab-btn active" data-source="states">36 States &amp; UTs</button>
+          <button class="tab-btn" data-source="wealth">Wealth Quintiles</button>
+          <button class="tab-btn" data-source="education">Educational Levels</button>
+          <button class="tab-btn" data-source="residence">Rural / Urban</button>
+          <button class="tab-btn" data-source="age">Age Cohorts</button>
+          <button class="tab-btn" data-source="occupation">Current Occupation</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="explorer-search-input" class="filter-select" placeholder="Search rows... (e.g. Karnataka, Poorest)" style="width: 240px;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Metrics Summary Card -->
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-top">
+          <span class="kpi-label">Active Records</span>
+          <span class="tag tag-overall" id="stat-record-count">36 Rows</span>
+        </div>
+        <div class="kpi-value" id="stat-total-sample">724,115</div>
+        <div class="kpi-footer">Total Subgroup Sample N</div>
+      </div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-top">
+          <span class="kpi-label">Mean Facility Barrier</span>
+          <span class="tag tag-facility">Rank 1</span>
+        </div>
+        <div class="kpi-value" id="stat-mean-facility" style="color: var(--domain-facility);">46.0%</div>
+        <div class="kpi-footer">Weighted Subgroup Mean</div>
+      </div>
+
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-top">
+          <span class="kpi-label">Mean Logistic Barrier</span>
+          <span class="tag tag-logistic">Rank 2</span>
+        </div>
+        <div class="kpi-value" id="stat-mean-logistic" style="color: var(--domain-logistic);">31.6%</div>
+        <div class="kpi-footer">Distance / Transport Mean</div>
+      </div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-top">
+          <span class="kpi-label">Mean Household Barrier</span>
+          <span class="tag tag-household">Rank 3</span>
+        </div>
+        <div class="kpi-value" id="stat-mean-household" style="color: var(--domain-household);">27.2%</div>
+        <div class="kpi-footer">Financial / Autonomy Mean</div>
+      </div>
+    </div>
+
+    <!-- Interactive Data Table Card -->
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <span class="card-title" id="explorer-table-title">State-Level Healthcare Access Barriers (36 States &amp; UTs)</span>
+          <div class="card-subtitle">Click column headers to sort ascending / descending</div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table" id="explorer-data-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)" style="cursor: pointer;">Subgroup Category &#x25B4;&#x25BE;</th>
+              <th onclick="sortTable(1)" style="cursor: pointer;">Observed Any Barrier (≥1) &#x25B4;&#x25BE;</th>
+              <th onclick="sortTable(2)" style="cursor: pointer;">Facility Barrier &#x25B4;&#x25BE;</th>
+              <th onclick="sortTable(3)" style="cursor: pointer;">Logistic Barrier &#x25B4;&#x25BE;</th>
+              <th onclick="sortTable(4)" style="cursor: pointer;">Household Barrier &#x25B4;&#x25BE;</th>
+              <th onclick="sortTable(5)" style="cursor: pointer;">Predicted Composite Score &#x25B4;&#x25BE;</th>
+              <th onclick="sortTable(6)" style="cursor: pointer;">Sample Size (N) &#x25B4;&#x25BE;</th>
+            </tr>
+          </thead>
+          <tbody id="explorer-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Toolbar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-muted);">
+        <div>Showing <span id="page-item-start">1</span> to <span id="page-item-end">36</span> of <span id="page-item-total">36</span> entries</div>
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-prev-page" class="chart-btn" disabled>&larr; Previous</button>
+          <button id="btn-next-page" class="chart-btn" disabled>Next &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Disclaimer -->
+    <div class="callout callout-info">
+      <strong>Data Scope &amp; Methodology Integrity:</strong>
+      All aggregated statistics represent observed survey proportions and Stage 1 machine learning inferences on 724,115 women in NFHS-5 (2019–2021). Results are purely observational and descriptive.
+    </div>
+  </div>
+
+  <script>
+    let rawDataStore = {
+      states: [],
+      wealth: [],
+      education: [],
+      residence: [],
+      age: [],
+      occupation: []
+    };
+
+    let activeSource = "states";
+    let currentSearchQuery = "";
+    let currentSortCol = 1;
+    let currentSortAsc = false;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      Promise.all([
+        window.DashboardState.fetchData("state_summary.json"),
+        window.DashboardState.fetchData("demographic_summary.json")
+      ]).then(([stateData, demoData]) => {
+        if (stateData && stateData.states) {
+          rawDataStore.states = stateData.states.map(s => ({
+            name: s.state_name,
+            any: s.observed_any_barrier_rate,
+            facility: s.observed_facility_rate,
+            logistic: s.observed_logistic_rate,
+            household: s.observed_household_rate,
+            composite: s.predicted_composite_score,
+            sampleN: s.sample_size_n
+          }));
+        }
+
+        if (demoData) {
+          const mapDemo = arr => (arr || []).map(d => ({
+            name: LabelRenderer.formatFeatureName(d.subgroup || Object.values(d.group_keys || {})[0] || "Subgroup"),
+            any: d.observed_any_barrier_rate,
+            facility: d.observed_facility_rate,
+            logistic: d.observed_logistic_rate,
+            household: d.observed_household_rate,
+            composite: d.predicted_composite_score || 0,
+            sampleN: d.sample_size_n || 0
+          }));
+
+          rawDataStore.wealth = mapDemo(demoData.by_wealth);
+          rawDataStore.education = mapDemo(demoData.by_education);
+          rawDataStore.residence = mapDemo(demoData.by_residence);
+          rawDataStore.age = mapDemo(demoData.by_age);
+          rawDataStore.occupation = mapDemo(demoData.by_occupation);
+        }
+
+        renderExplorer();
+      });
+
+      // Tabs
+      const tabs = document.querySelectorAll("#dataset-strata-tabs .tab-btn");
+      tabs.forEach(btn => {
+        btn.addEventListener("click", function () {
+          tabs.forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+          activeSource = this.getAttribute("data-source");
+          renderExplorer();
+        });
+      });
+
+      // Search
+      const searchInput = document.getElementById("explorer-search-input");
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          currentSearchQuery = this.value.toLowerCase().trim();
+          renderExplorer();
+        });
+      }
+
+      // CSV Export
+      document.getElementById("btn-export-csv").addEventListener("click", exportToCsv);
+    });
+
+    function getActiveDataset() {
+      let data = rawDataStore[activeSource] || [];
+      if (currentSearchQuery) {
+        data = data.filter(d => d.name.toLowerCase().includes(currentSearchQuery));
+      }
+
+      data.sort((a, b) => {
+        const keys = ["name", "any", "facility", "logistic", "household", "composite", "sampleN"];
+        const k = keys[currentSortCol] || "any";
+        if (typeof a[k] === "string") {
+          return currentSortAsc ? a[k].localeCompare(b[k]) : b[k].localeCompare(a[k]);
+        }
+        return currentSortAsc ? a[k] - b[k] : b[k] - a[k];
+      });
+
+      return data;
+    }
+
+    function sortTable(colIndex) {
+      if (currentSortCol === colIndex) {
+        currentSortAsc = !currentSortAsc;
+      } else {
+        currentSortCol = colIndex;
+        currentSortAsc = false;
+      }
+      renderExplorer();
+    }
+
+    function renderExplorer() {
+      const data = getActiveDataset();
+      const tbody = document.getElementById("explorer-table-body");
+
+      document.getElementById("stat-record-count").textContent = `${data.length} Records`;
+      const totalN = data.reduce((sum, d) => sum + (d.sampleN || 0), 0) || 724115;
+      document.getElementById("stat-total-sample").textContent = totalN.toLocaleString();
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--text-muted);">No matching data found for "${currentSearchQuery}".</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(d => `
+        <tr>
+          <td><strong>${d.name}</strong></td>
+          <td style="color: var(--primary); font-weight: 700;">${(d.any * 100).toFixed(2)}%</td>
+          <td>${(d.facility * 100).toFixed(2)}%</td>
+          <td>${(d.logistic * 100).toFixed(2)}%</td>
+          <td>${(d.household * 100).toFixed(2)}%</td>
+          <td><span class="tag tag-overall">${d.composite ? (d.composite * 100).toFixed(2) + '%' : '—'}</span></td>
+          <td style="font-weight: 600; color: var(--text-muted);">${d.sampleN ? d.sampleN.toLocaleString() : '—'}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("page-item-start").textContent = "1";
+      document.getElementById("page-item-end").textContent = data.length;
+      document.getElementById("page-item-total").textContent = data.length;
+    }
+
+    function exportToCsv() {
+      const data = getActiveDataset();
+      if (!data.length) return;
+
+      const headers = ["Subgroup Category", "Observed Any Barrier (%)", "Facility Barrier (%)", "Logistic Barrier (%)", "Household Barrier (%)", "Predicted Composite Score (%)", "Sample Size (N)"];
+      const rows = data.map(d => [
+        `"${d.name}"`,
+        (d.any * 100).toFixed(2),
+        (d.facility * 100).toFixed(2),
+        (d.logistic * 100).toFixed(2),
+        (d.household * 100).toFixed(2),
+        (d.composite * 100).toFixed(2),
+        d.sampleN
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `barrierlens_${activeSource}_data_export.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>

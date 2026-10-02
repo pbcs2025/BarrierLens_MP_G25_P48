@@ -3,224 +3,306 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>National Overview — BarrierLens P48</title>
+  <title>National Overview — BarrierLens Intelligence</title>
   <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
   <div class="container">
-    <div class="page-header">
-      <h1 class="page-title">National Healthcare Access Barrier Overview</h1>
-      <p class="page-subtitle">National prevalence, comparative domain ranking, and observed vs predicted model alignment across 724,115 Indian women (NFHS-5).</p>
+    <div class="subpage-header">
+      <h1 class="subpage-title">National Healthcare Access Barrier Overview</h1>
+      <p class="subpage-subtitle">National prevalence, comparative domain ranking, and observed vs predicted model alignment across 724,115 Indian women surveyed in NFHS-5.</p>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
-      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <span id="rail-a-badge-slot"></span>
-        <span id="rail-b-badge-slot"></span>
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span class="tag tag-household">Rail A: NFHS-5 Observed</span>
+          <span class="tag tag-overall">Rail B: Stage 1 ML Predicted</span>
+          <span class="tag tag-facility">Total Sample N = 724,115</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Benchmark: Pradhan &amp; De (2025)</div>
       </div>
     </div>
 
-    <!-- KPI Cards -->
+    <!-- Display Mode & Domain Filter Toolbar -->
+    <div class="global-filter-panel" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span class="filter-field-label">Display Metric:</span>
+          <div class="tab-group" id="view-mode-tabs">
+            <button class="tab-btn active" data-mode="percentage">Prevalence (%)</button>
+            <button class="tab-btn" data-mode="proportion">Proportion (0–1)</button>
+            <button class="tab-btn" data-mode="count">Estimated Women Count</button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="filter-field-label">Filter Barrier Domain:</span>
+          <select class="filter-select" id="domain-filter" style="min-width: 180px;">
+            <option value="all">All 3 Domains</option>
+            <option value="Facility">Facility Barrier</option>
+            <option value="Logistic">Logistic Barrier</option>
+            <option value="Household">Household Barrier</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI Cards Grid -->
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title">Total Women Analysed</div>
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-top">
+          <span class="kpi-label">Sample (N)</span>
+          <div class="kpi-icon-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+        </div>
         <div class="kpi-value" id="kpi-total-women">724,115</div>
-        <div class="kpi-subtext">NFHS-5 Individual Recode</div>
+        <div class="kpi-footer">NFHS-5 Women (15–49)</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">At Least One Barrier</div>
+
+      <div class="kpi-card kpi-overall">
+        <div class="kpi-top">
+          <span class="kpi-label">≥1 Barrier</span>
+          <span class="tag tag-overall">60.68%</span>
+        </div>
         <div class="kpi-value" id="kpi-any-barrier">60.68%</div>
-        <div class="kpi-subtext">Base Paper Benchmark: 84.0%</div>
+        <div class="kpi-footer">Base Paper: 84.0%</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Facility-Level Barrier</div>
-        <div class="kpi-value" id="kpi-facility-barrier" style="color: #e11d48;">46.01%</div>
-        <div class="kpi-subtext">Rank 1 (Highest Barrier)</div>
+
+      <div class="kpi-card kpi-facility">
+        <div class="kpi-top">
+          <span class="kpi-label">Facility Barrier</span>
+          <span class="tag tag-facility">Rank 1</span>
+        </div>
+        <div class="kpi-value" id="kpi-facility-barrier" style="color: var(--domain-facility);">46.01%</div>
+        <div class="kpi-footer">Primary Concern</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Logistic Barrier</div>
-        <div class="kpi-value" id="kpi-logistic-barrier" style="color: #d97706;">31.61%</div>
-        <div class="kpi-subtext">Rank 2 (Moderate Barrier)</div>
+
+      <div class="kpi-card kpi-logistic">
+        <div class="kpi-top">
+          <span class="kpi-label">Logistic Barrier</span>
+          <span class="tag tag-logistic">Rank 2</span>
+        </div>
+        <div class="kpi-value" id="kpi-logistic-barrier" style="color: var(--domain-logistic);">31.61%</div>
+        <div class="kpi-footer">Distance &amp; Transport</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Household Barrier</div>
-        <div class="kpi-value" id="kpi-household-barrier" style="color: #2563eb;">27.16%</div>
-        <div class="kpi-subtext">Rank 3 (Lowest Barrier)</div>
+
+      <div class="kpi-card kpi-household">
+        <div class="kpi-top">
+          <span class="kpi-label">Household Barrier</span>
+          <span class="tag tag-household">Rank 3</span>
+        </div>
+        <div class="kpi-value" id="kpi-household-barrier" style="color: var(--domain-household);">27.16%</div>
+        <div class="kpi-footer">Money &amp; Permission</div>
       </div>
     </div>
 
-    <!-- Main Chart Card -->
+    <!-- Main Comparison Chart Card -->
     <div class="card">
-      <div class="card-title">
-        <span>Barrier Prevalence Comparison: Observed vs Predicted vs Base Paper</span>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title" id="national-chart-title">Observed vs Predicted vs Base Paper Benchmark</span>
+          <div class="card-subtitle">Comparing NFHS-5 Observed (Rail A), ML Predicted (Rail B), and Published Benchmark</div>
+        </div>
       </div>
-      <div id="national-overview-chart" class="chart-box"></div>
+      <div id="national-overview-chart" class="chart-box" style="min-height: 450px;">
+        <div style="padding: 40px; text-align: center; color: var(--text-muted);">
+          <span class="skeleton" style="width: 100%; height: 380px;"></span>
+        </div>
+      </div>
     </div>
 
-    <!-- Barrier Ranking Table Card -->
+    <!-- Barrier Domain Ranking Table Card -->
     <div class="card">
-      <div class="card-title">Comparative Barrier Domain Ranking</div>
-      <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 12px;">
-        <thead>
-          <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem;">
-            <th style="padding: 10px;">Rank</th>
-            <th style="padding: 10px;">Barrier Domain</th>
-            <th style="padding: 10px;">Observed Prevalence (Rail A)</th>
-            <th style="padding: 10px;">Predicted Probability (Rail B)</th>
-            <th style="padding: 10px;">Base Paper Reference</th>
-            <th style="padding: 10px;">Prevalence Level</th>
-          </tr>
-        </thead>
-        <tbody id="ranking-table-body" style="font-size: 0.95rem;">
-          <!-- Dynamically filled -->
-        </tbody>
-      </table>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Comparative Barrier Domain Ranking Table</span>
+          <div class="card-subtitle">Sample N = 724,115 Indian Women</div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Barrier Domain</th>
+              <th>Observed Prevalence (Rail A)</th>
+              <th>Predicted Probability (Rail B)</th>
+              <th>Base Paper Reference</th>
+              <th>Prevalence Level</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Executive Insights Card -->
-    <div class="insights-card">
-      <div class="insights-card-header">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <div class="insights-card-title">Executive Insights & National Trends</div>
+    <div class="dynamic-insights-panel">
+      <div class="insights-header">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span class="insights-title">Executive National Insights</span>
       </div>
-      <p class="insights-card-body" id="summary-banner-text">
-        Across 724,115 Indian women surveyed in NFHS-5, healthcare access barriers remain highly prevalent, with 60.68% experiencing at least one major barrier. Facility-level concerns represent the primary constraint (46.01% observed), followed by logistic barriers (31.61%) and household financial/autonomy constraints (27.16%). BarrierLens machine learning predictions closely match this rank ordering, confirming macro-level alignment across observed and predicted domains.
+      <p class="insights-body">
+        Across 724,115 Indian women surveyed in NFHS-5, healthcare access barriers remain widespread, with <strong>60.68%</strong> experiencing at least one major constraint. Facility-level concerns represent the primary constraint (<strong>46.01% observed</strong>), followed by logistic barriers (<strong>31.61%</strong>) and household financial/autonomy constraints (<strong>27.16%</strong>). BarrierLens machine learning predictions closely match this domain hierarchy, demonstrating consistent macro-level alignment across observed and model outputs.
       </p>
     </div>
-
-    <!-- Data & Methodology Notes -->
-    <div id="methodology-note-slot"></div>
   </div>
 
-
   <script>
-    function showChartError(message) {
-      const el = document.getElementById("national-overview-chart");
-      el.innerHTML = `<div class="callout callout-warning" style="margin:0;">${message}</div>`;
+    let rawNationalData = null;
+    let currentDisplayMode = "percentage";
+    let currentDomainFilter = "all";
+
+    document.addEventListener("DOMContentLoaded", function () {
+      window.DashboardState.fetchData("national_overview.json").then(data => {
+        if (!data) return;
+        rawNationalData = data;
+        renderKPIs();
+        renderTable();
+        renderNationalChart();
+      });
+
+      // Display Mode Tabs
+      const modeBtns = document.querySelectorAll("#view-mode-tabs .tab-btn");
+      modeBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+          modeBtns.forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+          currentDisplayMode = this.getAttribute("data-mode");
+          renderKPIs();
+          renderNationalChart();
+          renderTable();
+        });
+      });
+
+      // Domain Filter Dropdown
+      const domainSelect = document.getElementById("domain-filter");
+      domainSelect.addEventListener("change", function () {
+        currentDomainFilter = this.value;
+        renderKPIs();
+        renderNationalChart();
+        renderTable();
+      });
+    });
+
+    function renderKPIs() {
+      if (!rawNationalData || !rawNationalData.kpis) return;
+      const kpis = rawNationalData.kpis;
+      const totalWomen = 724115;
+
+      function fmt(val) {
+        if (currentDisplayMode === "proportion") return val.toFixed(4);
+        if (currentDisplayMode === "count") return Math.round(val * totalWomen).toLocaleString();
+        return (val * 100).toFixed(2) + "%";
+      }
+
+      document.getElementById("kpi-total-women").textContent = totalWomen.toLocaleString();
+      document.getElementById("kpi-any-barrier").textContent = fmt(kpis.observed_any_barrier_rate);
+      document.getElementById("kpi-facility-barrier").textContent = fmt(kpis.observed_facility_rate);
+      document.getElementById("kpi-logistic-barrier").textContent = fmt(kpis.observed_logistic_rate);
+      document.getElementById("kpi-household-barrier").textContent = fmt(kpis.observed_household_rate);
     }
 
-    function renderNationalComparisonChart(chartData) {
-      if (typeof Plotly === "undefined") {
-        const msg = "Plotly.js failed to load. Check the CDN script tag and browser console.";
-        console.error(msg);
-        showChartError(msg);
-        return;
-      }
+    function renderNationalChart() {
+      if (!rawNationalData || typeof Plotly === "undefined") return;
 
-      if (!Array.isArray(chartData) || chartData.length === 0) {
-        const msg = "Chart data is unavailable or has an unexpected structure.";
-        console.error(msg, chartData);
-        showChartError(msg);
-        return;
+      let chartData = rawNationalData.comparison_chart_data;
+      if (currentDomainFilter !== "all") {
+        chartData = chartData.filter(d => d.barrier_type.toLowerCase().includes(currentDomainFilter.toLowerCase()));
       }
+      if (chartData.length === 0) chartData = rawNationalData.comparison_chart_data;
 
-      const categories = chartData.map(d => d.barrier_type);
+      const categories = chartData.map(d => LabelRenderer ? LabelRenderer.formatFeatureName(d.barrier_type) : d.barrier_type);
+      const totalWomen = 724115;
+
       const seriesList = [];
-
       if (chartData.every(d => d.observed != null)) {
         seriesList.push({
           name: "Rail A — Observed (NFHS-5)",
-          values: chartData.map(d => d.observed * 100),
-          color: ChartUtils.colors.railA,
-          hoverLabel: "Observed prevalence"
+          values: chartData.map(d => currentDisplayMode === "count" ? Math.round(d.observed * totalWomen) : (currentDisplayMode === "proportion" ? d.observed : d.observed * 100)),
+          color: ChartUtils.colors.railA
         });
       }
+
       if (chartData.every(d => d.predicted != null)) {
         seriesList.push({
           name: "Rail B — Predicted (BarrierLens)",
-          values: chartData.map(d => d.predicted * 100),
-          color: ChartUtils.colors.railB,
-          hoverLabel: "Predicted probability"
+          values: chartData.map(d => currentDisplayMode === "count" ? Math.round(d.predicted * totalWomen) : (currentDisplayMode === "proportion" ? d.predicted : d.predicted * 100)),
+          color: ChartUtils.colors.railB
         });
       }
+
       if (chartData.every(d => d.base_paper != null)) {
         seriesList.push({
-          name: "Base Paper Reference (Pradhan & De)",
-          values: chartData.map(d => d.base_paper * 100),
-          color: ChartUtils.colors.basePaper,
-          hoverLabel: "Published reference"
+          name: "Base Paper Benchmark (Pradhan & De)",
+          values: chartData.map(d => currentDisplayMode === "count" ? Math.round(d.base_paper * totalWomen) : (currentDisplayMode === "proportion" ? d.base_paper : d.base_paper * 100)),
+          color: ChartUtils.colors.basePaper
         });
       }
 
-      if (seriesList.length === 0) {
-        const msg = "Chart data is unavailable or has an unexpected structure.";
-        console.error(msg, chartData);
-        showChartError(msg);
-        return;
-      }
+      const unitLabel = currentDisplayMode === "count" ? "Est. Women Count" : (currentDisplayMode === "proportion" ? "Proportion (0–1)" : "Prevalence (%)");
+      const title = `Barrier Prevalence Comparison (${unitLabel})`;
 
-      try {
-        const traces = seriesList.map(s => ({
-          x: categories,
-          y: s.values,
-          name: s.name,
-          type: "bar",
-          marker: { color: s.color },
-          text: s.values.map(v => v.toFixed(1) + "%"),
-          textposition: "auto",
-          hovertemplate: "<b>%{x}</b><br>" + s.hoverLabel + ": %{y:.1f}%<extra></extra>"
-        }));
+      const explanation = `
+        <strong>National Overview Domain Comparison:</strong><br>
+        • <strong>Rail A (Observed):</strong> Direct prevalence calculated from 724,115 women in NFHS-5.<br>
+        • <strong>Rail B (Predicted):</strong> Out-of-fold Stage 1 machine learning inferences.<br>
+        • <strong>Base Paper Benchmark:</strong> Reference values from Pradhan &amp; De (2025).<br>
+        <em>Note:</em> Facility barriers (46.01%) rank highest nationwide, followed by Logistic (31.61%) and Household (27.16%).
+      `;
 
-        Plotly.newPlot("national-overview-chart", traces, {
-          title: { text: "Observed vs Predicted vs Published Base Paper Prevalence", font: { size: 16, color: "#0f172a" } },
-          barmode: "group",
-          margin: { t: 50, b: 40, l: 60, r: 20 },
-          paper_bgcolor: "transparent",
-          plot_bgcolor: "transparent",
-          xaxis: { color: "#64748b", title: "Barrier Domain" },
-          yaxis: { color: "#64748b", gridcolor: "#f1f5f9", title: "Prevalence (%)", ticksuffix: "%" },
-          legend: { orientation: "h", y: -0.15 }
-        }, { responsive: true, displayModeBar: false });
-      } catch (err) {
-        console.error("Error rendering national overview chart:", err);
-        showChartError("Unable to render chart. Check the browser console for details.");
-      }
+      ChartUtils.createGroupedBarChart("national-overview-chart", title, categories, seriesList, explanation);
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
-      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
-      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
+    function renderTable() {
+      if (!rawNationalData) return;
+      const tbody = document.getElementById("ranking-table-body");
+      let items = rawNationalData.barrier_ranking;
 
-      fetch("../assets/data/national_overview.json")
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("HTTP " + response.status + " loading national_overview.json");
-          }
-          return response.json();
-        })
-        .then(data => {
-          const kpis = data.kpis;
-          document.getElementById("kpi-total-women").textContent = kpis.total_women.toLocaleString();
-          document.getElementById("kpi-any-barrier").textContent = (kpis.observed_any_barrier_rate * 100).toFixed(2) + "%";
-          document.getElementById("kpi-facility-barrier").textContent = (kpis.observed_facility_rate * 100).toFixed(2) + "%";
-          document.getElementById("kpi-logistic-barrier").textContent = (kpis.observed_logistic_rate * 100).toFixed(2) + "%";
-          document.getElementById("kpi-household-barrier").textContent = (kpis.observed_household_rate * 100).toFixed(2) + "%";
+      if (currentDomainFilter !== "all") {
+        items = items.filter(i => i.barrier_type.toLowerCase().includes(currentDomainFilter.toLowerCase()));
+      }
 
-          const tbody = document.getElementById("ranking-table-body");
-          tbody.innerHTML = data.barrier_ranking.map(item => `
-            <tr style="border-bottom: 1px solid var(--border-color);">
-              <td style="padding: 12px; font-weight: 700;">#${item.rank}</td>
-              <td style="padding: 12px; font-weight: 600;">${item.barrier_type}</td>
-              <td style="padding: 12px; color: #0284c7; font-weight: 600;">${(item.observed_rate * 100).toFixed(2)}%</td>
-              <td style="padding: 12px; color: #7c3aed; font-weight: 600;">${(item.predicted_prob * 100).toFixed(2)}%</td>
-              <td style="padding: 12px; color: #64748b;">${(item.base_paper_rate * 100).toFixed(1)}%</td>
-              <td style="padding: 12px;"><span style="padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; background: #f1f5f9; color: #334155;">${item.level}</span></td>
-            </tr>
-          `).join("");
+      const totalWomen = 724115;
+      tbody.innerHTML = items.map(item => {
+        let obsDisp = (item.observed_rate * 100).toFixed(2) + "%";
+        let predDisp = (item.predicted_prob * 100).toFixed(2) + "%";
+        let baseDisp = (item.base_paper_rate * 100).toFixed(1) + "%";
 
-          renderNationalComparisonChart(data.comparison_chart_data);
-        })
-        .catch(err => {
-          console.error("Error loading national_overview.json:", err);
-          showChartError("Unable to load national_overview.json. Check the data path and browser console.");
-        });
-    });
+        if (currentDisplayMode === "proportion") {
+          obsDisp = item.observed_rate.toFixed(4);
+          predDisp = item.predicted_prob.toFixed(4);
+          baseDisp = item.base_paper_rate.toFixed(4);
+        } else if (currentDisplayMode === "count") {
+          obsDisp = Math.round(item.observed_rate * totalWomen).toLocaleString();
+          predDisp = Math.round(item.predicted_prob * totalWomen).toLocaleString();
+          baseDisp = Math.round(item.base_paper_rate * totalWomen).toLocaleString();
+        }
+
+        return `
+          <tr>
+            <td style="font-weight: 800;">#${item.rank}</td>
+            <td style="font-weight: 700;">${item.barrier_type}</td>
+            <td style="color: var(--rail-a); font-weight: 700;">${obsDisp}</td>
+            <td style="color: var(--rail-b); font-weight: 700;">${predDisp}</td>
+            <td style="color: var(--text-muted);">${baseDisp}</td>
+            <td><span class="tag tag-overall">${item.level}</span></td>
+          </tr>
+        `;
+      }).join("");
+    }
   </script>
 </body>
 </html>
