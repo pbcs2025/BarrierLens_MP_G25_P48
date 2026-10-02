@@ -208,6 +208,14 @@
       }
     }
 
+    let APIService = options.APIService;
+    if (!APIService) {
+      if (typeof window !== 'undefined' && window.BarrierLensAPIService) APIService = window.BarrierLensAPIService;
+      else if (typeof require !== 'undefined') {
+        try { APIService = require('./api-service.js'); } catch (e) {}
+      }
+    }
+
     // 1. Load / Ensure Data Cache
     const basePath = options.basePath || '';
     const dataRegistry = options.dataRegistry || await DataModule.preloadChatbotData(basePath);
@@ -293,13 +301,60 @@
       }
     }
 
-    // 3. Fallback to analytical NLU query pipeline
+    // 3. Build evidence payload for backend API call
     const normalized = IntentModule.normalizeQuery(text);
     const entities = IntentModule.extractEntities(normalized);
     const intentResult = IntentModule.detectIntent(normalized, entities);
     const retrieval = RetrievalModule.retrieveVerifiedEvidence(intentResult, entities, dataRegistry);
     const calculations = CalculationModule.calculateDerivedValues(retrieval);
     const evidencePayload = EvidenceModule.buildEvidencePayload(intentResult, entities, retrieval, calculations);
+
+    // 4. Call Ollama backend API if available and not skipped, otherwise use deterministic fallback
+    if (!options.skipBackend && APIService && typeof APIService.sendChatMessage === 'function') {
+      try {
+        // Prepare request payload for backend API
+        const chatPayload = {
+          question: queryStr,
+          message: queryStr,
+          language: language || "en",
+          intent: intentResult.intent,
+          history: options.history || []
+        };
+
+        // Only include evidence if it's verified and has actual data
+        if (evidencePayload && evidencePayload.status === "verified" && evidencePayload.evidence && evidencePayload.evidence.length > 0) {
+          chatPayload.evidence = evidencePayload;
+        }
+
+        // Call backend /api/chat endpoint
+        const backendResponse = await APIService.sendChatMessage(chatPayload);
+
+        // If backend responds successfully, use Ollama-generated answer
+        if (backendResponse && backendResponse.status === "success" && backendResponse.answer) {
+          return {
+            answer: backendResponse.answer,
+            language: backendResponse.language || language || "en",
+            intent: backendResponse.intent || intentResult.intent,
+            confidence: intentResult.confidence,
+            entities: entities,
+            source: backendResponse.source || evidencePayload.provenance.dataSourcesUsed || [],
+            relatedPage: backendResponse.relatedPage || INTENT_PAGE_MAP[intentResult.intent] || null,
+            status: backendResponse.status || evidencePayload.status,
+            metrics: backendResponse.metrics || evidencePayload.evidence.map(e => ({ label: e.label, value: e.value, unit: e.unit, entity: e.entity })),
+            evidence: backendResponse.evidence_used || evidencePayload.evidence,
+            calculations: evidencePayload.calculations,
+            methodologyNote: evidencePayload.methodologyNote,
+            limitationNote: evidencePayload.limitationNote,
+            disclaimer: backendResponse.disclaimer || (intentResult.intent === "LIMITATIONS" ? "Cross-sectional survey data; association does not establish clinical causality." : null),
+            claims: backendResponse.claims || []
+          };
+        }
+      } catch (error) {
+        console.warn('[BarrierLensResponse] Backend API call failed, using deterministic fallback:', error.message || error);
+      }
+    }
+
+    // 5. Deterministic fallback when backend is unavailable
     const answer = formatDeterministicAnswer(evidencePayload);
     const relatedPageObj = INTENT_PAGE_MAP[intentResult.intent] || null;
 

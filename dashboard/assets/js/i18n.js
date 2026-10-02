@@ -26,17 +26,17 @@
     en: {
       // Header & Assistant Title
       assistantTitle: "BarrierLens Research Assistant",
-      assistantSubtitle: "Verified NFHS-5 Intelligence & Explainability",
-      assistantBadge: "NFHS-5 Grounded",
-      onlineStatus: "Online • Verified Engine",
+      assistantSubtitle: "Powered by Ollama (Llama 3.2) & NFHS-5 Intelligence",
+      assistantBadge: "Ollama AI Grounded",
+      onlineStatus: "Online • Ollama AI",
 
       // Welcome Message
       welcomeTitle: "Welcome to BarrierLens Research Intelligence",
-      welcomeGreeting: "Hello! I am your research intelligence assistant for the BarrierLens platform (NFHS-5 dataset, N=724,115 Indian women). Ask questions about national prevalence, state comparisons, rural-urban disparities, risk archetypes, or SHAP explainability.",
-      welcomeHelp: "Select a suggested question below or type/speak your own question in English, Kannada, or Hindi.",
+      welcomeGreeting: "Hello! I am your AI research assistant for BarrierLens (NFHS-5, N=724,115 Indian women). Powered by local Ollama AI, you can ask me ANY question about healthcare access barriers, disparities, Stage 1 ML models, policy solutions, or state-wise patterns.",
+      welcomeHelp: "Ask any open question below or choose a suggested research topic in English, Kannada, or Hindi.",
 
       // Controls & Inputs
-      inputPlaceholder: "Ask a research question or compare states...",
+      inputPlaceholder: "Ask any question about healthcare barriers, data, or models...",
       sendButton: "Send question",
       micButton: "Use voice input",
       micStopButton: "Stop listening",

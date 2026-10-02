@@ -16,8 +16,8 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  // Base API configuration (configurable, default relative /api or localhost:5000/api)
-  let _apiBaseUrl = '/api';
+  // Base API configuration (always use localhost:5000 for development)
+  let _apiBaseUrl = 'http://localhost:5000/api';
 
   function setApiBaseUrl(url) {
     if (url && typeof url === 'string') {
@@ -124,22 +124,46 @@
    * Send Chat Message API call: POST /api/chat
    */
   async function sendChatMessage(payload) {
-    const endpoint = `${_apiBaseUrl}/chat`;
-    try {
-      if (typeof fetch === 'undefined') return null;
+    if (typeof fetch === 'undefined') return null;
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+    const endpoints = [
+      `${_apiBaseUrl}/chat`,
+      'http://localhost:5000/api/chat',
+      'http://127.0.0.1:5000/api/chat'
+    ];
 
-      if (!response.ok) return null;
-      return await response.json();
-    } catch (err) {
-      console.warn(`[BarrierLensAPIService] /api/chat error: ${err.message}`);
-      return null;
+    const uniqueEndpoints = Array.from(new Set(endpoints));
+
+    for (const endpoint of uniqueEndpoints) {
+      try {
+        const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timeoutId = controller ? setTimeout(() => controller.abort(), 35000) : null;
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller ? controller.signal : undefined
+        });
+
+        if (timeoutId) clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.json().catch(() => null);
+          if (data && (data.answer || data.response)) {
+            return data;
+          }
+        }
+      } catch (err) {
+        console.warn(`[BarrierLensAPIService] Notice: ${endpoint} unreachable (${err.message}).`);
+      }
     }
+
+    return {
+      status: "api_error",
+      isOffline: true,
+      answer: "Unable to connect to the BarrierLens AI service. Please make sure the backend and Ollama are running."
+    };
   }
 
   return {

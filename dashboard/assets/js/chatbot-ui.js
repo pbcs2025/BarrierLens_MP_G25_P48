@@ -121,6 +121,14 @@
     return null;
   }
 
+  function getAPIService() {
+    if (typeof window !== 'undefined' && window.BarrierLensAPIService) return window.BarrierLensAPIService;
+    if (typeof require !== 'undefined') {
+      try { return require('./api-service.js'); } catch (e) {}
+    }
+    return null;
+  }
+
   function t(key, lang = _currentLang) {
     const i18n = getI18n();
     return i18n ? i18n.t(key, lang) : key;
@@ -972,13 +980,67 @@
 
   async function executeQuery(query, lang) {
     const responseEngine = getResponseEngine();
-    if (!responseEngine || !responseEngine.processUserQuery) {
-      throw new Error("Central processUserQuery function not found.");
+    let localResult = null;
+    if (responseEngine && responseEngine.processUserQuery) {
+      try {
+        localResult = await responseEngine.processUserQuery(query, lang, { 
+          barrierContext: _activeBarrier,
+          skipBackend: true
+        });
+      } catch (err) {
+        console.warn("[BarrierLensChatbotUI] Local evidence extraction warning:", err);
+      }
     }
-    return await responseEngine.processUserQuery(query, lang, { barrierContext: _activeBarrier });
+
+    // Attempt backend Ollama API call with conversation history
+    const apiService = getAPIService();
+    if (apiService && typeof apiService.sendChatMessage === 'function') {
+      try {
+        const history = (_messages || []).slice(-6).map(m => ({
+          role: m.role || (m.sender === 'user' ? 'user' : 'assistant'),
+          content: m.content || m.text || ''
+        }));
+
+        const backendPayload = {
+          message: query,
+          question: query,
+          language: lang,
+          history: history,
+          activeBarrier: _activeBarrier,
+          evidence: localResult || undefined
+        };
+
+        const backendResp = await apiService.sendChatMessage(backendPayload);
+        if (backendResp && backendResp.status === "success" && (backendResp.answer || backendResp.response)) {
+          const ans = backendResp.answer || backendResp.response;
+          return Object.assign({}, localResult || {}, backendResp, {
+            answer: ans,
+            response: ans
+          });
+        }
+      } catch (err) {
+        console.warn("[BarrierLensChatbotUI] Backend API call failed, falling back to local engine:", err);
+      }
+    }
+
+    // Seamless offline fallback
+    if (localResult && localResult.answer) {
+      return localResult;
+    }
+
+    return {
+      answer: "BarrierLens analyzes healthcare access barriers among 724,115 Indian women from the NFHS-5 dataset. Please ask any question about household, logistic, or facility barriers, disparities, or ML predictive models.",
+      status: "fallback",
+      language: lang,
+      intent: "GENERAL",
+      source: ["NFHS-5 (2019-21)"],
+      metrics: [],
+      evidence: []
+    };
   }
 
   function renderUserMessage(text) {
+    _messages.push({ role: 'user', content: text, sender: 'user', text: text });
     const container = document.getElementById('bl-chat-messages');
     if (!container) return;
 
@@ -997,6 +1059,7 @@
   }
 
   function renderAssistantResponse(res) {
+    _messages.push({ role: 'assistant', content: (res && res.answer) || '', sender: 'bot', text: (res && res.answer) || '' });
     const container = document.getElementById('bl-chat-messages');
     if (!container || !res) return;
 

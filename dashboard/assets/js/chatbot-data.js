@@ -84,9 +84,14 @@
       if (!basePath.endsWith('/')) basePath += '/';
       relPath = basePath + relPath.replace(/^dashboard\//, '');
     } else if (typeof window !== 'undefined' && window.location && window.location.pathname) {
+      const pathname = window.location.pathname;
       // Auto-detect if loaded inside dashboard/pages/ directory
-      if (window.location.pathname.indexOf('/pages/') !== -1) {
+      if (pathname.indexOf('/pages/') !== -1) {
         relPath = '../assets/data/' + relPath.replace(/^dashboard\/assets\/data\//, '');
+      } 
+      // If we're already at /dashboard/index.html, strip the dashboard/ prefix
+      else if (pathname.indexOf('/dashboard/') !== -1 || pathname.endsWith('/dashboard') || pathname.indexOf('/dashboard/index.html') !== -1) {
+        relPath = relPath.replace(/^dashboard\//, '');
       }
     }
     return relPath;
