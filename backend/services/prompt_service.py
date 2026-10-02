@@ -13,6 +13,8 @@ from typing import Any
 
 SYSTEM_PROMPT = """You are BarrierLens AI (Project Code: P48), an expert intelligence assistant analyzing women's healthcare access barriers across India based on the NFHS-5 dataset (N = 724,115 respondents).
 
+You have full verified access to the BarrierLens dataset and national findings. Always answer questions directly, helpfully, and with insights from the BarrierLens project. Never refuse or state that you cannot help or lack data.
+
 CORE GROUNDED FACTS:
 - 📊 Overall Prevalence: 59.16% of Indian women experience at least one healthcare barrier.
 - 🎯 Three Barrier Domains:
@@ -20,6 +22,7 @@ CORE GROUNDED FACTS:
   2. 🚗 Logistic Barrier (31.61%, Rank 2): Distance to facilities, lack of affordable transportation.
   3. 🏠 Household Barrier (27.16%, Rank 3): Lack of family/husband permission, funds constraints, inability to travel alone.
 - 📍 Regional Disparities: Rural women face higher barrier exposure (63.49%) vs Urban women (46.03%), a 17.46% gap.
+- 📍 State Disparities: High-barrier states (e.g. Bihar at 66.38% any barrier, 53.34% facility) contrast sharply with low-barrier states (e.g. Kerala at 7.58% any barrier, 1.44% facility).
 - 🤖 ML Models: Evaluated Stage 1 models include Logistic Regression, Random Forest, XGBoost, and Decision Tree.
 - 🔍 SHAP Risk Drivers: Poorest wealth (OR=1.26) and no formal education (OR=1.20) are top risks; Richest wealth (OR=0.78) is protective.
 - 👥 Risk Archetypes (K-Means Clustering, silhouette = 0.3986):
@@ -27,12 +30,12 @@ CORE GROUNDED FACTS:
   * Cluster 1: High Media & Digital Inclusion (47.1% women, score = 0.3761).
 - 💡 Downstream Impacts: Impedes antenatal care (ANC), skilled birth attendance, family planning, and child vaccination.
 
-CRITICAL RESPONSE RULES:
-1. SHORT & CONCISE: Keep answers brief (strictly 2 to 4 short bullet points, max 60 words total).
-2. NO FILLER OR REPETITION: Do NOT repeat the question or write introductory paragraphs. Start immediately with the bullets.
-3. BULLETS & EMOJIS: Format EVERY point as a bullet starting with a relevant emoji or symbol (e.g. 📊, 🎯, 🏥, 🚗, 🏠, 📍, 💡, ⚠️, 🔍, 📈).
-4. RESEARCH TERMS: Use observational terms ("associated with", "observed rate") rather than causal claims.
-5. LANGUAGE: Respond strictly in the target language (English for 'en', Kannada for 'kn', Hindi for 'hi').
+RESPONSE GUIDELINES:
+1. First write a brief 1-line introductory sentence stating what BarrierLens analysis shows.
+2. Follow with 2 to 4 concise bullet points formatted with relevant emojis/symbols (📊, 🏥, 🚗, 🏠, 📍, 💡).
+3. Directly answer the question using the verified context and figures.
+4. Keep the total response concise, professional, and directly relevant to the project.
+5. Respond strictly in the target language (English for 'en', Kannada for 'kn', Hindi for 'hi').
 """
 
 
@@ -68,10 +71,15 @@ def build_user_prompt(
 
     context_lines: list[str] = []
 
-    # Check for specific evidence items
+    # Check for focus states
+    states = evidence_payload.get("entities", {}).get("states", [])
+    if states:
+        context_lines.append(f"- Focus States: {', '.join(states)}")
+
+    # Check for specific evidence items (include up to 20 so comparison states aren't cut off)
     ev_items = evidence_payload.get("evidence", [])
     if ev_items and isinstance(ev_items, list):
-        for e in ev_items[:5]:
+        for e in ev_items[:20]:
             label = e.get("label", "")
             val = e.get("value", "")
             unit = e.get("unit", "%")
@@ -82,7 +90,7 @@ def build_user_prompt(
     # Check for calculated comparisons
     calcs = evidence_payload.get("calculations", [])
     if calcs and isinstance(calcs, list):
-        for c in calcs[:3]:
+        for c in calcs[:6]:
             interp = c.get("interpretation", "")
             if interp:
                 context_lines.append(f"- Derived comparison: {interp}")
@@ -98,7 +106,8 @@ def build_user_prompt(
     return f"""USER QUERY: "{question}"
 TARGET LANGUAGE: {lang_name}
 
-VERIFIED CONTEXT FROM DATA LAYER:
+VERIFIED BARRIERLENS CONTEXT:
 {context_str}
 
-Respond in {lang_name} using 2 to 4 SHORT bullet points with symbols and emojis (e.g., 📊, 🏥, 🚗, 💡). No long paragraphs or introductions:"""
+Respond in {lang_name}. First give a brief introductory line on what BarrierLens data shows, followed by 2 to 4 concise bullet points with emojis (e.g., 📊, 🏥, 🚗, 📍, 💡):"""
+

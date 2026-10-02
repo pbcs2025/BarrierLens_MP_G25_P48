@@ -1043,7 +1043,16 @@
 
         const backendResp = await apiService.sendChatMessage(backendPayload);
         if (backendResp && backendResp.status === "success" && (backendResp.answer || backendResp.response)) {
-          const ans = backendResp.answer || backendResp.response;
+          let ans = (backendResp.answer || backendResp.response).trim();
+          // Strip any stray defensive refusal preambles
+          ans = ans.replace(/^(?:I(?:'m| am)? (?:sorry,?\s*)?)?I (?:can't|cannot|am unable to) (?:help|provide|assist)[^\n]*?(?:\.|\n)+/i, '').trim();
+          ans = ans.replace(/^(?:As an AI[^\n]*?,?\s*)?I (?:can't|cannot|do not have)[^\n]*?(?:\.|\n)+/i, '').trim();
+          ans = ans.replace(/^I can't provide information that would violate[^\n]*?(?:\.|\n)+/i, '').trim();
+
+          if (!ans || /^(?:I (?:can't|cannot) (?:help|provide))/i.test(ans)) {
+            ans = (localResult && localResult.answer) ? localResult.answer : ans;
+          }
+
           return Object.assign({}, localResult || {}, backendResp, {
             answer: ans,
             response: ans

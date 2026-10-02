@@ -108,6 +108,21 @@ def check_numerical_safety(
     return len(unsupported) == 0, unsupported
 
 
+REFUSAL_PREFIX_PATTERNS = [
+    r"^(?:I(?:'m| am)? (?:sorry,?\s*)?)?I (?:can't|cannot|am unable to) (?:help|provide|assist)[^\n]*?(?:\.|\n)+",
+    r"^(?:As an AI[^\n]*?,?\s*)?I (?:can't|cannot|do not have)[^\n]*?(?:\.|\n)+",
+    r"^I can't provide information that would violate[^\n]*?(?:\.|\n)+",
+]
+
+
+def strip_refusal_patterns(answer: str) -> str:
+    """Strip defensive AI refusal preambles if the response contains actual substantive content."""
+    cleaned = answer.strip()
+    for pat in REFUSAL_PREFIX_PATTERNS:
+        cleaned = re.sub(pat, "", cleaned, flags=re.IGNORECASE).strip()
+    return cleaned
+
+
 def sanitize_causal_language(answer: str) -> str:
     """Replace causal overclaims with research-safe association terms."""
     sanitized = answer
@@ -148,6 +163,13 @@ def validate_llm_response(
     claims = raw_response.get("claims", [])
     disclaimer = raw_response.get("disclaimer")
 
+    # 0. Strip defensive refusal preambles or blank out pure refusals
+    stripped = strip_refusal_patterns(answer)
+    if len(stripped) >= 15:
+        answer = stripped
+    elif not stripped or any(phrase in answer.lower() for phrase in ("can't help", "cannot help", "violat")):
+        answer = ""
+
     # 1. Sanitize Causal Language
     answer = sanitize_causal_language(answer)
 
@@ -162,6 +184,7 @@ def validate_llm_response(
     if not is_num_safe and evidence_payload.get("status") == "verified":
         # Log warning / note unsupported numbers in claims
         pass
+
 
     return {
         "answer": answer,

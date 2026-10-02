@@ -271,7 +271,20 @@ def generate_llm_explanation(
             if isinstance(e, dict) and e.get("source") and e.get("path")
         ]
 
-        ans = validated.get("answer") or validated.get("response") or response_text.strip()
+        ans = (validated.get("answer") or validated.get("response") or response_text).strip()
+
+        # If LLM output is a refusal or empty, automatically fallback to verified deterministic response
+        is_refusal = (
+            not ans
+            or any(phrase in ans.lower() for phrase in ("can't help", "cannot help", "unable to help", "violat"))
+            or (len(ans.splitlines()) <= 2 and "help" in ans.lower() and "request" in ans.lower())
+        )
+        if is_refusal:
+            logger.info("LLM returned refusal or empty response (%s). Using verified fallback.", ans)
+            fallback = generate_offline_fallback(question, language, evidence_payload)
+            if fallback.get("answer"):
+                return fallback
+
         return {
             "status": "success",
             "answer": ans,
@@ -338,7 +351,7 @@ def generate_offline_fallback(
         any_ev = next((e for e in ev_items if isinstance(e, dict) and "Any Barrier" in e.get("label", "")), None)
         rate_str = f"{any_ev['value']}%" if any_ev else "documented in NFHS-5"
         answer_parts.extend([
-            f"📍 **State Profile: {state_name}**",
+            f"📍 **State Profile: {state_name} (NFHS-5 Analysis)**",
             f"• 📊 **Observed Rate**: {rate_str} encounter healthcare barriers.",
             "• 🔍 Detailed district metrics are available in the State Analysis module.",
         ])
@@ -346,12 +359,20 @@ def generate_offline_fallback(
         states = evidence_payload.get("entities", {}).get("states", [])
         s1 = states[0] if len(states) > 0 else "State A"
         s2 = states[1] if len(states) > 1 else "State B"
-        answer_parts.append(f"📊 **Barrier Comparison: {s1} vs {s2}**")
+        answer_parts.append(f"📊 **Barrier Comparison: {s1} vs {s2} (NFHS-5 Analysis):**")
+        seen_domains = set()
         for e in ev_items:
-            if isinstance(e, dict) and "Any Barrier" in e.get("label", ""):
-                answer_parts.append(f"• 📍 **{e.get('entity')}**: {e.get('value')}% observed rate")
+            if isinstance(e, dict) and any(k in e.get("label", "") for k in ("Any Barrier", "Facility", "Logistic", "Household")):
+                domain_key = f"{e.get('entity')}_{e.get('label')}"
+                if domain_key not in seen_domains:
+                    seen_domains.add(domain_key)
+                    answer_parts.append(f"• 📍 **{e.get('entity')} ({e.get('label', '')})**: {e.get('value')}%")
         if calcs:
-            answer_parts.append(f"• 📈 **Disparity Gap**: {calcs[0].get('interpretation', '')}")
+            for c in calcs[:3]:
+                interp = c.get('interpretation', '')
+                if interp:
+                    answer_parts.append(f"• 📈 **Disparity Gap**: {interp}")
+
     elif intent == "RURAL_URBAN" or "rural" in q_lower or "urban" in q_lower:
         answer_parts.extend([
             "📍 **Rural vs Urban Disparity (NFHS-5):**",
