@@ -59,7 +59,7 @@ function proxyToBackend(req, res) {
     } else {
       res.end(JSON.stringify({
         status: "success",
-        answer: "The BarrierLens local analytics suite is active. For full Claude LLM responses, ensure backend/app.py is running with a valid CLAUDE_API_KEY in backend/.env.",
+        answer: "The BarrierLens local analytics suite is active. For full Ollama LLM responses, ensure backend/app.py and Ollama are running.",
         disclaimer: "Deterministic dataset grounding mode active."
       }));
     }
