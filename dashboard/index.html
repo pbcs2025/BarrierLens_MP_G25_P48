@@ -466,7 +466,7 @@
       const floatingAiBtn = document.getElementById("floating-ask-ai-btn");
       if (floatingAiBtn) {
         floatingAiBtn.addEventListener("click", function () {
-          const launcher = document.querySelector(".chat-launcher");
+          const launcher = document.getElementById("bl-chat-launcher") || document.querySelector(".bl-chat-launcher") || document.querySelector(".chat-launcher");
           if (launcher) {
             launcher.click();
           } else if (window.BarrierLensChatbotUI && typeof window.BarrierLensChatbotUI.openChat === "function") {

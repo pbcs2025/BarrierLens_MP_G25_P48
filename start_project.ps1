@@ -4,14 +4,21 @@ Write-Host "  Starting BarrierLens P48 Healthcare Access Research Platform     "
 Write-Host "====================================================================" -ForegroundColor Cyan
 Write-Host ""
 
-$pythonPath = "C:\Users\sharm\AppData\Local\Programs\Python\Python311\python.exe"
+$pythonPath = $null
+if (Get-Command python -ErrorAction SilentlyContinue) {
+    $pythonPath = (Get-Command python).Source
+} elseif (Test-Path "venv\Scripts\python.exe") {
+    $pythonPath = "venv\Scripts\python.exe"
+} elseif (Test-Path ".venv\Scripts\python.exe") {
+    $pythonPath = ".venv\Scripts\python.exe"
+}
 
 # 1. Start Python Flask API Backend
-if (Test-Path $pythonPath) {
-    Write-Host "[1/2] Starting Flask Backend on port 5000..." -ForegroundColor Green
+if ($pythonPath) {
+    Write-Host "[1/2] Starting Flask Backend on port 5000 using $pythonPath..." -ForegroundColor Green
     Start-Process -FilePath $pythonPath -ArgumentList "backend\app.py" -WindowStyle Minimized
 } else {
-    Write-Host "[1/2] Python not found at default location; continuing with dashboard..." -ForegroundColor Yellow
+    Write-Host "[1/2] Python not found; continuing with dashboard..." -ForegroundColor Yellow
 }
 
 # 2. Open default browser
