@@ -1,83 +1,127 @@
-// Shared Plotly Helper Functions & Expanded Chart Modal for BarrierLens Dashboard
+/**
+ * BARRIERLENS — ADVANCED PLOTLY CHART UTILITIES & INTERACTIVITY ENGINE
+ * Features: Dark/Light Mode Adaptability, Responsive Layouts, Modal Expanders, High-Res Export, Cross-Filtering.
+ */
+
 const ChartUtils = {
-  // Soft Lavender & Theme Palette
+  // Theme Palette
   colors: {
     railA: "#0284c7",       // Soft sky blue for Rail A (Observed)
-    railB: "#7c3aed",       // Lavender purple for Rail B (Predicted)
+    railB: "#6366f1",       // Indigo purple for Rail B (Predicted)
     basePaper: "#64748b",   // Slate for Base Paper Reference
-    facility: "#e11d48",    // Soft rose for Facility
-    logistic: "#d97706",    // Subtle amber for Logistic
-    household: "#2563eb",   // Soft blue for Household
-    overall: "#7c3aed",     // Lavender for Overall
-    c0: "#0284c7",
-    c1: "#d97706",
-    c2: "#e11d48",
-    c3: "#7c3aed"
+    facility: "#e11d48",    // Rose for Facility Barrier
+    logistic: "#d97706",    // Amber for Logistic Barrier
+    household: "#2563eb",   // Blue for Household Barrier
+    overall: "#4f46e5",     // Indigo for Overall
+    teal: "#0d9488",
+    c0: "#e11d48",
+    c1: "#0284c7",
+    c2: "#d97706",
+    c3: "#6366f1"
   },
 
-  // Registry for active charts to support click-to-expand
+  // Active chart registry for modals & cross-filtering
   _chartRegistry: {},
 
-  // Base Chart Config
+  // Base Plotly Configuration
   baseConfig: {
     responsive: true,
     displayModeBar: true,
     displaylogo: false,
-    modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d']
+    modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d'],
+    toImageButtonOptions: {
+      format: 'png',
+      filename: 'barrierlens_chart_export',
+      height: 600,
+      width: 900,
+      scale: 2
+    }
   },
 
-  // Common Layout Styling
+  // Dark/Light Theme layout detector
   getBaseLayout: function (title, xAxisTitle = '', yAxisTitle = '') {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDark ? '#f8fafc' : '#0f172a';
+    const mutedColor = isDark ? '#94a3b8' : '#64748b';
+    const gridColor = isDark ? '#1e293b' : '#f1f5f9';
+    const zerolineColor = isDark ? '#334155' : '#e2e8f0';
+
     return {
       title: {
         text: title,
-        font: { family: '-apple-system, sans-serif', size: 15, color: '#1e1b4b', weight: 800 },
+        font: { family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', size: 15, color: textColor, weight: 800 },
         x: 0,
         xanchor: 'left'
       },
       margin: { t: 50, b: 60, l: 60, r: 20 },
       paper_bgcolor: 'transparent',
       plot_bgcolor: 'transparent',
-      font: { family: '-apple-system, sans-serif', color: '#64748b' },
+      font: { family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', color: mutedColor },
       xaxis: {
-        title: { text: xAxisTitle, font: { size: 12, color: '#64748b' } },
-        color: '#64748b',
-        gridcolor: '#e9d5ff',
-        zerolinecolor: '#e2e8f0'
+        title: { text: xAxisTitle, font: { size: 12, color: mutedColor } },
+        color: mutedColor,
+        gridcolor: gridColor,
+        zerolinecolor: zerolineColor
       },
       yaxis: {
-        title: { text: yAxisTitle, font: { size: 12, color: '#64748b' } },
-        color: '#64748b',
-        gridcolor: '#e9d5ff',
-        zerolinecolor: '#e2e8f0'
+        title: { text: yAxisTitle, font: { size: 12, color: mutedColor } },
+        color: mutedColor,
+        gridcolor: gridColor,
+        zerolinecolor: zerolineColor
       },
       legend: {
         orientation: 'h',
         y: -0.22,
         x: 0,
-        font: { size: 12, color: '#475569' }
+        font: { size: 12, color: mutedColor }
       },
       hoverlabel: {
-        bgcolor: '#2e1065',
-        font: { family: '-apple-system, sans-serif', size: 12, color: '#ffffff' },
+        bgcolor: isDark ? '#1e293b' : '#0f172a',
+        font: { family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', size: 12, color: '#ffffff' },
         bordercolor: 'transparent'
       }
     };
   },
 
-  // Register click handler for expanded view modal
-  registerChartClick: function (containerId, title, explanationText) {
+  // Attach toolbar actions (Fullscreen modal, Download, Explanation)
+  injectChartActions: function (containerId, title, explanation) {
     const el = document.getElementById(containerId);
-    if (!el) return;
+    if (!el || el.dataset.actionsInjected) return;
 
-    el.onclick = () => {
-      this.openExpandedChartModal(containerId, title, explanationText);
-    };
+    const parentCard = el.closest('.card');
+    if (parentCard) {
+      let titleRow = parentCard.querySelector('.card-title-row');
+      if (!titleRow) {
+        const titleEl = parentCard.querySelector('.card-title');
+        if (titleEl) {
+          titleRow = document.createElement('div');
+          titleRow.className = 'card-title-row';
+          titleEl.parentNode.insertBefore(titleRow, titleEl);
+          titleRow.appendChild(titleEl);
+        }
+      }
+
+      if (titleRow && !titleRow.querySelector('.card-actions')) {
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'card-actions';
+        actionsDiv.innerHTML = `
+          <button class="chart-btn" onclick="ChartUtils.openExpandedChartModal('${containerId}', '${title.replace(/'/g, "\\'")}', \`${(explanation || '').replace(/`/g, '\\`')}\`)" title="Expand Fullscreen with Explanation">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+            <span>Expand &amp; Explain</span>
+          </button>
+          <button class="chart-btn" onclick="Plotly.downloadImage('${containerId}', {format: 'png', filename: '${containerId}_export', height: 600, width: 900, scale: 2})" title="Export High-Res PNG">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>PNG</span>
+          </button>
+        `;
+        titleRow.appendChild(actionsDiv);
+      }
+    }
+    el.dataset.actionsInjected = "true";
   },
 
   createGroupedBarChart: function (containerId, title, categories, seriesList, explanation) {
-    // Format categories to human-readable names if needed
-    const formattedCategories = categories.map(c => LabelRenderer ? LabelRenderer.formatFeatureName(c) : c);
+    const formattedCategories = categories.map(c => window.LabelRenderer ? window.LabelRenderer.formatFeatureName(c) : c);
 
     const data = seriesList.map(s => ({
       x: formattedCategories,
@@ -93,13 +137,13 @@ const ChartUtils = {
     const layout = this.getBaseLayout(title, '', 'Prevalence / Probability');
     layout.barmode = 'group';
 
-    this._chartRegistry[containerId] = { data, layout, title, explanation };
+    this._chartRegistry[containerId] = { type: 'grouped', data, layout, title, explanation, categories, seriesList };
     Plotly.react(containerId, data, layout, this.baseConfig);
-    this.registerChartClick(containerId, title, explanation);
+    this.injectChartActions(containerId, title, explanation);
   },
 
   createStackedBarChart: function (containerId, title, categories, seriesList, explanation) {
-    const formattedCategories = categories.map(c => LabelRenderer ? LabelRenderer.formatFeatureName(c) : c);
+    const formattedCategories = categories.map(c => window.LabelRenderer ? window.LabelRenderer.formatFeatureName(c) : c);
 
     const data = seriesList.map(s => ({
       x: formattedCategories,
@@ -115,13 +159,13 @@ const ChartUtils = {
     const layout = this.getBaseLayout(title, '', 'Percentage of Women (%)');
     layout.barmode = 'stack';
 
-    this._chartRegistry[containerId] = { data, layout, title, explanation };
+    this._chartRegistry[containerId] = { type: 'stacked', data, layout, title, explanation, categories, seriesList };
     Plotly.react(containerId, data, layout, this.baseConfig);
-    this.registerChartClick(containerId, title, explanation);
+    this.injectChartActions(containerId, title, explanation);
   },
 
   createRankedBarChart: function (containerId, title, categories, values, color = '#0284c7', yAxisTitle = 'Prevalence (%)', explanation = '') {
-    const formattedCategories = categories.map(c => LabelRenderer ? LabelRenderer.formatFeatureName(c) : c);
+    const formattedCategories = categories.map(c => window.LabelRenderer ? window.LabelRenderer.formatFeatureName(c) : c);
 
     const data = [{
       x: formattedCategories,
@@ -137,13 +181,13 @@ const ChartUtils = {
     layout.margin.b = 100;
     layout.xaxis.tickangle = -45;
 
-    this._chartRegistry[containerId] = { data, layout, title, explanation };
+    this._chartRegistry[containerId] = { type: 'ranked', data, layout, title, explanation, categories, values, color, yAxisTitle };
     Plotly.react(containerId, data, layout, this.baseConfig);
-    this.registerChartClick(containerId, title, explanation);
+    this.injectChartActions(containerId, title, explanation);
   },
 
-  createHorizontalBarChart: function (containerId, title, categories, values, color = '#7c3aed', xAxisTitle = 'Odds Ratio (OR)', explanation = '') {
-    const formattedCategories = categories.map(c => LabelRenderer ? LabelRenderer.formatFeatureName(c) : c);
+  createHorizontalBarChart: function (containerId, title, categories, values, color = '#6366f1', xAxisTitle = 'Odds Ratio (OR)', explanation = '') {
+    const formattedCategories = categories.map(c => window.LabelRenderer ? window.LabelRenderer.formatFeatureName(c) : c);
 
     const data = [{
       x: values,
@@ -157,22 +201,22 @@ const ChartUtils = {
     }];
 
     const layout = this.getBaseLayout(title, xAxisTitle, '');
-    layout.margin.l = 320;
+    layout.margin.l = 300;
     layout.yaxis.autorange = 'reversed';
 
-    this._chartRegistry[containerId] = { data, layout, title, explanation };
+    this._chartRegistry[containerId] = { type: 'horizontal', data, layout, title, explanation, categories, values, color, xAxisTitle };
     Plotly.react(containerId, data, layout, this.baseConfig);
-    this.registerChartClick(containerId, title, explanation);
+    this.injectChartActions(containerId, title, explanation);
   },
 
-  createTreemapChart: function (containerId, title, labels, values, colorscale = 'Purples', domainName = 'Prevalence', explanation = '') {
+  createTreemapChart: function (containerId, title, labels, values, colorscale = 'Blues', domainName = 'Prevalence', explanation = '') {
     const data = [{
       type: 'treemap',
       labels: labels,
       parents: labels.map(() => ''),
       values: values,
       texttemplate: '<b>%{label}</b><br>%{value:.1f}%',
-      textfont: { family: '-apple-system, sans-serif', size: 13, color: '#ffffff' },
+      textfont: { family: '-apple-system, BlinkMacSystemFont, sans-serif', size: 13, color: '#ffffff' },
       hovertemplate: 'State / UT: <b>%{label}</b><br>' + domainName + ': <b>%{value:.1f}%</b><extra></extra>',
       marker: {
         colors: values,
@@ -185,7 +229,7 @@ const ChartUtils = {
     const layout = {
       title: {
         text: title,
-        font: { family: '-apple-system, sans-serif', size: 15, color: '#1e1b4b', weight: 800 },
+        font: { family: '-apple-system, BlinkMacSystemFont, sans-serif', size: 15, color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a', weight: 800 },
         x: 0,
         xanchor: 'left'
       },
@@ -194,9 +238,9 @@ const ChartUtils = {
       plot_bgcolor: 'transparent'
     };
 
-    this._chartRegistry[containerId] = { data, layout, title, explanation };
+    this._chartRegistry[containerId] = { type: 'treemap', data, layout, title, explanation, labels, values };
     Plotly.react(containerId, data, layout, this.baseConfig);
-    this.registerChartClick(containerId, title, explanation);
+    this.injectChartActions(containerId, title, explanation);
   },
 
   // Full Screen Chart Modal with Detailed Non-Causal Explanation
@@ -209,13 +253,13 @@ const ChartUtils = {
             <div class="chart-modal-header">
               <div>
                 <div id="chart-modal-title" style="font-size:1.15rem; font-weight:800; color:#ffffff;">Expanded Chart Visualization</div>
-                <div style="font-size:0.8rem; color:#e9d5ff; margin-top:2px;">Complete interactive inspection &amp; statistical explanation</div>
+                <div style="font-size:0.8rem; color:#94a3b8; margin-top:2px;">Complete interactive inspection &amp; academic explanation</div>
               </div>
-              <button id="close-chart-modal-btn" style="background:rgba(255,255,255,0.15); border:none; color:#ffffff; padding:6px 12px; border-radius:6px; font-weight:700; cursor:pointer;">Close &times;</button>
+              <button id="close-chart-modal-btn" style="background:rgba(255,255,255,0.15); border:none; color:#ffffff; padding:6px 14px; border-radius:6px; font-weight:700; cursor:pointer;">Close &times;</button>
             </div>
             <div class="chart-modal-body">
               <div id="chart-modal-plot-container" class="chart-modal-plot-container"></div>
-              <div class="chart-explanation-box" id="chart-modal-explanation"></div>
+              <div class="callout callout-info" id="chart-modal-explanation"></div>
             </div>
           </div>
         </div>
@@ -223,13 +267,8 @@ const ChartUtils = {
       document.body.insertAdjacentHTML("beforeend", modalHtml);
       modal = document.getElementById("chart-detail-modal");
 
-      document.getElementById("close-chart-modal-btn").onclick = () => {
-        modal.classList.remove("active");
-      };
-
-      modal.onclick = (e) => {
-        if (e.target === modal) modal.classList.remove("active");
-      };
+      document.getElementById("close-chart-modal-btn").onclick = () => modal.classList.remove("active");
+      modal.onclick = (e) => { if (e.target === modal) modal.classList.remove("active"); };
     }
 
     const reg = this._chartRegistry[containerId];
@@ -246,33 +285,32 @@ const ChartUtils = {
 
     Plotly.react("chart-modal-plot-container", data, layout, this.baseConfig);
 
-    // Dynamic Statistical & Non-Causal Explanation
     let explanationText = customExplanation || (reg ? reg.explanation : null);
     if (!explanationText) {
-      if (title.toLowerCase().includes("odds ratio")) {
-        explanationText = `
-          <strong>Understanding Logistic Regression Odds Ratios (OR):</strong><br>
-          • <strong>OR > 1:</strong> Indicates higher odds of experiencing the barrier associated with this feature.<br>
-          • <strong>OR < 1:</strong> Indicates lower odds of experiencing the barrier (protective factor).<br>
-          • <strong>OR ≈ 1:</strong> Indicates little to no observed association in the logistic model.<br>
-          <em>Note:</em> Odds ratios describe cross-sectional statistical associations in the NFHS-5 dataset. They do not demonstrate causal mechanics.
-        `;
-      } else if (title.toLowerCase().includes("shap")) {
-        explanationText = `
-          <strong>Understanding SHAP (SHapley Additive exPlanations):</strong><br>
-          • <strong>Feature Impact:</strong> SHAP values quantify each feature's directional contribution to the model's prediction for an individual woman.<br>
-          • <strong>Beeswarm Plot:</strong> Points positioned further right indicate higher predicted barrier risk; color represents feature value (red = high, blue = low).<br>
-          <em>Note:</em> SHAP values measure machine learning model attribution value — they do not demonstrate real-world physical causality.
-        `;
-      } else {
-        explanationText = `
-          <strong>Understanding the Chart Metrics:</strong><br>
-          This visualization compares observed survey prevalence (Rail A) and machine learning model predictions (Rail B) across key sub-populations.<br>
-          <em>Note:</em> Differences between groups reflect observed sample distributions in NFHS-5 (N = 724,115). All statistics represent observational cross-sectional patterns.
-        `;
-      }
+      explanationText = `
+        <strong>Statistical Interpretation &amp; Academic Note:</strong><br>
+        • Observed prevalence metrics are calculated from 724,115 Indian women surveyed in NFHS-5.<br>
+        • Model predicted probabilities represent out-of-fold Stage 1 machine learning inferences.<br>
+        <em>Note:</em> Differences between demographic cohorts describe observational cross-sectional patterns and should not be interpreted as physical causal relationships.
+      `;
     }
 
     document.getElementById("chart-modal-explanation").innerHTML = explanationText;
   }
 };
+
+// Re-render all registered charts on theme change
+if (window.DashboardState) {
+  window.DashboardState.on('theme-change', function () {
+    Object.keys(ChartUtils._chartRegistry).forEach(containerId => {
+      const el = document.getElementById(containerId);
+      if (el && ChartUtils._chartRegistry[containerId]) {
+        const reg = ChartUtils._chartRegistry[containerId];
+        const layout = ChartUtils.getBaseLayout(reg.title);
+        if (reg.layout.barmode) layout.barmode = reg.layout.barmode;
+        if (reg.layout.margin) layout.margin = reg.layout.margin;
+        Plotly.relayout(containerId, layout);
+      }
+    });
+  });
+}

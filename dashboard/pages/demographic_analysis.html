@@ -3,102 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demographic Analysis — BarrierLens P48</title>
+  <title>Demographic Analysis — BarrierLens Intelligence</title>
   <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
   <div class="container">
-    <div class="page-header">
-      <h1 class="page-title">Demographic &amp; Socioeconomic Analysis</h1>
-      <p class="page-subtitle">Multi-dimensional analysis across Age Group, Educational Level, Wealth Index Quintile, Residence, and Occupation (NFHS-5).</p>
+    <div class="subpage-header">
+      <h1 class="subpage-title">Who Faces Healthcare Access Barriers?</h1>
+      <p class="subpage-subtitle">Multi-dimensional analysis of socioeconomic and demographic disparity gradients across Wealth Index Quintiles, Educational Levels, Age Cohorts, and Residence (NFHS-5, N = 724,115).</p>
     </div>
 
     <!-- Badges Bar -->
     <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
       <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-          <span id="rail-a-badge-slot"></span>
-          <span id="rail-b-badge-slot"></span>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span class="tag tag-household">Observed Prevalence (Rail A)</span>
+          <span class="tag tag-overall">Predicted Composite (Rail B)</span>
+          <span class="tag tag-facility">Total Sample N = 724,115</span>
         </div>
-        <div class="tag tag-overall">Sample N = 724,115 Women</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Data: NFHS-5 Standard Recode Features</div>
       </div>
-    </div>
-
-    <!-- Scope Note -->
-    <div class="callout callout-info" style="margin-bottom: 24px;">
-      <strong>Data Scope Note:</strong> All socio-demographic indicators are derived directly from standard NFHS-5 recode features — Age Group (5-Year Groups), Highest Educational Level, Wealth Index Quintile, Type of Residence (Urban/Rural), and Current Occupation. Waiting-time and provider-quality metrics are not available in NFHS-5 survey datasets.
     </div>
 
     <!-- KPI Summary Grid -->
     <div class="kpi-grid">
       <div class="kpi-card kpi-facility">
-        <div class="kpi-header">
-          <div class="kpi-title">Wealth Index Quintile Gradient</div>
+        <div class="kpi-top">
+          <span class="kpi-label">Wealth Gradient</span>
           <span class="tag tag-facility">1.91x Gap</span>
         </div>
         <div class="kpi-value" style="color: var(--domain-facility);">75.6% vs 39.5%</div>
-        <div class="kpi-subtext">Poorest vs Richest Quintiles</div>
+        <div class="kpi-footer">Poorest vs Richest Quintile</div>
       </div>
 
       <div class="kpi-card kpi-logistic">
-        <div class="kpi-header">
-          <div class="kpi-title">Type of Residence Disparity</div>
+        <div class="kpi-top">
+          <span class="kpi-label">Residence Gap</span>
           <span class="tag tag-logistic">+17.5 pp</span>
         </div>
         <div class="kpi-value" style="color: var(--domain-logistic);">63.5% vs 46.0%</div>
-        <div class="kpi-subtext">Rural vs Urban Gap</div>
+        <div class="kpi-footer">Rural vs Urban Disparity</div>
       </div>
 
       <div class="kpi-card kpi-household">
-        <div class="kpi-header">
-          <div class="kpi-title">Educational Level Impact</div>
+        <div class="kpi-top">
+          <span class="kpi-label">Education Gradient</span>
           <span class="tag tag-household">1.52x Gap</span>
         </div>
         <div class="kpi-value" style="color: var(--domain-household);">67.9% vs 44.7%</div>
-        <div class="kpi-subtext">No Education vs Higher</div>
-      </div>
-
-      <div class="kpi-card kpi-facility">
-        <div class="kpi-header">
-          <div class="kpi-title">Highest Risk Occupation</div>
-          <span class="tag tag-facility">Agri Workers</span>
-        </div>
-        <div class="kpi-value" style="color: var(--domain-facility);">67.1%</div>
-        <div class="kpi-subtext">Agricultural Laborers</div>
+        <div class="kpi-footer">No Education vs Higher</div>
       </div>
 
       <div class="kpi-card kpi-overall">
-        <div class="kpi-header">
-          <div class="kpi-title">Youth Vulnerability</div>
-          <span class="tag tag-overall">15-19 Yrs</span>
+        <div class="kpi-top">
+          <span class="kpi-label">Youth Cohort (15-19)</span>
+          <span class="tag tag-overall">61.1%</span>
         </div>
-        <div class="kpi-value" style="color: var(--rail-b-color);">61.1%</div>
-        <div class="kpi-subtext">Youngest Age Cohort</div>
+        <div class="kpi-value">61.1%</div>
+        <div class="kpi-footer">Youngest Age Category</div>
       </div>
     </div>
 
-    <!-- Controls & Dimension Selector -->
-    <div class="card">
-      <div class="card-title">Select Demographic Dimension to Explore</div>
-      <div class="filter-bar" style="margin-top: 12px; margin-bottom: 0;">
+    <!-- Dimension Selector Toolbar -->
+    <div class="global-filter-panel" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
         <div class="tab-group" id="demographic-tabs">
-          <button class="tab-btn active" data-dim="by_wealth">Wealth Index Quintile</button>
-          <button class="tab-btn" data-dim="by_residence">Type of Residence</button>
-          <button class="tab-btn" data-dim="by_education">Educational Level</button>
-          <button class="tab-btn" data-dim="by_age">Age Group</button>
+          <button class="tab-btn active" data-dim="by_wealth">Wealth Quintiles (5)</button>
+          <button class="tab-btn" data-dim="by_education">Educational Levels (4)</button>
+          <button class="tab-btn" data-dim="by_residence">Residence (Rural/Urban)</button>
+          <button class="tab-btn" data-dim="by_age">Age Cohorts (7)</button>
           <button class="tab-btn" data-dim="by_occupation">Current Occupation</button>
         </div>
 
-        <div class="filter-group">
-          <span class="filter-label">Chart Type:</span>
-          <select id="chart-type-select" class="select-input">
-            <option value="grouped">Grouped Bar (Domain Comparison)</option>
-            <option value="stacked">Stacked Disparity Bar</option>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="filter-field-label">Chart Type:</span>
+          <select id="chart-type-select" class="filter-select">
+            <option value="grouped">Grouped Domain Bars</option>
+            <option value="stacked">Stacked Disparity Breakdown</option>
           </select>
         </div>
       </div>
@@ -106,19 +93,56 @@
 
     <!-- Main Dynamic Chart Card -->
     <div class="card">
-      <div class="card-title">
-        <span id="demo-chart-title">Demographic Barrier Breakdown</span>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title" id="demo-chart-title">Barrier Prevalence by Wealth Index Quintile</span>
+          <div class="card-subtitle">Click any category bar or row below to inspect detailed demographic profile</div>
+        </div>
       </div>
-      <div id="demo-chart" class="chart-box" style="min-height: 480px;">
-        <div style="padding:40px; text-align:center; color:#64748b;">Loading demographic chart...</div>
+      <div id="demo-chart" class="chart-box" style="min-height: 460px;">
+        <div style="padding: 40px; text-align: center; color: var(--text-muted);">Loading demographic chart...</div>
+      </div>
+    </div>
+
+    <!-- Selected Demographic Inspector Side-Panel / Card -->
+    <div id="subgroup-detail-panel" class="card" style="display: none; background: var(--bg-surface); border-color: var(--primary);">
+      <div class="card-title-row">
+        <span class="card-title" id="subgroup-detail-name" style="color: var(--primary);">Selected Population Profile</span>
+        <button onclick="document.getElementById('subgroup-detail-panel').style.display='none'" class="btn-reset-filters">&times; Close</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 10px;">
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">SAMPLE N</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="subgroup-val-n">-</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">ANY BARRIER (≥1)</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary);" id="subgroup-val-any">-</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--domain-facility);">FACILITY BARRIER</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--domain-facility);" id="subgroup-val-facility">-</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--domain-logistic);">LOGISTIC BARRIER</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--domain-logistic);" id="subgroup-val-logistic">-</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--domain-household);">HOUSEHOLD BARRIER</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--domain-household);" id="subgroup-val-household">-</div>
+        </div>
       </div>
     </div>
 
     <!-- Data Summary Table Card -->
     <div class="card">
-      <div class="card-title">
-        <span>Demographic Summary Breakdown Table</span>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Demographic Summary Table</span>
+          <div class="card-subtitle">Complete subgroup barrier breakdown with sample sizes</div>
+        </div>
       </div>
+
       <div class="table-responsive">
         <table class="data-table">
           <thead>
@@ -129,7 +153,7 @@
               <th>Logistic Barrier</th>
               <th>Household Barrier</th>
               <th>Predicted Composite (Rail B)</th>
-              <th>Sample N</th>
+              <th>Sample Size (N)</th>
             </tr>
           </thead>
           <tbody id="demo-table-body"></tbody>
@@ -138,17 +162,15 @@
     </div>
 
     <!-- Executive Insights Card -->
-    <div class="insights-card">
-      <div class="insights-card-header">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div class="insights-card-title">Demographic Gradient Insights</div>
+    <div class="dynamic-insights-panel">
+      <div class="insights-header">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="insights-title">Demographic Gradient Insights</span>
       </div>
-      <p class="insights-card-body" id="demo-insight-text">
-        Demographic analysis demonstrates steep gradients in healthcare access barriers across socio-economic status. Women in the poorest wealth quintile experience 75.6% barrier rates compared to 39.5% among the richest quintile. Similarly, uneducated and rural agricultural workers face compounded barrier risks across facility, distance, and household financial autonomy dimensions.
+      <p class="insights-body">
+        Demographic analysis demonstrates sharp gradients in healthcare access constraints across socioeconomic status. Women in the <strong>poorest wealth quintile experience 75.6% barrier rates</strong> compared to <strong>39.5% among the richest quintile</strong> (a 1.91x disparity). Similarly, women without formal schooling and those engaged in rural agricultural labor face compounded vulnerabilities across facility medicine shortages and transportation barriers.
       </p>
     </div>
-
-    <div id="methodology-note-slot"></div>
   </div>
 
   <script>
@@ -163,38 +185,16 @@
       by_occupation: "Barrier Prevalence by Current Occupation"
     };
 
-    function fetchJson(filename) {
-      const paths = [
-        "../assets/data/" + filename,
-        "assets/data/" + filename,
-        "/assets/data/" + filename
-      ];
-
-      function tryNext(index) {
-        if (index >= paths.length) return Promise.resolve(null);
-        return fetch(paths[index])
-          .then(r => r.ok ? r.json() : tryNext(index + 1))
-          .catch(() => tryNext(index + 1));
-      }
-
-      return tryNext(0);
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("rail-a-badge-slot").innerHTML = LabelRenderer.renderRailBadge("A");
-      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
-      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
-
-      fetchJson("demographic_summary.json")
-        .then(data => {
-          if (!data) return;
-          demoDataGlobal = data;
-          renderDimension();
-        });
+      window.DashboardState.fetchData("demographic_summary.json").then(data => {
+        if (!data) return;
+        demoDataGlobal = data;
+        renderDimension();
+      });
 
       const tabBtns = document.querySelectorAll("#demographic-tabs .tab-btn");
       tabBtns.forEach(btn => {
-        btn.addEventListener("click", function() {
+        btn.addEventListener("click", function () {
           tabBtns.forEach(b => b.classList.remove("active"));
           this.classList.add("active");
           activeDim = this.getAttribute("data-dim");
@@ -208,8 +208,7 @@
     function getSubgroupLabel(d) {
       if (d.subgroup) return LabelRenderer.formatFeatureName(d.subgroup);
       if (d.group_keys && Object.keys(d.group_keys).length > 0) {
-        const rawVal = Object.values(d.group_keys)[0];
-        return LabelRenderer.formatFeatureName(rawVal);
+        return LabelRenderer.formatFeatureName(Object.values(d.group_keys)[0]);
       }
       return "Subgroup";
     }
@@ -233,26 +232,49 @@
         { name: "Household Barrier", values: hhVals, color: ChartUtils.colors.household }
       ];
 
+      const explanation = `
+        <strong>Understanding Demographic Gradients:</strong><br>
+        Shows observed prevalence of encountering specific barrier domains across ${dimTitles[activeDim]}.<br>
+        <em>Note:</em> Poorest wealth quintile and uneducated cohorts display elevated risk across all 3 barrier domains.
+      `;
+
       if (chartType === "stacked") {
-        ChartUtils.createStackedBarChart("demo-chart", dimTitles[activeDim], categories, series);
+        ChartUtils.createStackedBarChart("demo-chart", dimTitles[activeDim], categories, series, explanation);
       } else {
         series.unshift({ name: "Observed Any Barrier (≥1)", values: anyVals, color: ChartUtils.colors.railA });
-        ChartUtils.createGroupedBarChart("demo-chart", dimTitles[activeDim], categories, series);
+        ChartUtils.createGroupedBarChart("demo-chart", dimTitles[activeDim], categories, series, explanation);
       }
 
       // Render Table
       const tbody = document.getElementById("demo-table-body");
-      tbody.innerHTML = dimData.map(d => `
-        <tr>
+      tbody.innerHTML = dimData.map((d, idx) => `
+        <tr onclick="inspectSubgroup(${idx})" style="cursor: pointer;">
           <td><strong>${getSubgroupLabel(d)}</strong></td>
-          <td style="color:var(--rail-b-color); font-weight:700;">${(d.observed_any_barrier_rate * 100).toFixed(2)}%</td>
+          <td style="color: var(--primary); font-weight: 700;">${(d.observed_any_barrier_rate * 100).toFixed(2)}%</td>
           <td>${(d.observed_facility_rate * 100).toFixed(2)}%</td>
           <td>${(d.observed_logistic_rate * 100).toFixed(2)}%</td>
           <td>${(d.observed_household_rate * 100).toFixed(2)}%</td>
           <td><span class="tag tag-overall">${d.predicted_composite_score ? (d.predicted_composite_score * 100).toFixed(2) + '%' : '—'}</span></td>
-          <td style="font-weight:600; color:var(--text-muted);">${d.sample_size_n ? d.sample_size_n.toLocaleString() : '—'}</td>
+          <td style="font-weight: 600; color: var(--text-muted);">${d.sample_size_n ? d.sample_size_n.toLocaleString() : '—'}</td>
         </tr>
       `).join("");
+    }
+
+    function inspectSubgroup(idx) {
+      if (!demoDataGlobal || !demoDataGlobal[activeDim]) return;
+      const d = demoDataGlobal[activeDim][idx];
+      if (!d) return;
+
+      const panel = document.getElementById("subgroup-detail-panel");
+      document.getElementById("subgroup-detail-name").textContent = `${getSubgroupLabel(d)} — Detailed Profile`;
+      document.getElementById("subgroup-val-n").textContent = d.sample_size_n ? d.sample_size_n.toLocaleString() : "724,115";
+      document.getElementById("subgroup-val-any").textContent = (d.observed_any_barrier_rate * 100).toFixed(2) + "%";
+      document.getElementById("subgroup-val-facility").textContent = (d.observed_facility_rate * 100).toFixed(2) + "%";
+      document.getElementById("subgroup-val-logistic").textContent = (d.observed_logistic_rate * 100).toFixed(2) + "%";
+      document.getElementById("subgroup-val-household").textContent = (d.observed_household_rate * 100).toFixed(2) + "%";
+
+      panel.style.display = "block";
+      panel.scrollIntoView({ behavior: "smooth" });
     }
   </script>
 </body>

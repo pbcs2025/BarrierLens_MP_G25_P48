@@ -1,0 +1,19 @@
+{
+  "name": "barrierlens-p48",
+  "version": "1.0.0",
+  "description": "BarrierLens P48 - Women's Healthcare Access Research Platform & Analytics Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/chatbot/member2-evidence.test.js"
+  },
+  "keywords": [
+    "barrierlens",
+    "nfhs5",
+    "healthcare",
+    "machine-learning",
+    "dashboard"
+  ],
+  "author": "Group 25 (P48)",
+  "license": "UNLICENSED"
+}

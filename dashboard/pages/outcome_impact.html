@@ -3,155 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Healthcare Utilization Impact — BarrierLens P48</title>
+  <title>Outcome Impact — BarrierLens Intelligence</title>
   <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
   <div class="container">
-    <div class="page-header">
-      <h1 class="page-title">Healthcare Utilization Impact (Stage 2 Predictive Models)</h1>
-      <p class="page-subtitle">Evaluation of healthcare access barrier predictions in forecasting downstream outcomes &mdash; Antenatal Care (ANC) gap and Unmet Family Planning need.</p>
+    <div class="subpage-header">
+      <h1 class="subpage-title">Healthcare Utilization Impact (Stage 2 Predictive Models)</h1>
+      <p class="subpage-subtitle">Evaluating whether Stage 1 barrier probabilities improve downstream forecasting of maternal health gaps: Antenatal Care (ANC) Deficit and Unmet Family Planning Need.</p>
     </div>
 
     <!-- Badges Bar -->
     <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
       <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-          <span id="rail-b-badge-slot"></span>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
           <span class="tag tag-overall">Stage 2: Logistic Regression &amp; Random Forest</span>
+          <span class="tag tag-household">Downstream Maternal Outcomes</span>
+          <span class="tag tag-facility">Predictive ROC-AUC Uplift Validation</span>
         </div>
-        <div class="tag tag-overall">Secondary Healthcare Outcomes</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Data: <code>outcome_impact_summary.json</code></div>
       </div>
-    </div>
-
-    <!-- Scope Note -->
-    <div class="callout callout-info" style="margin-bottom: 24px;">
-      <strong>Stage 2 Architecture Note:</strong> Stage 2 models evaluate whether incorporating Stage 1 barrier probabilities enhances secondary prediction of downstream maternal healthcare utilization gaps.
     </div>
 
     <!-- Target 1: Unmet Family Planning Need -->
     <div class="card">
-      <div class="card-title">
-        <span>Target 1 &mdash; Unmet Family Planning Need (<code style="background:#e2e8f0; padding:2px 4px; border-radius:3px;">target_unmet_fp</code>)</span>
-        <span class="tag tag-facility">Sample N = 466,859</span>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Target 1 — Unmet Family Planning Need (<code style="font-size:0.85rem; color:var(--primary);">target_unmet_fp</code>)</span>
+          <div class="card-subtitle">Analytic Cohort of 466,859 Eligible Married Indian Women</div>
+        </div>
+        <span class="tag tag-facility">10.64% Case Prevalence</span>
       </div>
-      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
-        Evaluates whether adding Stage 1 barrier probabilities improves prediction of unmet family planning needs among 466,859 eligible women.
-      </p>
 
-      <div class="kpi-grid">
+      <div class="kpi-grid" style="margin-top: 14px;">
         <div class="kpi-card kpi-overall">
-          <div class="kpi-header">
-            <div class="kpi-title">Analytic Sample (N)</div>
-            <span class="tag tag-overall">Eligible Women</span>
+          <div class="kpi-top">
+            <span class="kpi-label">Analytic Sample (N)</span>
+            <span class="tag tag-overall">Eligible</span>
           </div>
-          <div class="kpi-value" id="fp-sample">466,859</div>
-          <div class="kpi-subtext">NFHS-5 Married Women</div>
+          <div class="kpi-value">466,859</div>
+          <div class="kpi-footer">Eligible Married Women</div>
         </div>
 
         <div class="kpi-card kpi-facility">
-          <div class="kpi-header">
-            <div class="kpi-title">Unmet Need Prevalence</div>
+          <div class="kpi-top">
+            <span class="kpi-label">Unmet Need Prevalence</span>
             <span class="tag tag-facility">10.6%</span>
           </div>
-          <div class="kpi-value" id="fp-rate" style="color: var(--domain-facility);">10.6%</div>
-          <div class="kpi-subtext">49,672 Positive Cases</div>
+          <div class="kpi-value" style="color: var(--domain-facility);">10.64%</div>
+          <div class="kpi-footer">49,672 Positive Cases</div>
         </div>
 
         <div class="kpi-card kpi-household">
-          <div class="kpi-header">
-            <div class="kpi-title">LR Full Model ROC-AUC</div>
+          <div class="kpi-top">
+            <span class="kpi-label">Full Model ROC-AUC</span>
             <span class="tag tag-household">AUC 0.6591</span>
           </div>
-          <div class="kpi-value" id="fp-auc" style="color: var(--rail-b-color);">0.6591</div>
-          <div class="kpi-subtext">Includes Barrier Features</div>
+          <div class="kpi-value" style="color: var(--rail-b);">0.6591</div>
+          <div class="kpi-footer">Includes Barrier Features</div>
         </div>
 
         <div class="kpi-card kpi-logistic">
-          <div class="kpi-header">
-            <div class="kpi-title">Barrier Feature Uplift</div>
+          <div class="kpi-top">
+            <span class="kpi-label">Barrier Feature Uplift</span>
             <span class="tag tag-logistic">+0.0017 AUC</span>
           </div>
-          <div class="kpi-value" id="fp-uplift" style="color: var(--domain-overall);">+0.0017</div>
-          <div class="kpi-subtext">Baseline AUC: 0.6574</div>
+          <div class="kpi-value" style="color: var(--domain-overall);">+0.0017</div>
+          <div class="kpi-footer">Baseline AUC: 0.6574</div>
         </div>
       </div>
 
-      <div id="fp-chart" class="chart-box" style="min-height: 400px; margin-top: 16px;">
-        <div style="padding:40px; text-align:center; color:#64748b;">Loading Family Planning chart...</div>
-      </div>
+      <div id="fp-chart" class="chart-box" style="min-height: 380px; margin-top: 16px;"></div>
     </div>
 
     <!-- Target 2: ANC Gap -->
     <div class="card">
-      <div class="card-title">
-        <span>Target 2 &mdash; Antenatal Care (ANC) Gap (&lt;4 Visits) (<code style="background:#e2e8f0; padding:2px 4px; border-radius:3px;">target_anc_gap</code>)</span>
-        <span class="tag tag-household">Sample N = 163,018</span>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Target 2 — Antenatal Care (ANC) Gap (&lt;4 Visits) (<code style="font-size:0.85rem; color:var(--primary);">target_anc_gap</code>)</span>
+          <div class="card-subtitle">Analytic Cohort of 163,018 Women with Recent Live Births</div>
+        </div>
+        <span class="tag tag-household">41.80% Inadequate Care</span>
       </div>
-      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
-        Evaluates prediction of inadequate antenatal care (&lt;4 ANC visits) among 163,018 women with recent live births.
-      </p>
 
-      <div class="kpi-grid">
+      <div class="kpi-grid" style="margin-top: 14px;">
         <div class="kpi-card kpi-overall">
-          <div class="kpi-header">
-            <div class="kpi-title">Analytic Sample (N)</div>
+          <div class="kpi-top">
+            <span class="kpi-label">Analytic Sample (N)</span>
             <span class="tag tag-overall">Recent Births</span>
           </div>
-          <div class="kpi-value" id="anc-sample">163,018</div>
-          <div class="kpi-subtext">Women with Recent Birth</div>
+          <div class="kpi-value">163,018</div>
+          <div class="kpi-footer">Women with Recent Live Birth</div>
         </div>
 
         <div class="kpi-card kpi-facility">
-          <div class="kpi-header">
-            <div class="kpi-title">ANC Gap Prevalence</div>
+          <div class="kpi-top">
+            <span class="kpi-label">ANC Gap Prevalence</span>
             <span class="tag tag-facility">41.8%</span>
           </div>
-          <div class="kpi-value" id="anc-rate" style="color: var(--domain-facility);">41.8%</div>
-          <div class="kpi-subtext">68,141 Inadequate ANC</div>
+          <div class="kpi-value" style="color: var(--domain-facility);">41.80%</div>
+          <div class="kpi-footer">68,141 Inadequate ANC Visits</div>
         </div>
 
         <div class="kpi-card kpi-household">
-          <div class="kpi-header">
-            <div class="kpi-title">LR Full Model ROC-AUC</div>
+          <div class="kpi-top">
+            <span class="kpi-label">Full Model ROC-AUC</span>
             <span class="tag tag-household">AUC 0.6356</span>
           </div>
-          <div class="kpi-value" id="anc-auc" style="color: var(--rail-b-color);">0.6356</div>
-          <div class="kpi-subtext">Includes Barrier Features</div>
+          <div class="kpi-value" style="color: var(--rail-b);">0.6356</div>
+          <div class="kpi-footer">Includes Barrier Features</div>
         </div>
 
         <div class="kpi-card kpi-logistic">
-          <div class="kpi-header">
-            <div class="kpi-title">Barrier Feature Uplift</div>
+          <div class="kpi-top">
+            <span class="kpi-label">Barrier Feature Uplift</span>
             <span class="tag tag-logistic">+0.0019 AUC</span>
           </div>
-          <div class="kpi-value" id="anc-uplift" style="color: var(--domain-overall);">+0.0019</div>
-          <div class="kpi-subtext">Baseline AUC: 0.6337</div>
+          <div class="kpi-value" style="color: var(--domain-overall);">+0.0019</div>
+          <div class="kpi-footer">Baseline AUC: 0.6337</div>
         </div>
       </div>
 
-      <div id="anc-chart" class="chart-box" style="min-height: 400px; margin-top: 16px;">
-        <div style="padding:40px; text-align:center; color:#64748b;">Loading ANC chart...</div>
-      </div>
+      <div id="anc-chart" class="chart-box" style="min-height: 380px; margin-top: 16px;"></div>
     </div>
 
-    <!-- Stage 2 Model Performance Table Card -->
+    <!-- Model Performance Summary Table Card -->
     <div class="card">
-      <div class="card-title">Stage 2 Outcome Model Performance Summary</div>
+      <div class="card-title-row">
+        <div>
+          <span class="card-title">Stage 2 Outcome Model Performance Summary</span>
+          <div class="card-subtitle">Baseline Demographics vs Barrier-Augmented Model Comparison</div>
+        </div>
+      </div>
+
       <div class="table-responsive">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Target Outcome</th>
+              <th>Target Healthcare Outcome</th>
               <th>Model Architecture</th>
               <th>Baseline ROC-AUC</th>
               <th>Full Model ROC-AUC</th>
-              <th>Barrier Uplift (&Delta;AUC)</th>
+              <th>Barrier Uplift (ΔAUC)</th>
               <th>Test Accuracy</th>
               <th>F1-Score</th>
             </tr>
@@ -162,32 +161,25 @@
     </div>
 
     <!-- Executive Insights Card -->
-    <div class="insights-card">
-      <div class="insights-card-header">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div class="insights-card-title">Stage 2 Utilization Insights</div>
+    <div class="dynamic-insights-panel">
+      <div class="insights-header">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="insights-title">Stage 2 Predictive Insights</span>
       </div>
-      <p class="insights-card-body">
-        Stage 2 predictive models demonstrate that Stage 1 barrier probabilities provide modest, statistically consistent incremental value when predicting downstream health service gaps. For Unmet Family Planning Need (N = 466,859), the full model achieves an AUC of 0.6591 (+0.0017 over socio-demographic baseline). For Antenatal Care Gap (N = 163,018), the full model achieves an AUC of 0.6356 (+0.0019 over baseline).
+      <p class="insights-body">
+        Stage 2 evaluations demonstrate that incorporating Stage 1 barrier probabilities provides statistically consistent incremental predictive power for secondary maternal health deficits. For <strong>Unmet Family Planning Need (N = 466,859)</strong>, the full model reaches an <strong>AUC of 0.6591 (+0.0017 uplift)</strong>. For <strong>Antenatal Care Deficits (&lt;4 visits, N = 163,018)</strong>, the full model achieves an <strong>AUC of 0.6356 (+0.0019 uplift)</strong> over demographic baselines.
       </p>
     </div>
-
-    <div id="methodology-note-slot"></div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("rail-b-badge-slot").innerHTML = LabelRenderer.renderRailBadge("B");
-      document.getElementById("methodology-note-slot").innerHTML = LabelRenderer.renderMethodologyNote();
-
-      fetch("../assets/data/outcome_impact_summary.json")
-        .then(r => r.json())
-        .then(data => {
-          renderFPChart(data);
-          renderANCChart(data);
-          renderTable(data);
-        })
-        .catch(err => console.error("Error loading outcome_impact_summary.json:", err));
+      window.DashboardState.fetchData("outcome_impact_summary.json").then(data => {
+        if (!data) return;
+        renderFPChart(data);
+        renderANCChart(data);
+        renderTable(data);
+      });
     });
 
     function renderFPChart(data) {
@@ -198,14 +190,21 @@
       const baseAUC = [fp.models.logistic_regression.baseline_auc, fp.models.random_forest.baseline_auc];
       const fullAUC = [fp.models.logistic_regression.full_auc, fp.models.random_forest.full_auc];
 
+      const explanation = `
+        <strong>Unmet Family Planning Prediction:</strong><br>
+        • Evaluates whether adding Stage 1 barrier probabilities improves ROC-AUC over baseline demographics.<br>
+        • Full model achieves 0.6591 AUC with +0.0017 uplift.
+      `;
+
       ChartUtils.createGroupedBarChart(
         "fp-chart",
-        "Unmet Family Planning Need &mdash; Baseline vs Barrier-Augmented ROC-AUC",
+        "Unmet Family Planning — Baseline vs Barrier-Augmented ROC-AUC",
         categories,
         [
           { name: "Baseline Model (Demographics Only)", values: baseAUC, color: ChartUtils.colors.basePaper },
-          { name: "Full Model (+ Barrier Features)", values: fullAUC, color: ChartUtils.colors.railB }
-        ]
+          { name: "Full Model (+ Barrier Probabilities)", values: fullAUC, color: ChartUtils.colors.railB }
+        ],
+        explanation
       );
     }
 
@@ -217,14 +216,21 @@
       const baseAUC = [anc.models.logistic_regression.baseline_auc, anc.models.random_forest.baseline_auc];
       const fullAUC = [anc.models.logistic_regression.full_auc, anc.models.random_forest.full_auc];
 
+      const explanation = `
+        <strong>Antenatal Care (ANC) Gap Prediction:</strong><br>
+        • Predicts risk of &lt;4 ANC visits among women with recent live births (N = 163,018).<br>
+        • Full model reaches 0.6356 AUC with +0.0019 uplift over demographic baseline.
+      `;
+
       ChartUtils.createGroupedBarChart(
         "anc-chart",
-        "Antenatal Care (ANC) Gap &mdash; Baseline vs Barrier-Augmented ROC-AUC",
+        "Antenatal Care Gap — Baseline vs Barrier-Augmented ROC-AUC",
         categories,
         [
           { name: "Baseline Model (Demographics Only)", values: baseAUC, color: ChartUtils.colors.basePaper },
-          { name: "Full Model (+ Barrier Features)", values: fullAUC, color: ChartUtils.colors.railB }
-        ]
+          { name: "Full Model (+ Barrier Probabilities)", values: fullAUC, color: ChartUtils.colors.railB }
+        ],
+        explanation
       );
     }
 
@@ -258,7 +264,7 @@
           <td><strong>${r.target}</strong></td>
           <td><span class="tag tag-overall">${r.model}</span></td>
           <td style="color:var(--text-muted);">${r.baseline}</td>
-          <td style="color:var(--rail-b-color); font-weight:700;">${r.full}</td>
+          <td style="color:var(--rail-b); font-weight:700;">${r.full}</td>
           <td><span class="tag tag-facility">${r.uplift}</span></td>
           <td>${r.acc}</td>
           <td style="font-weight:600;">${r.f1}</td>

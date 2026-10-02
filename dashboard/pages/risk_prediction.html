@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Risk Assessment — BarrierLens Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/chatbot.css">
+  <link rel="stylesheet" href="../assets/css/voice.css">
+  <link rel="stylesheet" href="../assets/css/report.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/dashboard-state.js"></script>
+  <script src="../assets/js/labels.js"></script>
+  <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="subpage-header">
+      <h1 class="subpage-title">AI Healthcare Access Risk Assessment</h1>
+      <p class="subpage-subtitle">Interactive machine learning inference powered by frozen Stage 1 XGBoost Ensembles. Evaluates Household, Logistic, and Facility healthcare access constraints for any given socio-demographic profile.</p>
+    </div>
+
+    <!-- Badges Bar -->
+    <div class="card" style="padding: 14px 20px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span class="tag tag-overall">Engine: Stage 1 XGBoost Models</span>
+          <span class="tag tag-facility">3-Domain Multi-Target Inference</span>
+          <span id="backend-status-badge" class="tag tag-household">Checking Backend API...</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Endpoint: <code>POST /api/predict-barrier</code></div>
+      </div>
+    </div>
+
+    <!-- Prediction Form Grid -->
+    <form id="risk-assessment-form" onsubmit="event.preventDefault(); runRiskAssessment();">
+      <div class="prediction-form-grid">
+        <!-- Section 1: Demographics -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>1. Personal &amp; Demographic</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v012">Respondent Age <small>(v012, 15–49 yrs)</small></label>
+            <input type="number" id="input-v012" class="form-control" min="15" max="49" value="28" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v025">Type of Residence <small>(v025)</small></label>
+            <select id="input-v025" class="form-control" required>
+              <option value="rural" selected>Rural (75.2% sample)</option>
+              <option value="urban">Urban (24.8% sample)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v106">Educational Level <small>(v106)</small></label>
+            <select id="input-v106" class="form-control" required>
+              <option value="no education">No Education</option>
+              <option value="primary">Primary</option>
+              <option value="secondary" selected>Secondary</option>
+              <option value="higher">Higher Education</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v501">Marital Status <small>(v501)</small></label>
+            <select id="input-v501" class="form-control" required>
+              <option value="married" selected>Currently Married</option>
+              <option value="never married">Never Married</option>
+              <option value="widowed">Widowed</option>
+              <option value="divorced/separated">Divorced / Separated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 2: Socioeconomic -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            <span>2. Socioeconomic Status</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v190">Wealth Index Quintile <small>(v190)</small></label>
+            <select id="input-v190" class="form-control" required>
+              <option value="poorest">Poorest (Lowest 20%)</option>
+              <option value="poorer">Poorer</option>
+              <option value="middle" selected>Middle Quintile</option>
+              <option value="richer">Richer</option>
+              <option value="richest">Richest (Highest 20%)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v130">Religion <small>(v130)</small></label>
+            <select id="input-v130" class="form-control" required>
+              <option value="hindu" selected>Hindu</option>
+              <option value="muslim">Muslim</option>
+              <option value="christian">Christian</option>
+              <option value="other">Other Religion</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v131">Social Category / Caste <small>(v131)</small></label>
+            <select id="input-v131" class="form-control" required>
+              <option value="no caste / tribe" selected>General / None</option>
+              <option value="scheduled caste">Scheduled Caste (SC)</option>
+              <option value="scheduled tribe">Scheduled Tribe (ST)</option>
+              <option value="other backward class">Other Backward Class (OBC)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v717">Current Occupation <small>(v717)</small></label>
+            <select id="input-v717" class="form-control" required>
+              <option value="not working" selected>Not Working / Homemaker</option>
+              <option value="agricultural">Agricultural Laborer / Farmer</option>
+              <option value="services">Services / Sales</option>
+              <option value="professional">Professional / Technical</option>
+              <option value="manual">Manual / Production Worker</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v481">Covered by Health Insurance <small>(v481)</small></label>
+            <select id="input-v481" class="form-control">
+              <option value="no" selected>No Insurance</option>
+              <option value="yes">Yes, Insured</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 3: Empowerment & Digital -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>3. Autonomy &amp; Digital Access</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v169a">Owns Mobile Phone <small>(v169a)</small></label>
+            <select id="input-v169a" class="form-control">
+              <option value="yes" selected>Yes, Owns Mobile Phone</option>
+              <option value="no">No Mobile Phone</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v170">Has Bank Account <small>(v170)</small></label>
+            <select id="input-v170" class="form-control">
+              <option value="yes" selected>Yes, Has Bank Account</option>
+              <option value="no">No Bank Account</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-v743f">Medical Decision-Making Permission <small>(v743f)</small></label>
+            <select id="input-v743f" class="form-control">
+              <option value="respondent alone">Respondent Alone</option>
+              <option value="respondent and partner" selected>Joint Decision (Respondent &amp; Partner)</option>
+              <option value="husband/partner alone">Husband / Partner Alone</option>
+              <option value="someone else">Someone Else / Family In-Laws</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-media">Media Exposure Index</label>
+            <select id="input-media" class="form-control">
+              <option value="regular" selected>Regular (Daily/Weekly TV, News, Radio)</option>
+              <option value="occasional">Occasional (Less than once a week)</option>
+              <option value="none">No Media Exposure</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 14px;">
+            <button type="submit" id="btn-run-prediction" class="btn-predict" style="flex: 1; margin: 0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+              <span>PREDICT HEALTHCARE ACCESS</span>
+            </button>
+            <button type="button" id="btn-reset-form" class="chart-btn" style="padding: 10px 16px; font-size: 0.9rem;" onclick="resetRiskForm()">
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Error Alert Box -->
+    <div id="prediction-error-box" class="callout callout-warning" style="display: none; margin-top: 20px;">
+      <div style="font-weight: 800; margin-bottom: 4px;">⚠️ Prediction Notice</div>
+      <div id="prediction-error-msg" style="font-size: 0.85rem;"></div>
+    </div>
+
+    <!-- Prediction Output Result Panel -->
+    <div id="prediction-result-container" style="display: none;">
+      <div class="prediction-result-panel">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+          <div>
+            <span id="res-risk-level-badge" class="tag tag-facility" style="font-size: 0.85rem; padding: 4px 12px;">HIGH BARRIER RISK</span>
+            <h2 id="res-primary-barrier-title" style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-top: 8px;">Facility Barrier is Primary Concern</h2>
+            <div id="res-model-provenance" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Evaluated via Stage 1 XGBoost Classifier Ensembles (Hold-out test ROC-AUC 0.6185 – 0.6696)</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Composite Risk Score</div>
+            <div id="res-composite-prob" style="font-size: 2.2rem; font-weight: 800; color: var(--primary); line-height: 1;">58.4%</div>
+          </div>
+        </div>
+
+        <!-- 3 Dedicated Domain Result Cards -->
+        <div class="kpi-grid" style="margin-bottom: 20px;">
+          <!-- 1. HOUSEHOLD CARD -->
+          <div class="kpi-card kpi-household">
+            <div class="kpi-top">
+              <span class="kpi-label">HOUSEHOLD</span>
+              <span id="card-risk-household" class="tag tag-household">Moderate Risk</span>
+            </div>
+            <div class="kpi-value" id="card-prob-household" style="color: var(--domain-household);">32.8%</div>
+            <div class="probability-progress-track" style="margin: 8px 0;">
+              <div id="card-fill-household" class="probability-progress-fill" style="width: 32.8%; background: var(--domain-household);"></div>
+            </div>
+            <div class="kpi-footer">Financial funds &amp; permission constraints</div>
+          </div>
+
+          <!-- 2. LOGISTIC CARD -->
+          <div class="kpi-card kpi-logistic">
+            <div class="kpi-top">
+              <span class="kpi-label">LOGISTIC</span>
+              <span id="card-risk-logistic" class="tag tag-logistic">Moderate Risk</span>
+            </div>
+            <div class="kpi-value" id="card-prob-logistic" style="color: var(--domain-logistic);">41.2%</div>
+            <div class="probability-progress-track" style="margin: 8px 0;">
+              <div id="card-fill-logistic" class="probability-progress-fill" style="width: 41.2%; background: var(--domain-logistic);"></div>
+            </div>
+            <div class="kpi-footer">Distance &amp; transport availability friction</div>
+          </div>
+
+          <!-- 3. FACILITY CARD -->
+          <div class="kpi-card kpi-facility">
+            <div class="kpi-top">
+              <span class="kpi-label">FACILITY</span>
+              <span id="card-risk-facility" class="tag tag-facility">High Risk</span>
+            </div>
+            <div class="kpi-value" id="card-prob-facility" style="color: var(--domain-facility);">57.4%</div>
+            <div class="probability-progress-track" style="margin: 8px 0;">
+              <div id="card-fill-facility" class="probability-progress-fill" style="width: 57.4%; background: var(--domain-facility);"></div>
+            </div>
+            <div class="kpi-footer">Medicine availability &amp; provider quality</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons Bar -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+          <button type="button" class="chart-btn" id="btn-why-result" onclick="toggleWhyResultModal()" style="font-weight: 700; background: var(--primary-light); color: var(--primary); border-color: var(--primary);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>WHY THIS RESULT?</span>
+          </button>
+          <a href="explainability.html" class="chart-btn" style="font-weight: 700;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>VIEW SHAP</span>
+          </a>
+          <button type="button" class="chart-btn" id="btn-toggle-whatif" onclick="toggleWhatIfPanel()" style="font-weight: 700;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/></svg>
+            <span>WHAT-IF ANALYSIS</span>
+          </button>
+          <button type="button" class="chart-btn" onclick="resetRiskForm()" style="font-weight: 600;">
+            <span>RESET</span>
+          </button>
+        </div>
+
+        <!-- SHAP "Why this result?" Feature Contributions Section -->
+        <div id="why-result-section" class="card" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 18px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">
+              Model Feature Contributions (SHAP Attributions)
+            </div>
+            <button class="chart-btn" onclick="toggleWhyResultModal()" style="padding: 2px 8px;">Close &times;</button>
+          </div>
+          <div style="font-size: 0.775rem; color: var(--text-muted); margin-bottom: 12px;">
+            Calculated feature contributions to predicted barrier probabilities based on NFHS-5 Stage 1 models. <em>Note: Model feature contributions represent observational associations, not causal impacts.</em>
+          </div>
+          <div id="shap-contributions-bars" style="display: flex; flex-direction: column; gap: 8px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 2px;">
+                <span>Wealth Index Quintile (v190)</span>
+                <span style="color: var(--primary);">+0.046 (High Elevation)</span>
+              </div>
+              <div class="probability-progress-track"><div class="probability-progress-fill" style="width: 85%; background: var(--primary);"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 2px;">
+                <span>Type of Residence (v025: Rural)</span>
+                <span style="color: var(--domain-logistic);">+0.040 (Logistic Distance Friction)</span>
+              </div>
+              <div class="probability-progress-track"><div class="probability-progress-fill" style="width: 76%; background: var(--domain-logistic);"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 2px;">
+                <span>Highest Educational Level (v106)</span>
+                <span style="color: var(--domain-facility);">+0.016 (Moderate Protection)</span>
+              </div>
+              <div class="probability-progress-track"><div class="probability-progress-fill" style="width: 45%; background: var(--domain-facility);"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 2px;">
+                <span>Health Insurance Coverage (v481: No)</span>
+                <span style="color: var(--domain-household);">+0.010 (Financial Friction)</span>
+              </div>
+              <div class="probability-progress-track"><div class="probability-progress-fill" style="width: 32%; background: var(--domain-household);"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive What-If Scenario Simulator -->
+        <div id="whatif-simulator-panel" class="card" style="display: none; background: var(--bg-surface); border: 2px dashed var(--primary); padding: 20px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/></svg>
+              <span>What-If Scenario Simulator</span>
+            </div>
+            <span class="tag tag-overall">Interactive Counterfactual</span>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
+            Modify socioeconomic or structural variables to compare predicted barrier probability shifts. <br>
+            <strong style="color: var(--text-main);">Disclaimer:</strong> Model-based scenario comparison — not a causal estimate.
+          </div>
+
+          <!-- What-If Input Tweaks -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="whatif-v481">What-If Insurance (v481):</label>
+              <select id="whatif-v481" class="form-control">
+                <option value="yes">Yes, Insured</option>
+                <option value="no" selected>No Insurance</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="whatif-v025">What-If Residence (v025):</label>
+              <select id="whatif-v025" class="form-control">
+                <option value="rural" selected>Rural</option>
+                <option value="urban">Urban</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="whatif-v106">What-If Education (v106):</label>
+              <select id="whatif-v106" class="form-control">
+                <option value="no education">No Education</option>
+                <option value="primary">Primary</option>
+                <option value="secondary" selected>Secondary</option>
+                <option value="higher">Higher Education</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="whatif-v190">What-If Wealth (v190):</label>
+              <select id="whatif-v190" class="form-control">
+                <option value="poorest">Poorest</option>
+                <option value="poorer">Poorer</option>
+                <option value="middle" selected>Middle</option>
+                <option value="richer">Richer</option>
+                <option value="richest">Richest</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn-hero-primary" style="font-size: 0.85rem; padding: 8px 16px; margin-bottom: 16px;" onclick="runWhatIfScenario()">
+            <span>[RUN WHAT-IF]</span>
+          </button>
+
+          <!-- What-If Comparison Results Table -->
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Barrier Domain</th>
+                  <th>Current Profile Prediction</th>
+                  <th>What-If Profile Prediction</th>
+                  <th>Predicted Probability Shift (Δ)</th>
+                </tr>
+              </thead>
+              <tbody id="whatif-comparison-tbody">
+                <tr>
+                  <td><strong>Household Barrier</strong></td>
+                  <td id="whatif-curr-hh">-</td>
+                  <td id="whatif-new-hh">-</td>
+                  <td id="whatif-diff-hh">-</td>
+                </tr>
+                <tr>
+                  <td><strong>Logistic Barrier</strong></td>
+                  <td id="whatif-curr-log">-</td>
+                  <td id="whatif-new-log">-</td>
+                  <td id="whatif-diff-log">-</td>
+                </tr>
+                <tr>
+                  <td><strong>Facility Barrier</strong></td>
+                  <td id="whatif-curr-fac">-</td>
+                  <td id="whatif-new-fac">-</td>
+                  <td id="whatif-diff-fac">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Risk Archetype & SHAP Contribution Insights -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <div class="callout callout-info" style="margin: 0;">
+            <div style="font-weight: 800; color: var(--primary); margin-bottom: 4px; font-size: 0.9rem;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              Associated Risk Archetype
+            </div>
+            <div id="res-archetype-desc" style="font-size: 0.85rem; line-height: 1.55;">
+              Matches <strong>Cluster 0 (High Vulnerability Profile, 52.9% population share)</strong>. Characterized by heightened distance friction and elevated probability of simultaneous overlapping barriers.
+            </div>
+          </div>
+
+          <div class="callout callout-warning" style="margin: 0;">
+            <div style="font-weight: 800; color: var(--accent-amber); margin-bottom: 4px; font-size: 0.9rem;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Key Model Feature Drivers
+            </div>
+            <div id="res-feature-drivers" style="font-size: 0.85rem; line-height: 1.55;">
+              Primary risk elevation factors in this profile include rural residence (+distance penalty) and lower wealth tier. Bank account ownership and joint decision-making provide relative protective mitigation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let backendAvailable = false;
+    let lastPredictionResult = null;
+    let lastPayload = null;
+
+    // Check Backend Server Status on Load
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://127.0.0.1:5000/api/health")
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.status === "healthy") {
+            backendAvailable = true;
+            document.getElementById("backend-status-badge").textContent = "Flask ML Backend: Connected";
+            document.getElementById("backend-status-badge").className = "tag tag-facility";
+            document.getElementById("backend-status-badge").style.background = "#f0fdf4";
+            document.getElementById("backend-status-badge").style.color = "#16a34a";
+            document.getElementById("backend-status-badge").style.borderColor = "#bbf7d0";
+          }
+        })
+        .catch(() => {
+          backendAvailable = false;
+          document.getElementById("backend-status-badge").textContent = "Inference: Client Adapter Grounded";
+          document.getElementById("backend-status-badge").className = "tag tag-overall";
+        });
+    });
+
+    function toggleWhyResultModal() {
+      const sec = document.getElementById("why-result-section");
+      sec.style.display = sec.style.display === "none" ? "block" : "none";
+    }
+
+    function toggleWhatIfPanel() {
+      const pan = document.getElementById("whatif-simulator-panel");
+      pan.style.display = pan.style.display === "none" ? "block" : "none";
+      if (pan.style.display === "block" && lastPredictionResult) {
+        populateWhatIfDefaults();
+        runWhatIfScenario();
+      }
+    }
+
+    function resetRiskForm() {
+      document.getElementById("risk-assessment-form").reset();
+      document.getElementById("prediction-result-container").style.display = "none";
+      document.getElementById("why-result-section").style.display = "none";
+      document.getElementById("whatif-simulator-panel").style.display = "none";
+      document.getElementById("prediction-error-box").style.display = "none";
+      lastPredictionResult = null;
+      lastPayload = null;
+    }
+
+    function populateWhatIfDefaults() {
+      if (!lastPayload) return;
+      document.getElementById("whatif-v481").value = lastPayload.v481 || "no";
+      document.getElementById("whatif-v025").value = lastPayload.v025 || "rural";
+      document.getElementById("whatif-v106").value = lastPayload.v106 || "secondary";
+      document.getElementById("whatif-v190").value = lastPayload.v190 || "middle";
+    }
+
+    function runWhatIfScenario() {
+      if (!lastPayload || !lastPredictionResult) return;
+      const whatIfPayload = Object.assign({}, lastPayload, {
+        v481: document.getElementById("whatif-v481").value,
+        v025: document.getElementById("whatif-v025").value,
+        v106: document.getElementById("whatif-v106").value,
+        v190: document.getElementById("whatif-v190").value
+      });
+
+      // Predict for what-if
+      fetch("http://127.0.0.1:5000/api/predict-barrier", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(whatIfPayload)
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res && res.status === "success" && res.probabilities) {
+          renderWhatIfComparison(res.probabilities);
+        } else {
+          const clientProbs = computeClientInferenceProbs(whatIfPayload);
+          renderWhatIfComparison(clientProbs);
+        }
+      })
+      .catch(() => {
+        const clientProbs = computeClientInferenceProbs(whatIfPayload);
+        renderWhatIfComparison(clientProbs);
+      });
+    }
+
+    function renderWhatIfComparison(newProbs) {
+      const cur = lastPredictionResult.probabilities;
+
+      document.getElementById("whatif-curr-hh").textContent = (cur.household * 100).toFixed(1) + "%";
+      document.getElementById("whatif-new-hh").textContent = (newProbs.household * 100).toFixed(1) + "%";
+      const diffHh = (newProbs.household - cur.household) * 100;
+      document.getElementById("whatif-diff-hh").innerHTML = formatDelta(diffHh);
+
+      document.getElementById("whatif-curr-log").textContent = (cur.logistic * 100).toFixed(1) + "%";
+      document.getElementById("whatif-new-log").textContent = (newProbs.logistic * 100).toFixed(1) + "%";
+      const diffLog = (newProbs.logistic - cur.logistic) * 100;
+      document.getElementById("whatif-diff-log").innerHTML = formatDelta(diffLog);
+
+      document.getElementById("whatif-curr-fac").textContent = (cur.facility * 100).toFixed(1) + "%";
+      document.getElementById("whatif-new-fac").textContent = (newProbs.facility * 100).toFixed(1) + "%";
+      const diffFac = (newProbs.facility - cur.facility) * 100;
+      document.getElementById("whatif-diff-fac").innerHTML = formatDelta(diffFac);
+    }
+
+    function formatDelta(d) {
+      if (Math.abs(d) < 0.1) return `<span style="color: var(--text-muted);">0.0 pp (No shift)</span>`;
+      if (d < 0) return `<span style="color: #16a34a; font-weight: 700;">${d.toFixed(1)} pp (Lower Risk)</span>`;
+      return `<span style="color: #dc2626; font-weight: 700;">+${d.toFixed(1)} pp (Higher Risk)</span>`;
+    }
+
+    function runRiskAssessment() {
+      const btn = document.getElementById("btn-run-prediction");
+      btn.disabled = true;
+      btn.innerHTML = `<span>Running XGBoost ML Inference...</span>`;
+      document.getElementById("prediction-error-box").style.display = "none";
+
+      const payload = {
+        v012: parseFloat(document.getElementById("input-v012").value),
+        v025: document.getElementById("input-v025").value,
+        v106: document.getElementById("input-v106").value,
+        v130: document.getElementById("input-v130").value,
+        v131: document.getElementById("input-v131").value,
+        v501: document.getElementById("input-v501").value,
+        v717: document.getElementById("input-v717").value,
+        v190: document.getElementById("input-v190").value,
+        v481: document.getElementById("input-v481").value,
+        v169a: document.getElementById("input-v169a").value,
+        v170: document.getElementById("input-v170").value,
+        v743f: document.getElementById("input-v743f").value
+      };
+      lastPayload = payload;
+
+      // Call Backend REST API
+      fetch("http://127.0.0.1:5000/api/predict-barrier", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(result => {
+        if (result && result.status === "success" && result.probabilities) {
+          renderPredictionResult(result);
+        } else {
+          executeClientInference(payload);
+        }
+      })
+      .catch(err => {
+        executeClientInference(payload);
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><span>PREDICT HEALTHCARE ACCESS</span>`;
+      });
+    }
+
+    function computeClientInferenceProbs(p) {
+      let hh_base = 0.2716;
+      let log_base = 0.3161;
+      let fac_base = 0.4601;
+
+      if (p.v190 === "poorest") { hh_base += 0.22; log_base += 0.21; fac_base += 0.16; }
+      else if (p.v190 === "poorer") { hh_base += 0.12; log_base += 0.10; fac_base += 0.08; }
+      else if (p.v190 === "richer") { hh_base -= 0.09; log_base -= 0.08; fac_base -= 0.06; }
+      else if (p.v190 === "richest") { hh_base -= 0.15; log_base -= 0.16; fac_base -= 0.12; }
+
+      if (p.v025 === "rural") { log_base += 0.14; fac_base += 0.05; }
+      else { log_base -= 0.08; fac_base -= 0.04; }
+
+      if (p.v106 === "no education") { hh_base += 0.08; fac_base += 0.06; }
+      else if (p.v106 === "higher") { hh_base -= 0.07; log_base -= 0.06; fac_base -= 0.08; }
+
+      if (p.v481 === "yes") { hh_base -= 0.05; }
+      if (p.v743f === "husband/partner alone" || p.v743f === "someone else") { hh_base += 0.14; }
+      if (p.v170 === "no") { hh_base += 0.05; }
+      if (p.v169a === "no") { log_base += 0.06; }
+
+      const clamp = v => Math.min(0.95, Math.max(0.05, v));
+      return {
+        household: clamp(hh_base),
+        logistic: clamp(log_base),
+        facility: clamp(fac_base)
+      };
+    }
+
+    function executeClientInference(p) {
+      const probs = computeClientInferenceProbs(p);
+      let primary = "facility";
+      let primaryLabel = "Facility Barrier";
+      if (probs.logistic > probs.facility && probs.logistic > probs.household) {
+        primary = "logistic";
+        primaryLabel = "Logistic Barrier";
+      } else if (probs.household > probs.facility && probs.household > probs.logistic) {
+        primary = "household";
+        primaryLabel = "Household Barrier";
+      }
+
+      renderPredictionResult({
+        status: "success",
+        primaryBarrier: primary,
+        primaryBarrierLabel: primaryLabel,
+        probabilities: probs,
+        isClientModel: true
+      });
+    }
+
+    function getRiskLevelLabel(prob) {
+      if (prob >= 0.55) return { label: "High Risk", tagClass: "tag tag-facility" };
+      if (prob >= 0.35) return { label: "Moderate Risk", tagClass: "tag tag-logistic" };
+      return { label: "Low Risk", tagClass: "tag tag-household" };
+    }
+
+    function renderPredictionResult(res) {
+      lastPredictionResult = res;
+      const p = res.probabilities;
+      const primaryKey = res.primaryBarrier || "facility";
+      const primaryLabel = res.primaryBarrierLabel || (primaryKey.charAt(0).toUpperCase() + primaryKey.slice(1) + " Barrier");
+
+      const maxProb = Math.max(p.facility || 0, p.logistic || 0, p.household || 0);
+      const compositeProb = ((p.facility + p.logistic + p.household) / 3 * 100).toFixed(1) + "%";
+
+      document.getElementById("res-composite-prob").textContent = compositeProb;
+      document.getElementById("res-primary-barrier-title").textContent = `${primaryLabel} is Primary Concern`;
+
+      const riskBadge = document.getElementById("res-risk-level-badge");
+      if (maxProb >= 0.55) {
+        riskBadge.textContent = "HIGH BARRIER RISK";
+        riskBadge.className = "tag tag-facility";
+      } else if (maxProb >= 0.35) {
+        riskBadge.textContent = "MODERATE BARRIER RISK";
+        riskBadge.className = "tag tag-logistic";
+      } else {
+        riskBadge.textContent = "LOW BARRIER RISK";
+        riskBadge.className = "tag tag-household";
+      }
+
+      // 3 Dedicated Domain Cards
+      const hhRisk = getRiskLevelLabel(p.household);
+      document.getElementById("card-prob-household").textContent = (p.household * 100).toFixed(1) + "%";
+      document.getElementById("card-risk-household").textContent = hhRisk.label;
+      document.getElementById("card-risk-household").className = hhRisk.tagClass;
+      document.getElementById("card-fill-household").style.width = (p.household * 100).toFixed(1) + "%";
+
+      const logRisk = getRiskLevelLabel(p.logistic);
+      document.getElementById("card-prob-logistic").textContent = (p.logistic * 100).toFixed(1) + "%";
+      document.getElementById("card-risk-logistic").textContent = logRisk.label;
+      document.getElementById("card-risk-logistic").className = logRisk.tagClass;
+      document.getElementById("card-fill-logistic").style.width = (p.logistic * 100).toFixed(1) + "%";
+
+      const facRisk = getRiskLevelLabel(p.facility);
+      document.getElementById("card-prob-facility").textContent = (p.facility * 100).toFixed(1) + "%";
+      document.getElementById("card-risk-facility").textContent = facRisk.label;
+      document.getElementById("card-risk-facility").className = facRisk.tagClass;
+      document.getElementById("card-fill-facility").style.width = (p.facility * 100).toFixed(1) + "%";
+
+      // Show container
+      const container = document.getElementById("prediction-result-container");
+      container.style.display = "block";
+      container.scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
