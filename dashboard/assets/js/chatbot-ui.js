@@ -1,8 +1,8 @@
 /**
  * BARRIERLENS — MEMBER 3 & MEMBER 4: CHATBOT UI CONTROLLER
  * Merged entry point supporting two modes:
- *   1. "Identify My Barrier" (Guided Input questionnaire -> ML Prediction)
- *   2. "Explore Barriers" (Direct barrier selection menu -> Household, Logistic, Facility, Multiple, All)
+ *   1. "Explore Barriers" (Direct barrier selection menu -> Household, Logistic, Facility, Multiple, All)
+ *   2. "Chat with Assistant" (Conversational open research assistant)
  * Shared Active Barrier Context (`activeBarrier`, `barrierSource`, `latestPrediction`, `activeLanguage`).
  * Multilingual UI (English, Kannada, Hindi), Change Barrier / Change Language controls mid-chat without history loss.
  * Dual environment support: Browser (window.BarrierLensChatbotUI) & Node.js (module.exports).
@@ -340,11 +340,19 @@
     if (modeScreen && typeof modeScreen.render === 'function') {
       modeScreen.render('bl-mode-screen-container', {
         activeLanguage: _currentLang,
-        onSelectIdentify: startGuidedFlow,
-        onSelectExplore: startExploreFlow
+        onSelectExplore: startExploreFlow,
+        onStartChat: focusChatInput
       });
     } else {
       renderInlineChooseModeScreen('bl-mode-screen-container');
+    }
+  }
+
+  function focusChatInput() {
+    const input = document.getElementById('bl-chat-input');
+    if (input) {
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -355,39 +363,39 @@
     const labels = {
       en: {
         welcomeTitle: "Welcome to BarrierLens",
-        welcomeSubtitle: "What would you like to do? Choose an entry mode:",
-        identifyTitle: "1. Identify My Barrier",
-        identifyBadge: "Guided ML Model Flow",
-        identifyDesc: "Answer guided questions to predict your likely primary healthcare barrier (Household, Logistic, or Facility) using machine learning.",
-        identifyBtn: "Identify My Barrier →",
-        exploreTitle: "2. Explore Barriers",
+        welcomeSubtitle: "What would you like to do? Choose an option:",
+        exploreTitle: "1. Explore Barriers",
         exploreBadge: "Verified Evidence Flow",
         exploreDesc: "Directly select or ask about a barrier and explore verified BarrierLens evidence across 5 categories.",
-        exploreBtn: "Explore Barriers →"
+        exploreBtn: "Explore Barriers →",
+        chatTitle: "2. Chat with AI Assistant",
+        chatBadge: "Conversational AI",
+        chatDesc: "Ask any open question about healthcare access barriers, national disparities, or ML models to converse directly.",
+        chatBtn: "Start Conversation ↓"
       },
       kn: {
         welcomeTitle: "ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್‌ಗೆ ಸುಸ್ವಾಗತ",
-        welcomeSubtitle: "ನೀವು ಏನು ಮಾಡಲು ಬಯಸುತ್ತೀರಿ? ಪ್ರವೇಶ ವಿಧಾನವನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
-        identifyTitle: "1. ನನ್ನ ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಿ",
-        identifyBadge: "ಮಾರ್ಗದರ್ಶಿತ ML ಮಾದರಿ ಶೈಲಿ",
-        identifyDesc: "ಮೆಷಿನ್ ಲರ್ನಿಂಗ್ ಬಳಸಿ ನಿಮ್ಮ ಆರೋಗ್ಯ ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಲು ಕೆಲವು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.",
-        identifyBtn: "ಅಡಚಣೆಯನ್ನು ಗುರುತಿಸಿ →",
-        exploreTitle: "2. ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+        welcomeSubtitle: "ನೀವು ಏನು ಮಾಡಲು ಬಯಸುತ್ತೀರಿ? ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ:",
+        exploreTitle: "1. ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
         exploreBadge: "ಪರಿಶೀಲಿಸಿದ ಸಾಕ್ಷ್ಯ ಶೈಲಿ",
         exploreDesc: "5 ವರ್ಗಗಳಲ್ಲಿ ದೃಢೀಕೃತ ಮಾಹಿತಿ, ಅಂಕಿಅಂಶಗಳು ಮತ್ತು ಪರಿಹಾರಗಳನ್ನು ವೀಕ್ಷಿಸಿ.",
-        exploreBtn: "ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ →"
+        exploreBtn: "ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ →",
+        chatTitle: "2. ಸಹಾಯಕನೊಂದಿಗೆ ಮಾತನಾಡಿ",
+        chatBadge: "AI ಸಂಭಾಷಣೆ",
+        chatDesc: "ಆರೋಗ್ಯ ಅಡಚಣೆಗಳು, ರಾಷ್ಟ್ರೀಯ ಅಂಕಿಅಂಶಗಳು ಅಥವಾ ML ಮಾದರಿಗಳ ಬಗ್ಗೆ ಯಾವುದೇ ಪ್ರಶ್ನೆ ಕೇಳಿ.",
+        chatBtn: "ಸಂಭಾಷಣೆ ಪ್ರಾರಂಭಿಸಿ ↓"
       },
       hi: {
         welcomeTitle: "BarrierLens में आपका स्वागत है",
         welcomeSubtitle: "आप क्या करना चाहेंगे? एक विकल्प चुनें:",
-        identifyTitle: "1. मेरी बाधा पहचानें",
-        identifyBadge: "निर्देशित ML मॉडल प्रवाह",
-        identifyDesc: "मशीन लर्निंग का उपयोग करके अपनी प्राथमिक स्वास्थ्य बाधा का अनुमान लगाने के लिए प्रश्नों के उत्तर दें।",
-        identifyBtn: "मेरी बाधा पहचानें →",
-        exploreTitle: "2. बाधाओं का अन्वेषण करें",
+        exploreTitle: "1. बाधाओं का अन्वेषण करें",
         exploreBadge: "सत्यापित साक्ष्य प्रवाह",
         exploreDesc: "5 श्रेणियों में सत्यापित जानकारी, आँकड़े और समाधान देखें।",
-        exploreBtn: "बाधाओं का अन्वेषण करें →"
+        exploreBtn: "बाधाओं का अन्वेषण करें →",
+        chatTitle: "2. एआई सहायक से चैट करें",
+        chatBadge: "संवादात्मक एआई",
+        chatDesc: "स्वास्थ्य पहुंच बाधाओं, राष्ट्रीय विश्लेषण या ML मॉडल के बारे में कोई भी प्रश्न पूछें।",
+        chatBtn: "बातचीत शुरू करें ↓"
       }
     };
 
@@ -402,40 +410,40 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
-          <!-- Option 1: Identify My Barrier -->
-          <div class="bl-mode-card" id="bl-inline-mode-identify" style="background: #eff6ff; border: 2px solid #93c5fd; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
+          <!-- Option 1: Explore Barriers -->
+          <div class="bl-mode-card" id="bl-inline-mode-explore" style="background: #eff6ff; border: 2px solid #93c5fd; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 0.7rem; font-weight: 700; background: #2563eb; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.identifyBadge}</span>
-              <span style="font-size: 1.1rem;">🎯</span>
-            </div>
-            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #1e3a8a;">${text.identifyTitle}</h4>
-            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #334155; line-height: 1.4;">${text.identifyDesc}</p>
-            <button id="bl-btn-inline-identify" style="width: 100%; padding: 8px 12px; background: #2563eb; color: #ffffff; border: none; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.identifyBtn}</button>
-          </div>
-
-          <!-- Option 2: Explore Barriers -->
-          <div class="bl-mode-card" id="bl-inline-mode-explore" style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 0.7rem; font-weight: 700; background: #475569; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.exploreBadge}</span>
+              <span style="font-size: 0.7rem; font-weight: 700; background: #2563eb; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.exploreBadge}</span>
               <span style="font-size: 1.1rem;">🔍</span>
             </div>
-            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">${text.exploreTitle}</h4>
-            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #475569; line-height: 1.4;">${text.exploreDesc}</p>
-            <button id="bl-btn-inline-explore" style="width: 100%; padding: 8px 12px; background: #f1f5f9; color: #0f172a; border: 1px solid #94a3b8; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.exploreBtn}</button>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #1e3a8a;">${text.exploreTitle}</h4>
+            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #334155; line-height: 1.4;">${text.exploreDesc}</p>
+            <button id="bl-btn-inline-explore" style="width: 100%; padding: 8px 12px; background: #2563eb; color: #ffffff; border: none; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.exploreBtn}</button>
+          </div>
+
+          <!-- Option 2: Chat with AI Assistant -->
+          <div class="bl-mode-card" id="bl-inline-mode-chat" style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: 700; background: #475569; color: #ffffff; padding: 2px 8px; border-radius: 999px;">${text.chatBadge}</span>
+              <span style="font-size: 1.1rem;">💬</span>
+            </div>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">${text.chatTitle}</h4>
+            <p style="margin: 0 0 10px 0; font-size: 0.82rem; color: #475569; line-height: 1.4;">${text.chatDesc}</p>
+            <button id="bl-btn-inline-chat" style="width: 100%; padding: 8px 12px; background: #f1f5f9; color: #0f172a; border: 1px solid #94a3b8; border-radius: 7px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">${text.chatBtn}</button>
           </div>
         </div>
       </div>
     `;
 
-    const btnId = container.querySelector('#bl-btn-inline-identify');
-    const cardId = container.querySelector('#bl-inline-mode-identify');
     const btnExp = container.querySelector('#bl-btn-inline-explore');
     const cardExp = container.querySelector('#bl-inline-mode-explore');
+    const btnChat = container.querySelector('#bl-btn-inline-chat');
+    const cardChat = container.querySelector('#bl-inline-mode-chat');
 
-    if (btnId) btnId.addEventListener('click', startGuidedFlow);
-    if (cardId) cardId.addEventListener('click', (e) => { if (e.target !== btnId) startGuidedFlow(); });
     if (btnExp) btnExp.addEventListener('click', startExploreFlow);
     if (cardExp) cardExp.addEventListener('click', (e) => { if (e.target !== btnExp) startExploreFlow(); });
+    if (btnChat) btnChat.addEventListener('click', focusChatInput);
+    if (cardChat) cardChat.addEventListener('click', focusChatInput);
   }
 
   function startGuidedFlow() {

@@ -231,7 +231,7 @@
       // A. Greeting
       if (ctx.intent === "greeting") {
         return {
-          answer: `Hello! Welcome to **BarrierLens** (NFHS-5 Healthcare Access Research Assistant).\n\nWhat would you like to do?\n- Type **Explore Barriers** to browse verified research on Household, Logistic, and Facility barriers.\n- Type **Identify My Barrier** to predict your barrier domain using our Stage 1 ML models.`,
+          answer: `Hello! Welcome to **BarrierLens** (NFHS-5 Healthcare Access Research Assistant).\n\nWhat would you like to do?\n- Click or type **Explore Barriers** to browse verified research on Household, Logistic, and Facility barriers.\n- Ask any question about healthcare access barriers, national disparities, or ML models to converse directly!\n\n*(Note: To predict your personalized barrier risk, visit the **AI Risk Assessment** tool directly on the dashboard).*`,
           language: language || "en",
           intent: "greeting",
           confidence: 1.0,
@@ -262,16 +262,16 @@
         };
       }
 
-      // C. Mode 1 Entry: Identify My Barrier
-      if (ctx.intent === "identify_barrier" || lowerQuery.includes("identify my barrier") || lowerQuery.includes("identify barrier")) {
+      // C. Barrier Assessment Query -> Direct to Dashboard AI Risk Assessment
+      if (ctx.intent === "identify_barrier" || lowerQuery.includes("identify my barrier") || lowerQuery.includes("identify barrier") || lowerQuery.includes("check my barrier") || lowerQuery.includes("check which barrier")) {
         return {
-          answer: `Welcome to **Identify My Barrier** (Mode 1)!\n\nOur Stage 1 Machine Learning models evaluate your demographic and household profile across 724,115 women to predict your primary barrier.\n\nTo begin, please tell us your:\n- **Age** (e.g. 28)\n- **Education level** (no education / primary / secondary / higher)\n- **Wealth tier** (poorest / poorer / middle / richer / richest)\n- **Residence** (rural / urban)`,
+          answer: `To check and evaluate your personalized barrier risk using our ML models, please visit the **AI Risk Assessment** tool directly on the dashboard ([Risk Prediction](pages/risk_prediction.html)).\n\nHere in the chatbot, you can **explore barrier categories** (Household, Logistic, Facility, Multiple, All) or ask me any question about healthcare access barriers and NFHS-5 research!`,
           language: language || "en",
           intent: "identify_barrier",
           confidence: 1.0,
           entities: ctx.entities,
-          source: ["saved_models/stage1/random_forest_logistic.pkl"],
-          relatedPage: INTENT_PAGE_MAP.REGRESSION,
+          source: ["pages/risk_prediction.html"],
+          relatedPage: "pages/risk_prediction.html",
           status: "verified",
           metrics: [],
           evidence: [],
