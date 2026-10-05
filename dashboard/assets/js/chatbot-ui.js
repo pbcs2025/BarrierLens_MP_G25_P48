@@ -671,6 +671,7 @@
     if (barrierUI && typeof barrierUI.render === 'function') {
       barrierUI.render('bl-barrier-select-container', {
         activeBarrier: _activeBarrier,
+        activeLanguage: _currentLang,
         onSelectBarrier: onExploreBarrierSelected,
         onBack: renderWelcomeOrChooseMode,
         onCancel: renderWelcomeOrChooseMode
@@ -684,26 +685,47 @@
     const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
     if (!container) return;
 
-    const barriers = [
-      { id: "Household Barrier", key: "household", icon: "🏠", label: "Household Barrier", desc: "Family permission, travelling alone, and decision-making constraints." },
-      { id: "Logistic Barrier", key: "logistic", icon: "🚗", label: "Logistic Barrier", desc: "Transportation, distance to facility, and monetary constraints." },
-      { id: "Facility Barrier", key: "facility", icon: "🏥", label: "Facility Barrier", desc: "Absence of female providers, doctor availability, and medicine supply." },
-      { id: "Multiple Barriers", key: "multiple", icon: "⚠️", label: "Multiple Barriers", desc: "Co-occurring overlapping barriers across 2 or more domains." },
-      { id: "All Barriers", key: "all", icon: "📊", label: "All Barriers", desc: "Comprehensive nationwide multi-barrier analytics." }
-    ];
+    const langKey = resolveLangKey(_currentLang);
+    const barrierUI = getBarrierUI();
+
+    const headers = {
+      en: { back: "← Back to Modes", modeTag: "Mode 2: Explore", title: "Explore Healthcare Access Barriers", subtitle: "Select a barrier category to view verified NFHS-5 evidence & solutions:" },
+      kn: { back: "← ಪ್ರವೇಶ ವಿಧಾನಗಳಿಗೆ ಹಿಂತಿರುಗಿ", modeTag: "ವಿಧಾನ 2: ಅನ್ವೇಷಣೆ", title: "ಆರೋಗ್ಯ ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ", subtitle: "ದೃಢೀಕೃತ NFHS-5 ಮಾಹಿತಿ ಮತ್ತು ಪರಿಹಾರಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಒಂದು ಅಡಚಣೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ:" },
+      hi: { back: "← मोड पर वापस जाएं", modeTag: "मोड 2: अन्वेषण", title: "स्वास्थ्य देखभाल बाधाओं का अन्वेषण करें", subtitle: "सत्यापित NFHS-5 साक्ष्य और समाधान देखने के लिए एक श्रेणी चुनें:" }
+    };
+    const tHeader = headers[langKey] || headers.en;
+
+    let barriers = [];
+    if (barrierUI && barrierUI.BARRIER_DEFINITIONS) {
+      barriers = barrierUI.BARRIER_DEFINITIONS.map(b => ({
+        id: b.id,
+        key: b.key,
+        icon: b.icon,
+        label: (b.title && b.title[langKey]) || (b.title && b.title.en) || b.id,
+        desc: (b.desc && b.desc[langKey]) || (b.desc && b.desc.en) || ''
+      }));
+    } else {
+      barriers = [
+        { id: "Household Barrier", key: "household", icon: "🏠", label: langKey === 'kn' ? 'ಮನೆ/ಕುಟುಂಬದ ಅಡಚಣೆ' : langKey === 'hi' ? 'घरेलू / पारिवारिक बाधा' : 'Household Barrier', desc: langKey === 'kn' ? 'ಅನುಮತಿ ಕೊರತೆ, ಒಬ್ಬರೇ ಹೋಗಲು ಇಷ್ಟವಿಲ್ಲದಿರುವುದು, ಮನೆಯ ಹಂತದ ತೊಂದರೆಗಳು.' : langKey === 'hi' ? 'अकेले जाने की अनिच्छा, अनुमति की कमी या घरेलू निर्णय बाधाएं।' : 'Permission to go, not wanting to go alone, distance concerns at home.' },
+        { id: "Logistic Barrier", key: "logistic", icon: "🚗", label: langKey === 'kn' ? 'ಸಾರಿಗೆ / ವೆಚ್ಚದ ಅಡಚಣೆ' : langKey === 'hi' ? 'परिवहन / लागत बाधा' : 'Logistic Barrier', desc: langKey === 'kn' ? 'ಸಾರಿಗೆ ಸೌಲಭ್ಯದ ಅಭಾವ, ಚಿಕಿತ್ಸಾ ವೆಚ್ಚ ಮತ್ತು ಆಸ್ಪತ್ರೆಯ ದೂರ.' : langKey === 'hi' ? 'परिवहन की अनुपलब्धता, स्वास्थ्य केंद्र की दूरी और यात्रा लागत।' : 'Transport availability, monetary costs, distance to healthcare facility.' },
+        { id: "Facility Barrier", key: "facility", icon: "🏥", label: langKey === 'kn' ? 'ಆಸ್ಪತ್ರೆ / ಸೌಲಭ್ಯದ ಅಡಚಣೆ' : langKey === 'hi' ? 'अस्पताल / सुविधा की बाधा' : 'Facility Barrier', desc: langKey === 'kn' ? 'ವೈದ್ಯರ ಗೈರುಹಾಜರಿ, ಔಷಧಿಗಳ ಅಭಾವ ಮತ್ತು ಸಿಬ್ಬಂದಿಯ ನಡವಳಿಕೆ.' : langKey === 'hi' ? 'डॉक्टर की अनुपलब्धता, दवाइयों की कमी या स्वास्थ्यकर्मियों का व्यवहार।' : 'Absence of doctor, lack of medicines, provider attitudes at facility.' },
+        { id: "Multiple Barriers", key: "multiple", icon: "⚠️", label: langKey === 'kn' ? 'ಅನೇಕ ಅಡಚಣೆಗಳು (2+)' : langKey === 'hi' ? 'अनेक बाधाएं (2+)' : 'Multiple Barriers', desc: langKey === 'kn' ? 'ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು (2+) ಅಡಚಣೆಗಳನ್ನು ಏಕಕಾಲದಲ್ಲಿ ಎದುರಿಸುವುದು.' : langKey === 'hi' ? 'एक से अधिक (2+) बाधाओं का एक साथ सामना करना।' : 'Overlapping compound barriers (facing 2 or more barriers simultaneously).' },
+        { id: "All Barriers", key: "all", icon: "📊", label: langKey === 'kn' ? 'ಎಲ್ಲಾ ಅಡಚಣೆಗಳ ಒಟ್ಟು ನೋಟ' : langKey === 'hi' ? 'सभी बाधाओं का अवलोकन' : 'All Barriers', desc: langKey === 'kn' ? 'ಯಾವುದೇ ಒಂದಾದರೂ ಅಡಚಣೆಯನ್ನು ಎದುರಿಸುತ್ತಿರುವ ಒಟ್ಟಾರೆ ರಾಷ್ಟ್ರೀಯ ಪ್ರಮಾಣ.' : langKey === 'hi' ? 'कम से कम एक स्वास्थ्य बाधा का सामना करने वाली महिलाओं की समग्र दर।' : 'Composite national prevalence across any of the healthcare barriers.' }
+      ];
+    }
 
     container.innerHTML = `
       <div style="padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
           <button id="bl-btn-barrier-menu-top-back" style="padding: 5px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-            ← Back to Modes
+            ${tHeader.back}
           </button>
-          <span style="font-size: 0.72rem; font-weight: 700; color: #475569; text-transform: uppercase;">Mode 2: Explore</span>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #475569; text-transform: uppercase;">${tHeader.modeTag}</span>
         </div>
 
         <div style="margin-bottom: 12px; text-align: center;">
-          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">Select a Barrier to Explore</h4>
-          <p style="margin: 0; font-size: 0.82rem; color: #64748b;">Choose one of the 5 canonical BarrierLens categories:</p>
+          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">${tHeader.title}</h4>
+          <p style="margin: 0; font-size: 0.82rem; color: #64748b;">${tHeader.subtitle}</p>
         </div>
         <div style="display: grid; gap: 8px;">
           ${barriers.map(b => `
@@ -761,6 +783,7 @@
     if (barrierUI) {
       barrierUI.render(selectDiv, {
         activeBarrier: _activeBarrier,
+        activeLanguage: _currentLang,
         onSelectBarrier: (newBarrier) => {
           selectDiv.remove();
           onExploreBarrierSelected(newBarrier);

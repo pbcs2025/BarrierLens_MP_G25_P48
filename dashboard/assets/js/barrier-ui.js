@@ -103,7 +103,7 @@
       title: {
         en: "Multiple Barriers",
         kn: "ಅನೇಕ ಅಡಚಣೆಗಳು (2+)",
-        hi: "ಅನೇಕ ಬಾಧಾಏಂ (2+)"
+        hi: "अनेक बाधाएं (2+)"
       },
       desc: {
         en: "Overlapping compound barriers (facing 2 or more barriers simultaneously).",
@@ -128,6 +128,14 @@
     }
   ];
 
+  function resolveLangKey(lang) {
+    if (!lang || typeof lang !== 'string') return 'en';
+    const l = lang.trim().toLowerCase();
+    if (l === 'kn' || l.startsWith('kn') || l.includes('kannada') || l.includes('ಕನ್ನಡ')) return 'kn';
+    if (l === 'hi' || l.startsWith('hi') || l.includes('hindi') || l.includes('हिंदी') || l.includes('हिन्दी')) return 'hi';
+    return 'en';
+  }
+
   function getBarrierInfo(barrierName) {
     if (!barrierName) return BARRIER_DEFINITIONS[0];
     const found = BARRIER_DEFINITIONS.find(b => b.id.toLowerCase() === barrierName.toLowerCase() || b.key.toLowerCase() === barrierName.toLowerCase());
@@ -146,10 +154,7 @@
     const activeBarrier = options.activeBarrier || "All Barriers";
 
     const activeLanguage = options.activeLanguage || options.lang || 'en';
-    const rawLang = String(activeLanguage).toLowerCase();
-    const langKey = (rawLang.startsWith('kn') || rawLang.includes('kannada') || rawLang.includes('ಕನ್ನಡ')) ? 'kn'
-      : (rawLang.startsWith('hi') || rawLang.includes('hindi') || rawLang.includes('हिंदी') || rawLang.includes('हिन्दी')) ? 'hi'
-      : 'en';
+    const langKey = resolveLangKey(activeLanguage);
 
     const headerTexts = {
       en: {
@@ -230,10 +235,12 @@
   }
 
   function buildBarrierSelectionGridHtml(activeLang = 'en', currentBarrier = null) {
+    const langKey = resolveLangKey(activeLang);
+
     const cards = BARRIER_DEFINITIONS.map(b => {
       const isSelected = currentBarrier && currentBarrier.toLowerCase() === b.id.toLowerCase();
-      const titleText = b.title[activeLang] || b.title.en;
-      const descText = b.desc[activeLang] || b.desc.en;
+      const titleText = b.title[langKey] || b.title.en;
+      const descText = b.desc[langKey] || b.desc.en;
 
       return `
         <button class="bl-barrier-grid-card ${isSelected ? 'active' : ''}" data-barrier-id="${b.id}" aria-label="${titleText}">
@@ -246,11 +253,13 @@
       `;
     }).join('');
 
+    const headerText = langKey === 'kn' ? 'ವಿಶ್ಲೇಷಿಸಲು ಅಡಚಣೆಯನ್ನು ಆರಿಸಿ:' : langKey === 'hi' ? 'विश्लेषण के लिए बाधा चुनें:' : 'Select Barrier to Explore:';
+
     return `
       <div class="bl-barrier-selection-container" id="bl-barrier-selection-container">
         <div class="bl-barrier-selection-header">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-          <span>${activeLang === 'kn' ? 'ವಿಶ್ಲೇಷಿಸಲು ಅಡಚಣೆಯನ್ನು ಆರಿಸಿ:' : activeLang === 'hi' ? 'विश्लेषण के लिए बाधा चुनें:' : 'Select Barrier to Explore:'}</span>
+          <span>${headerText}</span>
         </div>
         <div class="bl-barrier-grid">
           ${cards}
@@ -261,11 +270,12 @@
 
   function buildActiveBarrierBannerHtml(activeBarrier, activeLang = 'en') {
     if (!activeBarrier) return '';
+    const langKey = resolveLangKey(activeLang);
     const info = getBarrierInfo(activeBarrier);
-    const titleText = info.title[activeLang] || info.title.en;
+    const titleText = info.title[langKey] || info.title.en;
 
-    const changeBarrierText = activeLang === 'kn' ? 'ಬದಲಾಯಿಸಿ' : activeLang === 'hi' ? 'बदलें' : 'Change';
-    const activeLabelText = activeLang === 'kn' ? 'ಸಕ್ರಿಯ ಅಡಚಣೆ:' : activeLang === 'hi' ? 'सक्रिय बाधा:' : 'Active Barrier:';
+    const changeBarrierText = langKey === 'kn' ? 'ಬದಲಾಯಿಸಿ' : langKey === 'hi' ? 'बदलें' : 'Change';
+    const activeLabelText = langKey === 'kn' ? 'ಸಕ್ರಿಯ ಅಡಚಣೆ:' : langKey === 'hi' ? 'सक्रिय बाधा:' : 'Active Barrier:';
 
     return `
       <div class="bl-active-barrier-bar" id="bl-active-barrier-bar">
@@ -283,7 +293,8 @@
 
   function renderBarrierLensEvidenceCard(data, activeLang = 'en') {
     if (!data) return '';
-    const badgeText = activeLang === 'kn' ? 'ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ದೃಢೀಕೃತ ಆಧಾರ' : activeLang === 'hi' ? 'बैरियर लेंस सत्यापित साक्ष्य' : 'BarrierLens Evidence';
+    const langKey = resolveLangKey(activeLang);
+    const badgeText = langKey === 'kn' ? 'ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ದೃಢೀಕೃತ ಆಧಾರ' : langKey === 'hi' ? 'बैरियर लेंस सत्यापित साक्ष्य' : 'BarrierLens Evidence';
     
     let metricsHtml = '';
     if (data.metrics && data.metrics.length > 0) {
@@ -324,10 +335,11 @@
 
   function renderExternalSolutionCard(solutionObj, activeLang = 'en') {
     if (!solutionObj) return '';
-    const badgeText = activeLang === 'kn' ? 'ಬಾಹ್ಯ ಅಧಿಕೃತ ಆಧಾರ' : activeLang === 'hi' ? 'बाह्य आधिकारिक साक्ष्य' : 'External Evidence';
-    const recLabel = activeLang === 'kn' ? 'ಶಿಫಾರಸು ಮಾಡಿದ ಪರಿಹಾರ' : activeLang === 'hi' ? 'अनुशंसित समाधान' : 'Recommended Solution';
-    const sourceLabel = activeLang === 'kn' ? 'ಮೂಲ / ಸಂಸ್ಥೆ' : activeLang === 'hi' ? 'स्रोतः' : 'Source';
-    const whyLabel = activeLang === 'kn' ? 'ಇದು ಏಕೆ ನೆರವಾಗುತ್ತದೆ' : activeLang === 'hi' ? 'यह क्यों सहायक है' : 'Why it may help';
+    const langKey = resolveLangKey(activeLang);
+    const badgeText = langKey === 'kn' ? 'ಬಾಹ್ಯ ಅಧಿಕೃತ ಆಧಾರ' : langKey === 'hi' ? 'बाह्य आधिकारिक साक्ष्य' : 'External Evidence';
+    const recLabel = langKey === 'kn' ? 'ಶಿಫಾರಸು ಮಾಡಿದ ಪರಿಹಾರ' : langKey === 'hi' ? 'अनुशंसित समाधान' : 'Recommended Solution';
+    const sourceLabel = langKey === 'kn' ? 'ಮೂಲ / ಸಂಸ್ಥೆ' : langKey === 'hi' ? 'स्रोतः' : 'Source';
+    const whyLabel = langKey === 'kn' ? 'ಇದು ಏಕೆ ನೆರವಾಗುತ್ತದೆ' : langKey === 'hi' ? 'यह क्यों सहायक है' : 'Why it may help';
 
     const solutionName = solutionObj.recommendedSolution || solutionObj.solution || solutionObj.recommendation || solutionObj.title || '';
     const sourceName = solutionObj.source || solutionObj.organization || 'WHO / Official Health Agency';

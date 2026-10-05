@@ -82,7 +82,10 @@
     "waited more than", "minutes", "hours", "wait duration",
     "number of hospitals", "hospital count", "number of beds", "bed availability",
     "doctor count", "number of doctors", "satisfaction rate", "satisfaction level",
-    "clinical outcome", "individual prognosis", "affected hospitals", "hospital list"
+    "clinical outcome", "individual prognosis", "affected hospitals", "hospital list",
+    "ಕಾಯುವ ಸಮಯ", "ಕಾಯುವ", "ಪ್ರತೀಕ್ಷಾ ಸಮಯ", "ಪ್ರತೀಕ್ಷಾ", "ಪ್ರತೀಕ್ಷೆ", "ಪ್ರತೀಕ್ಷೆಯ", "ಪ್ರತೀಕ್ಷೆಯು", "ಚಿಕಿತ್ಸಾ ವೆಚ್ಚ", "ವೈದ್ಯರ ವೇತನ", "ಆಸ್ಪತ್ರೆ ಕಾಯುವ ಸಮಯ", "ಆಸ್ಪತ್ರೆಯ ಕಾಯುವ ಸಮಯ", "ಸರಾಸರಿ ಕಾಯುವ ಸಮಯ",
+    "ಪ್ರತೀಕ್ಷಾ ಸಮಯ", "ಪ್ರತೀಕ್ಷೆಯ", "ಪ್ರತೀಕ್ಷೆ", "ಪ್ರತೀಕ್ಷೆಯು", "ಕಾಯುವ ಸಮಯ ಎಷ್ಟು", "ಆಸ್ಪತ್ರೆಯ ಸರಾಸರಿ",
+    "प्रतीक्षा समय", "प्रतीक्षा का समय", "प्रतीक्षा", "इंतजार का समय", "इंतजार", "इंतज़ार का समय", "इंतज़ार", "इलाज की लागत", "डॉक्टर का वेतन", "प्रतीक्षा का औसत समय", "औसत समय"
   ];
 
   /**
@@ -284,7 +287,7 @@
     }
 
     // Rule 3: National Overview
-    if (/\b(national|overall|most common|highest barrier|national overview|india|prevalence|broadest|country)\b/.test(text) && entities.states.length === 0) {
+    if (/\b(national|overall|most common|highest barrier|national overview|india|prevalence|broadest|country)\b|ಅತ್ಯಂತ ಸಾಮಾನ್ಯ|ಸಾಮಾನ್ಯವಾದ ಅಡಚಣೆ|ರಾಷ್ಟ್ರೀಯ ಅವಲೋಕನ|ಒಟ್ಟಾರೆ|ಸಾಮಾನ್ಯ|सबसे आम|राष्ट्रीय अवलोकन|समग्र/.test(text) && entities.states.length === 0) {
       scores.NATIONAL_OVERVIEW += 0.85;
     }
 
@@ -301,7 +304,7 @@
     }
 
     // Rule 6: Risk Archetypes / Clusters
-    if (entities.topic === "cluster" || /\b(archetype|archetypes|cluster|clusters|vulnerab|high vulnerability|segment|kmeans)\b/.test(text)) {
+    if (entities.topic === "cluster" || /\b(archetype|archetypes|cluster|clusters|vulnerab|high vulnerability|segment|kmeans)\b|ಅಪಾಯದ ಮಾದರಿ|ಅಪಾಯದ ಮಾದರಿಗಳು|ಕ್ಲಸ್ಟರಿಂಗ್|जोखिम के प्रकार|क्लस्टरिंग/.test(text)) {
       scores.RISK_ARCHETYPE += 0.90;
     }
 
@@ -321,7 +324,7 @@
     }
 
     // Rule 10: SHAP / Feature Importance
-    if (entities.topic === "shap" || /\b(shap|explainability|model driver|feature importance|shapley)\b/.test(text)) {
+    if (entities.topic === "shap" || /\b(shap|explainability|model driver|feature importance|shapley)\b|ವಿವರಣೆ|ವ್ಯಾಖ್ಯಾನ|व्याख्यात्मकता/.test(text)) {
       scores.SHAP += 0.95;
     }
 
@@ -336,7 +339,7 @@
     }
 
     // Rule 13: Limitations / Causation
-    if (entities.topic === "limitations" || /\b(causation|causal|causes|causing|does.*cause|prove causation|limitation|limitations|cross-sectional|correlation)\b/.test(text)) {
+    if (entities.topic === "limitations" || /\b(causation|causal|causes|causing|does.*cause|prove causation|limitation|limitations|cross-sectional|correlation)\b|ಕಾರಣಾತ್ಮಕತೆ|ಸಾಬೀತುಪಡಿಸಬಹುದೇ|ಮಿತಿಗಳು|कारण संबंध|साबित/.test(text)) {
       scores.LIMITATIONS += 0.95;
     }
 

@@ -89,6 +89,21 @@
     "lakshadweep": "Lakshadweep", "ಲಕ್ಷದ್ವೀಪ": "Lakshadweep", "लक्षद्वीप": "Lakshadweep"
   };
 
+  const UNSUPPORTED_KEYWORDS = [
+    "waiting time", "wait time", "queue", "hospital stay", "bed count", "doctor salary",
+    "cost of surgery", "patient satisfaction", "treatment plan", "medical diagnosis",
+    "prescribe", "clinical advice", "individual diagnosis", "personal advice", "dosage",
+    "hospital rating", "ambulance count", "nursing staff",
+    "treatment cost", "cost of treatment", "operation cost", "surgery cost",
+    "waited more than", "minutes", "hours", "wait duration",
+    "number of hospitals", "hospital count", "number of beds", "bed availability",
+    "doctor count", "number of doctors", "satisfaction rate", "satisfaction level",
+    "clinical outcome", "individual prognosis", "affected hospitals", "hospital list",
+    "ಕಾಯುವ ಸಮಯ", "ಕಾಯುವ", "ಪ್ರತೀಕ್ಷಾ ಸಮಯ", "ಪ್ರತೀಕ್ಷಾ", "ಪ್ರತೀಕ್ಷೆ", "ಪ್ರತೀಕ್ಷೆಯ", "ಪ್ರತೀಕ್ಷೆಯು", "ಚಿಕಿತ್ಸಾ ವೆಚ್ಚ", "ವೈದ್ಯರ ವೇತನ", "ಆಸ್ಪತ್ರೆ ಕಾಯುವ ಸಮಯ", "ಆಸ್ಪತ್ರೆಯ ಕಾಯುವ ಸಮಯ", "ಸರಾಸರಿ ಕಾಯುವ ಸಮಯ",
+    "ಪ್ರತೀಕ್ಷಾ ಸಮಯ", "ಪ್ರತೀಕ್ಷೆಯ", "ಪ್ರತೀಕ್ಷೆ", "ಪ್ರತೀಕ್ಷೆಯು", "ಕಾಯುವ ಸಮಯ ಎಷ್ಟು", "ಆಸ್ಪತ್ರೆಯ ಸರಾಸರಿ",
+    "प्रतीक्षा समय", "प्रतीक्षा का समय", "प्रतीक्षा", "इंतजार का समय", "इंतजार", "इंतज़ार का समय", "इंतज़ार", "इलाज की लागत", "डॉक्टर का वेतन", "प्रतीक्षा का औसत समय", "औसत समय"
+  ];
+
   /**
    * Helper to check word/phrase match in text.
    */
@@ -271,6 +286,11 @@
       lower.includes("बाधाओं का अन्वेषण करें")
     ) {
       return "explore_barrier";
+    }
+
+    // 4.5. Unsupported out-of-scope trigger
+    if (UNSUPPORTED_KEYWORDS.some(kw => textContains(lower, kw))) {
+      return "UNSUPPORTED";
     }
 
     // 5. Barrier selection or explicit barrier change triggers
