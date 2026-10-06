@@ -103,6 +103,10 @@
     return _state.sidebarCollapsed;
   }
 
+  function getSidebarCollapsed() {
+    return !!_state.sidebarCollapsed;
+  }
+
   // Filter Management
   function setFilter(key, value) {
     _state.filters[key] = value || '';
@@ -138,21 +142,46 @@
     return Object.keys(_state.filters).some(k => k !== 'domain' && _state.filters[k] !== '');
   }
 
+  function dataUrlCandidates(filename) {
+    const pathName = (window.location.pathname || '').replace(/\\/g, '/');
+    const inPagesDir = pathName.includes('/pages/');
+    const urls = [];
+    if (inPagesDir) {
+      urls.push('../assets/data/' + filename);
+    }
+    urls.push('assets/data/' + filename);
+    urls.push('/assets/data/' + filename);
+    return urls.filter((u, i, arr) => arr.indexOf(u) === i);
+  }
+
+  function fetchFromUrl(url, filename) {
+    return fetch(url).then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status} loading ${filename} from ${url}`);
+      return res.json();
+    });
+  }
+
   // JSON Data Fetching with in-memory caching & fallbacks
   function fetchData(filename) {
     if (_state.dataCache[filename]) {
       return Promise.resolve(_state.dataCache[filename]);
     }
 
-    const inPagesDir = window.location.pathname.includes('/pages/');
-    const basePath = inPagesDir ? '../assets/data/' : 'assets/data/';
-    const url = basePath + filename;
+    const urls = dataUrlCandidates(filename);
 
-    return fetch(url)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status} loading ${filename}`);
-        return res.json();
-      })
+    function tryAt(index) {
+      if (index >= urls.length) {
+        return Promise.reject(new Error(`All data paths failed for ${filename}`));
+      }
+      return fetchFromUrl(urls[index], filename).catch(err => {
+        if (index < urls.length - 1) {
+          return tryAt(index + 1);
+        }
+        throw err;
+      });
+    }
+
+    return tryAt(0)
       .then(data => {
         _state.dataCache[filename] = data;
         emit('data-loaded', { filename, data });
@@ -162,6 +191,39 @@
         console.error(`Failed to fetch ${filename}:`, err);
         return null;
       });
+  }
+
+  function rowMatchesFilter(row, filterVal) {
+    if (!row || !filterVal) return false;
+    const needle = String(filterVal).toLowerCase().trim();
+    if ((row.subgroup || '').toLowerCase() === needle) return true;
+    if (row.group_keys) {
+      return Object.values(row.group_keys).some(v => String(v).toLowerCase() === needle);
+    }
+    return false;
+  }
+
+  function findRuralUrbanGroups(ruralUrban) {
+    if (!ruralUrban) return { rural: null, urban: null };
+    if (ruralUrban.rural && ruralUrban.urban) {
+      return { rural: ruralUrban.rural, urban: ruralUrban.urban };
+    }
+    const groups = ruralUrban.groups || [];
+    return {
+      rural: groups.find(g => String(g.residence || '').toLowerCase() === 'rural') || null,
+      urban: groups.find(g => String(g.residence || '').toLowerCase() === 'urban') || null
+    };
+  }
+
+  function generateDynamicInsightText() {
+    const m = getFilteredSummaryMetrics();
+    const n = (m.sampleN || 0).toLocaleString();
+    const anyPct = ((m.anyBarrierRate || 0) * 100).toFixed(2);
+    const facPct = ((m.facilityRate || 0) * 100).toFixed(2);
+    const logPct = ((m.logisticRate || 0) * 100).toFixed(2);
+    const hhPct = ((m.householdRate || 0) * 100).toFixed(2);
+    const scope = m.filterLabel || 'National Sample';
+    return `${scope} (N = ${n}): ${anyPct}% of women report at least one healthcare access barrier (facility ${facPct}%, logistic ${logPct}%, household ${hhPct}%).`;
   }
 
   // Dynamic Macro Metrics Computation based on active filters
@@ -204,21 +266,26 @@
       let match = null;
       let label = '';
 
+      function subgroupLabel(row, prefix) {
+        const raw = row.subgroup || (row.group_keys ? Object.values(row.group_keys)[0] : '');
+        return prefix + (raw || '').toString();
+      }
+
       if (_state.filters.wealth && demographic.by_wealth) {
-        match = demographic.by_wealth.find(w => (w.subgroup || '').toLowerCase() === _state.filters.wealth.toLowerCase());
-        if (match) label = `Wealth: ${match.subgroup}`;
+        match = demographic.by_wealth.find(w => rowMatchesFilter(w, _state.filters.wealth));
+        if (match) label = subgroupLabel(match, 'Wealth: ');
       } else if (_state.filters.residence && demographic.by_residence) {
-        match = demographic.by_residence.find(r => (r.subgroup || '').toLowerCase() === _state.filters.residence.toLowerCase());
-        if (match) label = `Residence: ${match.subgroup}`;
+        match = demographic.by_residence.find(r => rowMatchesFilter(r, _state.filters.residence));
+        if (match) label = subgroupLabel(match, 'Residence: ');
       } else if (_state.filters.education && demographic.by_education) {
-        match = demographic.by_education.find(e => (e.subgroup || '').toLowerCase() === _state.filters.education.toLowerCase());
-        if (match) label = `Education: ${match.subgroup}`;
+        match = demographic.by_education.find(e => rowMatchesFilter(e, _state.filters.education));
+        if (match) label = subgroupLabel(match, 'Education: ');
       } else if (_state.filters.age && demographic.by_age) {
-        match = demographic.by_age.find(a => (a.subgroup || '').toLowerCase() === _state.filters.age.toLowerCase());
-        if (match) label = `Age: ${match.subgroup}`;
+        match = demographic.by_age.find(a => rowMatchesFilter(a, _state.filters.age));
+        if (match) label = subgroupLabel(match, 'Age: ');
       } else if (_state.filters.occupation && demographic.by_occupation) {
-        match = demographic.by_occupation.find(o => (o.subgroup || '').toLowerCase() === _state.filters.occupation.toLowerCase());
-        if (match) label = `Occupation: ${match.subgroup}`;
+        match = demographic.by_occupation.find(o => rowMatchesFilter(o, _state.filters.occupation));
+        if (match) label = subgroupLabel(match, 'Occupation: ');
       }
 
       if (match) {
@@ -246,9 +313,10 @@
 
     if (pageName === 'home' || pageName === 'index') {
       // 1. Rural vs Urban distribution
-      if (ruralUrban && ruralUrban.rural && ruralUrban.urban) {
-        const rRate = (ruralUrban.rural.observed_any_barrier_rate * 100).toFixed(1);
-        const uRate = (ruralUrban.urban.observed_any_barrier_rate * 100).toFixed(1);
+      const ru = findRuralUrbanGroups(ruralUrban);
+      if (ru.rural && ru.urban) {
+        const rRate = (ru.rural.observed_any_barrier_rate * 100).toFixed(1);
+        const uRate = (ru.urban.observed_any_barrier_rate * 100).toFixed(1);
         const diff = (rRate - uRate).toFixed(1);
         insights.push({
           icon: '📊',
@@ -262,14 +330,14 @@
         insights.push({
           icon: '🏥',
           title: 'Predominant Barrier Domains',
-          text: `Facility-level constraints (${national.kpis.observed_facility_rate}% observed) and Household barriers (${national.kpis.observed_household_rate}%) represent the most prevalent challenges across the 724,115 surveyed women.`
+          text: `Facility-level constraints (${(national.kpis.observed_facility_rate * 100).toFixed(2)}% observed) and Household barriers (${(national.kpis.observed_household_rate * 100).toFixed(2)}%) represent the most prevalent challenges across the 724,115 surveyed women.`
         });
       }
 
       // 3. Demographic & Wealth Pattern
       if (demo && demo.by_wealth) {
-        const poorest = demo.by_wealth.find(w => (w.subgroup || '').toLowerCase() === 'poorest');
-        const richest = demo.by_wealth.find(w => (w.subgroup || '').toLowerCase() === 'richest');
+        const poorest = demo.by_wealth.find(w => rowMatchesFilter(w, 'poorest'));
+        const richest = demo.by_wealth.find(w => rowMatchesFilter(w, 'richest'));
         if (poorest && richest) {
           const pRate = (poorest.observed_any_barrier_rate * 100).toFixed(1);
           const rRate = (richest.observed_any_barrier_rate * 100).toFixed(1);
@@ -389,6 +457,7 @@
     toggleTheme,
     setSidebarCollapsed,
     toggleSidebar,
+    getSidebarCollapsed,
     setFilter,
     setFilters,
     resetFilters,

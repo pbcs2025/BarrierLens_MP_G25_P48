@@ -10,6 +10,7 @@
   <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
@@ -174,21 +175,76 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      window.DashboardState.fetchData("outcome_impact_summary.json").then(data => {
-        if (!data) return;
-        renderFPChart(data);
-        renderANCChart(data);
-        renderTable(data);
+      ChartUtils.loadJsonAndRender({
+        containerIds: ["fp-chart", "anc-chart"],
+        filename: "outcome_impact_summary.json",
+        loadingMessage: "Loading outcome impact charts...",
+        errorMessage: "Unable to load outcome impact chart.",
+        render: function (data) {
+          renderFPChart(data);
+          renderANCChart(data);
+          renderTable(data);
+        }
       });
     });
 
-    function renderFPChart(data) {
-      if (!data.targets || !data.targets.target_unmet_fp) return;
-      const fp = data.targets.target_unmet_fp;
+    function normalizeOutcomeBlock(block) {
+      if (!block) return null;
+      if (block.models) return block;
+      const models = {};
+      if (block.logistic_regression) {
+        const lr = block.logistic_regression;
+        const full = lr.full_with_barriers_auc != null ? lr.full_with_barriers_auc : lr.roc_auc;
+        const uplift = lr.barrier_uplift_auc != null ? lr.barrier_uplift_auc : 0;
+        models.logistic_regression = {
+          baseline_auc: lr.baseline_socioeconomic_auc != null ? lr.baseline_socioeconomic_auc : (full - uplift),
+          full_auc: full,
+          auc_uplift: uplift,
+          test_accuracy: lr.accuracy,
+          f1_score: lr.f1_score
+        };
+      }
+      if (block.random_forest) {
+        const rf = block.random_forest;
+        const full = rf.full_with_barriers_auc != null ? rf.full_with_barriers_auc : rf.roc_auc;
+        const uplift = rf.barrier_uplift_auc != null ? rf.barrier_uplift_auc : 0;
+        models.random_forest = {
+          baseline_auc: rf.baseline_socioeconomic_auc != null ? rf.baseline_socioeconomic_auc : (typeof full === "number" ? full - uplift : null),
+          full_auc: full,
+          auc_uplift: uplift,
+          test_accuracy: rf.accuracy,
+          f1_score: rf.f1_score
+        };
+      }
+      return { models: models };
+    }
 
-      const categories = ["Logistic Regression", "Random Forest"];
-      const baseAUC = [fp.models.logistic_regression.baseline_auc, fp.models.random_forest.baseline_auc];
-      const fullAUC = [fp.models.logistic_regression.full_auc, fp.models.random_forest.full_auc];
+    function getOutcomeTargets(data) {
+      if (data.targets) return data.targets;
+      return {
+        target_unmet_fp: normalizeOutcomeBlock(data.target_unmet_fp),
+        target_anc_gap: normalizeOutcomeBlock(data.target_anc_gap)
+      };
+    }
+
+    function renderFPChart(data) {
+      const targets = getOutcomeTargets(data);
+      if (!targets || !targets.target_unmet_fp || !targets.target_unmet_fp.models) return;
+      const fp = targets.target_unmet_fp;
+      const models = fp.models;
+      const categories = [];
+      const baseAUC = [];
+      const fullAUC = [];
+      if (models.logistic_regression) {
+        categories.push("Logistic Regression");
+        baseAUC.push(models.logistic_regression.baseline_auc);
+        fullAUC.push(models.logistic_regression.full_auc);
+      }
+      if (models.random_forest) {
+        categories.push("Random Forest");
+        baseAUC.push(models.random_forest.baseline_auc);
+        fullAUC.push(models.random_forest.full_auc);
+      }
 
       const explanation = `
         <strong>Unmet Family Planning Prediction:</strong><br>
@@ -209,12 +265,23 @@
     }
 
     function renderANCChart(data) {
-      if (!data.targets || !data.targets.target_anc_gap) return;
-      const anc = data.targets.target_anc_gap;
-
-      const categories = ["Logistic Regression", "Random Forest"];
-      const baseAUC = [anc.models.logistic_regression.baseline_auc, anc.models.random_forest.baseline_auc];
-      const fullAUC = [anc.models.logistic_regression.full_auc, anc.models.random_forest.full_auc];
+      const targets = getOutcomeTargets(data);
+      if (!targets || !targets.target_anc_gap || !targets.target_anc_gap.models) return;
+      const anc = targets.target_anc_gap;
+      const models = anc.models;
+      const categories = [];
+      const baseAUC = [];
+      const fullAUC = [];
+      if (models.logistic_regression) {
+        categories.push("Logistic Regression");
+        baseAUC.push(models.logistic_regression.baseline_auc);
+        fullAUC.push(models.logistic_regression.full_auc);
+      }
+      if (models.random_forest) {
+        categories.push("Random Forest");
+        baseAUC.push(models.random_forest.baseline_auc);
+        fullAUC.push(models.random_forest.full_auc);
+      }
 
       const explanation = `
         <strong>Antenatal Care (ANC) Gap Prediction:</strong><br>
@@ -235,25 +302,26 @@
     }
 
     function renderTable(data) {
-      if (!data.targets) return;
+      const targets = getOutcomeTargets(data);
+      if (!targets) return;
       const rows = [];
 
-      Object.keys(data.targets).forEach(targetKey => {
-        const targetObj = data.targets[targetKey];
+      Object.keys(targets).forEach(function (targetKey) {
+        const targetObj = targets[targetKey];
+        if (!targetObj || !targetObj.models) return;
         const targetName = targetKey === "target_unmet_fp" ? "Unmet Family Planning Need" : "Antenatal Care Gap (<4 Visits)";
 
-        Object.keys(targetObj.models).forEach(modelKey => {
+        Object.keys(targetObj.models).forEach(function (modelKey) {
           const m = targetObj.models[modelKey];
           const modelName = modelKey === "logistic_regression" ? "Logistic Regression" : "Random Forest";
-
           rows.push({
             target: targetName,
             model: modelName,
-            baseline: m.baseline_auc.toFixed(4),
-            full: m.full_auc.toFixed(4),
-            uplift: "+" + m.auc_uplift.toFixed(4),
-            acc: (m.test_accuracy * 100).toFixed(2) + "%",
-            f1: m.f1_score.toFixed(4)
+            baseline: m.baseline_auc != null ? Number(m.baseline_auc).toFixed(4) : "—",
+            full: m.full_auc != null ? Number(m.full_auc).toFixed(4) : "—",
+            uplift: m.auc_uplift != null ? "+" + Number(m.auc_uplift).toFixed(4) : "—",
+            acc: m.test_accuracy != null ? (m.test_accuracy * 100).toFixed(2) + "%" : "—",
+            f1: m.f1_score != null ? Number(m.f1_score).toFixed(4) : "—"
           });
         });
       });

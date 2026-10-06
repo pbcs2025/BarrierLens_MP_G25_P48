@@ -10,6 +10,7 @@
   <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
@@ -121,10 +122,15 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      window.DashboardState.fetchData("empowerment_summary.json").then(data => {
-        if (!data) return;
-        renderChart(data);
-        renderTable(data);
+      ChartUtils.loadJsonAndRender({
+        containerId: "empowerment-chart",
+        filename: "empowerment_summary.json",
+        loadingMessage: "Loading empowerment chart...",
+        errorMessage: "Unable to load empowerment chart.",
+        render: function (data) {
+          renderChart(data);
+          renderTable(data);
+        }
       });
     });
 

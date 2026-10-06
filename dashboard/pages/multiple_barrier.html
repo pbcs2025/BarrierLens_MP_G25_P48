@@ -10,6 +10,7 @@
   <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
@@ -148,12 +149,17 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      window.DashboardState.fetchData("multiple_barrier_summary.json").then(data => {
-        if (!data) return;
-        renderDistributionChart(data.overall);
-        renderWealthChart(data.by_wealth_tier);
-        renderResidenceChart(data.by_residence);
-        renderTable(data.by_wealth_tier);
+      ChartUtils.loadJsonAndRender({
+        containerIds: ["distribution-chart", "wealth-cross-chart", "residence-cross-chart"],
+        filename: "multiple_barrier_summary.json",
+        loadingMessage: "Loading multiple barrier charts...",
+        errorMessage: "Unable to load multiple barrier charts.",
+        render: function (data) {
+          renderDistributionChart(data.overall);
+          renderWealthChart(data.by_wealth_tier);
+          renderResidenceChart(data.by_residence);
+          renderTable(data.by_wealth_tier);
+        }
       });
     });
 

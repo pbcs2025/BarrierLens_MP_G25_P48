@@ -10,6 +10,7 @@
   <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
@@ -150,19 +151,86 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      window.DashboardState.fetchData("rural_urban_summary.json").then(data => {
-        if (!data) return;
-        renderChart(data);
-        renderTable(data);
+      ChartUtils.loadJsonAndRender({
+        containerId: "rural-urban-chart",
+        filename: "rural_urban_summary.json",
+        loadingMessage: "Loading residence comparison chart...",
+        errorMessage: "Unable to load residence comparison chart.",
+        render: function (data) {
+          const comparison = buildDomainComparison(data);
+          if (!comparison) {
+            throw new Error("Residence comparison JSON is missing Rural/Urban groups");
+          }
+          renderChart(comparison);
+          renderTable(comparison);
+        }
       });
     });
 
-    function renderChart(data) {
-      const domains = data.domain_comparison.map(d => d.domain);
-      const ruralObs = data.domain_comparison.map(d => d.rural_observed * 100);
-      const urbanObs = data.domain_comparison.map(d => d.urban_observed * 100);
-      const ruralPred = data.domain_comparison.map(d => d.rural_predicted * 100);
-      const urbanPred = data.domain_comparison.map(d => d.urban_predicted * 100);
+    function meanPredicted(row) {
+      const vals = [row.predicted_household_prob, row.predicted_logistic_prob, row.predicted_facility_prob]
+        .filter(function (v) { return typeof v === "number"; });
+      if (!vals.length) return 0;
+      return vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
+    }
+
+    function buildDomainComparison(data) {
+      if (data && Array.isArray(data.domain_comparison) && data.domain_comparison.length) {
+        return data.domain_comparison;
+      }
+      const groups = (data && data.groups) || [];
+      const rural = (data && data.rural) || groups.find(function (g) {
+        return String(g.residence || "").toLowerCase() === "rural";
+      });
+      const urban = (data && data.urban) || groups.find(function (g) {
+        return String(g.residence || "").toLowerCase() === "urban";
+      });
+      if (!rural || !urban) return null;
+
+      return [
+        {
+          domain: "Any Barrier (≥1)",
+          rural_observed: rural.observed_any_barrier_rate,
+          urban_observed: urban.observed_any_barrier_rate,
+          rural_predicted: meanPredicted(rural),
+          urban_predicted: meanPredicted(urban)
+        },
+        {
+          domain: "Facility-Level Barrier",
+          rural_observed: rural.observed_facility_rate,
+          urban_observed: urban.observed_facility_rate,
+          rural_predicted: rural.predicted_facility_prob,
+          urban_predicted: urban.predicted_facility_prob
+        },
+        {
+          domain: "Logistic Barrier (Distance)",
+          rural_observed: rural.observed_logistic_rate,
+          urban_observed: urban.observed_logistic_rate,
+          rural_predicted: rural.predicted_logistic_prob,
+          urban_predicted: urban.predicted_logistic_prob
+        },
+        {
+          domain: "Household Barrier (Money/Autonomy)",
+          rural_observed: rural.observed_household_rate,
+          urban_observed: urban.observed_household_rate,
+          rural_predicted: rural.predicted_household_prob,
+          urban_predicted: urban.predicted_household_prob
+        }
+      ];
+    }
+
+    function renderChart(domainComparison) {
+      const chartContainer = document.getElementById("rural-urban-chart");
+      if (!chartContainer) {
+        console.error("Residence comparison chart container not found");
+        return;
+      }
+
+      const domains = domainComparison.map(function (d) { return d.domain; });
+      const ruralObs = domainComparison.map(function (d) { return d.rural_observed * 100; });
+      const urbanObs = domainComparison.map(function (d) { return d.urban_observed * 100; });
+      const ruralPred = domainComparison.map(function (d) { return d.rural_predicted * 100; });
+      const urbanPred = domainComparison.map(function (d) { return d.urban_predicted * 100; });
 
       const explanation = `
         <strong>Residence Comparison Interpretation:</strong><br>
@@ -184,9 +252,10 @@
       );
     }
 
-    function renderTable(data) {
+    function renderTable(domainComparison) {
       const tbody = document.getElementById("ru-table-body");
-      tbody.innerHTML = data.domain_comparison.map(d => {
+      if (!tbody) return;
+      tbody.innerHTML = domainComparison.map(function (d) {
         const rObs = d.rural_observed * 100;
         const uObs = d.urban_observed * 100;
         const diff = (rObs - uObs).toFixed(2);

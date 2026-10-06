@@ -10,6 +10,7 @@
   <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
 </head>
 <body>
@@ -148,6 +149,16 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <span class="card-title" id="treemap-card-title">State-wise Treemap</span>
+          <div class="card-subtitle">Area-weighted prevalence across States and Union Territories</div>
+        </div>
+      </div>
+      <div id="state-treemap-chart" class="chart-box" style="min-height: 480px;"></div>
+    </div>
+
     <!-- State Comparison Mode (State A vs State B) -->
     <div class="card" style="border: 2px solid var(--primary); background: var(--bg-surface);">
       <div class="card-title-row">
@@ -257,15 +268,20 @@
     let stateDataGlobal = null;
 
     document.addEventListener("DOMContentLoaded", function () {
-      window.DashboardState.fetchData("state_summary.json").then(data => {
-        if (!data) return;
-        stateDataGlobal = data;
-        populateStateDropdown(data.states);
-        populateCompareDropdowns(data.states);
-        renderStateKPIs(data);
-        renderAllCharts();
-        renderStateTable();
-        renderStateComparison();
+      ChartUtils.loadJsonAndRender({
+        containerIds: ["state-ranked-chart", "state-treemap-chart"],
+        filename: "state_summary.json",
+        loadingMessage: "Loading state rankings...",
+        errorMessage: "Unable to load state analysis charts.",
+        render: function (data) {
+          stateDataGlobal = data;
+          populateStateDropdown(data.states);
+          populateCompareDropdowns(data.states);
+          renderStateKPIs(data);
+          renderAllCharts();
+          renderStateTable();
+          renderStateComparison();
+        }
       });
 
       document.getElementById("compare-state-a").addEventListener("change", renderStateComparison);
@@ -386,8 +402,10 @@
         return queryLower ? "#cbd5e1" : "#0284c7";
       });
 
-      document.getElementById("chart-card-title").textContent = `State-wise Ranked ${metricLabels[metricKey]}`;
-      document.getElementById("treemap-card-title").textContent = `State-wise Treemap (${metricLabels[metricKey]})`;
+      const rankedTitle = document.getElementById("chart-card-title");
+      if (rankedTitle) rankedTitle.textContent = `State-wise Ranked ${metricLabels[metricKey]}`;
+      const treemapTitle = document.getElementById("treemap-card-title");
+      if (treemapTitle) treemapTitle.textContent = `State-wise Treemap (${metricLabels[metricKey]})`;
 
       const explanation = `
         <strong>State Disparity Interpretation:</strong><br>

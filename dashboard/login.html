@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BarrierLens — Healthcare Access Intelligence. Data-driven approaches to identifying barriers in women's healthcare access in India using NFHS-5 data, XGBoost and SHAP explainable AI.">
+  <title>BarrierLens — Sign In · Healthcare Access Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body class="bl-login-body">
+
+  <!-- ================================================================
+       ANIMATED HEALTHCARE + DATA BACKGROUND (pure CSS / SVG)
+       ================================================================ -->
+  <div class="bl-bg" aria-hidden="true">
+    <div class="bl-bg-base"></div>
+    <div class="bl-grid-lines"></div>
+    <div class="bl-glow bl-glow-1"></div>
+    <div class="bl-glow bl-glow-2"></div>
+    <div class="bl-glow bl-glow-3"></div>
+
+    <!-- Concentric clustering rings (K-Means / model inference motif) -->
+    <div class="bl-radar">
+      <span class="bl-radar-ring bl-radar-ring-1"></span>
+      <span class="bl-radar-ring bl-radar-ring-2"></span>
+      <span class="bl-radar-ring bl-radar-ring-3"></span>
+      <span class="bl-radar-core"></span>
+      <span class="bl-radar-sweep"></span>
+    </div>
+
+    <!-- Floating data particles -->
+    <div class="bl-particles">
+      <span class="bl-particle" style="--x:6%;  --y:18%; --d:0s;    --s:3px;  --dur:19s; --dx:34px;  --dy:-46px;"></span>
+      <span class="bl-particle" style="--x:14%; --y:72%; --d:-4s;   --s:2px;  --dur:23s; --dx:-28px; --dy:-38px;"></span>
+      <span class="bl-particle" style="--x:22%; --y:34%; --d:-9s;   --s:4px;  --dur:26s; --dx:26px;  --dy:44px;"></span>
+      <span class="bl-particle" style="--x:29%; --y:84%; --d:-2s;   --s:2px;  --dur:21s; --dx:40px;  --dy:-52px;"></span>
+      <span class="bl-particle" style="--x:35%; --y:12%; --d:-13s;  --s:3px;  --dur:25s; --dx:-34px; --dy:40px;"></span>
+      <span class="bl-particle" style="--x:41%; --y:58%; --d:-6s;   --s:2px;  --dur:29s; --dx:22px;  --dy:-34px;"></span>
+      <span class="bl-particle" style="--x:48%; --y:26%; --d:-16s;  --s:3px;  --dur:22s; --dx:-30px; --dy:48px;"></span>
+      <span class="bl-particle" style="--x:55%; --y:78%; --d:-11s;  --s:2px;  --dur:27s; --dx:36px;  --dy:-30px;"></span>
+      <span class="bl-particle" style="--x:62%; --y:9%;  --d:-3s;   --s:4px;  --dur:24s; --dx:-26px; --dy:42px;"></span>
+      <span class="bl-particle" style="--x:68%; --y:64%; --d:-19s;  --s:2px;  --dur:30s; --dx:32px;  --dy:-48px;"></span>
+      <span class="bl-particle" style="--x:74%; --y:30%; --d:-7s;   --s:3px;  --dur:20s; --dx:-38px; --dy:36px;"></span>
+      <span class="bl-particle" style="--x:79%; --y:88%; --d:-14s;  --s:2px;  --dur:28s; --dx:24px;  --dy:-40px;"></span>
+      <span class="bl-particle" style="--x:84%; --y:20%; --d:-1s;   --s:3px;  --dur:23s; --dx:-30px; --dy:46px;"></span>
+      <span class="bl-particle" style="--x:89%; --y:70%; --d:-10s;  --s:2px;  --dur:26s; --dx:34px;  --dy:-32px;"></span>
+      <span class="bl-particle" style="--x:93%; --y:44%; --d:-17s;  --s:3px;  --dur:21s; --dx:-24px; --dy:38px;"></span>
+      <span class="bl-particle" style="--x:3%;  --y:52%; --d:-12s;  --s:2px;  --dur:31s; --dx:28px;  --dy:-44px;"></span>
+      <span class="bl-particle" style="--x:19%; --y:6%;  --d:-5s;   --s:3px;  --dur:25s; --dx:-32px; --dy:34px;"></span>
+      <span class="bl-particle" style="--x:44%; --y:94%; --d:-15s;  --s:2px;  --dur:27s; --dx:30px;  --dy:-36px;"></span>
+      <span class="bl-particle" style="--x:58%; --y:44%; --d:-8s;   --s:3px;  --dur:22s; --dx:-26px; --dy:50px;"></span>
+      <span class="bl-particle" style="--x:72%; --y:96%; --d:-20s;  --s:2px;  --dur:29s; --dx:36px;  --dy:-30px;"></span>
+      <span class="bl-particle" style="--x:97%; --y:8%;  --d:-3s;   --s:3px;  --dur:24s; --dx:-28px; --dy:42px;"></span>
+    </div>
+
+    <!-- Data node network -->
+    <svg class="bl-network" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" focusable="false">
+      <defs>
+        <linearGradient id="blLink" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"  stop-color="#22d3ee" stop-opacity="0"/>
+          <stop offset="45%" stop-color="#818cf8" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="blNode" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#e0f7ff" stop-opacity="0.95"/>
+          <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <g class="bl-network-links">
+        <line x1="120" y1="180" x2="330" y2="320"/>
+        <line x1="330" y1="320" x2="560" y2="150"/>
+        <line x1="560" y1="150" x2="760" y2="380"/>
+        <line x1="760" y1="380" x2="980" y2="210"/>
+        <line x1="980" y1="210" x2="1200" y2="420"/>
+        <line x1="1200" y1="420" x2="1340" y2="250"/>
+        <line x1="200" y1="640" x2="420" y2="720"/>
+        <line x1="420" y1="720" x2="680" y2="620"/>
+        <line x1="680" y1="620" x2="900" y2="760"/>
+        <line x1="900" y1="760" x2="1120" y2="640"/>
+        <line x1="330" y1="320" x2="420" y2="720"/>
+        <line x1="760" y1="380" x2="680" y2="620"/>
+        <line x1="980" y1="210" x2="1120" y2="640"/>
+      </g>
+
+      <g class="bl-network-nodes">
+        <circle class="bl-node" cx="120" cy="180" r="9" style="--nd:0s"/>
+        <circle class="bl-node" cx="330" cy="320" r="11" style="--nd:1.4s"/>
+        <circle class="bl-node" cx="560" cy="150" r="8"  style="--nd:2.8s"/>
+        <circle class="bl-node" cx="760" cy="380" r="12" style="--nd:4.1s"/>
+        <circle class="bl-node" cx="980" cy="210" r="9"  style="--nd:5.5s"/>
+        <circle class="bl-node" cx="1200" cy="420" r="10" style="--nd:6.9s"/>
+        <circle class="bl-node" cx="1340" cy="250" r="7"  style="--nd:8.2s"/>
+        <circle class="bl-node" cx="200" cy="640" r="8"  style="--nd:2.2s"/>
+        <circle class="bl-node" cx="420" cy="720" r="10" style="--nd:3.6s"/>
+        <circle class="bl-node" cx="680" cy="620" r="9"  style="--nd:5s"/>
+        <circle class="bl-node" cx="900" cy="760" r="8"  style="--nd:6.4s"/>
+        <circle class="bl-node" cx="1120" cy="640" r="10" style="--nd:7.8s"/>
+      </g>
+    </svg>
+
+    <!-- Healthcare heartbeat / EKG line with ML pipeline nodes -->
+    <div class="bl-ekg-wrap">
+    <svg class="bl-ekg" viewBox="0 0 1440 220" preserveAspectRatio="none" focusable="false">
+      <defs>
+        <linearGradient id="blEkgStroke" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#22d3ee" stop-opacity="0.15"/>
+          <stop offset="18%"  stop-color="#22d3ee" stop-opacity="0.75"/>
+          <stop offset="50%"  stop-color="#818cf8" stop-opacity="0.9"/>
+          <stop offset="82%"  stop-color="#c084fc" stop-opacity="0.75"/>
+          <stop offset="100%" stop-color="#c084fc" stop-opacity="0.15"/>
+        </linearGradient>
+        <filter id="blEkgGlow" x="-10%" y="-60%" width="120%" height="220%">
+          <feGaussianBlur stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <path class="bl-ekg-base"
+            d="M0 150 H150 l14 -6 l12 12 l16 -60 l20 132 l18 -78 l14 10 H420 l16 -8 l14 14 l18 -66 l20 146 l18 -84 l14 12 H660 l16 -6 l12 12 l16 -58 l20 128 l18 -76 l14 10 H900 l16 -8 l14 14 l18 -68 l20 148 l18 -82 l14 12 H1200 l16 -6 l12 12 l16 -60 l20 130 l18 -78 l14 10 H1440"/>
+
+      <path class="bl-ekg-pulse"
+            d="M0 150 H150 l14 -6 l12 12 l16 -60 l20 132 l18 -78 l14 10 H420 l16 -8 l14 14 l18 -66 l20 146 l18 -84 l14 12 H660 l16 -6 l12 12 l16 -58 l20 128 l18 -76 l14 10 H900 l16 -8 l14 14 l18 -68 l20 148 l18 -82 l14 12 H1200 l16 -6 l12 12 l16 -60 l20 130 l18 -78 l14 10 H1440"/>
+
+      <g class="bl-ekg-nodes" filter="url(#blEkgGlow)">
+        <circle class="bl-ekg-node" cx="230"  cy="150" r="4.5" style="--en:0s"/>
+        <circle class="bl-ekg-node" cx="452"  cy="150" r="4.5" style="--en:1.2s"/>
+        <circle class="bl-ekg-node" cx="680"  cy="150" r="4.5" style="--en:2.4s"/>
+        <circle class="bl-ekg-node" cx="900"  cy="150" r="4.5" style="--en:3.6s"/>
+        <circle class="bl-ekg-node" cx="1120" cy="150" r="4.5" style="--en:4.8s"/>
+        <circle class="bl-ekg-node" cx="1310" cy="150" r="4.5" style="--en:6s"/>
+      </g>
+    </svg>
+
+    <div class="bl-ekg-labels" aria-hidden="true">
+      <span style="--el:0.15s; left:16.0%">NFHS-5</span>
+      <span style="--el:1.35s; left:31.4%">DATA</span>
+      <span style="--el:2.55s; left:47.2%">ML</span>
+      <span style="--el:3.75s; left:62.5%">XGBoost</span>
+      <span style="--el:4.95s; left:77.8%">SHAP</span>
+      <span style="--el:6.15s; left:91.0%">INSIGHTS</span>
+    </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       LOGIN / LANDING CONTENT
+       ================================================================ -->
+  <main class="bl-login-shell">
+
+    <!-- Floating project data chips -->
+    <div class="bl-float-layer" aria-hidden="true">
+      <div class="bl-float-card bl-fc-1" style="--fd:1.4s;  --fy:-16px; --fx:10px;  --fdur:9s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>724,115 Women</span>
+      </div>
+      <div class="bl-float-card bl-fc-2" style="--fd:2.1s;  --fy:14px;  --fx:-12px; --fdur:11s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+        <span>NFHS-5</span>
+      </div>
+      <div class="bl-float-card bl-fc-3" style="--fd:2.8s;  --fy:-12px; --fx:14px;  --fdur:10s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
+        <span>XGBoost</span>
+      </div>
+      <div class="bl-float-card bl-fc-4" style="--fd:3.5s;  --fy:12px;  --fx:-10px; --fdur:12s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>SHAP Explainability</span>
+      </div>
+      <div class="bl-float-card bl-fc-5" style="--fd:4.2s;  --fy:-14px; --fx:8px;   --fdur:10.5s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v6M9 11h6"/></svg>
+        <span>Healthcare Barriers</span>
+      </div>
+      <div class="bl-float-card bl-fc-6" style="--fd:4.9s;  --fy:16px;  --fx:-14px; --fdur:11.5s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>
+        <span>SDG 3</span>
+      </div>
+    </div>
+
+    <div class="bl-grid">
+
+      <!-- LEFT: project branding / hero -->
+      <section class="bl-hero">
+        <div class="bl-brand bl-anim" style="--d:0.10s">
+          <span class="bl-brand-mark">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9.5 12h1.8l1-2.4 1.6 4.2 1-1.8h1.6"/></svg>
+          </span>
+          <span class="bl-brand-text">
+            <span class="bl-brand-name">BARRIERLENS</span>
+            <span class="bl-brand-sub">Healthcare Access Intelligence</span>
+          </span>
+        </div>
+
+        <h1 class="bl-title bl-anim" style="--d:0.28s">
+          Data-Driven Approaches to Identifying Barriers in
+          <span class="hl">Women&rsquo;s Healthcare Access in India</span>
+        </h1>
+
+        <p class="bl-desc bl-anim" style="--d:0.44s">
+          An interactive research and machine learning platform using NFHS-5 data to explore
+          healthcare access barriers among women in India.
+        </p>
+
+        <div class="bl-badges bl-anim" style="--d:0.60s">
+          <span class="bl-badge"><i class="dot"></i>NFHS-5 RESEARCH</span>
+          <span class="bl-badge"><i class="dot"></i>MACHINE LEARNING</span>
+          <span class="bl-badge"><i class="dot"></i>EXPLAINABLE AI</span>
+          <span class="bl-badge"><i class="dot"></i>HEALTHCARE ANALYTICS</span>
+        </div>
+
+        <!-- DATA → ANALYSIS → ML → INSIGHT → HEALTHCARE ACCESS pipeline -->
+        <div class="bl-pipeline bl-anim" style="--d:0.76s" aria-hidden="true">
+          <span class="bl-step">DATA</span>
+          <span class="bl-step-arrow"></span>
+          <span class="bl-step">ANALYSIS</span>
+          <span class="bl-step-arrow"></span>
+          <span class="bl-step">MACHINE LEARNING</span>
+          <span class="bl-step-arrow"></span>
+          <span class="bl-step">INSIGHT</span>
+          <span class="bl-step-arrow"></span>
+          <span class="bl-step bl-step-accent">HEALTHCARE ACCESS</span>
+        </div>
+      </section>
+
+      <!-- RIGHT: login card -->
+      <section class="bl-auth-col">
+        <div class="bl-login-card bl-anim" style="--d:0.34s" id="login-card">
+          <div class="bl-card-glow" aria-hidden="true"></div>
+
+          <header class="bl-card-head">
+            <h2 class="bl-card-title">Welcome to BarrierLens</h2>
+            <p class="bl-card-sub">Enter the research intelligence dashboard</p>
+          </header>
+
+          <form class="bl-form" id="login-form" novalidate autocomplete="on">
+            <div class="bl-field bl-anim" style="--d:0.52s">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <input id="bl-username" name="username" type="text" class="bl-input"
+                       placeholder=" " autocomplete="username"
+                       spellcheck="false" required>
+                <label class="bl-label" for="bl-username">Email / Username</label>
+              </div>
+            </div>
+
+            <div class="bl-field bl-anim" style="--d:0.64s">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input id="bl-password" name="password" type="password" class="bl-input"
+                       placeholder=" " autocomplete="current-password" required>
+                <label class="bl-label" for="bl-password">Password</label>
+                <button type="button" class="bl-toggle-pass" id="bl-toggle-password"
+                        aria-label="Show password" aria-pressed="false">
+                  <svg class="ico-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="ico-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="bl-row bl-anim" style="--d:0.74s">
+              <label class="bl-check" for="bl-remember">
+                <input type="checkbox" id="bl-remember" name="remember">
+                <span class="bl-box" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0b1020" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="bl-check-text">Remember me</span>
+              </label>
+              <span class="bl-demo-note" title="College project demonstration build">Demo build</span>
+            </div>
+
+            <p class="bl-error" id="login-error" role="alert" aria-live="assertive" hidden></p>
+
+            <button type="submit" class="bl-btn-primary" id="bl-signin">
+              <span class="bl-btn-label">SIGN IN</span>
+              <span class="bl-btn-loader" aria-hidden="true"></span>
+              <svg class="bl-btn-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+
+            <button type="button" class="bl-btn-ghost" id="bl-demo-login">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>CONTINUE AS DEMO</span>
+            </button>
+
+            <p class="bl-credentials" id="bl-credentials-hint">
+              Demonstration credentials &mdash;
+              <code>research@barrierlens.in</code> / <code>BarrierLens@2025</code>
+              (or press <strong>Continue as Demo</strong>)
+            </p>
+          </form>
+
+          <footer class="bl-card-foot">
+            <span>NFHS-5 Research Intelligence</span>
+            <span class="sep">•</span>
+            <span>Machine Learning</span>
+            <span class="sep">•</span>
+            <span>Explainable AI</span>
+          </footer>
+        </div>
+      </section>
+
+      <!-- PROJECT TEAM (full width, appears last on mobile) -->
+      <section class="bl-team bl-anim" style="--d:0.9s" aria-label="Project team">
+        <div class="bl-team-head">
+          <span class="bl-team-kicker">MAJOR PROJECT · G25 · P48</span>
+          <h3 class="bl-team-title">Project Team</h3>
+        </div>
+        <div class="bl-team-grid">
+          <article class="bl-member">
+            <span class="bl-member-avatar" aria-hidden="true">PH</span>
+            <span class="bl-member-name">Parvati Hiregoudra</span>
+            <span class="bl-member-id">1GA23CS114</span>
+          </article>
+          <article class="bl-member">
+            <span class="bl-member-avatar" aria-hidden="true">PB</span>
+            <span class="bl-member-name">Prathibha B C</span>
+            <span class="bl-member-id">1GA23CS125</span>
+          </article>
+          <article class="bl-member">
+            <span class="bl-member-avatar" aria-hidden="true">RM</span>
+            <span class="bl-member-name">Rabiya Bushra M</span>
+            <span class="bl-member-id">1GA23CS130</span>
+          </article>
+          <article class="bl-member">
+            <span class="bl-member-avatar" aria-hidden="true">SS</span>
+            <span class="bl-member-name">Sharmila S</span>
+            <span class="bl-member-id">1GA23CS153</span>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Sign-in status + full-screen transition overlay -->
+  <div class="bl-transition" id="bl-transition" aria-hidden="true">
+    <div class="bl-transition-grid"></div>
+    <div class="bl-transition-sweep"></div>
+    <div class="bl-transition-core">
+      <div class="bl-transition-ring"></div>
+      <div class="bl-transition-ring bl-transition-ring-2"></div>
+      <p class="bl-transition-status" id="bl-transition-status">Signing in…</p>
+    </div>
+  </div>
+
+  <div class="bl-sr-only" id="bl-live-status" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/login-page.js"></script>
+</body>
+</html>

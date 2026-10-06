@@ -23,6 +23,101 @@ const ChartUtils = {
   // Active chart registry for modals & cross-filtering
   _chartRegistry: {},
 
+  showChartStatus: function (containerId, kind, message, retryFn) {
+    const el = document.getElementById(containerId);
+    if (!el) {
+      console.error('Chart container not found:', containerId);
+      return false;
+    }
+    if (kind === 'loading') {
+      el.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-muted);">' +
+        (message || 'Loading chart...') + '</div>';
+      return true;
+    }
+    if (kind === 'error') {
+      const retryId = containerId + '-retry-btn';
+      el.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-muted);">' +
+        '<div style="margin-bottom:12px;">' + (message || 'Unable to load chart.') + '</div>' +
+        '<button type="button" class="chart-btn" id="' + retryId + '">Retry</button></div>';
+      const btn = document.getElementById(retryId);
+      if (btn && typeof retryFn === 'function') {
+        btn.addEventListener('click', retryFn);
+      }
+    }
+    return true;
+  },
+
+  ensureChartReady: function (containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) {
+      console.error('Chart container not found:', containerId);
+      return false;
+    }
+    if (typeof Plotly === 'undefined') {
+      console.error('Plotly is not loaded before chart render for', containerId);
+      this.showChartStatus(containerId, 'error', 'Unable to load chart (Plotly is not available).');
+      return false;
+    }
+    return true;
+  },
+
+  _plot: function (containerId, data, layout) {
+    if (!this.ensureChartReady(containerId)) return;
+    try {
+      Plotly.react(containerId, data, layout, this.baseConfig);
+    } catch (err) {
+      console.error('Plotly.react failed for', containerId, err);
+      this.showChartStatus(containerId, 'error', 'Unable to load chart.');
+    }
+  },
+
+  loadJsonAndRender: function (opts) {
+    const self = this;
+    const containers = opts.containerIds || (opts.containerId ? [opts.containerId] : []);
+    const loadingMsg = opts.loadingMessage || 'Loading chart...';
+    const errorMsg = opts.errorMessage || 'Unable to load chart.';
+    const filename = opts.filename;
+    const filenames = opts.filenames;
+    const render = opts.render;
+
+    function run() {
+      containers.forEach(function (id) { self.showChartStatus(id, 'loading', loadingMsg); });
+      if (typeof Plotly === 'undefined') {
+        containers.forEach(function (id) {
+          self.showChartStatus(id, 'error', 'Unable to load chart (Plotly is not available).', run);
+        });
+        return;
+      }
+      if (!window.DashboardState || typeof window.DashboardState.fetchData !== 'function') {
+        console.error('DashboardState is not initialized');
+        containers.forEach(function (id) { self.showChartStatus(id, 'error', errorMsg, run); });
+        return;
+      }
+      const request = filenames
+        ? Promise.all(filenames.map(function (f) { return window.DashboardState.fetchData(f); }))
+        : window.DashboardState.fetchData(filename);
+      request.then(function (data) {
+        const ok = filenames ? (Array.isArray(data) && data.every(Boolean)) : !!data;
+        if (!ok) {
+          containers.forEach(function (id) { self.showChartStatus(id, 'error', errorMsg, run); });
+          return;
+        }
+        try {
+          render(data);
+        } catch (err) {
+          console.error('Chart render failed:', err);
+          containers.forEach(function (id) { self.showChartStatus(id, 'error', errorMsg, run); });
+        }
+      }).catch(function (err) {
+        console.error('Chart data load failed:', err);
+        containers.forEach(function (id) { self.showChartStatus(id, 'error', errorMsg, run); });
+      });
+    }
+
+    run();
+    return run;
+  },
+
   // Base Plotly Configuration
   baseConfig: {
     responsive: true,
@@ -138,7 +233,7 @@ const ChartUtils = {
     layout.barmode = 'group';
 
     this._chartRegistry[containerId] = { type: 'grouped', data, layout, title, explanation, categories, seriesList };
-    Plotly.react(containerId, data, layout, this.baseConfig);
+    this._plot(containerId, data, layout);
     this.injectChartActions(containerId, title, explanation);
   },
 
@@ -160,7 +255,7 @@ const ChartUtils = {
     layout.barmode = 'stack';
 
     this._chartRegistry[containerId] = { type: 'stacked', data, layout, title, explanation, categories, seriesList };
-    Plotly.react(containerId, data, layout, this.baseConfig);
+    this._plot(containerId, data, layout);
     this.injectChartActions(containerId, title, explanation);
   },
 
@@ -182,7 +277,7 @@ const ChartUtils = {
     layout.xaxis.tickangle = -45;
 
     this._chartRegistry[containerId] = { type: 'ranked', data, layout, title, explanation, categories, values, color, yAxisTitle };
-    Plotly.react(containerId, data, layout, this.baseConfig);
+    this._plot(containerId, data, layout);
     this.injectChartActions(containerId, title, explanation);
   },
 
@@ -205,7 +300,7 @@ const ChartUtils = {
     layout.yaxis.autorange = 'reversed';
 
     this._chartRegistry[containerId] = { type: 'horizontal', data, layout, title, explanation, categories, values, color, xAxisTitle };
-    Plotly.react(containerId, data, layout, this.baseConfig);
+    this._plot(containerId, data, layout);
     this.injectChartActions(containerId, title, explanation);
   },
 
@@ -239,7 +334,7 @@ const ChartUtils = {
     };
 
     this._chartRegistry[containerId] = { type: 'treemap', data, layout, title, explanation, labels, values };
-    Plotly.react(containerId, data, layout, this.baseConfig);
+    this._plot(containerId, data, layout);
     this.injectChartActions(containerId, title, explanation);
   },
 
@@ -309,7 +404,9 @@ if (window.DashboardState) {
         const layout = ChartUtils.getBaseLayout(reg.title);
         if (reg.layout.barmode) layout.barmode = reg.layout.barmode;
         if (reg.layout.margin) layout.margin = reg.layout.margin;
-        Plotly.relayout(containerId, layout);
+        if (typeof Plotly !== 'undefined') {
+          Plotly.relayout(containerId, layout);
+        }
       }
     });
   });

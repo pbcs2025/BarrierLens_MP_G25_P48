@@ -3,6 +3,40 @@
  * Injects modern collapsible sidebar, top navigation header, command search, theme toggle, and AI assistant hook.
  */
 
+/* ==========================================================================
+   DEMO AUTH GATE
+   The login/landing page is the entry point of the platform, so dashboard
+   documents require an active demo session (see assets/js/auth.js and the
+   /auth routes in server.js). This is a demonstration gate only - it is not
+   production-level security.
+   ========================================================================== */
+(function barrierLensDemoAuthGate() {
+  "use strict";
+
+  var pathname = String(window.location.pathname || "").replace(/\\/g, "/");
+  if (pathname.indexOf("login.html") !== -1) return;
+
+  var authenticated = false;
+  var storageBlocked = false;
+
+  try {
+    authenticated = !!(
+      window.localStorage.getItem("bl_auth_session") ||
+      window.sessionStorage.getItem("bl_auth_session")
+    );
+  } catch (err) {
+    // Storage unavailable (private mode / file://) - never lock the user out.
+    storageBlocked = true;
+  }
+
+  if (storageBlocked || authenticated) return;
+
+  var prefix = pathname.indexOf("/pages/") !== -1 ? "../" : "";
+  window.location.replace(
+    prefix + "login.html?next=" + encodeURIComponent(pathname + window.location.search)
+  );
+})();
+
 document.addEventListener("DOMContentLoaded", function () {
   const pathname = window.location.pathname.replace(/\\/g, "/");
   const inPagesDir = pathname.includes("/pages/");
@@ -67,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Build Left Sidebar HTML
   const sidebarHtml = `
-    <aside class="app-sidebar ${window.DashboardState && window.DashboardState.sidebarCollapsed ? 'collapsed' : ''}" id="app-sidebar">
+    <aside class="app-sidebar ${window.DashboardState && window.DashboardState.getSidebarCollapsed && window.DashboardState.getSidebarCollapsed() ? 'collapsed' : ''}" id="app-sidebar">
       <div class="sidebar-header">
         <a href="${pageHref('index.html')}" class="sidebar-brand">
           <div class="brand-icon-wrapper">
@@ -152,6 +186,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <svg id="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         </button>
 
+        <button class="chart-btn" id="header-logout-btn" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); font-weight: 700;" title="Sign out and return to the BarrierLens login page">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Sign out</span>
+        </button>
+
         <button class="chart-btn" id="header-ask-ai-btn" style="background: var(--primary); color: #ffffff; border-color: var(--primary); font-weight: 700;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span>Ask AI Assistant</span>
@@ -202,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (existingContainer && !document.querySelector(".app-shell")) {
     const mainContentHtml = existingContainer.outerHTML;
     const fullShellHtml = `
-      <div class="app-shell">
+      <div class="app-shell bl-shell-enter">
         ${sidebarHtml}
         <div class="app-main">
           ${topHeaderHtml}
@@ -287,6 +326,27 @@ document.addEventListener("DOMContentLoaded", function () {
     themeToggleBtn.addEventListener("click", function () {
       window.DashboardState.toggleTheme();
       updateThemeIcon();
+    });
+  }
+
+  // Sign out -> clear the demo session and return to the login / landing page
+  const logoutBtn = document.getElementById("header-logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+      const prefix = inPagesDir ? "../" : "";
+      const finish = function () {
+        try {
+          window.localStorage.removeItem("bl_auth_session");
+          window.sessionStorage.removeItem("bl_auth_session");
+        } catch (err) { /* storage blocked - server cookie already cleared */ }
+        window.location.replace(prefix + "login.html");
+      };
+      const auth = window.BarrierLensAuth;
+      if (auth && typeof auth.logout === "function") {
+        auth.logout().then(finish, finish);
+      } else {
+        finish();
+      }
     });
   }
 
