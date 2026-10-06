@@ -103,7 +103,7 @@
       title: {
         en: "Multiple Barriers",
         kn: "ಅನೇಕ ಅಡಚಣೆಗಳು (2+)",
-        hi: "ಅನೇಕ ಬಾಧಾಏಂ (2+)"
+        hi: "अनेक बाधाएं (2+)"
       },
       desc: {
         en: "Overlapping compound barriers (facing 2 or more barriers simultaneously).",
@@ -128,6 +128,14 @@
     }
   ];
 
+  function resolveLangKey(lang) {
+    if (!lang || typeof lang !== 'string') return 'en';
+    const l = lang.trim().toLowerCase();
+    if (l === 'kn' || l.startsWith('kn') || l.includes('kannada') || l.includes('ಕನ್ನಡ')) return 'kn';
+    if (l === 'hi' || l.startsWith('hi') || l.includes('hindi') || l.includes('हिंदी') || l.includes('हिन्दी')) return 'hi';
+    return 'en';
+  }
+
   function getBarrierInfo(barrierName) {
     if (!barrierName) return BARRIER_DEFINITIONS[0];
     const found = BARRIER_DEFINITIONS.find(b => b.id.toLowerCase() === barrierName.toLowerCase() || b.key.toLowerCase() === barrierName.toLowerCase());
@@ -145,21 +153,51 @@
     const onBack = options.onBack || options.onCancel || function() {};
     const activeBarrier = options.activeBarrier || "All Barriers";
 
-    const buttonsHtml = BARRIER_OPTIONS.map(b => {
-      const isSelected = b.name.toLowerCase() === activeBarrier.toLowerCase();
+    const activeLanguage = options.activeLanguage || options.lang || 'en';
+    const langKey = resolveLangKey(activeLanguage);
+
+    const headerTexts = {
+      en: {
+        back: "← Back to Modes",
+        modeTag: "Mode 2: Explore",
+        title: "Explore Healthcare Access Barriers",
+        subtitle: "Select a barrier category to view verified NFHS-5 evidence & solutions:",
+        activeBadge: "Active"
+      },
+      kn: {
+        back: "← ಪ್ರವೇಶ ವಿಧಾನಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
+        modeTag: "ವಿಧಾನ 2: ಅನ್ವೇಷಣೆ",
+        title: "ಆರೋಗ್ಯ ಅಡಚಣೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+        subtitle: "ದೃಢೀಕೃತ NFHS-5 ಮಾಹಿತಿ ಮತ್ತು ಪರಿಹಾರಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಒಂದು ಅಡಚಣೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
+        activeBadge: "ಸಕ್ರಿಯ"
+      },
+      hi: {
+        back: "← मोड पर वापस जाएं",
+        modeTag: "मोड 2: अन्वेषण",
+        title: "स्वास्थ्य देखभाल बाधाओं का अन्वेषण करें",
+        subtitle: "सत्यापित NFHS-5 साक्ष्य और समाधान देखने के लिए एक श्रेणी चुनें:",
+        activeBadge: "सक्रिय"
+      }
+    };
+    const tHeader = headerTexts[langKey] || headerTexts.en;
+
+    const buttonsHtml = BARRIER_DEFINITIONS.map(b => {
+      const isSelected = b.id.toLowerCase() === activeBarrier.toLowerCase();
       const bg = isSelected ? '#eff6ff' : '#ffffff';
       const border = isSelected ? '#2563eb' : '#e2e8f0';
       const textColor = isSelected ? '#1e40af' : '#0f172a';
+      const titleText = b.title[langKey] || b.title.en;
+      const descText = b.desc[langKey] || b.desc.en;
 
       return `
-        <button class="bl-barrier-select-btn" data-barrier="${b.name}" style="width: 100%; text-align: left; padding: 12px 14px; background: ${bg}; border: 1.5px solid ${border}; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: flex-start; gap: 10px;">
+        <button class="bl-barrier-select-btn" data-barrier="${b.id}" style="width: 100%; text-align: left; padding: 12px 14px; background: ${bg}; border: 1.5px solid ${border}; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: flex-start; gap: 10px;">
           <span style="font-size: 1.25rem;">${b.icon}</span>
           <div style="flex: 1;">
             <div style="font-weight: 700; font-size: 0.925rem; color: ${textColor}; display: flex; justify-content: space-between; align-items: center;">
-              <span>${b.name}</span>
-              ${isSelected ? '<span style="font-size: 0.75rem; background: #2563eb; color: #fff; padding: 2px 6px; border-radius: 4px;">Active</span>' : ''}
+              <span>${titleText}</span>
+              ${isSelected ? `<span style="font-size: 0.75rem; background: #2563eb; color: #fff; padding: 2px 6px; border-radius: 4px;">${tHeader.activeBadge}</span>` : ''}
             </div>
-            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">${b.desc}</div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">${descText}</div>
           </div>
         </button>
       `;
@@ -169,13 +207,13 @@
       <div class="bl-barrier-ui-wrapper" style="padding: 14px; font-family: system-ui, -apple-system, sans-serif;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
           <button id="bl-btn-barrier-ui-back" style="padding: 5px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-            ← Back to Modes
+            ${tHeader.back}
           </button>
-          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Mode 2: Explore</span>
+          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">${tHeader.modeTag}</span>
         </div>
         <div style="margin-bottom: 12px; text-align: center;">
-          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">Explore Healthcare Access Barriers</h4>
-          <p style="margin: 0; font-size: 0.825rem; color: #64748b;">Select a barrier category to view verified NFHS-5 evidence & solutions:</p>
+          <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: #0f172a;">${tHeader.title}</h4>
+          <p style="margin: 0; font-size: 0.825rem; color: #64748b;">${tHeader.subtitle}</p>
         </div>
         <div class="bl-barrier-buttons-list">
           ${buttonsHtml}
@@ -197,10 +235,12 @@
   }
 
   function buildBarrierSelectionGridHtml(activeLang = 'en', currentBarrier = null) {
+    const langKey = resolveLangKey(activeLang);
+
     const cards = BARRIER_DEFINITIONS.map(b => {
       const isSelected = currentBarrier && currentBarrier.toLowerCase() === b.id.toLowerCase();
-      const titleText = b.title[activeLang] || b.title.en;
-      const descText = b.desc[activeLang] || b.desc.en;
+      const titleText = b.title[langKey] || b.title.en;
+      const descText = b.desc[langKey] || b.desc.en;
 
       return `
         <button class="bl-barrier-grid-card ${isSelected ? 'active' : ''}" data-barrier-id="${b.id}" aria-label="${titleText}">
@@ -213,11 +253,13 @@
       `;
     }).join('');
 
+    const headerText = langKey === 'kn' ? 'ವಿಶ್ಲೇಷಿಸಲು ಅಡಚಣೆಯನ್ನು ಆರಿಸಿ:' : langKey === 'hi' ? 'विश्लेषण के लिए बाधा चुनें:' : 'Select Barrier to Explore:';
+
     return `
       <div class="bl-barrier-selection-container" id="bl-barrier-selection-container">
         <div class="bl-barrier-selection-header">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-          <span>${activeLang === 'kn' ? 'ವಿಶ್ಲೇಷಿಸಲು ಅಡಚಣೆಯನ್ನು ಆರಿಸಿ:' : activeLang === 'hi' ? 'विश्लेषण के लिए बाधा चुनें:' : 'Select Barrier to Explore:'}</span>
+          <span>${headerText}</span>
         </div>
         <div class="bl-barrier-grid">
           ${cards}
@@ -228,11 +270,12 @@
 
   function buildActiveBarrierBannerHtml(activeBarrier, activeLang = 'en') {
     if (!activeBarrier) return '';
+    const langKey = resolveLangKey(activeLang);
     const info = getBarrierInfo(activeBarrier);
-    const titleText = info.title[activeLang] || info.title.en;
+    const titleText = info.title[langKey] || info.title.en;
 
-    const changeBarrierText = activeLang === 'kn' ? 'ಬದಲಾಯಿಸಿ' : activeLang === 'hi' ? 'बदलें' : 'Change';
-    const activeLabelText = activeLang === 'kn' ? 'ಸಕ್ರಿಯ ಅಡಚಣೆ:' : activeLang === 'hi' ? 'सक्रिय बाधा:' : 'Active Barrier:';
+    const changeBarrierText = langKey === 'kn' ? 'ಬದಲಾಯಿಸಿ' : langKey === 'hi' ? 'बदलें' : 'Change';
+    const activeLabelText = langKey === 'kn' ? 'ಸಕ್ರಿಯ ಅಡಚಣೆ:' : langKey === 'hi' ? 'सक्रिय बाधा:' : 'Active Barrier:';
 
     return `
       <div class="bl-active-barrier-bar" id="bl-active-barrier-bar">
@@ -250,7 +293,8 @@
 
   function renderBarrierLensEvidenceCard(data, activeLang = 'en') {
     if (!data) return '';
-    const badgeText = activeLang === 'kn' ? 'ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ದೃಢೀಕೃತ ಆಧಾರ' : activeLang === 'hi' ? 'बैरियर लेंस सत्यापित साक्ष्य' : 'BarrierLens Evidence';
+    const langKey = resolveLangKey(activeLang);
+    const badgeText = langKey === 'kn' ? 'ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ದೃಢೀಕೃತ ಆಧಾರ' : langKey === 'hi' ? 'बैरियर लेंस सत्यापित साक्ष्य' : 'BarrierLens Evidence';
     
     let metricsHtml = '';
     if (data.metrics && data.metrics.length > 0) {
@@ -291,10 +335,11 @@
 
   function renderExternalSolutionCard(solutionObj, activeLang = 'en') {
     if (!solutionObj) return '';
-    const badgeText = activeLang === 'kn' ? 'ಬಾಹ್ಯ ಅಧಿಕೃತ ಆಧಾರ' : activeLang === 'hi' ? 'बाह्य आधिकारिक साक्ष्य' : 'External Evidence';
-    const recLabel = activeLang === 'kn' ? 'ಶಿಫಾರಸು ಮಾಡಿದ ಪರಿಹಾರ' : activeLang === 'hi' ? 'अनुशंसित समाधान' : 'Recommended Solution';
-    const sourceLabel = activeLang === 'kn' ? 'ಮೂಲ / ಸಂಸ್ಥೆ' : activeLang === 'hi' ? 'स्रोतः' : 'Source';
-    const whyLabel = activeLang === 'kn' ? 'ಇದು ಏಕೆ ನೆರವಾಗುತ್ತದೆ' : activeLang === 'hi' ? 'यह क्यों सहायक है' : 'Why it may help';
+    const langKey = resolveLangKey(activeLang);
+    const badgeText = langKey === 'kn' ? 'ಬಾಹ್ಯ ಅಧಿಕೃತ ಆಧಾರ' : langKey === 'hi' ? 'बाह्य आधिकारिक साक्ष्य' : 'External Evidence';
+    const recLabel = langKey === 'kn' ? 'ಶಿಫಾರಸು ಮಾಡಿದ ಪರಿಹಾರ' : langKey === 'hi' ? 'अनुशंसित समाधान' : 'Recommended Solution';
+    const sourceLabel = langKey === 'kn' ? 'ಮೂಲ / ಸಂಸ್ಥೆ' : langKey === 'hi' ? 'स्रोतः' : 'Source';
+    const whyLabel = langKey === 'kn' ? 'ಇದು ಏಕೆ ನೆರವಾಗುತ್ತದೆ' : langKey === 'hi' ? 'यह क्यों सहायक है' : 'Why it may help';
 
     const solutionName = solutionObj.recommendedSolution || solutionObj.solution || solutionObj.recommendation || solutionObj.title || '';
     const sourceName = solutionObj.source || solutionObj.organization || 'WHO / Official Health Agency';

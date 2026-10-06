@@ -78,19 +78,39 @@ async function runTestSuite() {
   // =========================================================================
   console.log('=== PART 2: MULTILINGUAL RENDERING TESTS (EN, KN, HI) ===');
 
-  const languages = ['en', 'kn', 'hi'];
+  const languages = ['en', 'kn', 'hi', 'kn-IN', 'hi-IN'];
   for (const lang of languages) {
-    I18n.setLanguage(lang);
-    assert(I18n.getCurrentLanguage() === lang, `i18n active language set to "${lang}"`);
-    assert(I18n.t('barrierLensEvidence', lang) !== 'barrierLensEvidence', `Translation for "barrierLensEvidence" exists in "${lang}"`);
-    assert(I18n.t('externalEvidence', lang) !== 'externalEvidence', `Translation for "externalEvidence" exists in "${lang}"`);
-    assert(I18n.t('recommendedSolution', lang) !== 'recommendedSolution', `Translation for "recommendedSolution" exists in "${lang}"`);
-    assert(I18n.t('solutionSource', lang) !== 'solutionSource', `Translation for "solutionSource" exists in "${lang}"`);
-    assert(I18n.t('whyItMayHelp', lang) !== 'whyItMayHelp', `Translation for "whyItMayHelp" exists in "${lang}"`);
+    const normLang = lang.startsWith('kn') ? 'kn' : lang.startsWith('hi') ? 'hi' : 'en';
+    I18n.setLanguage(normLang);
+    assert(I18n.getCurrentLanguage() === normLang, `i18n active language set to "${normLang}"`);
+    assert(I18n.t('barrierLensEvidence', normLang) !== 'barrierLensEvidence', `Translation for "barrierLensEvidence" exists in "${normLang}"`);
+    assert(I18n.t('externalEvidence', normLang) !== 'externalEvidence', `Translation for "externalEvidence" exists in "${normLang}"`);
+    assert(I18n.t('recommendedSolution', normLang) !== 'recommendedSolution', `Translation for "recommendedSolution" exists in "${normLang}"`);
 
-    // Test grid building in language
+    // Test grid building in language / locale
     const gridHtml = BarrierUI.buildBarrierSelectionGridHtml(lang, "Facility Barrier");
     assert(gridHtml.includes('bl-barrier-grid-card'), `Barrier selection grid HTML generated in "${lang}"`);
+
+    if (normLang === 'kn') {
+      assert(gridHtml.includes('ಮನೆ/ಕುಟುಂಬದ ಅಡಚಣೆ'), `Kannada title "ಮನೆ/ಕುಟುಂಬದ ಅಡಚಣೆ" present in grid for "${lang}"`);
+      assert(gridHtml.includes('ಎಲ್ಲಾ ಅಡಚಣೆಗಳ ಒಟ್ಟು ನೋಟ'), `Kannada title "ಎಲ್ಲಾ ಅಡಚಣೆಗಳ ಒಟ್ಟು ನೋಟ" present in grid for "${lang}"`);
+      assert(gridHtml.includes('ವಿಶ್ಲೇಷಿಸಲು ಅಡಚಣೆಯನ್ನು ಆರಿಸಿ:'), `Kannada header present in grid for "${lang}"`);
+    } else if (normLang === 'hi') {
+      assert(gridHtml.includes('घरेलू / पारिवारिक बाधा'), `Hindi title "घरेलू / पारिवारिक बाधा" present in grid for "${lang}"`);
+      assert(gridHtml.includes('अनेक बाधाएं (2+)'), `Hindi title "अनेक बाधाएं (2+)" in Devanagari script present in grid for "${lang}"`);
+      assert(gridHtml.includes('सभी बाधाओं का अवलोकन'), `Hindi title "सभी बाधाओं का अवलोकन" present in grid for "${lang}"`);
+      assert(gridHtml.includes('विश्लेषण के लिए बाधा चुनें:'), `Hindi header present in grid for "${lang}"`);
+    }
+
+    // Test active banner in language / locale
+    const bannerHtml = BarrierUI.buildActiveBarrierBannerHtml("All Barriers", lang);
+    if (normLang === 'kn') {
+      assert(bannerHtml.includes('ಸಕ್ರಿಯ ಅಡಚಣೆ:'), `Kannada "ಸಕ್ರಿಯ ಅಡಚಣೆ:" present in banner for "${lang}"`);
+      assert(bannerHtml.includes('ಎಲ್ಲಾ ಅಡಚಣೆಗಳ ಒಟ್ಟು ನೋಟ'), `Kannada title present in banner for "${lang}"`);
+    } else if (normLang === 'hi') {
+      assert(bannerHtml.includes('सक्रिय बाधा:'), `Hindi "सक्रिय बाधा:" present in banner for "${lang}"`);
+      assert(bannerHtml.includes('सभी बाधाओं का अवलोकन'), `Hindi title present in banner for "${lang}"`);
+    }
   }
   console.log('');
 

@@ -346,6 +346,18 @@
     return found ? found.speechCode : 'en-IN';
   }
 
+  /**
+   * Normalize any language input to supported code: 'en', 'kn', or 'hi'.
+   */
+  function normalizeLanguageCode(lang) {
+    if (!lang || typeof lang !== 'string') return 'en';
+    const l = lang.trim().toLowerCase();
+    if (l === 'kn' || l.startsWith('kn') || l.includes('kannada') || l.includes('ಕನ್ನಡ')) return 'kn';
+    if (l === 'hi' || l.startsWith('hi') || l.includes('hindi') || l.includes('हिंदी') || l.includes('हिन्दी')) return 'hi';
+    if (l === 'en' || l.includes('english')) return 'en';
+    return TRANSLATIONS[l] ? l : 'en';
+  }
+
   return {
     SUPPORTED_LANGUAGES,
     TRANSLATIONS,
@@ -355,6 +367,7 @@
     setLanguage,
     getCurrentLanguage,
     getSupportedLanguages,
-    getSpeechLocale
+    getSpeechLocale,
+    normalizeLanguageCode
   };
 }));

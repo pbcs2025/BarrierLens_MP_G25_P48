@@ -332,20 +332,26 @@ def generate_llm_explanation(
 
 def generate_offline_fallback(
     question: str,
-    language: str,
-    evidence_payload: dict[str, Any],
+    language: str = "en",
+    evidence_payload: dict[str, Any] = None,
 ) -> dict[str, Any]:
-    """Generate a high-quality deterministic response when Ollama is unavailable."""
-    intent = evidence_payload.get("intent", "UNKNOWN")
+    """Generate deterministic fallback answers using domain templates and evidence payload."""
+    if evidence_payload is None:
+        evidence_payload = {}
+
+    intent = evidence_payload.get("intent", "GENERAL_QUERY")
     ev_items = evidence_payload.get("evidence", [])
     calcs = evidence_payload.get("calculations", [])
     q_lower = (question or "").lower()
 
+    lang = str(language or "en").lower()
+    lang_code = "kn" if ("kn" in lang or "kannada" in lang) else ("hi" if ("hi" in lang or "hindi" in lang) else "en")
+
     # Identity / Name queries
     if any(phrase in q_lower for phrase in ("what is your name", "what's your name", "who are you", "what are you called", "your name", "ನಿಮ್ಮ ಹೆಸರೇನು", "आपका नाम")):
-        if language == "kn":
+        if lang_code == "kn":
             intro = "ನನ್ನ ಹೆಸರು **BarrierLens** (ಪ್ರಾಜೆಕ್ಟ್ ಕೋಡ್: P48). ನಾನು NFHS-5 ಸಮೀಕ್ಷೆಯ ಆಧಾರದ ಮೇಲೆ ಭಾರತದಾದ್ಯಂತ ಮಹಿಳೆಯರ ಆರೋಗ್ಯ ಸೇವಾ ಅಡೆತಡೆಗಳನ್ನು ವಿಶ್ಲೇಷಿಸುವ ಸಂಶೋಧನಾ AI ಸಹಾಯಕ."
-        elif language == "hi":
+        elif lang_code == "hi":
             intro = "मेरा नाम **BarrierLens** (प्रोजेक्ट कोड: P48) है। मैं NFHS-5 डेटासेट के आधार पर पूरे भारत में महिलाओं की स्वास्थ्य सेवा पहुंच बाधाओं का विश्लेषण करने वाला एक AI अनुसंधान सहायक हूँ।"
         else:
             intro = "My name is **BarrierLens** (Project Code: P48), an AI research intelligence assistant analyzing women's healthcare access barriers across India based on the NFHS-5 dataset (N = 724,115 respondents).\n\n• 🏥 **Facility Barriers (46.01%)**: Absence of providers & medication shortages\n• 🚗 **Logistic Barriers (31.61%)**: Distance & transport costs\n• 🏠 **Household Barriers (27.16%)**: Family permission & autonomy constraints"
@@ -367,28 +373,69 @@ def generate_offline_fallback(
     answer_parts: list[str] = []
 
     if intent == "NATIONAL_OVERVIEW" or "overview" in q_lower or "what is barrierlens" in q_lower or "objective" in q_lower:
-        answer_parts.extend([
-            "📊 **BarrierLens Overview (NFHS-5, N=724,115):**",
-            "• 🎯 **59.16%** of Indian women experience ≥1 healthcare access barrier.",
-            "• 🏥 **Facility Barrier (46.01%)**: Rank 1 (provider absence, drug shortages).",
-            "• 🚗 **Logistic Barrier (31.61%)**: Rank 2 (travel distance, lack of transport).",
-            "• 🏠 **Household Barrier (27.16%)**: Rank 3 (family permission, fund constraints).",
-        ])
+        if lang_code == "kn":
+            answer_parts.extend([
+                "📊 **ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಸಾರಾಂಶ (NFHS-5, N=7,24,115):**",
+                "• 🎯 **59.16%** ಭಾರತೀಯ ಮಹಿಳೆಯರು ಕನಿಷ್ಠ ಒಂದು ಆರೋಗ್ಯ ಪಡೆಯುವ ಅಡಚಣೆಯನ್ನು ಎದುರಿಸುತ್ತಾರೆ.",
+                "• 🏥 **ಸೌಲಭ್ಯ ಅಡಚಣೆ (46.01%)**: ಶ್ರೇಣಿ 1 (ವೈದ್ಯರ ಅಭಾವ ಮತ್ತು ಔಷಧಗಳ ಕೊರತೆ).",
+                "• 🚗 **ಸಾರಿಗೆ ಅಡಚಣೆ (31.61%)**: ಶ್ರೇಣಿ 2 (ಆಸ್ಪತ್ರೆಯ ದೂರ ಮತ್ತು ಸಾರಿಗೆ ವೆಚ್ಚ).",
+                "• 🏠 **ಮನೆ ಅಡಚಣೆ (27.16%)**: ಶ್ರೇಣಿ 3 (ಕುಟುಂಬದ ಅನುಮತಿ ಮತ್ತು ಹಣಕಾಸಿನ ಮಿತಿ).",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "📊 **बैरियरलेंस सारांश (NFHS-5, N=7,24,115):**",
+                "• 🎯 **59.16%** भारतीय महिलाएं कम से कम एक स्वास्थ्य सेवा बाधा का सामना करती हैं।",
+                "• 🏥 **अस्पताल बाधा (46.01%)**: रैंक 1 (डॉक्टरों की अनुपलब्धता और दवाओं की कमी)।",
+                "• 🚗 **परिवहन बाधा (31.61%)**: रैंक 2 (अस्पताल की दूरी और परिवहन लागत)।",
+                "• 🏠 **घरेलू बाधा (27.16%)**: रैंक 3 (पारिवारिक अनुमति और वित्तीय सीमाएं)।",
+            ])
+        else:
+            answer_parts.extend([
+                "📊 **BarrierLens Overview (NFHS-5, N=724,115):**",
+                "• 🎯 **59.16%** of Indian women experience ≥1 healthcare access barrier.",
+                "• 🏥 **Facility Barrier (46.01%)**: Rank 1 (provider absence, drug shortages).",
+                "• 🚗 **Logistic Barrier (31.61%)**: Rank 2 (travel distance, lack of transport).",
+                "• 🏠 **Household Barrier (27.16%)**: Rank 3 (family permission, fund constraints).",
+            ])
     elif intent == "STATE_ANALYSIS" or "state" in q_lower:
         states = evidence_payload.get("entities", {}).get("states", [])
         state_name = states[0] if states else "the requested state"
         any_ev = next((e for e in ev_items if isinstance(e, dict) and "Any Barrier" in e.get("label", "")), None)
-        rate_str = f"{any_ev['value']}%" if any_ev else "documented in NFHS-5"
-        answer_parts.extend([
-            f"📍 **State Profile: {state_name} (NFHS-5 Analysis)**",
-            f"• 📊 **Observed Rate**: {rate_str} encounter healthcare barriers.",
-            "• 🔍 Detailed district metrics are available in the State Analysis module.",
-        ])
+        if any_ev:
+            if lang_code == "kn":
+                answer_parts.append(f"📍 **ರಾಜ್ಯ ವಿಶ್ಲೇಷಣೆ: {state_name} (NFHS-5):**")
+                answer_parts.append(f"• 🎯 **ಒಟ್ಟು ಅಡಚಣೆ ದರ**: {any_ev['value']}% ಮಹಿಳೆಯರು ಅಡಚಣೆಗಳನ್ನು ಎದುರಿಸುತ್ತಾರೆ.")
+            elif lang_code == "hi":
+                answer_parts.append(f"📍 **राज्य विश्लेषण: {state_name} (NFHS-5):**")
+                answer_parts.append(f"• 🎯 **कुल बाधा दर**: {any_ev['value']}% महिलाएं बाधाओं का सामना करती हैं।")
+            else:
+                answer_parts.append(f"📍 **State Profile: {state_name} (NFHS-5):**")
+                answer_parts.append(f"• 🎯 **Overall Barrier Rate**: {any_ev['value']}% of women face healthcare access barriers.")
+            for e in ev_items:
+                if isinstance(e, dict) and e != any_ev and "label" in e:
+                    lbl = e.get("label", "")
+                    val = e.get("value", "")
+                    answer_parts.append(f"• 📊 **{lbl}**: {val}%")
+        else:
+            if lang_code == "kn":
+                answer_parts.append(f"📍 **{state_name}** ಗಾಗಿ ದತ್ತಾಂಶ ಸಾರಾಂಶ:")
+            elif lang_code == "hi":
+                answer_parts.append(f"📍 **{state_name}** के लिए डेटा सारांश:")
+            else:
+                answer_parts.append(f"📍 **State Data Summary for {state_name}:**")
+            for e in ev_items[:4]:
+                if isinstance(e, dict) and "label" in e:
+                    answer_parts.append(f"• 📊 **{e.get('label')}**: {e.get('value')}%")
     elif intent == "STATE_COMPARISON" or "compare" in q_lower:
         states = evidence_payload.get("entities", {}).get("states", [])
         s1 = states[0] if len(states) > 0 else "State A"
         s2 = states[1] if len(states) > 1 else "State B"
-        answer_parts.append(f"📊 **Barrier Comparison: {s1} vs {s2} (NFHS-5 Analysis):**")
+        if lang_code == "kn":
+            answer_parts.append(f"📊 **ರಾಜ್ಯಗಳ ಹೋಲಿಕೆ: {s1} ಮತ್ತು {s2} (NFHS-5):**")
+        elif lang_code == "hi":
+            answer_parts.append(f"📊 **राज्य तुलना: {s1} बनाम {s2} (NFHS-5):**")
+        else:
+            answer_parts.append(f"📊 **Barrier Comparison: {s1} vs {s2} (NFHS-5 Analysis):**")
         seen_domains = set()
         for e in ev_items:
             if isinstance(e, dict) and any(k in e.get("label", "") for k in ("Any Barrier", "Facility", "Logistic", "Household")):
@@ -401,49 +448,121 @@ def generate_offline_fallback(
                 interp = c.get('interpretation', '')
                 if interp:
                     answer_parts.append(f"• 📈 **Disparity Gap**: {interp}")
-
     elif intent == "RURAL_URBAN" or "rural" in q_lower or "urban" in q_lower:
-        answer_parts.extend([
-            "📍 **Rural vs Urban Disparity (NFHS-5):**",
-            "• 🏡 **Rural Rate**: 63.49% face healthcare barriers.",
-            "• 🏙️ **Urban Rate**: 46.03% face healthcare barriers.",
-            "• 📈 **Disparity Gap**: 17.46 percentage points higher in rural areas.",
-        ])
+        if lang_code == "kn":
+            answer_parts.extend([
+                "📍 **ಗ್ರಾಮೀಣ ಮತ್ತು ನಗರ ಅಡಚಣೆಗಳ ವ್ಯತ್ಯಾಸ (NFHS-5):**",
+                "• 🏡 **ಗ್ರಾಮೀಣ ದರ**: 63.49% ಮಹಿಳೆಯರು ಆರೋಗ್ಯ ಅಡಚಣೆಗಳನ್ನು ಎದುರಿಸುತ್ತಾರೆ.",
+                "• 🏙️ **ನಗರ ದರ**: 46.03% ಮಹಿಳೆಯರು ಆರೋಗ್ಯ ಅಡಚಣೆಗಳನ್ನು ಎದುರಿಸುತ್ತಾರೆ.",
+                "• 📈 **ವ್ಯತ್ಯಾಸದ ಅಂತರ**: ಗ್ರಾಮೀಣ ಪ್ರದೇಶಗಳಲ್ಲಿ 17.46 ಶೇಕಡಾವಾರು ಅಂಕಗಳು ಹೆಚ್ಚು.",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "📍 **ग्रामीण बनाम शहरी अंतर (NFHS-5):**",
+                "• 🏡 **ग्रामीण दर**: 63.49% महिलाएं स्वास्थ्य बाधाओं का सामना करती हैं।",
+                "• 🏙️ **शहरी दर**: 46.03% महिलाएं स्वास्थ्य बाधाओं का सामना करती हैं।",
+                "• 📈 **अंतर**: ग्रामीण क्षेत्रों में 17.46 प्रतिशत अंक अधिक।",
+            ])
+        else:
+            answer_parts.extend([
+                "📍 **Rural vs Urban Disparity (NFHS-5):**",
+                "• 🏡 **Rural Rate**: 63.49% face healthcare barriers.",
+                "• 🏙️ **Urban Rate**: 46.03% face healthcare barriers.",
+                "• 📈 **Disparity Gap**: 17.46 percentage points higher in rural areas.",
+            ])
         if calcs:
             answer_parts.append(f"• 💡 **Derived**: {calcs[0].get('interpretation', '')}")
     elif intent == "RISK_ARCHETYPE" or "cluster" in q_lower or "archetype" in q_lower:
-        answer_parts.extend([
-            "👥 **K-Means Risk Archetypes (silhouette = 0.3986):**",
-            "• ⚠️ **Cluster 0 (52.9%)**: High Vulnerability & Barrier Exposure (score = 0.5868).",
-            "• 📱 **Cluster 1 (47.1%)**: Media & Digital Inclusion (score = 0.3761).",
-        ])
+        if lang_code == "kn":
+            answer_parts.extend([
+                "👥 **K-Means ಅಪಾಯದ ಮಾದರಿಗಳು (silhouette = 0.3986):**",
+                "• ⚠️ **ಕ್ಲಸ್ಟರ್ 0 (52.9%)**: ಹೆಚ್ಚಿನ ಹಾನಿಗೊಳಗಾಗುವಿಕೆ ಮತ್ತು ಅಡಚಣೆ (ಸ್ಕೋರ್ = 0.5868).",
+                "• 📱 **ಕ್ಲಸ್ಟರ್ 1 (47.1%)**: ಮಾಧ್ಯಮ ಮತ್ತು ಡಿಜಿಟಲ್ ಒಳಗೊಳ್ಳುವಿಕೆ (ಸ್ಕೋರ್ = 0.3761).",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "👥 **K-Means जोखिम प्रारूप (silhouette = 0.3986):**",
+                "• ⚠️ **क्लस्टर 0 (52.9%)**: उच्च भेद्यता और बाधा जोखिम (स्कोर = 0.5868)।",
+                "• 📱 **क्लस्टर 1 (47.1%)**: मीडिया और डिजिटल समावेशन (स्कोर = 0.3761)।",
+            ])
+        else:
+            answer_parts.extend([
+                "👥 **K-Means Risk Archetypes (silhouette = 0.3986):**",
+                "• ⚠️ **Cluster 0 (52.9%)**: High Vulnerability & Barrier Exposure (score = 0.5868).",
+                "• 📱 **Cluster 1 (47.1%)**: Media & Digital Inclusion (score = 0.3761).",
+            ])
     elif intent == "SHAP" or "model" in q_lower or "feature" in q_lower or "xgboost" in q_lower:
-        answer_parts.extend([
-            "🤖 **ML Model Insights & SHAP Drivers:**",
-            "• 📉 **Poorest Wealth**: Top risk factor (OR = 1.26).",
-            "• 🎓 **No Formal Education**: Second leading risk driver (OR = 1.20).",
-            "• 🛡️ **Richest Wealth**: Strongest protective buffer (OR = 0.78).",
-        ])
+        if lang_code == "kn":
+            answer_parts.extend([
+                "🤖 **ML ಮಾಡೆಲ್ SHAP ವಿಶ್ಲೇಷಣೆ:**",
+                "• 📉 **ಅತ್ಯಂತ ಬಡ ಆರ್ಥಿಕ ಸ್ಥಿತಿ**: ಅತ್ಯಂತ ಪ್ರಮುಖ ಅಡಚಣೆ ಅಪಾಯದ ಅಂಶ (OR = 1.26).",
+                "• 🎓 **ಔಪಚಾರಿಕ ಶಿಕ್ಷಣ ಇಲ್ಲದಿರುವುದು**: ಎರಡನೇ ಪ್ರಮುಖ ಅಪಾಯದ ಅಂಶ (OR = 1.20).",
+                "• 🛡️ **ಅತ್ಯಂತ ಶ್ರೀಮಂತ ಸ್ಥಿತಿ**: ಪ್ರಮುಖ ರಕ್ಷಣಾತ್ಮಕ ಅಂಶ (OR = 0.78).",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "🤖 **ML मॉडल SHAP विश्लेषण:**",
+                "• 📉 **अति निर्धन वर्ग**: सबसे बड़ा जोखिम कारक (OR = 1.26)।",
+                "• 🎓 **शिक्षा की कमी**: दूसरा प्रमुख जोखिम कारक (OR = 1.20)।",
+                "• 🛡️ **अति धनी वर्ग**: सबसे मजबूत सुरक्षात्मक कारक (OR = 0.78)।",
+            ])
+        else:
+            answer_parts.extend([
+                "🤖 **ML Model Insights & SHAP Drivers:**",
+                "• 📉 **Poorest Wealth**: Top risk factor (OR = 1.26).",
+                "• 🎓 **No Formal Education**: Second leading risk driver (OR = 1.20).",
+                "• 🛡️ **Richest Wealth**: Strongest protective buffer (OR = 0.78).",
+            ])
     elif intent == "LIMITATIONS" or "causation" in q_lower:
-        answer_parts.extend([
-            "⚠️ **Methodological Scope & Limitations:**",
-            "• 📋 Observational NFHS-5 data identifies statistical associations, not causality.",
-            "• 🚫 Waiting times and clinical fees are not surveyed.",
-        ])
+        if lang_code == "kn":
+            answer_parts.extend([
+                "⚠️ **ಪದ್ಧತಿಗತ ಮಿತಿಗಳು:**",
+                "• 📋 NFHS-5 ದತ್ತಾಂಶವು ಸಾಂಖ್ಯಿಕ ಸಂಬಂಧಗಳನ್ನು ಗುರುತಿಸುತ್ತದೆ, ಕಾರಣಾತ್ಮಕತೆಯನ್ನಲ್ಲ.",
+                "• 🚫 ಕಾಯುವ ಸಮಯ ಮತ್ತು ವೈದ್ಯಕೀಯ ಶುಲ್ಕಗಳನ್ನು ಸಮೀಕ್ಷೆಯಲ್ಲಿ ಸೇರಿಸಲಾಗಿಲ್ಲ.",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "⚠️ **पद्धतिगत सीमाएं:**",
+                "• 📋 NFHS-5 डेटा सांख्यिकीय संबंधों की पहचान करता है, कारणता की नहीं।",
+                "• 🚫 प्रतीक्षा समय और चिकित्सा शुल्क सर्वेक्षण में शामिल नहीं हैं।",
+            ])
+        else:
+            answer_parts.extend([
+                "⚠️ **Methodological Scope & Limitations:**",
+                "• 📋 Observational NFHS-5 data identifies statistical associations, not causality.",
+                "• 🚫 Waiting times and clinical fees are not surveyed.",
+            ])
     else:
-        answer_parts.extend([
-            "📊 **BarrierLens Summary (NFHS-5, N=724,115):**",
-            "• 🎯 **59.16%** of women face healthcare access barriers.",
-            "• 🏥 **Rank 1**: Facility Barriers (46.01%).",
-            "• 🚗 **Rank 2**: Logistic Barriers (31.61%).",
-            "• 🏠 **Rank 3**: Household Barriers (27.16%).",
-        ])
+        if lang_code == "kn":
+            answer_parts.extend([
+                "📊 **ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಸಾರಾಂಶ (NFHS-5, N=7,24,115):**",
+                "• 🎯 **59.16%** ಮಹಿಳೆಯರು ಆರೋಗ್ಯ ಅಡಚಣೆಗಳನ್ನು ಎದುರಿಸುತ್ತಾರೆ.",
+                "• 🏥 **ಶ್ರೇಣಿ 1**: ಸೌಲಭ್ಯ ಅಡಚಣೆಗಳು (46.01%).",
+                "• 🚗 **ಶ್ರೇಣಿ 2**: ಸಾರಿಗೆ ಅಡಚಣೆಗಳು (31.61%).",
+                "• 🏠 **ಶ್ರೇಣಿ 3**: ಮನೆ ಅಡಚಣೆಗಳು (27.16%).",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "📊 **बैरियरलेंस सारांश (NFHS-5, N=7,24,115):**",
+                "• 🎯 **59.16%** महिलाएं स्वास्थ्य बाधाओं का सामना करती हैं।",
+                "• 🏥 **रैंक 1**: अस्पताल बाधाएं (46.01%)।",
+                "• 🚗 **रैंक 2**: परिवहन बाधाएं (31.61%)।",
+                "• 🏠 **रैंक 3**: घरेलू बाधाएं (27.16%)।",
+            ])
+        else:
+            answer_parts.extend([
+                "📊 **BarrierLens Summary (NFHS-5, N=724,115):**",
+                "• 🎯 **59.16%** of women face healthcare access barriers.",
+                "• 🏥 **Rank 1**: Facility Barriers (46.01%).",
+                "• 🚗 **Rank 2**: Logistic Barriers (31.61%).",
+                "• 🏠 **Rank 3**: Household Barriers (27.16%).",
+            ])
 
     answer_text = "\n".join(answer_parts)
     evidence_sources = [
         f"{e.get('source')}:{e.get('path')}"
         for e in ev_items
-        if isinstance(e, dict) and e.get("source")
+        if isinstance(e, dict) and e.get("source") and e.get("path")
     ]
 
     return {
@@ -454,13 +573,8 @@ def generate_offline_fallback(
         "intent": intent,
         "source": evidence_payload.get("source", ["NFHS-5 (2019-21)"]),
         "metrics": evidence_payload.get("metrics", []),
-        "evidence_used": evidence_sources,
+        "evidence_used": ev_items,
         "relatedPage": evidence_payload.get("relatedPage"),
-        "disclaimer": "Offline grounded explanation (Ollama service unavailable).",
+        "disclaimer": "Observational study based on NFHS-5 cross-sectional survey data (N=724,115).",
         "claims": [],
     }
-
-
-# Backwards compatibility aliases
-generate_llM_explanation = generate_llm_explanation
-parse_claude_json_response = parse_llm_json_response
