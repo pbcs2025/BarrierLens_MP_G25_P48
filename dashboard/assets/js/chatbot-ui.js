@@ -36,7 +36,7 @@
   function getI18n() {
     if (typeof window !== 'undefined' && window.BarrierLensI18n) return window.BarrierLensI18n;
     if (typeof require !== 'undefined') {
-      try { return require('./i18n.js'); } catch (e) {}
+      try { return require('./i18n.js'); } catch (e) { }
     }
     return null;
   }
@@ -44,7 +44,7 @@
   function getVoice() {
     if (typeof window !== 'undefined' && window.BarrierLensVoice) return window.BarrierLensVoice;
     if (typeof require !== 'undefined') {
-      try { return require('./voice.js'); } catch (e) {}
+      try { return require('./voice.js'); } catch (e) { }
     }
     return null;
   }
@@ -52,7 +52,7 @@
   function getResponseEngine() {
     if (typeof window !== 'undefined' && window.BarrierLensResponse) return window.BarrierLensResponse;
     if (typeof require !== 'undefined') {
-      try { return require('./response-engine.js'); } catch (e) {}
+      try { return require('./response-engine.js'); } catch (e) { }
     }
     return null;
   }
@@ -60,7 +60,7 @@
   function getReportGenerator() {
     if (typeof window !== 'undefined' && window.BarrierLensReportGenerator) return window.BarrierLensReportGenerator;
     if (typeof require !== 'undefined') {
-      try { return require('./report-generator.js'); } catch (e) {}
+      try { return require('./report-generator.js'); } catch (e) { }
     }
     return null;
   }
@@ -68,7 +68,7 @@
   function getChooseModeScreen() {
     if (typeof window !== 'undefined' && window.BarrierLensChooseModeScreen) return window.BarrierLensChooseModeScreen;
     if (typeof require !== 'undefined') {
-      try { return require('./choose-mode-screen.jsx'); } catch (e) {}
+      try { return require('./choose-mode-screen.jsx'); } catch (e) { }
     }
     return null;
   }
@@ -76,7 +76,7 @@
   function getGuidedInputUI() {
     if (typeof window !== 'undefined' && window.BarrierLensGuidedInputUI) return window.BarrierLensGuidedInputUI;
     if (typeof require !== 'undefined') {
-      try { return require('./guided-input-ui.jsx'); } catch (e) {}
+      try { return require('./guided-input-ui.jsx'); } catch (e) { }
     }
     return null;
   }
@@ -84,7 +84,7 @@
   function getBarrierUI() {
     if (typeof window !== 'undefined' && window.BarrierLensBarrierUI) return window.BarrierLensBarrierUI;
     if (typeof require !== 'undefined') {
-      try { return require('./barrier-ui.js'); } catch (e) {}
+      try { return require('./barrier-ui.js'); } catch (e) { }
     }
     return null;
   }
@@ -92,7 +92,7 @@
   function getLanguageSelector() {
     if (typeof window !== 'undefined' && window.BarrierLensLanguageSelector) return window.BarrierLensLanguageSelector;
     if (typeof require !== 'undefined') {
-      try { return require('./language-selector.js'); } catch (e) {}
+      try { return require('./language-selector.js'); } catch (e) { }
     }
     return null;
   }
@@ -100,7 +100,7 @@
   function getEvidenceCard() {
     if (typeof window !== 'undefined' && window.BarrierLensEvidenceCard) return window.BarrierLensEvidenceCard;
     if (typeof require !== 'undefined') {
-      try { return require('./evidence-card.jsx'); } catch (e) {}
+      try { return require('./evidence-card.jsx'); } catch (e) { }
     }
     return null;
   }
@@ -108,7 +108,7 @@
   function getSolutionCard() {
     if (typeof window !== 'undefined' && window.BarrierLensSolutionCard) return window.BarrierLensSolutionCard;
     if (typeof require !== 'undefined') {
-      try { return require('./solution-card.jsx'); } catch (e) {}
+      try { return require('./solution-card.jsx'); } catch (e) { }
     }
     return null;
   }
@@ -116,7 +116,7 @@
   function getContextManager() {
     if (typeof window !== 'undefined' && window.BarrierLensContextManager) return window.BarrierLensContextManager;
     if (typeof require !== 'undefined') {
-      try { return require('./context-manager.js'); } catch (e) {}
+      try { return require('./context-manager.js'); } catch (e) { }
     }
     return null;
   }
@@ -124,7 +124,7 @@
   function getAPIService() {
     if (typeof window !== 'undefined' && window.BarrierLensAPIService) return window.BarrierLensAPIService;
     if (typeof require !== 'undefined') {
-      try { return require('./api-service.js'); } catch (e) {}
+      try { return require('./api-service.js'); } catch (e) { }
     }
     return null;
   }
@@ -280,7 +280,7 @@
       { code: 'hi', nativeName: 'हिन्दी' }
     ];
 
-    const langOptions = languages.map(l => 
+    const langOptions = languages.map(l =>
       `<option value="${l.code}" ${l.code === _currentLang ? 'selected' : ''}>${l.nativeName}</option>`
     ).join('');
 
@@ -296,7 +296,7 @@
             </div>
           </div>
           <div class="bl-chat-header-actions" style="display: flex; gap: 6px; align-items: center;">
-            <button class="bl-header-btn" id="bl-change-barrier-btn" title="Change Barrier" aria-label="Change Barrier" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            <button class="bl-header-btn bl-change-barrier-btn" id="bl-change-barrier-btn" title="Change Barrier" aria-label="Change Barrier" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
               🔄 <span id="bl-active-barrier-label">${_activeBarrier}</span>
             </button>
 
@@ -1060,7 +1060,7 @@
     let localResult = null;
     if (responseEngine && responseEngine.processUserQuery) {
       try {
-        localResult = await responseEngine.processUserQuery(query, lang, { 
+        localResult = await responseEngine.processUserQuery(query, lang, {
           barrierContext: _activeBarrier,
           skipBackend: true
         });

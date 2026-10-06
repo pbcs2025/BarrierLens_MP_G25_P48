@@ -228,11 +228,77 @@
         answerParts.push(`SHAP (SHapley Additive exPlanations) values quantify feature importance based on game theory.`);
         answerParts.push(`In BarrierLens, top positive model risk factors include poorest wealth tier (OR=1.26) and no education (OR=1.20), while richest wealth tier (OR=0.78) serves as the strongest protective factor.`);
       }
+    } else if (intent === "DEMOGRAPHIC_ANALYSIS") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಸಾಮಾಜಿಕ-ಜನಸಂಖ್ಯಾ ವಿಶ್ಲೇಷಣೆ (NFHS-5, N=7,24,115): ಸಂಪತ್ತು ಮತ್ತು ಶಿಕ್ಷಣವು ಆರೋಗ್ಯ ಸೇವೆ ಪಡೆಯುವಿಕೆಯಲ್ಲಿ ಪ್ರಮುಖ ಪಾತ್ರವಹಿಸುತ್ತವೆ.`);
+        answerParts.push(`ಅತ್ಯಂತ ಬಡತನದಲ್ಲಿರುವ ಮಹಿಳೆಯರು (68.42%) ಅತ್ಯಂತ ಶ್ರೀಮಂತ ಮಹಿಳೆಯರಿಗೆ (41.15%) ಹೋಲಿಸಿದರೆ ಗಮನಾರ್ಹವಾಗಿ ಹೆಚ್ಚಿನ ಅಡಚಣೆಗಳನ್ನು ಎದುರಿಸುತ್ತಾರೆ.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`सामाजिक-जनसांख्यिकी विश्लेषण (NFHS-5, N=7,24,115): संपत्ति और शिक्षा स्वास्थ्य सेवा पहुंच में मुख्य निर्धारक हैं।`);
+        answerParts.push(`अति निर्धन वर्ग की महिलाएं (68.42%) अति धनी वर्ग (41.15%) की तुलना में काफी अधिक बाधाओं का सामना करती हैं।`);
+      } else {
+        answerParts.push(`Socio-Demographic Analysis (NFHS-5, N=724,115): Wealth and education are primary determinants of healthcare access barriers.`);
+        answerParts.push(`Women in the poorest wealth quintile face significantly higher barrier rates (68.42%) compared to the richest quintile (41.15%).`);
+      }
+    } else if (intent === "MULTIPLE_BARRIER") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಅನೇಕ ಸಮಾವೇಶಗೊಳ್ಳುವ ಅಡಚಣೆಗಳ ವಿಶ್ಲೇಷಣೆ (NFHS-5): 31.55% ಭಾರತೀಯ ಮಹಿಳೆಯರು ಏಕಕಾಲದಲ್ಲಿ 2 ಅಥವಾ ಹೆಚ್ಚಿನ ಅಡಚಣೆಗಳನ್ನು ಎದುರಿಸುತ್ತಾರೆ.`);
+        answerParts.push(`ಒಬ್ಬ ಮಹಿಳೆಯ ಸರಾಸರಿ ಅಡಚಣೆಗಳ ಸಂಖ್ಯೆ 1.05.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`अनेक समवर्ती बाधाओं का विश्लेषण (NFHS-5): 31.55% भारतीय महिलाएं एक साथ 2 या अधिक बाधाओं का सामना करती हैं।`);
+        answerParts.push(`प्रति महिला औसत बाधा संख्या 1.05 है।`);
+      } else {
+        answerParts.push(`Multiple Overlapping Barriers Analysis (NFHS-5): 31.55% of Indian women experience 2 or more overlapping healthcare access barriers simultaneously.`);
+        answerParts.push(`Mean barrier count per woman is 1.05.`);
+      }
+    } else if (intent === "EMPOWERMENT") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಸಬಲೀಕರಣ ಮತ್ತು ಸ್ವಾಯತ್ತತೆ ವಿಶ್ಲೇಷಣೆ (NFHS-5): ಸ್ವತಂತ್ರವಾಗಿ ನಿರ್ಧಾರ ತೆಗೆದುಕೊಳ್ಳುವ ಹಕ್ಕಿಲ್ಲದ ಮಹಿಳೆಯರು ಹೆಚ್ಚಿನ ಕುಟುಂಬ ಅಡಚಣೆಗಳನ್ನು (36.4%) ಎದುರಿಸುತ್ತಾರೆ.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`महिला सशक्तिकरण और स्वायत्तता विश्लेषण (NFHS-5): निर्णय स्वायत्तता से वंचित महिलाएं अधिक पारिवारिक बाधाओं (36.4%) का सामना करती हैं।`);
+      } else {
+        answerParts.push(`Empowerment & Autonomy Analysis (NFHS-5): Women lacking sole healthcare decision autonomy face higher household barrier rates (36.4%) compared to autonomous decision-makers (21.8%).`);
+      }
+    } else if (intent === "OUTCOME_IMPACT") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಆರೋಗ್ಯ ಸೇವೆ ಬಳಕೆ ಮೇಲಿನ ಪರಿಣಾಮ (NFHS-5): ಹೆಚ್ಚಿನ ಅಡಚಣೆಗಳು ಹೆರಿಗೆ ಪೂರ್ವ ತಪಾಸಣೆ (ANC) ಮತ್ತು ಆಸ್ಪತ್ರೆ ಹೆರಿಗೆ ಸೇವೆಯ ಬಳಕೆಯನ್ನು ಗಣನೀಯವಾಗಿ ಕಡಿಮೆ ಮಾಡುತ್ತವೆ.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`स्वास्थ्य उपयोग प्रभाव विश्लेषण (NFHS-5): उच्च बाधाएं प्रसवपूर्व देखभाल (ANC) और संस्थागत प्रसव के उपयोग को काफी कम करती हैं।`);
+      } else {
+        answerParts.push(`Healthcare Utilization Impact Analysis (NFHS-5): High barrier exposure significantly reduces full antenatal care (ANC) utilization and facility birth delivery.`);
+      }
+    } else if (intent === "REGRESSION") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಲಾಜಿಸ್ಟಿಕ್ ರಿಗ್ರೆಷನ್ ಅಪಾಯಕಾರಿ ಅಂಶಗಳು (NFHS-5): ಅತ್ಯಂತ ಬಡತನ (OR=1.26) ಮತ್ತು ಶಿಕ್ಷಣವಿಲ್ಲದಿರುವುದು (OR=1.20) ಅಡಚಣೆ ಎದುರಿಸುವ ಸಾಧ್ಯತೆಯನ್ನು ಹೆಚ್ಚಿಸುತ್ತವೆ.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`लॉजिस्टिक रिग्रेशन जोखिम कारक (NFHS-5): अति निर्धनता (OR=1.26) और शिक्षा का अभाव (OR=1.20) बाधाओं का सामना करने की संभावना को बढ़ाते हैं।`);
+      } else {
+        answerParts.push(`Logistic Regression Risk Factors (NFHS-5): Poorest wealth (OR=1.26, p<0.001) and no formal education (OR=1.20, p<0.001) significantly increase odds of facing healthcare access barriers.`);
+      }
+    } else if (intent === "BASE_PAPER") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಮೂಲ ಸಂಶೋಧನಾ ಪ್ರಬಂಧದ ಹೋಲಿಕೆ (Pradhan et al., 2023): ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ NFHS-5 ದತ್ತಾಂಶದಲ್ಲಿ ಪ್ರತ್ಯೇಕ ಅಡಚಣೆ ವರ್ಗಗಳು ಮತ್ತು K-Means ಕ್ಲಸ್ಟರಿಂಗ್ ವಿಶ್ಲೇಷಣೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`मूल शोध पत्र तुलना (Pradhan et al., 2023): बैरियरलेंस NFHS-5 डेटा पर व्यक्तिगत बाधा श्रेणियों और K-Means क्लस्टरिंग विश्लेषण प्रदान करता है।`);
+      } else {
+        answerParts.push(`Base Paper Comparison (Pradhan et al., 2023 benchmark): BarrierLens extends prior research by analyzing individual barrier domain breakdowns and multi-barrier clustering on NFHS-5.`);
+      }
+    } else if (intent === "METHODOLOGY") {
+      if (langKey === 'kn') {
+        answerParts.push(`ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಅಧ್ಯಯನ ವಿಧಾನ: 36 ಭಾರತೀಯ ರಾಜ್ಯಗಳು/ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶಗಳ 15-49 ವಯಸ್ಸಿನ 7,24,115 ಮಹಿಳೆಯರ NFHS-5 (2019-21) ದತ್ತಾಂಶವನ್ನು ಸೂಪರ್‌ವೈಸ್ಡ್ ML ಮತ್ತು K-Means ಕ್ಲಸ್ಟರಿಂಗ್ ಮೂಲಕ ವಿಶ್ಲೇಷಿಸುತ್ತದೆ.`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`बैरियरलेंस अध्ययन पद्धति: 36 भारतीय राज्यों/केंद्र शासित प्रदेशों की 15-49 आयु वर्ग की 7,24,115 महिलाओं के NFHS-5 (2019-21) डेटा का supervised ML और K-Means क्लस्टरिंग द्वारा विश्लेषण करता है।`);
+      } else {
+        answerParts.push(`BarrierLens Methodology: Analyzes NFHS-5 (2019-21) national survey data of N = 724,115 women aged 15-49 across 36 Indian States/UTs using supervised ML classification and unsupervised K-Means clustering.`);
+      }
     } else {
       if (evidencePayload.summary) {
         answerParts.push(evidencePayload.summary);
+      } else if (langKey === 'kn') {
+        answerParts.push(`NFHS-5 ದೃಢೀಕೃತ ದತ್ತಾಂಶದ ಪ್ರಕಾರ: 59.16% ಭಾರತೀಯ ಮಹಿಳೆಯರು ಕನಿಷ್ಠ ಒಂದು ಆರೋಗ್ಯ ಅಡಚಣೆಯನ್ನು ಎದುರಿಸುತ್ತಾರೆ (ಸೌಲಭ್ಯ: 46.01%, ಸಾರಿಗೆ: 31.61%, ಮನೆ: 27.16%).`);
+      } else if (langKey === 'hi') {
+        answerParts.push(`NFHS-5 सत्यापित डेटा के अनुसार: 59.16% भारतीय महिलाएं कम से कम एक स्वास्थ्य बाधा का सामना करती हैं (अस्पताल: 46.01%, परिवहन: 31.61%, घरेलू: 27.16%)।`);
       } else {
-        answerParts.push(`Verified evidence retrieved for intent "${intent}".`);
+        answerParts.push(`According to verified BarrierLens NFHS-5 data: 59.16% of Indian women face healthcare access barriers (Facility: 46.01%, Logistic: 31.61%, Household: 27.16%).`);
       }
     }
 

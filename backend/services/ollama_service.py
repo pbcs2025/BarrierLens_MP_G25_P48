@@ -532,6 +532,66 @@ def generate_offline_fallback(
                 "• 📋 Observational NFHS-5 data identifies statistical associations, not causality.",
                 "• 🚫 Waiting times and clinical fees are not surveyed.",
             ])
+    elif intent == "METHODOLOGY" or "methodology" in q_lower or "sample size" in q_lower:
+        if lang_code == "kn":
+            answer_parts.extend([
+                "🔬 **ಬ್ಯಾರಿಯರ್ ಲೆನ್ಸ್ ಅಧ್ಯಯನ ವಿಧಾನ (NFHS-5, N=7,24,115):**",
+                "• 📊 36 ಭಾರತೀಯ ರಾಜ್ಯಗಳು ಮತ್ತು ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶಗಳ 15-49 ವಯಸ್ಸಿನ 7,24,115 ಮಹಿಳೆಯರ ದತ್ತಾಂಶ ಸಮೀಕ್ಷೆ.",
+                "• 🤖 K-Means ಕ್ಲಸ್ಟರಿಂಗ್ ಮತ್ತು ಶ್ರೇಣೀಕೃತ ಸೂಪರ್‌ವೈಸ್ಡ್ ಮೆಷಿನ್ ಲರ್ನಿಂಗ್ (Random Forest, XGBoost).",
+                "• 🛡️ SHAP ಆಧಾರಿತ ಮಾದರಿ ವಿವರಣೆಗಳು ಮತ್ತು ಸಾಂಖ್ಯಿಕ ಪರಿಶೀಲನೆ.",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "🔬 **बैरियरलेंस अध्ययन पद्धति (NFHS-5, N=7,24,115):**",
+                "• 📊 36 भारतीय राज्यों और केंद्र शासित प्रदेशों की 15-49 आयु वर्ग की 7,24,115 महिलाओं का राष्ट्रीय सर्वेक्षण।",
+                "• 🤖 K-Means क्लस्टरिंग और वर्गीकृत सुपरवाइज्ड मशीन लर्निंग (Random Forest, XGBoost)।",
+                "• 🛡️ SHAP आधारित मॉडल व्याख्याएं और सांख्यिकीय सत्यापन।",
+            ])
+        else:
+            answer_parts.extend([
+                "🔬 **BarrierLens Research Methodology (NFHS-5, N=724,115):**",
+                "• 📊 National survey data of 724,115 women aged 15-49 across 36 Indian States/UTs.",
+                "• 🤖 K-Means clustering and supervised ML classifiers (Random Forest, XGBoost).",
+                "• 🛡️ SHAP explainability drivers and statistical validation.",
+            ])
+    elif intent == "DEMOGRAPHIC_ANALYSIS" or "demographic" in q_lower or "wealth" in q_lower or "education" in q_lower:
+        if lang_code == "kn":
+            answer_parts.extend([
+                "📊 **ಸಾಮಾಜಿಕ-ಜನಸಂಖ್ಯಾ ವಿಶ್ಲೇಷಣೆ (NFHS-5):**",
+                "• 💰 **ಸಂಪತ್ತಿನ ಶ್ರೇಣಿ**: ಅತ್ಯಂತ ಬಡ ಮಹಿಳೆಯರು 68.42% ಅಡಚಣೆ ಎದುರಿಸಿದರೆ, ಶ್ರೀಮಂತ ಮಹಿಳೆಯರು 41.15% ಎದುರಿಸುತ್ತಾರೆ.",
+                "• 🎓 **ಶಿಕ್ಷಣದ ಮಟ್ಟ**: ಶಿಕ್ಷಣವಿಲ್ಲದ ಮಹಿಳೆಯರಲ್ಲಿ ಅಡಚಣೆ ದರ ಗಮನಾರ್ಹವಾಗಿ ಹೆಚ್ಚಾಗಿದೆ.",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "📊 **सामाजिक-जनसांख्यिकी विश्लेषण (NFHS-5):**",
+                "• 💰 **संपत्ति वर्ग**: अति निर्धन महिलाएं 68.42% बाधा का सामना करती हैं, जबकि अति धनी 41.15%।",
+                "• 🎓 **शिक्षा का स्तर**: अशिक्षित महिलाओं में बाधा दर काफी अधिक है।",
+            ])
+        else:
+            answer_parts.extend([
+                "📊 **Socio-Demographic Disparities (NFHS-5):**",
+                "• 💰 **Wealth Tier**: Poorest women face 68.42% barrier rate vs 41.15% among Richest.",
+                "• 🎓 **Education**: No formal education significantly increases vulnerability.",
+            ])
+    elif intent == "MULTIPLE_BARRIER" or "multiple" in q_lower:
+        if lang_code == "kn":
+            answer_parts.extend([
+                "⚠️ **ಅನೇಕ ಸಮಾವೇಶಗೊಳ್ಳುವ ಅಡಚಣೆಗಳು (NFHS-5):**",
+                "• 📊 **31.55%** ಭಾರತೀಯ ಮಹಿಳೆಯರು 2 ಅಥವಾ ಹೆಚ್ಚಿನ ಅಡಚಣೆಗಳನ್ನು ಏಕಕಾಲದಲ್ಲಿ ಎದುರಿಸುತ್ತಾರೆ.",
+                "• 📈 ಒಬ್ಬ ಮಹಿಳೆಯ ಸರಾಸರಿ ಅಡಚಣೆಗಳ ಸಂಖ್ಯೆ: 1.05.",
+            ])
+        elif lang_code == "hi":
+            answer_parts.extend([
+                "⚠️ **अनेक समवर्ती बाधाएं (NFHS-5):**",
+                "• 📊 **31.55%** भारतीय महिलाएं एक साथ 2 या अधिक बाधाओं का सामना करती हैं।",
+                "• 📈 प्रति महिला औसत बाधा संख्या: 1.05।",
+            ])
+        else:
+            answer_parts.extend([
+                "⚠️ **Multiple Overlapping Barriers (NFHS-5):**",
+                "• 📊 **31.55%** of Indian women face 2 or more healthcare barriers simultaneously.",
+                "• 📈 Mean barrier count per woman: 1.05 barriers.",
+            ])
     else:
         if lang_code == "kn":
             answer_parts.extend([

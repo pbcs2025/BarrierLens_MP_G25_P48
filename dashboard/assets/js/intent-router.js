@@ -121,9 +121,9 @@
     if (!langInput || typeof langInput !== 'string') return "English";
     const lower = langInput.trim().toLowerCase();
 
-    if (lower === "kannada" || lower === "kn" || lower.includes("ಕನ್ನಡ")) return "Kannada";
-    if (lower === "hindi" || lower === "hi" || lower.includes("हिंदी") || lower.includes("हिन्दी")) return "Hindi";
-    if (lower === "english" || lower === "en") return "English";
+    if (lower === "kannada" || lower.startsWith("kn") || lower.includes("ಕನ್ನಡ")) return "Kannada";
+    if (lower === "hindi" || lower.startsWith("hi") || lower.includes("हिंदी") || lower.includes("ಹಿन्दी")) return "Hindi";
+    if (lower === "english" || lower.startsWith("en")) return "English";
 
     return "English";
   }

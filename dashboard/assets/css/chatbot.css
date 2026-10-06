@@ -79,9 +79,20 @@
 }
 
 @keyframes bl-pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
 }
 
 .bl-launcher-text {
@@ -241,6 +252,10 @@
   cursor: pointer;
   transition: color 0.15s, background 0.15s;
   outline: none;
+}
+
+.bl-change-barrier-btn {
+  width: 80px !important;
 }
 
 .bl-header-btn:hover {
@@ -532,12 +547,27 @@
   animation: bl-bounce 1.4s infinite ease-in-out both;
 }
 
-.bl-typing-dot:nth-child(1) { animation-delay: -0.32s; }
-.bl-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.bl-typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.bl-typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
 
 @keyframes bl-bounce {
-  0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
-  40% { transform: scale(1); opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -689,7 +719,7 @@
     padding: 10px 16px 10px 12px;
     font-size: 0.85rem;
   }
-  
+
   .bl-chat-modal {
     bottom: 0;
     right: 0;
@@ -1039,4 +1069,3 @@
   color: #3730a3;
   line-height: 1.4;
 }
-

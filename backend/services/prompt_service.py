@@ -63,12 +63,35 @@ def build_user_prompt(
     if evidence_payload is None:
         evidence_payload = {}
 
-    lang_map = {
-        "en": "English",
-        "kn": "Kannada (ಕನ್ನಡ)",
-        "hi": "Hindi (हिंदी)",
-    }
-    lang_name = lang_map.get(language, "English")
+def normalize_language_code(language_input: str | None) -> tuple[str, str]:
+    """Normalize raw language inputs to standard code ('en', 'kn', 'hi') and display name."""
+    raw = str(language_input or "en").strip().lower()
+    if "kn" in raw or "kannada" in raw or "ಕನ್ನಡ" in raw:
+        return "kn", "Kannada (ಕನ್ನಡ)"
+    if "hi" in raw or "hindi" in raw or "हिंदी" in raw or "ಹಿन्दी" in raw:
+        return "hi", "Hindi (हिंदी)"
+    return "en", "English"
+
+
+def build_user_prompt(
+    question: str,
+    language: str,
+    evidence_payload: dict[str, Any] | None = None,
+) -> str:
+    """Format user query and optional verified evidence context into a focused prompt.
+
+    Args:
+        question: User query text.
+        language: Target language ('en', 'kn', 'hi', 'Kannada', 'Hindi', etc.).
+        evidence_payload: Optional verified evidence object from data layer.
+
+    Returns:
+        Formatted prompt string with explicit response-language instruction.
+    """
+    if evidence_payload is None:
+        evidence_payload = {}
+
+    lang_code, lang_name = normalize_language_code(language)
 
     context_lines: list[str] = []
 
@@ -109,11 +132,21 @@ def build_user_prompt(
 
     context_str = "\n".join(context_lines) if context_lines else "No specific numerical filter provided; use core BarrierLens facts."
 
+    if lang_code == "kn":
+        lang_instruction = "Respond entirely in Kannada (ಕನ್ನಡ). Do not translate the question only; provide the complete, detailed, actual answer in Kannada script."
+    elif lang_code == "hi":
+        lang_instruction = "Respond entirely in Hindi (हिंदी). Do not translate the question only; provide the complete, detailed, actual answer in Devanagari Hindi script."
+    else:
+        lang_instruction = "Respond entirely in English. Provide the complete, detailed, actual answer in English."
+
     return f"""USER QUERY: "{question}"
-TARGET LANGUAGE: {lang_name}
+TARGET LANGUAGE: {lang_name} ({lang_code})
 
 VERIFIED BARRIERLENS CONTEXT:
 {context_str}
 
-Respond in {lang_name}. First give a brief introductory line on what BarrierLens data shows, followed by 2 to 4 concise bullet points with emojis (e.g., 📊, 🏥, 🚗, 📍, 💡):"""
+EXPLICIT LANGUAGE INSTRUCTION:
+{lang_instruction}
+First write a brief 1-line introductory summary sentence in {lang_name}, followed by 2 to 4 concise bullet points formatted with emojis (e.g., 📊, 🏥, 🚗, 🏠, 📍, 💡). Respond entirely in {lang_name}:"""
+
 
