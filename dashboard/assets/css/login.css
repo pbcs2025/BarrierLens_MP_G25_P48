@@ -1419,6 +1419,74 @@ html:has(> body.bl-login-body) {
 }
 
 /* ==========================================================================
+   10.1 AUTHENTICATION MODE TABS & REGISTRATION STYLES
+   ========================================================================== */
+
+.bl-tab-nav {
+  display: flex;
+  gap: 6px;
+  background: rgba(10, 16, 38, 0.65);
+  border: 1px solid var(--bl-line);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.bl-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--bl-text-mute);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.bl-tab-btn:hover {
+  color: var(--bl-text-soft);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bl-tab-btn.active {
+  color: var(--bl-white);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.45) 0%, rgba(124, 58, 237, 0.45) 100%);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.35);
+  border: 1px solid rgba(129, 140, 248, 0.4);
+}
+
+.bl-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 38px !important;
+  color: var(--bl-text) !important;
+}
+
+.bl-select option {
+  background-color: #0b1026;
+  color: var(--bl-text);
+  padding: 10px;
+}
+
+.bl-label-select {
+  top: -8px !important;
+  font-size: 0.72rem !important;
+  color: var(--bl-indigo-lt) !important;
+}
+
+
+/* ==========================================================================
    11. ACCESSIBILITY — REDUCED MOTION
    ========================================================================== */
 

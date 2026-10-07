@@ -228,11 +228,24 @@
         <div class="bl-login-card bl-anim" style="--d:0.34s" id="login-card">
           <div class="bl-card-glow" aria-hidden="true"></div>
 
-          <header class="bl-card-head">
-            <h2 class="bl-card-title">Welcome to BarrierLens</h2>
-            <p class="bl-card-sub">Enter the research intelligence dashboard</p>
+          <!-- Authentication Mode Tabs (Sign In / Register) -->
+          <div class="bl-tab-nav" role="tablist" aria-label="Authentication Options">
+            <button type="button" class="bl-tab-btn active" id="tab-login-btn" role="tab" aria-selected="true" aria-controls="login-form">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              <span>SIGN IN</span>
+            </button>
+            <button type="button" class="bl-tab-btn" id="tab-register-btn" role="tab" aria-selected="false" aria-controls="register-form">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>
+              <span>REGISTER</span>
+            </button>
+          </div>
+
+          <header class="bl-card-head" id="card-header">
+            <h2 class="bl-card-title" id="card-title">Welcome to BarrierLens</h2>
+            <p class="bl-card-sub" id="card-sub">Enter the research intelligence dashboard</p>
           </header>
 
+          <!-- SIGN IN FORM -->
           <form class="bl-form" id="login-form" novalidate autocomplete="on">
             <div class="bl-field bl-anim" style="--d:0.52s">
               <div class="bl-input-wrap">
@@ -291,6 +304,73 @@
               <code>research@barrierlens.in</code> / <code>BarrierLens@2025</code>
               (or press <strong>Continue as Demo</strong>)
             </p>
+          </form>
+
+          <!-- REGISTER FORM -->
+          <form class="bl-form" id="register-form" novalidate autocomplete="on" style="display: none;">
+            <div class="bl-field">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <input id="bl-reg-name" name="name" type="text" class="bl-input" placeholder=" " required>
+                <label class="bl-label" for="bl-reg-name">Full Name</label>
+              </div>
+            </div>
+
+            <div class="bl-field">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </span>
+                <input id="bl-reg-username" name="username" type="email" class="bl-input" placeholder=" " required>
+                <label class="bl-label" for="bl-reg-username">Email / Username</label>
+              </div>
+            </div>
+
+            <div class="bl-field">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                </span>
+                <select id="bl-reg-role" name="role" class="bl-input bl-select" required>
+                  <option value="Research Lead">Research Lead</option>
+                  <option value="Team Member">Team Member</option>
+                  <option value="Data Analyst">Data Analyst</option>
+                  <option value="Policy Specialist">Policy Specialist</option>
+                  <option value="Healthcare Professional">Healthcare Professional</option>
+                </select>
+                <label class="bl-label bl-label-select" for="bl-reg-role">Role / Affiliation</label>
+              </div>
+            </div>
+
+            <div class="bl-field">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input id="bl-reg-password" name="password" type="password" class="bl-input" placeholder=" " required minlength="6">
+                <label class="bl-label" for="bl-reg-password">Password (min 6 chars)</label>
+              </div>
+            </div>
+
+            <div class="bl-field">
+              <div class="bl-input-wrap">
+                <span class="bl-input-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
+                <input id="bl-reg-confirm" name="confirm_password" type="password" class="bl-input" placeholder=" " required>
+                <label class="bl-label" for="bl-reg-confirm">Confirm Password</label>
+              </div>
+            </div>
+
+            <p class="bl-error" id="register-error" role="alert" aria-live="assertive" hidden></p>
+
+            <button type="submit" class="bl-btn-primary" id="bl-signup">
+              <span class="bl-btn-label">CREATE ACCOUNT</span>
+              <span class="bl-btn-loader" aria-hidden="true"></span>
+              <svg class="bl-btn-arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
           </form>
 
           <footer class="bl-card-foot">

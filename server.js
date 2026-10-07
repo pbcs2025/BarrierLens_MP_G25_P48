@@ -34,6 +34,7 @@ const DEMO_USERS = [
   { username: '1ga23cs153', password: 'BarrierLens@2025', name: 'Sharmila S', role: 'Team Member' }
 ];
 
+const registeredUsers = [...DEMO_USERS];
 const sessions = new Map();
 
 function parseCookies(req) {
@@ -62,7 +63,7 @@ function readSession(req) {
 function matchDemoUser(username, password) {
   const needle = String(username || '').trim().toLowerCase();
   if (!needle || !password) return null;
-  const found = DEMO_USERS.find(u => u.username.toLowerCase() === needle);
+  const found = registeredUsers.find(u => u.username.toLowerCase() === needle);
   if (!found || found.password !== password) return null;
   return { username: found.username, name: found.name, role: found.role };
 }
@@ -104,6 +105,55 @@ function handleAuthRoute(req, res, pathname) {
     });
   }
 
+  if (pathname === '/auth/register' && req.method === 'POST') {
+    return readBody(req)
+      .then(raw => {
+        let payload = {};
+        try { payload = raw ? JSON.parse(raw) : {}; } catch (err) { payload = {}; }
+        const name = String(payload.name || '').trim();
+        const username = String(payload.username || '').trim();
+        const password = String(payload.password || '');
+        const role = String(payload.role || 'Research Analyst').trim();
+
+        if (!name || !username || !password) {
+          return sendJson(res, 400, {
+            authenticated: false,
+            error: 'Full name, email/username, and password are required for registration.'
+          });
+        }
+
+        if (password.length < 6) {
+          return sendJson(res, 400, {
+            authenticated: false,
+            error: 'Password must be at least 6 characters long.'
+          });
+        }
+
+        const needle = username.toLowerCase();
+        if (registeredUsers.some(u => u.username.toLowerCase() === needle)) {
+          return sendJson(res, 400, {
+            authenticated: false,
+            error: 'An account with this email/username already exists. Please sign in instead.'
+          });
+        }
+
+        const newUser = { username: needle, password, name, role };
+        registeredUsers.push(newUser);
+
+        const token = crypto.randomBytes(24).toString('hex');
+        const userObj = { username: newUser.username, name: newUser.name, role: newUser.role };
+        sessions.set(token, { user: userObj, issuedAt: Date.now() });
+
+        const maxAge = Math.floor(SESSION_TTL_MS / 1000);
+        res.setHeader(
+          'Set-Cookie',
+          `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax`
+        );
+        return sendJson(res, 200, { authenticated: true, user: userObj, registered: true });
+      })
+      .catch(() => sendJson(res, 400, { authenticated: false, error: 'Malformed registration request.' }));
+  }
+
   if (pathname === '/auth/login' && req.method === 'POST') {
     return readBody(req)
       .then(raw => {
@@ -113,7 +163,7 @@ function handleAuthRoute(req, res, pathname) {
         if (!user) {
           return sendJson(res, 401, {
             authenticated: false,
-            error: 'Invalid credentials for the BarrierLens demonstration account.'
+            error: 'Invalid credentials. Please check your username/password or register a new account.'
           });
         }
         const token = crypto.randomBytes(24).toString('hex');

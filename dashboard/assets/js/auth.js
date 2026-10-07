@@ -173,6 +173,62 @@
       });
   }
 
+  function register(name, username, password, role) {
+    var attempts = [];
+    if (typeof global.fetch === "function") {
+      attempts.push(
+        global.fetch("/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ name: name, username: username, password: password, role: role })
+        }).then(function (res) {
+          return res.json().then(function (body) {
+            return { server: true, ok: res.ok, body: body || {} };
+          }).catch(function () {
+            return { server: true, ok: false, body: {} };
+          });
+        }).catch(function () {
+          return { server: true, ok: false, body: {}, unreachable: true };
+        })
+      );
+    }
+
+    return Promise.all(attempts).then(function (results) {
+      var serverResult = results.length ? results[0] : null;
+      var user = null;
+
+      if (serverResult && serverResult.ok && serverResult.body && serverResult.body.authenticated) {
+        user = serverResult.body.user;
+      } else {
+        // Fallback for offline/static demo mode
+        var needle = String(username).trim().toLowerCase();
+        for (var i = 0; i < DEMO_USERS.length; i++) {
+          if (DEMO_USERS[i].username.toLowerCase() === needle) {
+            return { ok: false, error: "An account with this email/username already exists." };
+          }
+        }
+        user = { name: String(name).trim(), username: needle, role: role || "Research Analyst" };
+        DEMO_USERS.push({ name: user.name, username: user.username, password: password, role: user.role });
+      }
+
+      if (!user) {
+        var err = (serverResult && serverResult.body && serverResult.body.error) || "Registration failed. Please try again.";
+        return { ok: false, error: err };
+      }
+
+      var session = {
+        authenticated: true,
+        mode: (serverResult && serverResult.ok) ? "server" : "local",
+        user: user,
+        issuedAt: Date.now()
+      };
+      writeSession(session, true);
+
+      return { ok: true, user: user, mode: session.mode };
+    });
+  }
+
   function logout() {
     var done = function () { clearSession(); };
     if (typeof global.fetch === "function") {
@@ -206,6 +262,7 @@
     STORAGE_KEY: STORAGE_KEY,
     DEMO_USERS: DEMO_USERS,
     login: login,
+    register: register,
     logout: logout,
     verifyServerSession: verifyServerSession,
     isAuthenticated: function () { return readSession() !== null; },

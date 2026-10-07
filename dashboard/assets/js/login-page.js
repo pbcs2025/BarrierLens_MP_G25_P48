@@ -1,30 +1,38 @@
-/**
- * BARRIERLENS — LOGIN / LANDING PAGE CONTROLLER
- * ---------------------------------------------------------------------------
- * Handles: floating-label behaviour (CSS), show/hide password, demo access,
- * the staged "Signing in -> Access Granted" transition and the redirect into
- * the EXISTING BarrierLens Dashboard Home. No dashboard logic is touched here.
- */
-
 (function () {
   "use strict";
-
   var Auth = window.BarrierLensAuth;
 
-  var form = document.getElementById("login-form");
+  var loginForm = document.getElementById("login-form");
+  var registerForm = document.getElementById("register-form");
+
   var usernameInput = document.getElementById("bl-username");
   var passwordInput = document.getElementById("bl-password");
   var rememberInput = document.getElementById("bl-remember");
   var toggleBtn = document.getElementById("bl-toggle-password");
   var signInBtn = document.getElementById("bl-signin");
   var demoBtn = document.getElementById("bl-demo-login");
-  var errorBox = document.getElementById("login-error");
+  var loginErrorBox = document.getElementById("login-error");
+
+  var regNameInput = document.getElementById("bl-reg-name");
+  var regUsernameInput = document.getElementById("bl-reg-username");
+  var regRoleSelect = document.getElementById("bl-reg-role");
+  var regPasswordInput = document.getElementById("bl-reg-password");
+  var regConfirmInput = document.getElementById("bl-reg-confirm");
+  var signUpBtn = document.getElementById("bl-signup");
+  var registerErrorBox = document.getElementById("register-error");
+
+  var tabLoginBtn = document.getElementById("tab-login-btn");
+  var tabRegisterBtn = document.getElementById("tab-register-btn");
+
+  var cardTitle = document.getElementById("card-title");
+  var cardSub = document.getElementById("card-sub");
+
   var card = document.getElementById("login-card");
   var overlay = document.getElementById("bl-transition");
   var overlayStatus = document.getElementById("bl-transition-status");
   var liveRegion = document.getElementById("bl-live-status");
 
-  if (!form || !Auth) return;
+  if (!loginForm || !Auth) return;
 
   var reduceMotion = window.matchMedia
     ? window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -33,10 +41,6 @@
   function reduced() {
     return !!reduceMotion.matches;
   }
-
-  /* ---------------------------------------------------------------- */
-  /* Destination after login                                           */
-  /* ---------------------------------------------------------------- */
 
   function getNextTarget() {
     var params = new URLSearchParams(window.location.search);
@@ -47,18 +51,14 @@
     return Auth.homeHref();
   }
 
-  /* ---------------------------------------------------------------- */
-  /* Small helpers                                                     */
-  /* ---------------------------------------------------------------- */
-
   function announce(message) {
     if (liveRegion) liveRegion.textContent = message;
   }
 
-  function showError(message) {
-    if (!errorBox) return;
-    errorBox.textContent = message;
-    errorBox.hidden = false;
+  function showError(box, message) {
+    if (!box) return;
+    box.textContent = message;
+    box.hidden = false;
     announce(message);
     if (card) {
       card.animate(
@@ -73,23 +73,62 @@
     }
   }
 
-  function clearError() {
-    if (!errorBox) return;
-    errorBox.hidden = true;
-    errorBox.textContent = "";
+  function clearErrors() {
+    if (loginErrorBox) { loginErrorBox.hidden = true; loginErrorBox.textContent = ""; }
+    if (registerErrorBox) { registerErrorBox.hidden = true; registerErrorBox.textContent = ""; }
   }
 
-  function setBusy(isBusy) {
-    if (!signInBtn) return;
-    signInBtn.classList.toggle("is-busy", isBusy);
-    signInBtn.disabled = isBusy;
-    var label = signInBtn.querySelector(".bl-btn-label");
-    if (label) label.textContent = isBusy ? "SIGNING IN…" : "SIGN IN";
+  function setBusy(btn, isBusy, busyText, idleText) {
+    if (!btn) return;
+    btn.classList.toggle("is-busy", isBusy);
+    btn.disabled = isBusy;
+    var label = btn.querySelector(".bl-btn-label");
+    if (label) label.textContent = isBusy ? busyText : idleText;
     if (demoBtn) demoBtn.disabled = isBusy;
   }
 
   /* ---------------------------------------------------------------- */
-  /* Show / hide password                                              */
+  /* Tab Switching (Sign In vs Register)                               */
+  /* ---------------------------------------------------------------- */
+
+  function switchTab(mode) {
+    clearErrors();
+    if (mode === "register") {
+      tabLoginBtn.classList.remove("active");
+      tabLoginBtn.setAttribute("aria-selected", "false");
+      tabRegisterBtn.classList.add("active");
+      tabRegisterBtn.setAttribute("aria-selected", "true");
+
+      loginForm.style.display = "none";
+      registerForm.style.display = "block";
+
+      if (cardTitle) cardTitle.textContent = "Create Research Account";
+      if (cardSub) cardSub.textContent = "Register for BarrierLens access intelligence";
+
+      if (regNameInput) regNameInput.focus();
+    } else {
+      tabRegisterBtn.classList.remove("active");
+      tabRegisterBtn.setAttribute("aria-selected", "false");
+      tabLoginBtn.classList.add("active");
+      tabLoginBtn.setAttribute("aria-selected", "true");
+
+      registerForm.style.display = "none";
+      loginForm.style.display = "block";
+
+      if (cardTitle) cardTitle.textContent = "Welcome to BarrierLens";
+      if (cardSub) cardSub.textContent = "Enter the research intelligence dashboard";
+
+      if (usernameInput) usernameInput.focus();
+    }
+  }
+
+  if (tabLoginBtn && tabRegisterBtn) {
+    tabLoginBtn.addEventListener("click", function () { switchTab("login"); });
+    tabRegisterBtn.addEventListener("click", function () { switchTab("register"); });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Show / Hide Password                                              */
   /* ---------------------------------------------------------------- */
 
   if (toggleBtn && passwordInput) {
@@ -103,10 +142,10 @@
   }
 
   /* ---------------------------------------------------------------- */
-  /* Sign-in transition: Signing in -> Access Granted -> Dashboard     */
+  /* Sign-in / Registration Transition                                 */
   /* ---------------------------------------------------------------- */
 
-  function runTransition(destination) {
+  function runTransition(destination, statusMessage) {
     var fast = reduced();
 
     if (!overlay) {
@@ -115,8 +154,8 @@
     }
 
     overlay.classList.add("is-active");
-    overlayStatus.textContent = "Signing in…";
-    announce("Signing in. Verifying research credentials.");
+    overlayStatus.textContent = statusMessage || "Signing in…";
+    announce(statusMessage || "Signing in. Verifying research credentials.");
 
     if (fast) {
       overlayStatus.textContent = "Access Granted";
@@ -149,77 +188,125 @@
   }
 
   /* ---------------------------------------------------------------- */
-  /* Authentication attempt                                            */
+  /* Authentication & Registration Attempts                           */
   /* ---------------------------------------------------------------- */
 
   function attemptLogin(username, password) {
-    clearError();
+    clearErrors();
 
     if (!username || !password) {
-      showError("Please enter both your email/username and password.");
+      showError(loginErrorBox, "Please enter both your email/username and password.");
       (username ? passwordInput : usernameInput).focus();
       return;
     }
 
-    setBusy(true);
+    setBusy(signInBtn, true, "SIGNING IN…", "SIGN IN");
     announce("Signing in.");
 
     Auth.login(username, password, rememberInput && rememberInput.checked)
       .then(function (result) {
         if (!result || !result.ok) {
-          setBusy(false);
-          showError((result && result.error) || "Unable to sign in. Please try again.");
+          setBusy(signInBtn, false, "SIGNING IN…", "SIGN IN");
+          showError(loginErrorBox, (result && result.error) || "Unable to sign in. Please try again.");
           passwordInput.select();
           return;
         }
-        runTransition(getNextTarget());
+        runTransition(getNextTarget(), "Signing in…");
       })
       .catch(function () {
-        setBusy(false);
-        showError("Unexpected error while signing in. Please try again.");
+        setBusy(signInBtn, false, "SIGNING IN…", "SIGN IN");
+        showError(loginErrorBox, "Unexpected error while signing in. Please try again.");
+      });
+  }
+
+  function attemptRegister(name, username, role, password, confirmPassword) {
+    clearErrors();
+
+    if (!name) {
+      showError(registerErrorBox, "Please enter your full name.");
+      if (regNameInput) regNameInput.focus();
+      return;
+    }
+    if (!username) {
+      showError(registerErrorBox, "Please enter your email or username.");
+      if (regUsernameInput) regUsernameInput.focus();
+      return;
+    }
+    if (!password || password.length < 6) {
+      showError(registerErrorBox, "Password must be at least 6 characters long.");
+      if (regPasswordInput) regPasswordInput.focus();
+      return;
+    }
+    if (password !== confirmPassword) {
+      showError(registerErrorBox, "Passwords do not match. Please try again.");
+      if (regConfirmInput) regConfirmInput.focus();
+      return;
+    }
+
+    setBusy(signUpBtn, true, "CREATING ACCOUNT…", "CREATE ACCOUNT");
+    announce("Creating account.");
+
+    Auth.register(name, username, password, role)
+      .then(function (result) {
+        if (!result || !result.ok) {
+          setBusy(signUpBtn, false, "CREATING ACCOUNT…", "CREATE ACCOUNT");
+          showError(registerErrorBox, (result && result.error) || "Registration failed. Please try again.");
+          return;
+        }
+        runTransition(getNextTarget(), "Account Created…");
+      })
+      .catch(function () {
+        setBusy(signUpBtn, false, "CREATING ACCOUNT…", "CREATE ACCOUNT");
+        showError(registerErrorBox, "Unexpected error during registration. Please try again.");
       });
   }
 
   /* ---------------------------------------------------------------- */
-  /* Events                                                            */
+  /* Event Listeners                                                   */
   /* ---------------------------------------------------------------- */
 
-  form.addEventListener("submit", function (event) {
+  loginForm.addEventListener("submit", function (event) {
     event.preventDefault();
     attemptLogin(usernameInput.value.trim(), passwordInput.value);
   });
 
+  if (registerForm) {
+    registerForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      attemptRegister(
+        regNameInput ? regNameInput.value.trim() : "",
+        regUsernameInput ? regUsernameInput.value.trim() : "",
+        regRoleSelect ? regRoleSelect.value : "Research Lead",
+        regPasswordInput ? regPasswordInput.value : "",
+        regConfirmInput ? regConfirmInput.value : ""
+      );
+    });
+  }
+
   if (demoBtn) {
     demoBtn.addEventListener("click", function () {
+      switchTab("login");
       usernameInput.value = "research@barrierlens.in";
       passwordInput.value = "BarrierLens@2025";
-      clearError();
+      clearErrors();
       attemptLogin(usernameInput.value, passwordInput.value);
     });
   }
 
-  [usernameInput, passwordInput].forEach(function (input) {
+  [usernameInput, passwordInput, regNameInput, regUsernameInput, regPasswordInput, regConfirmInput].forEach(function (input) {
     if (!input) return;
-    input.addEventListener("input", clearError);
-  });
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Enter" && document.activeElement && document.activeElement.tagName === "INPUT") {
-      if (form.requestSubmit) form.requestSubmit();
-    }
+    input.addEventListener("input", clearErrors);
   });
 
   /* ---------------------------------------------------------------- */
-  /* Already signed in? Go straight to the dashboard.                  */
-  /* The server is authoritative when it answers, otherwise the local   */
-  /* marker is used (static hosting / file://).                         */
+  /* Auto-redirect if session active                                   */
   /* ---------------------------------------------------------------- */
 
   if (Auth.isAuthenticated()) {
     Auth.verifyServerSession().then(function (serverConfirmed) {
       if (serverConfirmed === false) {
         Auth.clearSession();
-        showError("Your previous session has expired. Please sign in again.");
+        showError(loginErrorBox, "Your previous session has expired. Please sign in again.");
         return;
       }
       window.location.replace(getNextTarget());
