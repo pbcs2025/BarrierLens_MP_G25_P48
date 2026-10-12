@@ -7,6 +7,12 @@
   <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../assets/js/d3.v7.min.js"></script>
+  <script>
+    if (typeof d3 === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/d3@7"><\/script>');
+    }
+  </script>
   <script src="../assets/js/dashboard-state.js"></script>
   <script src="../assets/js/labels.js"></script>
   <script src="../assets/js/chart-utils.js"></script>
@@ -71,6 +77,73 @@
       </div>
     </div>
 
+    <!-- India States Interactive Map -->
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <span class="card-title" id="map-card-title">India States Healthcare Barrier Map</span>
+          <div class="card-subtitle">Interactive geographical disparity analysis across 36 Indian States and Union Territories (NFHS-5, N = 724,115)</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div class="filter-field" style="min-width: 260px;">
+            <span class="filter-field-label">Map Metric:</span>
+            <select id="map-metric-select" class="filter-select">
+              <optgroup label="Rail A — Empirical Observed Barrier Rates">
+                <option value="observed_any_barrier_rate" selected>Observed Any Barrier (≥1 Barrier)</option>
+                <option value="observed_facility_rate">Observed Facility-Level Barrier</option>
+                <option value="observed_logistic_rate">Observed Logistic Barrier (Distance/Transport)</option>
+                <option value="observed_household_rate">Observed Household Barrier (Funds/Permission)</option>
+              </optgroup>
+              <optgroup label="Rail B — Machine Learning Risk Predictions">
+                <option value="predicted_composite_score">Predicted Composite Risk Score</option>
+                <option value="predicted_facility_prob">Predicted Facility Risk Probability</option>
+                <option value="predicted_logistic_prob">Predicted Logistic Risk Probability</option>
+                <option value="predicted_household_prob">Predicted Household Risk Probability</option>
+              </optgroup>
+            </select>
+          </div>
+          <button id="map-reset-btn" class="map-reset-btn" style="display: none;" title="Reset state selection to national view">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Reset Map Selection</span>
+          </button>
+        </div>
+      </div>
+      
+      <div id="india-map-container" class="india-map-wrapper">
+        <div class="map-loading-state">
+          <div class="pulse-dot" style="width: 14px; height: 14px; margin-bottom: 12px;"></div>
+          <span>Loading interactive India States Map...</span>
+        </div>
+      </div>
+
+      <!-- Small Territories / UT Quick Selector Strip -->
+      <div class="map-ut-strip" id="map-ut-strip" style="display: none;">
+        <span style="font-weight: 700; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Quick Inspect UTs &amp; Islands:
+        </span>
+        <div id="ut-quick-buttons" style="display: inline-flex; gap: 6px; flex-wrap: wrap;"></div>
+      </div>
+
+      <!-- Map Legend -->
+      <div id="map-legend" class="map-legend-card" style="display: none;">
+        <div class="map-legend-row">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 700; font-size: 0.8rem; color: var(--text-main);">Legend Scale:</span>
+            <span id="map-legend-type-badge" class="tag tag-overall" style="font-size: 0.65rem; padding: 2px 8px;">Rail A: Observed</span>
+          </div>
+          <div id="map-legend-gradient" class="map-legend-bar"></div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: var(--text-main);">
+            <span id="map-legend-min">0%</span>
+            <span style="color: var(--text-muted);">&ndash;</span>
+            <span id="map-legend-max">100%</span>
+          </div>
+          <span id="map-legend-label" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; margin-left: auto;"></span>
+        </div>
+        <div id="map-legend-note" style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;"></div>
+      </div>
+    </div>
+
     <!-- Controls & State Inspector Bar -->
     <div class="global-filter-panel" style="padding: 14px 20px; margin-bottom: 20px;">
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
@@ -78,11 +151,18 @@
           <div class="filter-field">
             <span class="filter-field-label">Target Barrier Domain:</span>
             <select id="barrier-select" class="filter-select">
-              <option value="observed_any_barrier_rate">Any Barrier (Observed ≥1)</option>
-              <option value="observed_facility_rate">Facility-Level Barrier</option>
-              <option value="observed_logistic_rate">Logistic Barrier (Transport/Distance)</option>
-              <option value="observed_household_rate">Household Barrier (Money/Permission)</option>
-              <option value="predicted_composite_score">Predicted Composite Score (Rail B)</option>
+              <optgroup label="Rail A — Empirical Observed Barrier Rates">
+                <option value="observed_any_barrier_rate">Any Barrier (Observed ≥1)</option>
+                <option value="observed_facility_rate">Facility-Level Barrier</option>
+                <option value="observed_logistic_rate">Logistic Barrier (Transport/Distance)</option>
+                <option value="observed_household_rate">Household Barrier (Money/Permission)</option>
+              </optgroup>
+              <optgroup label="Rail B — Machine Learning Risk Predictions">
+                <option value="predicted_composite_score">Predicted Composite Score (Rail B)</option>
+                <option value="predicted_facility_prob">Predicted Facility Risk</option>
+                <option value="predicted_logistic_prob">Predicted Logistic Risk</option>
+                <option value="predicted_household_prob">Predicted Household Risk</option>
+              </optgroup>
             </select>
           </div>
 
@@ -98,7 +178,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <div class="filter-field">
             <span class="filter-field-label">Inspect State Profile:</span>
-            <select id="state-inspector-select" class="filter-select" style="min-width: 220px;">
+            <select id="state-inspector-select" class="filter-select" style="min-width: 240px;">
               <option value="">-- Choose State to Detail --</option>
             </select>
           </div>
@@ -107,31 +187,79 @@
     </div>
 
     <!-- State Detailed Profile Card -->
-    <div id="state-detail-panel" class="card" style="display: none; background: var(--bg-surface); border-color: var(--primary);">
+    <div id="state-detail-panel" class="card" style="display: none; background: var(--bg-surface); border: 2px solid var(--primary); margin-bottom: 24px;">
       <div class="card-title-row">
-        <span class="card-title" id="detail-state-name" style="color: var(--primary);">State Profile</span>
-        <button id="close-state-detail" class="btn-reset-filters">&times; Close</button>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span class="card-title" id="detail-state-name" style="color: var(--primary);">State Profile</span>
+          <span id="detail-state-badge" class="tag tag-overall">36 States &amp; UTs</span>
+          <span id="detail-dominant-badge" class="tag tag-facility">Dominant: Facility</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button id="detail-reset-btn" class="map-reset-btn" title="Reset selection to national overview">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Reset</span>
+          </button>
+          <button id="close-state-detail" class="btn-reset-filters">&times; Close</button>
+        </div>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 10px;">
+
+      <!-- Primary Empirical 4 Barrier Metrics Grid (Rail A) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 14px;">
         <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">SAMPLE N</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">SURVEY SAMPLE (N)</div>
           <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="detail-sample-n">-</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;" id="detail-sample-share">-</div>
         </div>
         <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">ANY BARRIER RATE</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">ANY BARRIER (≥1)</div>
           <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary);" id="detail-any-rate">-</div>
+          <div style="font-size: 0.72rem; margin-top: 2px;" id="detail-any-delta">-</div>
         </div>
         <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <div style="font-size: 0.75rem; font-weight: 700; color: var(--domain-facility);">FACILITY BARRIER</div>
           <div style="font-size: 1.4rem; font-weight: 800; color: var(--domain-facility);" id="detail-fac-rate">-</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Staff, meds, distance</div>
         </div>
         <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <div style="font-size: 0.75rem; font-weight: 700; color: var(--domain-logistic);">LOGISTIC BARRIER</div>
           <div style="font-size: 1.4rem; font-weight: 800; color: var(--domain-logistic);" id="detail-log-rate">-</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Transport, distance</div>
         </div>
         <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <div style="font-size: 0.75rem; font-weight: 700; color: var(--domain-household);">HOUSEHOLD BARRIER</div>
           <div style="font-size: 1.4rem; font-weight: 800; color: var(--domain-household);" id="detail-hh-rate">-</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Funds, permission</div>
+        </div>
+      </div>
+
+      <!-- Demographic & Rural-Urban Context Breakdown -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-main);">ML Risk Predictions (Rail B)</span>
+            <span class="tag tag-overall" style="font-size: 0.65rem;">Model Output</span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-size: 1.5rem; font-weight: 800; color: var(--accent-purple);" id="detail-pred-composite">-</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Composite Risk Score</span>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;" id="detail-pred-subprobs">
+            Predicted Probabilities: Fac: <strong id="detail-pred-fac" style="color:var(--domain-facility);">-</strong> | Log: <strong id="detail-pred-log" style="color:var(--domain-logistic);">-</strong> | HH: <strong id="detail-pred-hh" style="color:var(--domain-household);">-</strong>
+          </div>
+        </div>
+
+        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-main);">Demographic &amp; Rural–Urban Context</span>
+            <span class="tag tag-household" style="font-size: 0.65rem;">NFHS-5 Grounding</span>
+          </div>
+          <div style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);" id="detail-rural-urban-context">
+            National rural baseline is 63.49% vs urban 46.03%.
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+            <span class="tag tag-facility" id="detail-cluster-tag" style="font-size: 0.7rem;">-</span>
+            <span class="tag tag-overall" id="detail-national-rank-tag" style="font-size: 0.7rem;">-</span>
+          </div>
         </div>
       </div>
     </div>
@@ -266,6 +394,8 @@
 
   <script>
     let stateDataGlobal = null;
+    let mapGeoJsonGlobal = null;
+    let selectedMapState = null;
 
     document.addEventListener("DOMContentLoaded", function () {
       ChartUtils.loadJsonAndRender({
@@ -281,14 +411,22 @@
           renderAllCharts();
           renderStateTable();
           renderStateComparison();
+          initMap();
+          attachChartInteractivity();
         }
       });
 
       document.getElementById("compare-state-a").addEventListener("change", renderStateComparison);
       document.getElementById("compare-state-b").addEventListener("change", renderStateComparison);
 
-      document.getElementById("barrier-select").addEventListener("change", () => renderAllCharts());
-      document.getElementById("sort-order").addEventListener("change", () => renderAllCharts());
+      document.getElementById("barrier-select").addEventListener("change", function () {
+        const mapSelect = document.getElementById("map-metric-select");
+        if (mapSelect) mapSelect.value = this.value;
+        renderAllCharts(selectedMapState || "");
+        renderIndiaMap();
+      });
+
+      document.getElementById("sort-order").addEventListener("change", () => renderAllCharts(selectedMapState || ""));
 
       const searchInput = document.getElementById("state-search");
       if (searchInput) {
@@ -298,7 +436,9 @@
           renderAllCharts(q);
           if (q) {
             const match = stateDataGlobal ? stateDataGlobal.states.find(s => s.state_name.toLowerCase().includes(q)) : null;
-            if (match) showStateDetail(match.state_name);
+            if (match) selectState(match.state_name);
+          } else {
+            resetStateSelection();
           }
         });
       }
@@ -307,21 +447,35 @@
       if (inspectorSelect) {
         inspectorSelect.addEventListener("change", function () {
           if (this.value) {
-            showStateDetail(this.value);
-            renderAllCharts(this.value);
-            renderStateTable(this.value.toLowerCase());
+            selectState(this.value);
           } else {
-            document.getElementById("state-detail-panel").style.display = "none";
-            renderAllCharts();
-            renderStateTable();
+            resetStateSelection();
           }
         });
       }
 
       const closeDetailBtn = document.getElementById("close-state-detail");
       if (closeDetailBtn) {
-        closeDetailBtn.addEventListener("click", function () {
-          document.getElementById("state-detail-panel").style.display = "none";
+        closeDetailBtn.addEventListener("click", resetStateSelection);
+      }
+
+      const detailResetBtn = document.getElementById("detail-reset-btn");
+      if (detailResetBtn) {
+        detailResetBtn.addEventListener("click", resetStateSelection);
+      }
+
+      const mapResetBtn = document.getElementById("map-reset-btn");
+      if (mapResetBtn) {
+        mapResetBtn.addEventListener("click", resetStateSelection);
+      }
+
+      const mapMetricSelect = document.getElementById("map-metric-select");
+      if (mapMetricSelect) {
+        mapMetricSelect.addEventListener("change", function () {
+          const barrierSelect = document.getElementById("barrier-select");
+          if (barrierSelect) barrierSelect.value = this.value;
+          renderIndiaMap();
+          renderAllCharts(selectedMapState || "");
         });
       }
     });
@@ -337,24 +491,149 @@
       });
     }
 
+    // Unified State Selection Handler
+    function selectState(stateName) {
+      if (!stateDataGlobal || !stateName) return;
+
+      // If clicking already selected state, toggle off
+      if (selectedMapState && selectedMapState.toLowerCase() === stateName.toLowerCase()) {
+        resetStateSelection();
+        return;
+      }
+
+      const match = stateDataGlobal.states.find(s => s.state_name.toLowerCase() === stateName.toLowerCase());
+      if (!match) return;
+
+      selectedMapState = match.state_name;
+
+      // Sync dropdowns
+      const inspectorSelect = document.getElementById("state-inspector-select");
+      if (inspectorSelect) inspectorSelect.value = match.state_name;
+
+      const mapResetBtn = document.getElementById("map-reset-btn");
+      if (mapResetBtn) mapResetBtn.style.display = "inline-flex";
+
+      showStateDetail(match.state_name);
+      renderAllCharts(match.state_name);
+      renderStateTable(match.state_name.toLowerCase());
+      renderIndiaMap();
+
+      if (window.DashboardState && typeof window.DashboardState.setFilter === "function") {
+        window.DashboardState.setFilter("state", match.state_name);
+      }
+    }
+
+    function resetStateSelection() {
+      selectedMapState = null;
+
+      const inspectorSelect = document.getElementById("state-inspector-select");
+      if (inspectorSelect) inspectorSelect.value = "";
+
+      const detailPanel = document.getElementById("state-detail-panel");
+      if (detailPanel) detailPanel.style.display = "none";
+
+      const mapResetBtn = document.getElementById("map-reset-btn");
+      if (mapResetBtn) mapResetBtn.style.display = "none";
+
+      const searchInput = document.getElementById("state-search");
+      if (searchInput && searchInput.value) searchInput.value = "";
+
+      renderAllCharts();
+      renderStateTable();
+      renderIndiaMap();
+
+      if (window.DashboardState && typeof window.DashboardState.setFilter === "function") {
+        window.DashboardState.setFilter("state", "");
+      }
+    }
+
     function showStateDetail(stateName) {
       const panel = document.getElementById("state-detail-panel");
       if (!stateName || !stateDataGlobal) {
-        panel.style.display = "none";
+        if (panel) panel.style.display = "none";
         return;
       }
 
       const st = stateDataGlobal.states.find(s => s.state_name.toLowerCase() === stateName.toLowerCase());
       if (!st) return;
 
+      // Calculate national ranks and comparisons
+      const sortedByAny = [...stateDataGlobal.states].sort((a, b) => b.observed_any_barrier_rate - a.observed_any_barrier_rate);
+      const rank = sortedByAny.findIndex(s => s.state_name.toLowerCase() === stateName.toLowerCase()) + 1;
+
+      // Update titles and badges
       document.getElementById("detail-state-name").textContent = `${st.state_name} — Detailed Profile`;
+      
+      const isUT = ["Andaman & Nicobar Islands", "Chandigarh", "Dadra & Nagar Haveli and Daman & Diu", "Delhi", "Jammu & Kashmir", "Ladakh", "Lakshadweep", "Puducherry"].includes(st.state_name);
+      const stateBadge = document.getElementById("detail-state-badge");
+      if (stateBadge) stateBadge.textContent = isUT ? "Union Territory" : "Indian State";
+
+      const dominantBadge = document.getElementById("detail-dominant-badge");
+      if (dominantBadge) {
+        dominantBadge.textContent = `Dominant Barrier: ${st.dominant_barrier || 'Facility'}`;
+        dominantBadge.className = `tag tag-${(st.dominant_barrier || 'facility').toLowerCase()}`;
+      }
+
+      // Survey Sample & Share
       document.getElementById("detail-sample-n").textContent = st.sample_size_n.toLocaleString();
-      document.getElementById("detail-any-rate").textContent = (st.observed_any_barrier_rate * 100).toFixed(2) + "%";
+      const pctSample = (st.pct_national_sample ? st.pct_national_sample * 100 : (st.sample_size_n / 724115) * 100).toFixed(2);
+      document.getElementById("detail-sample-share").textContent = `${pctSample}% of National Sample (724,115)`;
+
+      // Barrier Rates
+      const anyPct = (st.observed_any_barrier_rate * 100);
+      document.getElementById("detail-any-rate").textContent = anyPct.toFixed(2) + "%";
+      
+      // Delta vs National Baseline (60.68%)
+      const anyDelta = anyPct - 60.68;
+      const deltaEl = document.getElementById("detail-any-delta");
+      if (deltaEl) {
+        if (anyDelta > 0) {
+          deltaEl.innerHTML = `<span style="color:#dc2626; font-weight:700;">+${anyDelta.toFixed(2)} pp</span> vs Nat'l Baseline (60.7%)`;
+        } else {
+          deltaEl.innerHTML = `<span style="color:#16a34a; font-weight:700;">${anyDelta.toFixed(2)} pp</span> vs Nat'l Baseline (60.7%)`;
+        }
+      }
+
       document.getElementById("detail-fac-rate").textContent = (st.observed_facility_rate * 100).toFixed(2) + "%";
       document.getElementById("detail-log-rate").textContent = (st.observed_logistic_rate * 100).toFixed(2) + "%";
       document.getElementById("detail-hh-rate").textContent = (st.observed_household_rate * 100).toFixed(2) + "%";
+
+      // ML Predicted Scores (Rail B)
+      const predComposite = st.predicted_composite_score !== undefined ? (st.predicted_composite_score * 100).toFixed(2) + "%" : "N/A";
+      document.getElementById("detail-pred-composite").textContent = predComposite;
+      
+      const predFac = st.predicted_facility_prob !== undefined ? (st.predicted_facility_prob * 100).toFixed(1) + "%" : "N/A";
+      const predLog = st.predicted_logistic_prob !== undefined ? (st.predicted_logistic_prob * 100).toFixed(1) + "%" : "N/A";
+      const predHH = st.predicted_household_prob !== undefined ? (st.predicted_household_prob * 100).toFixed(1) + "%" : "N/A";
+      document.getElementById("detail-pred-fac").textContent = predFac;
+      document.getElementById("detail-pred-log").textContent = predLog;
+      document.getElementById("detail-pred-hh").textContent = predHH;
+
+      // Rural-Urban Context Comparison
+      const ruralUrbanEl = document.getElementById("detail-rural-urban-context");
+      if (ruralUrbanEl) {
+        if (anyPct > 63.49) {
+          ruralUrbanEl.innerHTML = `<strong>Higher Barrier Burden:</strong> At <strong>${anyPct.toFixed(1)}%</strong>, this territory exceeds the national rural baseline (63.5%), indicating that healthcare access barriers persist heavily even outside remote geography.`;
+        } else if (anyPct > 46.03) {
+          ruralUrbanEl.innerHTML = `<strong>Moderate Gradient:</strong> At <strong>${anyPct.toFixed(1)}%</strong>, barrier prevalence sits between the national urban average (46.0%) and rural average (63.5%). Infrastructure limitations are balanced by moderate transport access.`;
+        } else {
+          ruralUrbanEl.innerHTML = `<strong>Low Barrier Tier:</strong> At <strong>${anyPct.toFixed(1)}%</strong>, this territory performs better than the national urban baseline (46.0%), reflecting stronger healthcare delivery and institutional coverage.`;
+        }
+      }
+
+      const clusterTag = document.getElementById("detail-cluster-tag");
+      if (clusterTag) {
+        clusterTag.textContent = anyPct > 60.68 ? "High Disparity Risk Tier" : "Favorable Access Tier";
+        clusterTag.className = anyPct > 60.68 ? "tag tag-facility" : "tag tag-household";
+      }
+
+      const rankTag = document.getElementById("detail-national-rank-tag");
+      if (rankTag) {
+        rankTag.textContent = `Rank #${rank} of 36 (by Any Barrier Rate)`;
+      }
+
       panel.style.display = "block";
-      panel.scrollIntoView({ behavior: "smooth" });
+      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
     function renderStateKPIs(data) {
@@ -386,15 +665,20 @@
         observed_facility_rate: "Observed Facility Barrier Rate (%)",
         observed_logistic_rate: "Observed Logistic Barrier Rate (%)",
         observed_household_rate: "Observed Household Barrier Rate (%)",
-        predicted_composite_score: "Predicted Composite Score (Rail B)"
+        predicted_composite_score: "Predicted Composite Score (Rail B)",
+        predicted_facility_prob: "Predicted Facility Risk (Rail B)",
+        predicted_logistic_prob: "Predicted Logistic Risk (Rail B)",
+        predicted_household_prob: "Predicted Household Risk (Rail B)"
       };
 
       const sorted = [...stateDataGlobal.states].sort((a, b) => {
-        return order === "desc" ? b[metricKey] - a[metricKey] : a[metricKey] - b[metricKey];
+        const valA = a[metricKey] !== undefined ? a[metricKey] : -1;
+        const valB = b[metricKey] !== undefined ? b[metricKey] : -1;
+        return order === "desc" ? valB - valA : valA - valB;
       });
 
       const categories = sorted.map(s => s.state_name);
-      const values = sorted.map(s => s[metricKey] * 100);
+      const values = sorted.map(s => (s[metricKey] !== undefined ? s[metricKey] * 100 : 0));
 
       const queryLower = (searchQuery || "").toLowerCase().trim();
       const barColors = categories.map(c => {
@@ -403,35 +687,57 @@
       });
 
       const rankedTitle = document.getElementById("chart-card-title");
-      if (rankedTitle) rankedTitle.textContent = `State-wise Ranked ${metricLabels[metricKey]}`;
+      if (rankedTitle) rankedTitle.textContent = `State-wise Ranked ${metricLabels[metricKey] || metricKey}`;
       const treemapTitle = document.getElementById("treemap-card-title");
-      if (treemapTitle) treemapTitle.textContent = `State-wise Treemap (${metricLabels[metricKey]})`;
+      if (treemapTitle) treemapTitle.textContent = `State-wise Treemap (${metricLabels[metricKey] || metricKey})`;
 
       const explanation = `
         <strong>State Disparity Interpretation:</strong><br>
-        Displays ranked distribution of ${metricLabels[metricKey]} across all 36 Indian States and Union Territories.<br>
-        <em>Note:</em> Variations reflect geographical and infrastructural heterogeneity in survey sample data.
+        Displays ranked distribution of ${metricLabels[metricKey] || metricKey} across all 36 Indian States and Union Territories.<br>
+        <em>Note:</em> Click any bar to inspect state breakdown. Variations reflect geographical and infrastructural heterogeneity in NFHS-5 survey sample data.
       `;
 
       ChartUtils.createRankedBarChart(
         "state-ranked-chart",
-        `State-wise Ranked ${metricLabels[metricKey]}`,
+        `State-wise Ranked ${metricLabels[metricKey] || metricKey}`,
         categories,
         values,
         barColors,
-        metricLabels[metricKey],
+        metricLabels[metricKey] || metricKey,
         explanation
       );
 
       ChartUtils.createTreemapChart(
         "state-treemap-chart",
-        `State Distribution (${metricLabels[metricKey]})`,
+        `State Distribution (${metricLabels[metricKey] || metricKey})`,
         categories,
         values,
         "Blues",
-        metricLabels[metricKey],
+        metricLabels[metricKey] || metricKey,
         explanation
       );
+    }
+
+    function attachChartInteractivity() {
+      const rankedEl = document.getElementById("state-ranked-chart");
+      if (rankedEl) {
+        rankedEl.on("plotly_click", function (evt) {
+          if (evt && evt.points && evt.points[0]) {
+            const stateClicked = evt.points[0].x;
+            if (stateClicked) selectState(stateClicked);
+          }
+        });
+      }
+
+      const treemapEl = document.getElementById("state-treemap-chart");
+      if (treemapEl) {
+        treemapEl.on("plotly_click", function (evt) {
+          if (evt && evt.points && evt.points[0]) {
+            const stateClicked = evt.points[0].label;
+            if (stateClicked) selectState(stateClicked);
+          }
+        });
+      }
     }
 
     function renderStateTable(query = "") {
@@ -444,17 +750,21 @@
         return;
       }
 
-      tbody.innerHTML = filtered.map(s => `
-        <tr onclick="showStateDetail('${s.state_name.replace(/'/g, "\\'")}')" style="cursor: pointer;">
-          <td><strong>${s.state_name}</strong></td>
-          <td style="color:var(--primary); font-weight:700;">${(s.observed_any_barrier_rate * 100).toFixed(2)}%</td>
-          <td>${(s.observed_facility_rate * 100).toFixed(2)}%</td>
-          <td>${(s.observed_logistic_rate * 100).toFixed(2)}%</td>
-          <td>${(s.observed_household_rate * 100).toFixed(2)}%</td>
-          <td><span class="tag tag-overall">${(s.predicted_composite_score * 100).toFixed(2)}%</span></td>
-          <td style="font-weight:600; color:var(--text-muted);">${s.sample_size_n.toLocaleString()}</td>
-        </tr>
-      `).join("");
+      tbody.innerHTML = filtered.map(s => {
+        const isSelected = selectedMapState && selectedMapState.toLowerCase() === s.state_name.toLowerCase();
+        const rowStyle = isSelected ? 'background: rgba(79, 70, 229, 0.08); font-weight: 600;' : '';
+        return `
+          <tr onclick="selectState('${s.state_name.replace(/'/g, "\\'")}')" style="cursor: pointer; ${rowStyle}">
+            <td><strong>${isSelected ? '🔹 ' : ''}${s.state_name}</strong></td>
+            <td style="color:var(--primary); font-weight:700;">${(s.observed_any_barrier_rate * 100).toFixed(2)}%</td>
+            <td>${(s.observed_facility_rate * 100).toFixed(2)}%</td>
+            <td>${(s.observed_logistic_rate * 100).toFixed(2)}%</td>
+            <td>${(s.observed_household_rate * 100).toFixed(2)}%</td>
+            <td><span class="tag tag-overall">${s.predicted_composite_score !== undefined ? (s.predicted_composite_score * 100).toFixed(2) + '%' : 'N/A'}</span></td>
+            <td style="font-weight:600; color:var(--text-muted);">${s.sample_size_n.toLocaleString()}</td>
+          </tr>
+        `;
+      }).join("");
     }
 
     function populateCompareDropdowns(states) {
@@ -488,7 +798,6 @@
       document.getElementById("compare-header-a").textContent = stA.state_name;
       document.getElementById("compare-header-b").textContent = stB.state_name;
 
-      // Metric comparisons
       const anyA = stA.observed_any_barrier_rate * 100;
       const anyB = stB.observed_any_barrier_rate * 100;
       document.getElementById("comp-any-a").textContent = anyA.toFixed(2) + "%";
@@ -524,6 +833,377 @@
       if (d > 0) return `<span style="color: #dc2626; font-weight: 700;">+${d.toFixed(2)} pp (A higher)</span>`;
       return `<span style="color: #16a34a; font-weight: 700;">${d.toFixed(2)} pp (B higher)</span>`;
     }
+
+    // ============================================================
+    // INTERACTIVE INDIA STATES MAP (D3.js + GeoJSON)
+    // ============================================================
+    let mapTooltip = null;
+
+    function getOrCreateMapTooltip() {
+      if (!mapTooltip) {
+        mapTooltip = document.getElementById("map-tooltip");
+        if (!mapTooltip) {
+          mapTooltip = document.createElement("div");
+          mapTooltip.id = "map-tooltip";
+          document.body.appendChild(mapTooltip);
+        }
+      }
+      return mapTooltip;
+    }
+
+    async function loadMapGeoJson() {
+      if (mapGeoJsonGlobal) return mapGeoJsonGlobal;
+      try {
+        const response = await fetch("../assets/data/india_states.geojson");
+        if (!response.ok) throw new Error("Failed to load map geometry");
+        mapGeoJsonGlobal = await response.json();
+        return mapGeoJsonGlobal;
+      } catch (err) {
+        console.error("Map GeoJSON load error:", err);
+        const container = document.getElementById("india-map-container");
+        if (container) {
+          container.innerHTML = `
+            <div class="map-error-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="margin-bottom:12px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div style="font-weight:700; color:var(--text-main); margin-bottom:4px;">Unable to load India geographical boundaries.</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px;">Ensure india_states.geojson is accessible in assets/data.</div>
+              <button class="map-reset-btn" onclick="initMap()">Retry Loading Map</button>
+            </div>
+          `;
+        }
+        return null;
+      }
+    }
+
+    function isPredictedMetric(metricKey) {
+      return metricKey.startsWith("predicted_");
+    }
+
+    function getMetricLabel(metricKey) {
+      const labels = {
+        observed_any_barrier_rate: "Observed Any Barrier Rate (%)",
+        observed_facility_rate: "Observed Facility Barrier Rate (%)",
+        observed_logistic_rate: "Observed Logistic Barrier Rate (%)",
+        observed_household_rate: "Observed Household Barrier Rate (%)",
+        predicted_composite_score: "Predicted Composite Risk Score",
+        predicted_facility_prob: "Predicted Facility Risk Probability",
+        predicted_logistic_prob: "Predicted Logistic Risk Probability",
+        predicted_household_prob: "Predicted Household Risk Probability"
+      };
+      return labels[metricKey] || metricKey;
+    }
+
+    function getMetricColor(metricKey) {
+      const colors = {
+        observed_any_barrier_rate: ["#dbeafe", "#1d4ed8"],      // Sky to Royal Blue
+        observed_facility_rate: ["#ffe4e6", "#be123c"],         // Soft Rose to Crimson
+        observed_logistic_rate: ["#fef3c7", "#b45309"],         // Amber to Deep Amber
+        observed_household_rate: ["#e0f2fe", "#0369a1"],        // Light Cyan to Navy
+        predicted_composite_score: ["#f3e8ff", "#6b21a8"],       // Lavender to Deep Violet
+        predicted_facility_prob: ["#fce7f3", "#9d174d"],         // Pink to Dark Magenta
+        predicted_logistic_prob: ["#ffedd5", "#c2410c"],         // Peach to Burnt Orange
+        predicted_household_prob: ["#e2e8f0", "#4338ca"]         // Slate to Indigo
+      };
+      return colors[metricKey] || ["#dbeafe", "#1d4ed8"];
+    }
+
+    function interpolateColor(value, min, max, colorRange) {
+      const t = max > min ? (value - min) / (max - min) : 0.5;
+      const clampedT = Math.max(0, Math.min(1, t));
+      const [startHex, endHex] = colorRange;
+      const startRgb = hexToRgb(startHex);
+      const endRgb = hexToRgb(endHex);
+      if (!startRgb || !endRgb) return endHex;
+      const r = Math.round(startRgb.r + (endRgb.r - startRgb.r) * clampedT);
+      const g = Math.round(startRgb.g + (endRgb.g - startRgb.g) * clampedT);
+      const b = Math.round(startRgb.b + (endRgb.b - startRgb.b) * clampedT);
+      return `rgb(${r},${g},${b})`;
+    }
+
+    function hexToRgb(hex) {
+      const clean = hex.replace("#", "");
+      if (clean.length === 3) {
+        return { r: parseInt(clean[0] + clean[0], 16), g: parseInt(clean[1] + clean[1], 16), b: parseInt(clean[2] + clean[2], 16) };
+      }
+      if (clean.length === 6) {
+        return { r: parseInt(clean.slice(0, 2), 16), g: parseInt(clean.slice(2, 4), 16), b: parseInt(clean.slice(4, 6), 16) };
+      }
+      return null;
+    }
+
+    function renderIndiaMap() {
+      if (!stateDataGlobal || !mapGeoJsonGlobal) return;
+
+      const container = document.getElementById("india-map-container");
+      if (!container) return;
+
+      const metricKey = document.getElementById("map-metric-select")?.value || "observed_any_barrier_rate";
+      const metricLabel = getMetricLabel(metricKey);
+      const colorRange = getMetricColor(metricKey);
+      const isPredicted = isPredictedMetric(metricKey);
+
+      // Data lookup & distribution bounds
+      const dataByState = {};
+      let minVal = Infinity, maxVal = -Infinity;
+      let hasDataCount = 0;
+
+      stateDataGlobal.states.forEach(st => {
+        const rawVal = st[metricKey];
+        if (rawVal !== undefined && rawVal !== null && !isNaN(rawVal)) {
+          const valPct = rawVal * 100;
+          dataByState[st.state_name.toLowerCase()] = {
+            value: valPct,
+            sample: st.sample_size_n,
+            dominant: st.dominant_barrier,
+            raw: rawVal
+          };
+          if (valPct < minVal) minVal = valPct;
+          if (valPct > maxVal) maxVal = valPct;
+          hasDataCount++;
+        }
+      });
+
+      if (hasDataCount === 0) {
+        container.innerHTML = `
+          <div class="map-empty-state">
+            <div style="font-weight:700; color:var(--text-main); margin-bottom:4px;">No state-level data available for selected metric.</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Please select another healthcare barrier metric from the selector.</div>
+          </div>
+        `;
+        const legendEl = document.getElementById("map-legend");
+        if (legendEl) legendEl.style.display = "none";
+        return;
+      }
+
+      // Fixed aspect ratio viewBox for India (Lon 68.1°-97.4°, Lat 6.75°-37.1°)
+      const svgWidth = 800;
+      const svgHeight = 920;
+
+      const projection = d3.geoMercator().fitExtent([[24, 24], [776, 896]], mapGeoJsonGlobal);
+      const path = d3.geoPath().projection(projection);
+
+      // Setup or clear SVG
+      let svg = container.querySelector("svg");
+      if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        svg.setAttribute("class", "india-map-svg");
+        container.innerHTML = "";
+        container.appendChild(svg);
+      } else {
+        svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+        svg.setAttribute("class", "india-map-svg");
+        svg.innerHTML = "";
+      }
+
+      // Group containers for layer order (paths below, labels above)
+      const featuresGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      featuresGroup.setAttribute("class", "map-features-group");
+      svg.appendChild(featuresGroup);
+
+      const labelsGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      labelsGroup.setAttribute("class", "map-labels-group");
+      svg.appendChild(labelsGroup);
+
+      const tooltip = getOrCreateMapTooltip();
+
+      // Update Legend
+      const legendEl = document.getElementById("map-legend");
+      const legendGradient = document.getElementById("map-legend-gradient");
+      const legendMin = document.getElementById("map-legend-min");
+      const legendMax = document.getElementById("map-legend-max");
+      const legendLabel = document.getElementById("map-legend-label");
+      const legendNote = document.getElementById("map-legend-note");
+      const legendBadge = document.getElementById("map-legend-type-badge");
+
+      if (legendEl && legendGradient) {
+        legendGradient.style.background = `linear-gradient(90deg, ${colorRange[0]}, ${colorRange[1]})`;
+        legendMin.textContent = minVal.toFixed(1) + "%";
+        legendMax.textContent = maxVal.toFixed(1) + "%";
+        legendLabel.textContent = metricLabel;
+
+        if (legendBadge) {
+          legendBadge.textContent = isPredicted ? "Rail B: ML Prediction" : "Rail A: Observed Rate";
+          legendBadge.className = isPredicted ? "tag tag-overall" : "tag tag-household";
+        }
+
+        if (legendNote) {
+          if (isPredicted) {
+            legendNote.textContent = `Model-predicted probabilities generated by frozen Stage 1 gradient boosting pipelines. Grounded across ${hasDataCount} of 36 States/UTs.`;
+          } else {
+            legendNote.textContent = `Empirical survey rates calculated from NFHS-5 women's individual recode (N = 724,115). Active data for ${hasDataCount} of 36 States/UTs.`;
+          }
+        }
+        legendEl.style.display = "block";
+      }
+
+      // Render GeoJSON State Features
+      let selectedFeaturePath = null;
+
+      mapGeoJsonGlobal.features.forEach(feature => {
+        const stateName = feature.properties.state_name;
+        const stateCode = feature.properties.state_code || stateName.slice(0, 2).toUpperCase();
+        const stateKey = stateName.toLowerCase();
+        const stateData = dataByState[stateKey];
+        const isSelected = selectedMapState && selectedMapState.toLowerCase() === stateKey;
+
+        const statePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        statePath.setAttribute("d", path(feature));
+        statePath.setAttribute("data-state", stateName);
+        statePath.setAttribute("class", `map-state-path ${isSelected ? 'selected' : ''}`);
+
+        if (stateData) {
+          const color = interpolateColor(stateData.value, minVal, maxVal, colorRange);
+          statePath.setAttribute("fill", color);
+          statePath.setAttribute("stroke", isSelected ? "#4f46e5" : "#ffffff");
+          statePath.setAttribute("stroke-width", isSelected ? "3.5" : "0.9");
+          statePath.setAttribute("stroke-opacity", isSelected ? "1" : "0.95");
+
+          // Hover interactions
+          statePath.addEventListener("mouseenter", () => {
+            tooltip.style.opacity = "1";
+            tooltip.innerHTML = `
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
+                <span style="font-weight:800; font-size:0.9rem; color:var(--text-main);">${stateName}</span>
+                <span class="tag ${isPredicted ? 'tag-overall' : 'tag-facility'}" style="font-size:0.65rem; padding:1px 6px;">${isPredicted ? 'Rail B: ML Model' : 'Rail A: Observed'}</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:0.8rem; margin-bottom:4px;">
+                <span style="color:var(--text-muted);">${metricLabel}:</span>
+                <strong style="color:var(--primary); font-size:0.95rem;">${stateData.value.toFixed(2)}%</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:0.75rem; color:var(--text-muted); padding-top:4px; border-top:1px solid var(--border-color);">
+                <span>Survey Sample N:</span>
+                <strong>${stateData.sample.toLocaleString()} women</strong>
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px; font-style:italic;">
+                ${isSelected ? 'Click to deselect (restore national view)' : 'Click to inspect detailed state breakdown'}
+              </div>
+            `;
+          });
+
+          statePath.addEventListener("mousemove", (e) => {
+            const x = Math.min(window.innerWidth - 320, e.clientX + 14);
+            const y = Math.max(10, e.clientY - 30);
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y}px`;
+          });
+
+          statePath.addEventListener("mouseleave", () => {
+            tooltip.style.opacity = "0";
+          });
+
+          // State Click Event
+          statePath.addEventListener("click", () => {
+            selectState(stateName);
+          });
+        } else {
+          // Missing Data Neutral Styling
+          statePath.setAttribute("fill", "#64748b");
+          statePath.setAttribute("fill-opacity", "0.4");
+          statePath.setAttribute("stroke", "#475569");
+          statePath.setAttribute("stroke-width", "0.6");
+
+          statePath.addEventListener("mouseenter", () => {
+            tooltip.style.opacity = "1";
+            tooltip.innerHTML = `
+              <div style="font-weight:800; font-size:0.85rem; color:var(--text-main);">${stateName}</div>
+              <div style="color:var(--text-muted); font-size:0.75rem; margin-top:4px;">Data unavailable for ${metricLabel} in NFHS-5 recode.</div>
+            `;
+          });
+
+          statePath.addEventListener("mousemove", (e) => {
+            tooltip.style.left = `${e.clientX + 14}px`;
+            tooltip.style.top = `${e.clientY - 20}px`;
+          });
+
+          statePath.addEventListener("mouseleave", () => {
+            tooltip.style.opacity = "0";
+          });
+        }
+
+        if (isSelected) {
+          selectedFeaturePath = statePath;
+        } else {
+          featuresGroup.appendChild(statePath);
+        }
+
+        // Add Centroid State Code Label for states with sufficient area
+        const bounds = path.bounds(feature);
+        const w = bounds[1][0] - bounds[0][0];
+        const h = bounds[1][1] - bounds[0][1];
+        const centroid = path.centroid(feature);
+        
+        // Hide small UT labels to prevent overlap clutter; available via UT strip and hover
+        const skipLabelCodes = ['CH', 'DL', 'GA', 'LD', 'PY', 'DN', 'SK'];
+        const shouldShowLabel = w >= 28 && h >= 28 && !skipLabelCodes.includes(stateCode);
+
+        if (shouldShowLabel && centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {
+          const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          textEl.setAttribute("x", Math.round(centroid[0]));
+          textEl.setAttribute("y", Math.round(centroid[1]));
+          textEl.setAttribute("class", `map-state-label ${isSelected ? 'selected' : ''}`);
+          textEl.textContent = stateCode;
+          labelsGroup.appendChild(textEl);
+        }
+      });
+
+      // Ensure selected state path is drawn on top for clean border glow
+      if (selectedFeaturePath) {
+        featuresGroup.appendChild(selectedFeaturePath);
+      }
+
+      // Render Small UT Quick-Inspect strip
+      renderUTQuickPills();
+    }
+
+    function renderUTQuickPills() {
+      const container = document.getElementById("ut-quick-buttons");
+      const strip = document.getElementById("map-ut-strip");
+      if (!container || !stateDataGlobal) return;
+      if (strip) strip.style.display = "flex";
+
+      const smallUTs = [
+        { code: "DL", name: "Delhi" },
+        { code: "GA", name: "Goa" },
+        { code: "CH", name: "Chandigarh" },
+        { code: "PY", name: "Puducherry" },
+        { code: "LD", name: "Lakshadweep" },
+        { code: "DN", name: "Dadra & Nagar Haveli and Daman & Diu" },
+        { code: "SK", name: "Sikkim" },
+        { code: "AN", name: "Andaman & Nicobar Islands" }
+      ];
+
+      container.innerHTML = smallUTs.map(ut => {
+        const isSel = selectedMapState && selectedMapState.toLowerCase() === ut.name.toLowerCase();
+        const activeClass = isSel ? 'ut-pill-active' : '';
+        const shortLabel = ut.name.length > 18 ? ut.code : ut.name;
+        return `
+          <button type="button" class="ut-pill-btn ${activeClass}" onclick="selectState('${ut.name.replace(/'/g, "\\'")}')" title="Inspect ${ut.name}">
+            <span style="font-weight:700;">${ut.code}</span> &bull; ${shortLabel}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function debounce(fn, delay) {
+      let timeoutId;
+      return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    function initMap() {
+      loadMapGeoJson().then(geo => {
+        if (geo && stateDataGlobal) {
+          renderIndiaMap();
+        }
+      });
+
+      window.addEventListener("resize", debounce(renderIndiaMap, 200));
+    }
   </script>
 </body>
 </html>
+

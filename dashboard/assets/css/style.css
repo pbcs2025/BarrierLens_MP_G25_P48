@@ -152,21 +152,31 @@ body {
 
 /* Smooth entry for the shell when arriving from the login transition */
 .app-shell.bl-shell-enter {
-  animation: shellEnter 0.45s cubic-bezier(0.16, 0.84, 0.34, 1) both;
+  animation: shellEnter 0.35s ease both;
+}
+
+.app-shell.bl-shell-enter .app-main {
+  animation: mainEnter 0.45s cubic-bezier(0.16, 0.84, 0.34, 1) both;
 }
 
 @keyframes shellEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mainEnter {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-shell.bl-shell-enter {
+  .app-shell.bl-shell-enter,
+  .app-shell.bl-shell-enter .app-main {
     animation: none;
   }
 }
 
-/* Left Sidebar */
+/* Left Sidebar - Persistent across vertical page scrolling */
 .app-sidebar {
   width: var(--sidebar-width);
   background-color: var(--bg-sidebar);
@@ -178,10 +188,25 @@ body {
   top: 0;
   left: 0;
   bottom: 0;
+  height: 100vh;
+  height: 100dvh;
   z-index: 100;
   transition: width var(--transition-normal), transform var(--transition-normal);
+  overflow: hidden;
+}
+
+.app-sidebar__inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-sidebar__nav-wrapper {
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 16px 12px 0;
 }
 
 .app-sidebar.collapsed {
@@ -194,6 +219,7 @@ body {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
 }
 
 .sidebar-brand {
@@ -274,11 +300,10 @@ body {
 
 /* Sidebar Nav Groups */
 .sidebar-nav {
-  padding: 16px 12px;
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 16px;
 }
 
 .nav-section {
@@ -390,6 +415,7 @@ body {
   border-top: 1px solid var(--sidebar-border);
   font-size: 0.75rem;
   color: #64748b;
+  flex-shrink: 0;
 }
 
 .sidebar-footer-card {
@@ -1709,3 +1735,195 @@ body {
     padding: 7px;
   }
 }
+
+/* ==========================================================================
+   INTERACTIVE INDIA STATES MAP SYSTEM
+   ========================================================================== */
+.india-map-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 540px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.india-map-svg {
+  display: block;
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  max-height: 680px;
+  margin: 0 auto;
+  user-select: none;
+  filter: drop-shadow(0 4px 20px rgba(15, 23, 42, 0.06));
+}
+
+.map-state-path {
+  transition: fill 0.25s ease, stroke 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.map-state-path:hover {
+  filter: brightness(1.12) drop-shadow(0 3px 10px rgba(0, 0, 0, 0.22));
+  stroke: #4f46e5 !important;
+  stroke-width: 2.4px !important;
+  stroke-opacity: 1 !important;
+}
+
+.map-state-path.selected {
+  stroke: #ffffff !important;
+  stroke-width: 3.5px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 12px rgba(79, 70, 229, 0.9)) brightness(1.1);
+}
+
+.map-state-label {
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 11px;
+  fill: #ffffff;
+  stroke: rgba(15, 23, 42, 0.75);
+  stroke-width: 2.5px;
+  paint-order: stroke fill;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.5px;
+}
+
+.map-state-label.selected {
+  fill: #fef08a;
+  stroke: #0f172a;
+  stroke-width: 3px;
+  font-size: 12px;
+}
+
+/* Small UTs quick selector strip */
+.map-ut-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: 0.75rem;
+}
+
+.ut-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.ut-pill-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.ut-pill-btn.ut-pill-active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+}
+
+#map-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  box-shadow: var(--shadow-xl);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  color: var(--text-main);
+  min-width: 230px;
+  max-width: 330px;
+  backdrop-filter: blur(8px);
+}
+
+.map-legend-card {
+  padding: 14px 18px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.map-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.map-legend-bar {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.map-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.map-reset-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.map-empty-state,
+.map-loading-state,
+.map-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+

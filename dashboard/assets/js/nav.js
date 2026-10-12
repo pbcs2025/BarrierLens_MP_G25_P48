@@ -102,49 +102,53 @@ document.addEventListener("DOMContentLoaded", function () {
   // Build Left Sidebar HTML
   const sidebarHtml = `
     <aside class="app-sidebar ${window.DashboardState && window.DashboardState.getSidebarCollapsed && window.DashboardState.getSidebarCollapsed() ? 'collapsed' : ''}" id="app-sidebar">
-      <div class="sidebar-header">
-        <a href="${pageHref('index.html')}" class="sidebar-brand">
-          <div class="brand-icon-wrapper">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div class="brand-info">
-            <div class="brand-name">
-              BarrierLens
-              <span class="brand-version">v2.0</span>
+      <div class="app-sidebar__inner">
+        <div class="sidebar-header">
+          <a href="${pageHref('index.html')}" class="sidebar-brand">
+            <div class="brand-icon-wrapper">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
-            <div class="brand-tagline">Healthcare Access Intelligence</div>
-          </div>
-        </a>
-        <button class="sidebar-collapse-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar collapse">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-      </div>
+            <div class="brand-info">
+              <div class="brand-name">
+                BarrierLens
+                <span class="brand-version">v2.0</span>
+              </div>
+              <div class="brand-tagline">Healthcare Access Intelligence</div>
+            </div>
+          </a>
+          <button class="sidebar-collapse-btn" id="sidebar-toggle-btn" aria-label="Toggle sidebar collapse">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        </div>
 
-      <nav class="sidebar-nav">
-        ${navSections.map(section => `
-          <div class="nav-section">
-            <div class="nav-section-title">${section.title}</div>
-            ${section.items.map(item => `
-              <a href="${pageHref(item.path)}" 
-                 class="sidebar-nav-item ${currentFile === item.path ? 'active' : ''}" 
-                 data-title="${item.name}"
-                 title="${item.name}">
-                <span class="nav-icon">${item.icon}</span>
-                <span class="nav-label">${item.name}</span>
-                ${item.badge ? `<span class="nav-item-badge">${item.badge}</span>` : ''}
-              </a>
+        <div class="app-sidebar__nav-wrapper">
+          <nav class="sidebar-nav">
+            ${navSections.map(section => `
+              <div class="nav-section">
+                <div class="nav-section-title">${section.title}</div>
+                ${section.items.map(item => `
+                  <a href="${pageHref(item.path)}" 
+                     class="sidebar-nav-item ${currentFile === item.path ? 'active' : ''}" 
+                     data-title="${item.name}"
+                     title="${item.name}">
+                    <span class="nav-icon">${item.icon}</span>
+                    <span class="nav-label">${item.name}</span>
+                    ${item.badge ? `<span class="nav-item-badge">${item.badge}</span>` : ''}
+                  </a>
+                `).join('')}
+              </div>
             `).join('')}
-          </div>
-        `).join('')}
-      </nav>
+          </nav>
+        </div>
 
-      <div class="sidebar-footer">
-        <div class="sidebar-footer-card">
-          <div style="font-weight: 700; color: #f8fafc; font-size: 0.775rem;">NFHS-5 Individual Recode</div>
-          <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px;">N = 724,115 Indian Women</div>
-          <div style="display: flex; gap: 4px; margin-top: 6px;">
-            <span class="tag tag-overall" style="font-size: 0.65rem; padding: 1px 6px;">Stage 1 Ensembles</span>
-            <span class="tag tag-facility" style="font-size: 0.65rem; padding: 1px 6px;">k = 2 Clusters</span>
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-card">
+            <div style="font-weight: 700; color: #f8fafc; font-size: 0.775rem;">NFHS-5 Individual Recode</div>
+            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px;">N = 724,115 Indian Women</div>
+            <div style="display: flex; gap: 4px; margin-top: 6px;">
+              <span class="tag tag-overall" style="font-size: 0.65rem; padding: 1px 6px;">Stage 1 Ensembles</span>
+              <span class="tag tag-facility" style="font-size: 0.65rem; padding: 1px 6px;">k = 2 Clusters</span>
+            </div>
           </div>
         </div>
       </div>

@@ -201,6 +201,7 @@ const MIME_TYPES = {
   '.mjs': 'application/javascript; charset=UTF-8',
   '.jsx': 'application/javascript; charset=UTF-8',
   '.json': 'application/json; charset=UTF-8',
+  '.geojson': 'application/geo+json; charset=UTF-8',
   '.css': 'text/css; charset=UTF-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
