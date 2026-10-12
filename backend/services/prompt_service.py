@@ -45,24 +45,6 @@ def build_system_prompt() -> str:
     return SYSTEM_PROMPT
 
 
-def build_user_prompt(
-    question: str,
-    language: str,
-    evidence_payload: dict[str, Any] | None = None,
-) -> str:
-    """Format user query and optional verified evidence context into a focused prompt.
-
-    Args:
-        question: User query text.
-        language: Target language ('en', 'kn', 'hi').
-        evidence_payload: Optional verified evidence object from data layer.
-
-    Returns:
-        Formatted prompt string.
-    """
-    if evidence_payload is None:
-        evidence_payload = {}
-
 def normalize_language_code(language_input: str | None) -> tuple[str, str]:
     """Normalize raw language inputs to standard code ('en', 'kn', 'hi') and display name."""
     raw = str(language_input or "en").strip().lower()

@@ -16,8 +16,8 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  // Base API configuration (always use localhost:5000 for development)
-  let _apiBaseUrl = 'http://localhost:5000/api';
+  // Base API configuration (prioritize 127.0.0.1:5000 for reliable local communication)
+  let _apiBaseUrl = 'http://127.0.0.1:5000/api';
 
   function setApiBaseUrl(url) {
     if (url && typeof url === 'string') {
@@ -126,18 +126,21 @@
   async function sendChatMessage(payload) {
     if (typeof fetch === 'undefined') return null;
 
+    const origin = (typeof window !== 'undefined' && window.location && window.location.origin) ? window.location.origin : '';
     const endpoints = [
+      'http://127.0.0.1:5000/api/chat',
       `${_apiBaseUrl}/chat`,
-      'http://localhost:5000/api/chat',
-      'http://127.0.0.1:5000/api/chat'
-    ];
+      origin ? `${origin}/api/chat` : null,
+      '/api/chat',
+      'http://localhost:5000/api/chat'
+    ].filter(Boolean);
 
     const uniqueEndpoints = Array.from(new Set(endpoints));
 
     for (const endpoint of uniqueEndpoints) {
       try {
         const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        const timeoutId = controller ? setTimeout(() => controller.abort(), 35000) : null;
+        const timeoutId = controller ? setTimeout(() => controller.abort(), 90000) : null;
 
         const response = await fetch(endpoint, {
           method: 'POST',

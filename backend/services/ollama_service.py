@@ -27,7 +27,7 @@ def format_unavailable_response(
     intent = evidence_payload.get("intent", "UNSUPPORTED")
 
     lang_messages = {
-        "en": "This information is not directly captured in the NFHS-5 dataset recode columns.",
+        "en": "This information is not available or directly captured in the NFHS-5 dataset recode columns.",
         "kn": "ಈ ಮಾಹಿತಿಯು NFHS-5 ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ನೇರವಾಗಿ ಲಭ್ಯವಿಲ್ಲ.",
         "hi": "यह जानकारी NFHS-5 डेटासेट में सीधे उपलब्ध नहीं है।",
     }
@@ -63,6 +63,13 @@ def format_ollama_error_response(
             "hi": "AI सहायक सेवा वर्तमान में ऑफ़लाइन है। कृपया सुनिश्चित करें कि Ollama चल रहा है।",
         }
         disclaimer = f"Service Notice: Unable to reach Ollama at {settings.OLLAMA_BASE_URL}."
+    elif error_type == "model_missing":
+        msg_map = {
+            "en": f"The required model {settings.OLLAMA_MODEL} is missing. Please run 'ollama pull {settings.OLLAMA_MODEL}'.",
+            "kn": f"ಅಗತ್ಯವಿರುವ {settings.OLLAMA_MODEL} ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು 'ollama pull {settings.OLLAMA_MODEL}' ಚಲಾಯಿಸಿ.",
+            "hi": f"आवश्यक मॉडल {settings.OLLAMA_MODEL} अनुपलब्ध है। कृपया 'ollama pull {settings.OLLAMA_MODEL}' चलाएं।",
+        }
+        disclaimer = f"Service Notice: Required model {settings.OLLAMA_MODEL} missing. Run ollama pull {settings.OLLAMA_MODEL}."
     elif error_type == "timeout":
         msg_map = {
             "en": "The request timed out. Generating concise response.",

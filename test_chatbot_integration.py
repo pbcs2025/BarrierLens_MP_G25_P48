@@ -15,6 +15,8 @@ from pathlib import Path
 
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent / "backend"))
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 def test_backend_health():
     """Test if backend is reachable."""
@@ -24,7 +26,7 @@ def test_backend_health():
     
     try:
         import urllib.request
-        req = urllib.request.Request("http://localhost:5000/api/health")
+        req = urllib.request.Request("http://127.0.0.1:5000/api/health")
         with urllib.request.urlopen(req, timeout=5) as response:
             data = json.loads(response.read().decode())
             print(f"✅ Backend is running: {data.get('service', 'Unknown')}")
@@ -75,14 +77,14 @@ def test_chat_endpoint(question, history=None):
         
         data = json.dumps(payload).encode('utf-8')
         req = urllib.request.Request(
-            "http://localhost:5000/api/chat",
+            "http://127.0.0.1:5000/api/chat",
             data=data,
             headers={'Content-Type': 'application/json'},
             method='POST'
         )
         
         start_time = time.time()
-        with urllib.request.urlopen(req, timeout=30) as response:
+        with urllib.request.urlopen(req, timeout=90) as response:
             result = json.loads(response.read().decode())
             elapsed = time.time() - start_time
             

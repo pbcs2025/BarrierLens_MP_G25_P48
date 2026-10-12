@@ -27,8 +27,8 @@ class Settings:
     """Application Settings container."""
 
     def __init__(self) -> None:
-        self.OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").strip().rstrip("/")
-        self._configured_model: str = os.getenv("OLLAMA_MODEL", "auto").strip()
+        self.OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434").strip().rstrip("/")
+        self._configured_model: str = os.getenv("OLLAMA_MODEL", "llama3.2:3b").strip()
         self.OLLAMA_TIMEOUT: int = int(os.getenv("OLLAMA_TIMEOUT", "60"))
         self.MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "160"))
         self.NUM_CTX: int = int(os.getenv("NUM_CTX", "1024"))
@@ -40,8 +40,8 @@ class Settings:
 
     @property
     def OLLAMA_MODEL(self) -> str:
-        """Resolve model name dynamically: prefers llama3.2:1b for speed if available, else llama3.2:3b."""
-        if self._configured_model and self._configured_model.lower() != "auto":
+        """Resolve model name dynamically: prefers llama3.2:3b model."""
+        if self._configured_model and self._configured_model.lower() not in ("auto", ""):
             return self._configured_model
 
         # Auto-detect best installed model
@@ -50,12 +50,11 @@ class Settings:
             with urllib.request.urlopen(req, timeout=2) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 models = [m.get("name", "") for m in data.get("models", [])]
-                # If llama3.2:1b or 1b model is installed, use it for 3-5x faster responses on CPU
                 for m in models:
-                    if "1b" in m:
+                    if "3b" in m:
                         return m
                 for m in models:
-                    if "3b" in m or "llama" in m:
+                    if "1b" in m or "llama" in m:
                         return m
                 if models:
                     return models[0]

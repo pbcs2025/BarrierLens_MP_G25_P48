@@ -3,25 +3,44 @@
 import sys
 from pathlib import Path
 
-# Add project root to sys.path
+# Add project root and test dir to sys.path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+BACKEND_TEST_DIR = Path(__file__).resolve().parent
+if str(BACKEND_TEST_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_TEST_DIR))
 
-from tests.backend.test_chat_backend import (
-    test_exact_metric_grounding,
-    test_state_comparison,
-    test_missing_information_handling,
-    test_causation_safety,
-    test_shap_explanation,
-    test_medical_advice_disclaimer,
-    test_kannada_language_preservation,
-    test_hindi_language_preservation,
-    test_invalid_request_handling,
-    test_secret_protection_audit,
-    test_ollama_error_handling,
-    test_conversation_history_handling,
-)
+try:
+    from tests.backend.test_chat_backend import (
+        test_exact_metric_grounding,
+        test_state_comparison,
+        test_missing_information_handling,
+        test_causation_safety,
+        test_shap_explanation,
+        test_medical_advice_disclaimer,
+        test_kannada_language_preservation,
+        test_hindi_language_preservation,
+        test_invalid_request_handling,
+        test_secret_protection_audit,
+        test_ollama_error_handling,
+        test_conversation_history_handling,
+    )
+except ImportError:
+    from test_chat_backend import (
+        test_exact_metric_grounding,
+        test_state_comparison,
+        test_missing_information_handling,
+        test_causation_safety,
+        test_shap_explanation,
+        test_medical_advice_disclaimer,
+        test_kannada_language_preservation,
+        test_hindi_language_preservation,
+        test_invalid_request_handling,
+        test_secret_protection_audit,
+        test_ollama_error_handling,
+        test_conversation_history_handling,
+    )
 from backend.app import app
 
 

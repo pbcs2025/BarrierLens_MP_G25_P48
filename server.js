@@ -230,23 +230,13 @@ function proxyToBackend(req, res) {
     backendRes.pipe(res);
   });
 
-  proxyReq.on('error', () => {
-    // If backend isn't up, return graceful fallback for /api
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    if (req.url.includes('predict-barrier')) {
-      res.end(JSON.stringify({
-        status: "success",
-        primaryBarrier: "Logistic Barrier",
-        probabilities: { household: 0.28, logistic: 0.48, facility: 0.24 },
-        modelSource: "BarrierLens Embedded Prediction Adapter (Gateway Fallback)"
-      }));
-    } else {
-      res.end(JSON.stringify({
-        status: "success",
-        answer: "The BarrierLens local analytics suite is active. For full Ollama LLM responses, ensure backend/app.py and Ollama are running.",
-        disclaimer: "Deterministic dataset grounding mode active."
-      }));
-    }
+  proxyReq.on('error', (err) => {
+    res.writeHead(502, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: "error",
+      error: "Backend service unreachable at " + BACKEND_URL,
+      message: "The BarrierLens AI backend service is unreachable. Please ensure backend/app.py and Ollama are running."
+    }));
   });
 
   req.pipe(proxyReq);
