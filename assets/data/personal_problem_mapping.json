@@ -1,0 +1,203 @@
+{
+  "problemMappings": [
+    {
+      "barrier": "logistic",
+      "component": "distance",
+      "displayName": {
+        "en": "distance/location",
+        "kn": "ದೂರ",
+        "hi": "दूरी"
+      },
+      "keywords": {
+        "en": [
+          "distance", "far", "too far", "far away", "long distance", "remote",
+          "hospital is far", "clinic is far", "hospital too far", "clinic too far"
+        ],
+        "hi": [
+          "दूरी", "दूर", "बहुत दूर", "अस्पताल दूर", "काफ़ी दूर", "दूरी अधिक", "लंबी दूरी"
+        ],
+        "kn": [
+          "ದೂರ", "ಬಹಳ ದೂರ", "ತುಂಬಾ ದೂರ", "ಆಸ್ಪತ್ರೆ ದೂರ", "ಆಸ್ಪತ್ರೆ ತುಂಬಾ ದೂರ", "ದೂರವಿದೆ"
+        ]
+      }
+    },
+    {
+      "barrier": "logistic",
+      "component": "transport",
+      "displayName": {
+        "en": "distance/transport",
+        "kn": "ಸಾರಿಗೆ",
+        "hi": "परिवहन"
+      },
+      "keywords": {
+        "en": [
+          "transport", "no bus", "no vehicle", "no transport", "trouble reaching",
+          "cannot reach", "can't reach", "how to reach", "travel difficulty",
+          "difficulty going", "problem going to the hospital", "problem going",
+          "no auto", "no ambulance", "bus unavailable"
+        ],
+        "hi": [
+          "परिवहन", "बस नहीं", "गाड़ी नहीं", "सवारी नहीं", "पहुंचने में परेशानी",
+          "अस्पताल जाने में समस्या", "जाने में दिक्कत", "साधन नहीं", "पहुंच नहीं सकते"
+        ],
+        "kn": [
+          "ಸಾರಿಗೆ", "ಬಸ್ ಇಲ್ಲ", "ವಾಹನವಿಲ್ಲ", "ತಲುಪಲು ಕಷ್ಟ", "ಹೋಗಲು ಸಮಸ್ಯೆ",
+          "ಆಸ್ಪತ್ರೆಗೆ ಹೋಗಲು ತೊಂದರೆ", "ತಲುಪಲು ಸಾಧ್ಯವಿಲ್ಲ", "ಸಾರಿಗೆ ಕೊರತೆ"
+        ]
+      }
+    },
+    {
+      "barrier": "household",
+      "component": "money",
+      "displayName": {
+        "en": "cost/financial constraint",
+        "kn": "ಹಣಕಾಸು/ವೆಚ್ಚ",
+        "hi": "लागत/वित्तीय कमी"
+      },
+      "keywords": {
+        "en": [
+          "money", "cost", "can't afford", "cannot afford", "expensive", "afford treatment",
+          "no funds", "no cash", "poor", "treatment is costly", "have no money",
+          "lack of money", "cannot pay", "can't pay"
+        ],
+        "hi": [
+          "पैसा", "लागत", "इलाज का खर्च", "खर्च नहीं उठा सकते", "सक्षम नहीं",
+          "पैसे नहीं हैं", "उपचार का खर्च", "इलाज महंगा", "धन की कमी"
+        ],
+        "kn": [
+          "ಹಣ", "ವೆಚ್ಚ", "ಚಿಕಿತ್ಸೆ ಭರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ", "ಹಣವಿಲ್ಲ", "ಖರ್ಚು ಭರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ",
+          "ಚಿಕಿತ್ಸಾ ವೆಚ್ಚ", "ಹಣದ ಕೊರತೆ"
+        ]
+      }
+    },
+    {
+      "barrier": "household",
+      "component": "permission",
+      "displayName": {
+        "en": "family permission",
+        "kn": "ಕುಟುಂಬದ ಅನುಮತಿ",
+        "hi": "परिवार की अनुमति"
+      },
+      "keywords": {
+        "en": [
+          "permission", "family won't allow", "family doesn't allow", "family refusal",
+          "husband won't allow", "in-laws won't allow", "need permission",
+          "husband doesn't permit", "not allowed to go"
+        ],
+        "hi": [
+          "अनुमति", "परिवार अनुमति नहीं देता", "घरवाले जाने नहीं देते",
+          "पति मना करते हैं", "इजाजत नहीं", "ससुराल वाले नहीं जाने देते"
+        ],
+        "kn": [
+          "ಅನುಮತಿ", "ಕುಟುಂಬದವರು ಬಿಡುತ್ತಿಲ್ಲ", "ಗಂಡ ಒಪ್ಪುತ್ತಿಲ್ಲ",
+          "ಮನೆಯವರ ಅನುಮತಿ ಇಲ್ಲ", "ಅನುಮತಿ ಸಿಗುತ್ತಿಲ್ಲ"
+        ]
+      }
+    },
+    {
+      "barrier": "household",
+      "component": "companion",
+      "displayName": {
+        "en": "lack of companion",
+        "kn": "ಜೊತೆಗಾರರ ಕೊರತೆ",
+        "hi": "साथी का अभाव"
+      },
+      "keywords": {
+        "en": [
+          "no one to accompany", "go alone", "alone", "cannot go alone", "no companion",
+          "nobody to go with me", "no escort", "can't go alone", "scared to go alone"
+        ],
+        "hi": [
+          "साथ जाने वाला कोई नहीं", "अकेले जाना", "अकेले नहीं जा सकती",
+          "साथी नहीं", "कोई साथ नहीं", "अकेली नहीं जा सकती"
+        ],
+        "kn": [
+          "ಜೊತೆಗೆ ಯಾರೂ ಇಲ್ಲ", "ಒಂಟಿಯಾಗಿ ಹೋಗಲು ಸಾಧ್ಯವಿಲ್ಲ", "ಒಂಟಿ",
+          "ಜೊತೆಗಾರರಿಲ್ಲ", "ಜೊತೆಗೆ ಬರಲು ಯಾರೂ ಇಲ್ಲ"
+        ]
+      }
+    },
+    {
+      "barrier": "facility",
+      "component": "drugs",
+      "displayName": {
+        "en": "medicine availability",
+        "kn": "ಔಷಧಿ ಲಭ್ಯತೆ",
+        "hi": "दवा की उपलब्धता"
+      },
+      "keywords": {
+        "en": [
+          "no medicines", "drugs unavailable", "medicines not available",
+          "shortage of medicines", "stock out", "no tablets", "no drugs",
+          "pharmacy empty", "medicines are not available", "out of stock"
+        ],
+        "hi": [
+          "दवाएं नहीं हैं", "दवाइयां उपलब्ध नहीं", "दवा की कमी",
+          "दवा नहीं मिल रही", "दवाइयां खत्म", "औषधि नहीं"
+        ],
+        "kn": [
+          "ಔಷಧಿಗಳಿಲ್ಲ", "ಔಷಧಿ ಲಭ್ಯವಿಲ್ಲ", "ಮಾತ್ರೆಗಳಿಲ್ಲ",
+          "ಔಷಧಿ ಕೊರತೆ", "ಔಷಧಿ ಸಿಗುತ್ತಿಲ್ಲ"
+        ]
+      }
+    },
+    {
+      "barrier": "facility",
+      "component": "female provider",
+      "displayName": {
+        "en": "female healthcare provider",
+        "kn": "ಮಹಿಳಾ ವೈದ್ಯರು",
+        "hi": "महिला चिकित्सक"
+      },
+      "keywords": {
+        "en": [
+          "no female doctor", "lady doctor", "no lady doctor", "female provider",
+          "no woman doctor", "female doctor not there", "absence of female doctor",
+          "there is no lady doctor"
+        ],
+        "hi": [
+          "महिला डॉक्टर नहीं", "लेडी डॉक्टर नहीं", "स्त्री रोग चिकित्सक नहीं", "महिला चिकित्सक नहीं"
+        ],
+        "kn": [
+          "ಮಹಿಳಾ ವೈದ್ಯರಿಲ್ಲ", "ಲೇಡಿ ಡಾಕ್ಟರ್ ಇಲ್ಲ", "ಮಹಿಳಾ ವೈದ್ಯರು ಲಭ್ಯವಿಲ್ಲ"
+        ]
+      }
+    }
+  ],
+  "emergencyKeywords": {
+    "en": [
+      "severe pain", "heavy bleeding", "labour", "in labour", "unconscious",
+      "can't breathe", "cannot breathe", "chest pain", "bleeding heavily",
+      "emergency", "loss of consciousness"
+    ],
+    "hi": [
+      "अत्यधिक दर्द", "गंभीर दर्द", "भारी रक्तस्राव", "प्रसव", "प्रसव पीड़ा",
+      "बेहोश", "सांस नहीं आ रही", "सीने में दर्द", "आपातकाल"
+    ],
+    "kn": [
+      "ತೀವ್ರ ನೋವು", "ಹೆಚ್ಚು ರಕ್ತಸ್ರಾವ", "ಹೆರಿಗೆ", "ಹೆರಿಗೆ ನೋವು", "ಪ್ರಜ್ಞಾಹೀನ",
+      "ಉಸಿರಾಡಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ", "ಎದೆ ನೋವು", "ತುರ್ತು"
+    ]
+  },
+  "firstPersonIndicators": {
+    "en": [
+      "i have a problem", "i have problem", "i am facing", "i'm facing", "i can't",
+      "i cannot", "cannot reach", "can't reach", "can't afford", "cannot afford",
+      "my family", "no one to go with me", "nobody to go with me", "help me",
+      "i need help", "i am in labour", "i'm in labour", "hospital is far",
+      "no transport", "medicines are not available", "there is no lady doctor"
+    ],
+    "hi": [
+      "मुझे परेशानी है", "मुझे समस्या है", "मैं सामना कर रही हूँ", "मैं नहीं जा सकती",
+      "खर्च नहीं उठा सकती", "मेरा परिवार", "मेरे साथ कोई नहीं", "मेरी मदद करें",
+      "अस्पताल दूर है", "सवारी नहीं है", "दवाइयां उपलब्ध नहीं हैं", "महिला डॉक्टर नहीं है",
+      "प्रसव पीड़ा में हूँ"
+    ],
+    "kn": [
+      "ನನಗೆ ತೊಂದರೆ ಇದೆ", "ನನಗೆ ಸಮಸ್ಯೆ ಇದೆ", "ನಾನು ಎದುರಿಸುತ್ತಿದ್ದೇನೆ", "ಹೋಗಲು ಸಾಧ್ಯವಿಲ್ಲ",
+      "ಭರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ", "ನನ್ನ ಕುಟುಂಬ", "ನನ್ನ ಜೊತೆ ಯಾರೂ ಇಲ್ಲ", "ನನಗೆ ಸಹಾಯ ಮಾಡಿ",
+      "ಆಸ್ಪತ್ರೆ ದೂರವಿದೆ", "ಸಾರಿಗೆ ಇಲ್ಲ", "ಔಷಧಿಗಳು ಲಭ್ಯವಿಲ್ಲ", "ಮಹಿಳಾ ವೈದ್ಯರಿಲ್ಲ",
+      "ಹೆರಿಗೆ ನೋವಿನಲ್ಲಿದ್ದೇನೆ"
+    ]
+  }
+}

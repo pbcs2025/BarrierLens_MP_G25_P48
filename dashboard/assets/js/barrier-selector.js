@@ -250,10 +250,21 @@
    */
   function isBarrierSelectionText(text) {
     if (!text || typeof text !== 'string') return false;
-    const norm = normalizeBarrierName(text);
-    if (norm) return true;
+    const trimmed = text.trim();
+    if (!trimmed) return false;
 
-    return /\b(change|switch|select|show|set|choose|tell me about)\b.*\b(barrier|household|logistic|facility|multiple|all)\b/i.test(text);
+    // Questions or sentences with query words/problem descriptions are NOT menu selection clicks
+    if (/[?]/i.test(trimmed) || /\b(what|how|why|when|where|which|who|should|can|could|would|help|do|does|tell me|explain|facing|problem|issue|have a|have)\b/i.test(trimmed)) {
+      return false;
+    }
+
+    const lower = trimmed.toLowerCase();
+    for (const canonical of CANONICAL_BARRIERS) {
+      if (canonical.toLowerCase() === lower) return true;
+    }
+    if (KEY_TO_NAME[lower] || BARRIER_ALIASES[lower]) return true;
+
+    return /^(select|switch to|choose|explore)\s+(?:the\s+)?(household|logistic|facility|multiple|all)(?:\s+barrier)?$/i.test(trimmed);
   }
 
   /**

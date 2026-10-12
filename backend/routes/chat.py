@@ -112,11 +112,23 @@ def process_chat_request() -> Any:
                 "relatedPage": None,
             }
 
-        # Check if requested information is unavailable in NFHS-5 dataset
+        # Check if requested information is explicitly unsupported / out-of-scope in NFHS-5 dataset
         if evidence_payload.get("status") == "unavailable":
-            from backend.services.ollama_service import format_unavailable_response
-            unavailable_resp = format_unavailable_response(evidence_payload, language)
-            return jsonify(unavailable_resp), 200
+            if evidence_payload.get("intent") == "UNSUPPORTED":
+                from backend.services.ollama_service import format_unavailable_response
+                unavailable_resp = format_unavailable_response(evidence_payload, language)
+                return jsonify(unavailable_resp), 200
+            # For general research queries or greetings without specific tabular records,
+            # reset evidence payload so Ollama generates a dynamic, helpful research answer.
+            evidence_payload = {
+                "status": "general_query",
+                "intent": evidence_payload.get("intent", "GENERAL"),
+                "evidence": [],
+                "calculations": [],
+                "metrics": [],
+                "source": [],
+                "relatedPage": None,
+            }
 
         # Execute Ollama Explanation Service
         response_data = generate_llm_explanation(

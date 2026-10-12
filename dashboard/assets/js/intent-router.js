@@ -44,6 +44,9 @@
     "explain",
     "ask_solution",
     "solutions",
+    "compound_solution",
+    "personal_barrier_help",
+    "ask_barrier_ranking",
     "limitations",
     "change_language",
     "unknown"
@@ -220,7 +223,44 @@
    */
   function isSolutionsQuery(text) {
     if (!text || typeof text !== 'string') return false;
-    return /\b(what can be done|how can.*solv(e|ed)|how can.*fix|what are the solutions|how can we improve|what should be done|solutions|recommendation|intervention|interventions|how to overcome|overcome barrier)s?\b|ಪರಿಹಾರ|ಉಪಾಯ|ಉಪಾಯಗಳು|समाधान|उपाय/i.test(text);
+    return /\b(what can be done|what can (?:i|we|one)?\s*do|what should (?:i|we|one|a woman)?\s*do|what to do|what should be done|how to (?:solve|fix|handle|address|overcome|deal with)|how can.*solv(e|ed)|how can.*fix|how can.*overcome|what are the (?:solutions|schemes|interventions|recommendations|options)|what solutions exist|how can we improve|solutions|solution|recommendation|recommendations|intervention|interventions|how to overcome|overcome barrier|government schemes|schemes|remedy|remedies)s?\b|ಪರಿಹಾರ|ಉಪಾಯ|ಉಪಾಯಗಳು|ಏನು ಮಾಡಬಹುದು|ಏನು ಮಾಡಬೇಕು|ಯೋಜನೆಗಳು|ಯೋಜನೆ|समाधान|उपाय|क्या किया जा सकता है|क्या करना चाहिए|क्या कर सकते हैं|योजनाएं|योजना|सरकारी योजनाएं/i.test(text);
+  }
+
+  /**
+   * Addendum 3: Check if text is a first-person statement of difficulty/barrier help.
+   */
+  function isPersonalProblemStatement(text) {
+    if (!text || typeof text !== 'string') return false;
+    const lower = text.toLowerCase();
+
+    // Emergency phrases
+    if (/\b(severe pain|heavy bleeding|labour|in labour|unconscious|can't breathe|cannot breathe|chest pain|bleeding heavily|emergency)\b/i.test(lower) ||
+        /ತೀವ್ರ ನೋವು|ಹೆಚ್ಚು ರಕ್ತಸ್ರಾವ|ಹೆರಿಗೆ|ಹೆರಿಗೆ ನೋವು|ಪ್ರಜ್ಞಾಹೀನ/i.test(text) ||
+        /अत्यधिक दर्द|गंभीर दर्द|भारी रक्तस्राव|प्रसव|प्रसव पीड़ा|बेहोश/i.test(text)) {
+      return true;
+    }
+
+    // Direct guidance / barrier complaints (e.g., "i am facing facility level barrier what should i do")
+    if (/facing (?:a )?(facility|household|logistic|multiple).*(?:barrier|problem|level)/i.test(lower) ||
+        /i am facing/i.test(lower) || /i'm facing/i.test(lower)) {
+      return true;
+    }
+
+    // Specific problem statements from Addendum 3
+    if (/\b(hospital is far|clinic is far|no transport|no bus|can't afford|cannot afford|won't allow|doesn't allow|no one to go|nobody to go|not available|no lady doctor|no female doctor|no medicines|medicines are not available|trouble reaching|problem going to the hospital|problem going)\b/i.test(lower)) {
+      return true;
+    }
+
+    // First person problem statements
+    if (/\b(i have a problem|i have problem|can you help me|help me with|i need help|cannot reach hospital|can't reach hospital|cannot afford treatment|can't afford treatment)\b/i.test(lower)) {
+      return true;
+    }
+
+    // Kannada & Hindi indicators
+    if (/ಆಸ್ಪತ್ರೆ ದೂರ|ಅಸ್ಪತ್ರೆ ದೂರ|ಸಾರಿಗೆ ಇಲ್ಲ|ಔಷಧಿಗಳಿಲ್ಲ|ಮಹಿಳಾ ವೈದ್ಯರಿಲ್ಲ|ಚಿಕಿತ್ಸೆ ಭರಿಸಲು|ಕುಟುಂಬದವರು ಬಿಡುತ್ತಿಲ್ಲ|ಜೊತೆಗೆ ಯಾರೂ ಇಲ್ಲ|ತೊಂದರೆ ಇದೆ|ಸಮಸ್ಯೆ ಇದೆ/i.test(text)) return true;
+    if (/अस्पताल दूर|सवारी नहीं|दवाएं नहीं|दवाइयां उपलब्ध नहीं|महिला डॉक्टर नहीं|खर्च नहीं उठा|अनुमति नहीं|साथ जाने वाला कोई नहीं|समस्या है|परेशानी है/i.test(text)) return true;
+
+    return false;
   }
 
   /**
@@ -229,7 +269,7 @@
   function isGreeting(text) {
     if (!text || typeof text !== 'string') return false;
     const lower = text.trim().toLowerCase();
-    return /^(hi|hello|hey|greetings|good morning|good afternoon|good evening|namaste|vanakkam|namaskara|ನಮಸ್ಕಾರ|ನಮಸ್ತೆ|नमस्ते|प्रणाम)[\s!.]*$/i.test(lower);
+    return /^(hi+|hey+|hello+|hlo|hiya|greetings|good\\s+(?:morning|afternoon|evening|day)|namaste|vanakkam|namaskara|ನಮಸ್ಕಾರ|ನಮಸ್ತೆ|नमस्ते|ಪ್ರಣಾಮ)[\\s!.,]*$/i.test(lower);
   }
 
   /**
@@ -293,12 +333,51 @@
       return "UNSUPPORTED";
     }
 
+    // 4.6. Addendum 3: Personal Problem Statements ("I have a problem going to the hospital", "hospital is far", etc.)
+    if (isPersonalProblemStatement(trimmed)) {
+      return "personal_barrier_help";
+    }
+
+    // 4.7. Compound Solutions, Solutions & Pure Barrier Ranking triggers (prioritized before barrier selection)
+    const hasBarrierRankingSignal = /\b(which barrier|barrier is (?:most affected|dominant|highest|biggest)|biggest.*barrier|dominant barrier|highest barrier)\b|ಯಾವ ಅಡಚಣೆ|ಅಡಚಣೆ ಹೆಚ್ಚಾಗಿದೆ|ಅಡಚಣೆ ಪ್ರಮುಖ|कौन सी बाधा|बाधा सबसे बड़ी|बाधा प्रमुख/i.test(lower) || (/\b(most affected here|dominant in|dominant here)\b/i.test(lower) && !/\bwhich states\b/i.test(lower));
+
+    if (isSolutionsQuery(trimmed) && hasBarrierRankingSignal) {
+      return "compound_solution";
+    }
+    if (isSolutionsQuery(trimmed)) {
+      return "ask_solution";
+    }
+    if (hasBarrierRankingSignal) {
+      return "ask_barrier_ranking";
+    }
+
+    // 4.8. Questions with comparison, state analysis, group analysis, statistics (prioritized before barrier selection)
+    if (entities.comparisonTarget || /\b(compare|versus|vs|difference between|difference|higher than|lower than)\b|ಹೋಲಿಕೆ|ತುಲನಾ|तुलना/i.test(lower)) {
+      return "ask_comparison";
+    }
+    if (/\b(which states|affected states|worst affected states|state analysis|where is)\b|ಹೆಚ್ಚು ಬಾಧಿತ|प्रभावित राज्य/i.test(lower)) {
+      return "ask_state_analysis";
+    }
+    if (/\b(which groups|vulnerable groups|affected groups|wealth tier|by education|who faces|poorest women|richest women)\b|ಗುಂಪುಗಳು|समूह/i.test(lower)) {
+      return "ask_group_analysis";
+    }
+    if (/\b(statistic|statistics|rate|percent|percentage|data|numbers|figures|count|prevalence|how common|how many)\b|ಅಂಕಿಅಂಶ|ಆಂಕಡೆ|आंकड़े|प्रतिशत/i.test(lower)) {
+      return "ask_statistics";
+    }
+    // Explanation / Meaning trigger (prioritized before barrier selection)
+    if (/\b(what is|what are|what does.*mean|what do you mean|what mean|definition|define|meaning of|meaning|explain|explanation|tell me about|describe|overview|why|reason|how come|cause|why am i facing)\b|ವಿವರಣೆ|ವಿವರಿಸಿ|ಅರ್ಥ|ಏನು|ಯಾಕೆ|ಕಾರಣ|समझाएं|स्पष्ट करें|परिभाषा|क्या है|क्या अर्थ|मतलब|क्यों|कारण/i.test(lower)) {
+      return "ask_explanation";
+    }
+
     // 5. Barrier selection or explicit barrier change triggers
+    const hasQueryOrProblemWord = /[?]/i.test(trimmed) || /\b(what|how|why|when|where|which|who|should|can|could|would|help|do|does|tell me|explain|facing|problem|issue|have a|have|mean|meaning)\b/i.test(lower);
+
     if (barrierSelector) {
       const isSelectText = barrierSelector.isBarrierSelectionText(trimmed);
-      const detectedBarrierKey = barrierSelector.detectBarrierKeyFromText(trimmed);
+      const isPureBarrierClick = /^(?:select\s+)?(household|logistic|facility|multiple|all)(?:\s+barrier)?$/i.test(trimmed);
 
-      if (isSelectText || detectedBarrierKey) {
+      if (isSelectText || (isPureBarrierClick && !hasQueryOrProblemWord)) {
+        const detectedBarrierKey = barrierSelector.detectBarrierKeyFromText(trimmed);
         if (/\b(change|switch|show.*instead|different barrier)\b/i.test(lower)) {
           return "change_barrier";
         }
@@ -311,67 +390,41 @@
       }
     } else {
       // Direct intent matches for individual barrier selection
-      if (/\b(household barrier|household|family permission|family does not allow)\b/i.test(lower)) {
-        return "select_household";
-      }
-      if (/\b(logistic barrier|logistic|transportation|difficulty travelling|distance to hospital|money for treatment)\b/i.test(lower)) {
-        return "select_logistic";
-      }
-      if (/\b(facility barrier|facility|no doctors|doctor absent|no female provider|no medicine)\b/i.test(lower)) {
-        return "select_facility";
-      }
-      if (/\b(multiple barriers|multiple barrier|overlapping barriers)\b/i.test(lower)) {
-        return "select_multiple";
-      }
-      if (/\b(all barriers|all barrier)\b/i.test(lower)) {
-        return "select_all";
+      if (!hasQueryOrProblemWord) {
+        if (/^(?:select\s+)?(household barrier|household|family permission)\b/i.test(lower)) {
+          return "select_household";
+        }
+        if (/^(?:select\s+)?(logistic barrier|logistic|transportation)\b/i.test(lower)) {
+          return "select_logistic";
+        }
+        if (/^(?:select\s+)?(facility barrier|facility)\b/i.test(lower)) {
+          return "select_facility";
+        }
+        if (/^(?:select\s+)?(multiple barriers|multiple barrier|overlapping barriers)\b/i.test(lower)) {
+          return "select_multiple";
+        }
+        if (/^(?:select\s+)?(all barriers|all barrier)\b/i.test(lower)) {
+          return "select_all";
+        }
       }
     }
 
     // 6. Specific Barrier-Related Symptom / Context Queries
-    if (/\b(family does not allow|need permission|alone to hospital|husband does not allow)\b/i.test(lower)) {
-      return "select_household";
-    }
-    if (/\b(difficulty travelling|no transport|cannot afford bus|far away hospital|distance is far)\b/i.test(lower)) {
-      return "select_logistic";
-    }
-    if (/\b(no doctors at the hospital|no female doctor|no medicine available|doctor was absent)\b/i.test(lower)) {
-      return "select_facility";
-    }
-
-    // 7. Solutions trigger
-    if (isSolutionsQuery(trimmed)) {
-      return "ask_solution";
-    }
-
-    // 8. Comparison trigger
-    if (entities.comparisonTarget || /\b(compare|versus|vs|difference between|difference|higher than|lower than)\b|ಹೋಲಿಕೆ|ತುಲನಾ|तुलना/i.test(lower)) {
-      return "ask_comparison";
-    }
-
-    // 9. State analysis / affected states trigger
-    if (/\b(which states|most affected|affected states|worst affected states|state analysis|where is)\b|ಹೆಚ್ಚು ಬಾಧಿತ|प्रभावित राज्य/i.test(lower)) {
-      return "ask_state_analysis";
-    }
-
-    // 10. Socio-Demographic Group analysis trigger
-    if (/\b(which groups|vulnerable groups|affected groups|wealth tier|by education|who faces|poorest women|richest women)\b|ಗುಂಪುಗಳು|समूह/i.test(lower)) {
-      return "ask_group_analysis";
-    }
-
-    // 11. Statistics trigger
-    if (/\b(statistic|statistics|rate|percent|percentage|data|numbers|figures|count|prevalence|how common|how many)\b|ಅಂಕಿಅಂಶ|ಆಂಕಡೆ|आंकड़े|प्रतिशत/i.test(lower)) {
-      return "ask_statistics";
+    if (!hasQueryOrProblemWord) {
+      if (/\b(family does not allow|need permission|alone to hospital|husband does not allow)\b/i.test(lower)) {
+        return "select_household";
+      }
+      if (/\b(difficulty travelling|no transport|cannot afford bus|far away hospital|distance is far)\b/i.test(lower)) {
+        return "select_logistic";
+      }
+      if (/\b(no doctors at the hospital|no female doctor|no medicine available|doctor was absent)\b/i.test(lower)) {
+        return "select_facility";
+      }
     }
 
     // 12. Limitations & Causality trigger
     if (/\b(limitation|limitations|causation|causal|prove|does.*cause|cross-sectional|survey limit)\b|ಮಿತಿಗಳು|सीमाएं/i.test(lower)) {
       return "limitations";
-    }
-
-    // 13. Explanation trigger
-    if (/\b(what is|explain|tell me about|definition|describe|meaning|overview|why am i facing)\b|ವಿವರಣೆ|ವಿವರಿಸಿ|समझाएं|स्पष्ट करें/i.test(lower)) {
-      return "ask_explanation";
     }
 
     // Default fallback
@@ -384,6 +437,7 @@
     normalizeLanguage,
     extractEntities,
     isSolutionsQuery,
+    isPersonalProblemStatement,
     isGreeting,
     detectLanguageChange,
     detectIntent

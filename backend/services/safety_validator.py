@@ -35,6 +35,29 @@ MEDICAL_DISCLAIMER = (
     "from NFHS-5 survey data and does not provide individual medical diagnosis or personal health advice."
 )
 
+ALLOWED_DOMAINS = [
+    "nhm.gov.in",
+    "mohfw.gov.in",
+    "pib.gov.in",
+    "static.pib.gov.in",
+    "eparlib.nic.in",
+    "rsdebate.nic.in",
+    "qps.nhsrcindia.org",
+    "nhsrcindia.org",
+    "who.int",
+    "pmjay.gov.in",
+]
+
+
+def check_solutions_allowlist_safety(answer: str) -> bool:
+    """Ensure any URLs in answer match allowed public health domains."""
+    urls = re.findall(r"https?://([a-zA-Z0-9.-]+)", answer)
+    for host in urls:
+        host_lower = host.lower()
+        if not any(host_lower == d or host_lower.endswith("." + d) for d in ALLOWED_DOMAINS):
+            return False
+    return True
+
 
 def check_numerical_safety(
     answer: str,
@@ -185,12 +208,17 @@ def validate_llm_response(
         # Log warning / note unsupported numbers in claims
         pass
 
+    # 4. Verify Solutions Domain Allow-List & Scheme Integrity
+    is_domain_safe = check_solutions_allowlist_safety(answer)
+    if not is_domain_safe:
+        answer = ""  # Discard fabricated response
 
     return {
         "answer": answer,
         "claims": claims,
         "disclaimer": disclaimer,
         "numerical_safety_passed": is_num_safe,
+        "domain_safety_passed": is_domain_safe,
         "unsupported_numbers": unsupported if not is_num_safe else [],
     }
 

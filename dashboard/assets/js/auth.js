@@ -64,13 +64,16 @@
   }
 
   function writeSession(session, remember) {
-    var store = getStore(!!remember);
-    if (!store) store = getStore(true);
+    // Always persist to localStorage so session never expires or gets wiped on browser close
+    var store = getStore(true);
+    if (!store) store = getStore(false);
     if (!store) return false;
     try {
-      var other = store === getStore(true) ? getStore(false) : getStore(true);
-      if (other) other.removeItem(STORAGE_KEY);
       store.setItem(STORAGE_KEY, JSON.stringify(session));
+      var sessionStore = getStore(false);
+      if (sessionStore && sessionStore !== store) {
+        try { sessionStore.setItem(STORAGE_KEY, JSON.stringify(session)); } catch (e) {}
+      }
       return true;
     } catch (err) {
       return false;

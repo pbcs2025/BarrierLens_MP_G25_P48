@@ -32,9 +32,7 @@
   if (storageBlocked || authenticated) return;
 
   var prefix = pathname.indexOf("/pages/") !== -1 ? "../" : "";
-  window.location.replace(
-    prefix + "login.html?next=" + encodeURIComponent(pathname + window.location.search)
-  );
+  window.location.replace(prefix + "login.html");
 })();
 
 document.addEventListener("DOMContentLoaded", function () {

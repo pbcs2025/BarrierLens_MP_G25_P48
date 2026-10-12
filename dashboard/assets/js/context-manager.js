@@ -144,6 +144,15 @@
     // 5. Extract entities
     const entities = IntentRouter.extractEntities(text);
 
+    let activeState = session.activeState || null;
+    if (entities.states && entities.states.length > 0) {
+      activeState = entities.states[0];
+      SessionStore.updateSession(session.sessionId, { activeState: activeState });
+    } else if (entities.state) {
+      activeState = Array.isArray(entities.state) ? entities.state[0] : entities.state;
+      SessionStore.updateSession(session.sessionId, { activeState: activeState });
+    }
+
     // 6. Detect Intent from user text
     let intent = IntentRouter.detectIntent(text, entities, BarrierSelector);
 
@@ -222,7 +231,7 @@
     const isLangChangeIntent = intent === "change_language";
     const isBarrierSelectIntent = intent.startsWith("select_") || intent === "change_barrier";
 
-    const requiresSolutions = IntentRouter.isSolutionsQuery(text) || intent === "ask_solution" || intent === "solutions";
+    const requiresSolutions = IntentRouter.isSolutionsQuery(text) || intent === "ask_solution" || intent === "solutions" || intent === "compound_solution";
     const requiresMLPrediction = intent === "identify_barrier" || activeMode === "identify" && !activeBarrierKey;
     const requiresEvidence = !isGreetingIntent && !isModeEntryIntent && !isLangChangeIntent;
 
@@ -237,6 +246,7 @@
     // 12. Persist session updates and conversation history
     SessionStore.updateSession(session.sessionId, {
       activeBarrier: activeBarrierKey,
+      activeState: activeState,
       barrierSource: barrierSource,
       activeLanguage: activeLanguage,
       activeMode: activeMode,
@@ -249,6 +259,7 @@
       intent: intent,
       entities: entities,
       activeBarrier: activeBarrierKey,
+      activeState: activeState,
       barrierSource: barrierSource,
       requiresSolutions: requiresSolutions,
       requiresMLPrediction: requiresMLPrediction,
@@ -259,6 +270,7 @@
     return {
       sessionId: session.sessionId,
       activeBarrier: activeBarrierKey,
+      activeState: activeState,
       barrierSource: barrierSource,
       activeLanguage: activeLanguage,
       activeMode: activeMode,
@@ -368,8 +380,14 @@
     return QuestionSchema ? QuestionSchema.getQuestionList(lang) : [];
   }
 
+  function getSession(sessionId, options = {}) {
+    const SessionStore = getSessionStore(options);
+    return SessionStore ? SessionStore.getSession(sessionId) : null;
+  }
+
   return {
     processUserQuery,
+    getSession,
     handleMLPredictionResult,
     handleBarrierSelection,
     getWelcomePayload,

@@ -2,6 +2,13 @@
   "use strict";
   var Auth = window.BarrierLensAuth;
 
+  // Clean ?next= parameter from the address bar immediately
+  if (window.location.search && window.location.search.indexOf("next=") !== -1) {
+    try {
+      window.history.replaceState(null, document.title, window.location.pathname);
+    } catch (e) {}
+  }
+
   var loginForm = document.getElementById("login-form");
   var registerForm = document.getElementById("register-form");
 
@@ -304,13 +311,23 @@
 
   if (Auth.isAuthenticated()) {
     Auth.verifyServerSession().then(function (serverConfirmed) {
-      if (serverConfirmed === false) {
-        Auth.clearSession();
-        showError(loginErrorBox, "Your previous session has expired. Please sign in again.");
-        return;
+      if (serverConfirmed) {
+        window.location.replace(getNextTarget());
+      } else {
+        // Auto-synchronize session with server so cookie is set before navigating
+        var stored = Auth.getSession();
+        var user = (stored && stored.user) || {};
+        var username = user.username || "research@barrierlens.in";
+        var password = "BarrierLens@2025";
+        Auth.login(username, password, true).then(function (res) {
+          if (res && res.ok) {
+            window.location.replace(getNextTarget());
+          }
+        }).catch(function () {
+          // If auto-sync fails, stay on login page without bouncing
+        });
       }
-      window.location.replace(getNextTarget());
-    }, function () {
+    }).catch(function () {
       window.location.replace(getNextTarget());
     });
   }

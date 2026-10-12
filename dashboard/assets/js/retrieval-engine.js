@@ -456,6 +456,15 @@
       case "LIMITATIONS":
         return retrieveLimitations(dataRegistry);
 
+      case "ask_explanation":
+      case "EXPLANATION":
+        return {
+          status: "verified",
+          title: "Conceptual Barrier Definitions",
+          explanation: "BarrierLens categorizes healthcare access constraints across Household (family permission, travelling alone), Logistic (distance, transport), and Facility (absence of female doctors, medicine availability) domains.",
+          evidence: []
+        };
+
       case "UNSUPPORTED":
       default:
         return {

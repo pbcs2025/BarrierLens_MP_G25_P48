@@ -376,6 +376,19 @@
     };
   }
 
+  function getExternalSolutions(barrierInput = "all", request = {}, dataRegistry = {}, lang = "en") {
+    let SolutionsEngine = null;
+    if (typeof window !== 'undefined' && window.BarrierLensSolutionsEngine) SolutionsEngine = window.BarrierLensSolutionsEngine;
+    else if (typeof require !== 'undefined') {
+      try { SolutionsEngine = require('./solutions-engine.js'); } catch (e) {}
+    }
+    if (SolutionsEngine) {
+      const qText = request.text || request.query || "";
+      return SolutionsEngine.retrieveExternalSolutions(barrierInput, qText, dataRegistry, lang);
+    }
+    return { status: "unavailable", solutions: [] };
+  }
+
   return {
     buildEvidencePayload,
     getBarrierEvidence,
@@ -384,6 +397,7 @@
     getAffectedStates,
     getAffectedGroups,
     getBarrierComparison,
-    checkBarrierLensSolutionEvidence
+    checkBarrierLensSolutionEvidence,
+    getExternalSolutions
   };
 }));

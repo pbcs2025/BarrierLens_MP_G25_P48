@@ -140,7 +140,7 @@
     for (const endpoint of uniqueEndpoints) {
       try {
         const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        const timeoutId = controller ? setTimeout(() => controller.abort(), 90000) : null;
+        const timeoutId = controller ? setTimeout(() => controller.abort(), 60000) : null;
 
         const response = await fetch(endpoint, {
           method: 'POST',

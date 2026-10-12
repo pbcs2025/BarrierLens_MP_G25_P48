@@ -62,6 +62,14 @@
     validationReport: {
       file: "dashboard/assets/data/validation_report.json",
       purpose: "Verified data integrity & validation report"
+    },
+    solutionsRegistry: {
+      file: "dashboard/assets/data/solutions_registry.json",
+      purpose: "Curated source-cited external policy solutions and guidelines"
+    },
+    personalProblemMapping: {
+      file: "dashboard/assets/data/personal_problem_mapping.json",
+      purpose: "Personal problem statement mapping configuration"
     }
   };
 

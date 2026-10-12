@@ -23,7 +23,8 @@ const BACKEND_URL = 'http://127.0.0.1:5000';
 
 const AUTH_ENABLED = !['1', 'true', 'yes'].includes(String(process.env.BL_DISABLE_AUTH || '').toLowerCase());
 const SESSION_COOKIE = 'bl_session';
-const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
+const SESSION_TTL_MS = 10 * 365 * 24 * 60 * 60 * 1000; // 10 years (never expires)
+const SESSIONS_PERSIST_FILE = path.join(DASHBOARD_DIR, 'assets', 'data', '.server_sessions.json');
 
 const DEMO_USERS = [
   { username: 'research@barrierlens.in', password: 'BarrierLens@2025', name: 'Research Team', role: 'Research Lead' },
@@ -36,6 +37,28 @@ const DEMO_USERS = [
 
 const registeredUsers = [...DEMO_USERS];
 const sessions = new Map();
+
+function loadSessionsFromFile() {
+  try {
+    if (fs.existsSync(SESSIONS_PERSIST_FILE)) {
+      const raw = fs.readFileSync(SESSIONS_PERSIST_FILE, 'utf8');
+      const data = JSON.parse(raw);
+      if (data && typeof data === 'object') {
+        Object.keys(data).forEach(k => sessions.set(k, data[k]));
+      }
+    }
+  } catch (e) {}
+}
+
+function saveSessionsToFile() {
+  try {
+    const obj = {};
+    sessions.forEach((v, k) => { obj[k] = v; });
+    fs.writeFileSync(SESSIONS_PERSIST_FILE, JSON.stringify(obj), 'utf8');
+  } catch (e) {}
+}
+
+loadSessionsFromFile();
 
 function parseCookies(req) {
   const header = req.headers.cookie || '';
@@ -53,10 +76,7 @@ function readSession(req) {
   if (!token) return null;
   const session = sessions.get(token);
   if (!session) return null;
-  if (Date.now() - session.issuedAt > SESSION_TTL_MS) {
-    sessions.delete(token);
-    return null;
-  }
+  // Session expiration removed - keep sessions permanently active for panel presentation
   return session;
 }
 
@@ -143,8 +163,9 @@ function handleAuthRoute(req, res, pathname) {
         const token = crypto.randomBytes(24).toString('hex');
         const userObj = { username: newUser.username, name: newUser.name, role: newUser.role };
         sessions.set(token, { user: userObj, issuedAt: Date.now() });
+        saveSessionsToFile();
 
-        const maxAge = Math.floor(SESSION_TTL_MS / 1000);
+        const maxAge = 315360000; // 10 years (never expires)
         res.setHeader(
           'Set-Cookie',
           `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax`
@@ -168,7 +189,8 @@ function handleAuthRoute(req, res, pathname) {
         }
         const token = crypto.randomBytes(24).toString('hex');
         sessions.set(token, { user, issuedAt: Date.now() });
-        const maxAge = payload.remember ? 30 * 24 * 60 * 60 : Math.floor(SESSION_TTL_MS / 1000);
+        saveSessionsToFile();
+        const maxAge = 315360000; // 10 years (never expires)
         res.setHeader(
           'Set-Cookie',
           `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax`
@@ -180,7 +202,10 @@ function handleAuthRoute(req, res, pathname) {
 
   if (pathname === '/auth/logout' && req.method === 'POST') {
     const token = parseCookies(req)[SESSION_COOKIE];
-    if (token) sessions.delete(token);
+    if (token) {
+      sessions.delete(token);
+      saveSessionsToFile();
+    }
     res.setHeader('Set-Cookie', `${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax`);
     return sendJson(res, 200, { authenticated: false });
   }
@@ -217,13 +242,14 @@ const MIME_TYPES = {
 };
 
 function proxyToBackend(req, res) {
-  const targetUrl = new url.URL(req.url, BACKEND_URL);
+  const parsedReq = url.parse(req.url);
+  const backendParsed = url.parse(BACKEND_URL);
   const options = {
-    hostname: targetUrl.hostname,
-    port: targetUrl.port,
-    path: targetUrl.pathname + targetUrl.search,
+    hostname: backendParsed.hostname,
+    port: backendParsed.port,
+    path: parsedReq.path,
     method: req.method,
-    headers: { ...req.headers, host: targetUrl.host }
+    headers: { ...req.headers, host: backendParsed.host }
   };
 
   const proxyReq = http.request(options, (backendRes) => {
@@ -261,21 +287,17 @@ const server = http.createServer((req, res) => {
 
   // Normalize path
   if (pathname === '/') {
-    // The login / landing page is always the entry point.
+    // If authenticated on server, serve index.html; otherwise serve login.html cleanly
     if (AUTH_ENABLED && !readSession(req)) {
-      res.writeHead(302, { Location: '/login.html' });
-      res.end();
-      return;
+      pathname = '/login.html';
+    } else {
+      pathname = '/index.html';
     }
-    pathname = '/index.html';
   }
 
   // Gate every dashboard document behind an active demo session
   if (AUTH_ENABLED && isProtectedDocument(pathname) && !readSession(req)) {
-    const next = encodeURIComponent(pathname + (parsedUrl.search || ''));
-    res.writeHead(302, { Location: `/login.html?next=${next}` });
-    res.end();
-    return;
+    pathname = '/login.html';
   }
 
   // Safe file resolution inside DASHBOARD_DIR

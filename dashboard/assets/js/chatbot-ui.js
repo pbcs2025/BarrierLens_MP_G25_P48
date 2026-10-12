@@ -32,6 +32,52 @@
   let _barrierSource = 'user_selection'; // 'user_selection' or 'ml_prediction'
   let _latestPrediction = null;
 
+  const STORAGE_KEY_MESSAGES = 'bl_chatbot_messages_history';
+  const STORAGE_KEY_STATE = 'bl_chatbot_context_state';
+
+  function saveChatHistoryToStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem(STORAGE_KEY_MESSAGES, JSON.stringify(_messages));
+        window.localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify({
+          activeBarrier: _activeBarrier,
+          barrierSource: _barrierSource,
+          latestPrediction: _latestPrediction,
+          currentLang: _currentLang
+        }));
+      } catch (e) {
+        console.warn("[BarrierLensChatbotUI] Error saving chat history:", e);
+      }
+    }
+  }
+
+  function loadChatHistoryFromStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY_MESSAGES);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    return null;
+  }
+
+  function loadChatStateFromStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY_STATE);
+        if (raw) {
+          return JSON.parse(raw);
+        }
+      } catch (e) {}
+    }
+    return null;
+  }
+
   // Module References (Browser / Node)
   function getI18n() {
     if (typeof window !== 'undefined' && window.BarrierLensI18n) return window.BarrierLensI18n;
@@ -227,6 +273,23 @@
 
     escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+    // Parse Markdown links: [Title](url) -> clickable <a> tag
+    escaped = escaped.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+|[^\s\)]+\.html(?:\?[^\s\)]*)?)\)/g, function (match, title, href) {
+      return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: underline; font-weight: 600;">' + title + '</a>';
+    });
+
+    // Auto-link standalone URLs that are not already within an anchor tag
+    escaped = escaped.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g, function (match, prefix, url) {
+      let cleanUrl = url;
+      let trailing = '';
+      const m = cleanUrl.match(/([.,;:!?)]+)$/);
+      if (m) {
+        trailing = m[1];
+        cleanUrl = cleanUrl.slice(0, -trailing.length);
+      }
+      return prefix + '<a href="' + cleanUrl + '" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: underline; word-break: break-all;">' + cleanUrl + '</a>' + trailing;
+    });
+
     if (escaped.includes('- ') || escaped.includes('• ') || escaped.includes('* ')) {
       const lines = escaped.split('\n');
       let inList = false;
@@ -359,6 +422,15 @@
   function initDOM() {
     if (typeof document === 'undefined' || _domMounted) return;
 
+    // Restore saved context state (barrier, language, etc.)
+    const savedState = loadChatStateFromStorage();
+    if (savedState) {
+      if (savedState.activeBarrier) _activeBarrier = savedState.activeBarrier;
+      if (savedState.barrierSource) _barrierSource = savedState.barrierSource;
+      if (savedState.latestPrediction) _latestPrediction = savedState.latestPrediction;
+      if (savedState.currentLang) _currentLang = savedState.currentLang;
+    }
+
     const prefix = getAssetPrefix();
     if (!document.querySelector('link[href*="chatbot.css"]')) {
       const linkChat = document.createElement('link');
@@ -374,7 +446,17 @@
     bindEvents();
     renderSuggestedQuestions();
     bindVoiceStateMachine();
-    renderWelcomeOrChooseMode();
+
+    // Check for saved chat history and restore if present
+    const savedMessages = loadChatHistoryFromStorage();
+    if (Array.isArray(savedMessages) && savedMessages.length > 0) {
+      _messages = savedMessages;
+      renderRestoredConversation(savedMessages);
+    } else {
+      renderWelcomeOrChooseMode();
+    }
+
+    updateActiveBarrierHeader();
   }
 
   function renderWelcomeOrChooseMode() {
@@ -1027,6 +1109,11 @@
 
   function clearChat() {
     _messages = [];
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.removeItem(STORAGE_KEY_MESSAGES);
+      } catch (e) {}
+    }
     renderWelcomeOrChooseMode();
   }
 
@@ -1069,6 +1156,15 @@
       }
     }
 
+    // Instant response only for simple greetings; all questions go to dynamic Ollama
+    const isInstantIntent = localResult && localResult.answer && (
+      localResult.intent === "greeting"
+    );
+
+    if (isInstantIntent) {
+      return localResult;
+    }
+
     // Attempt backend Ollama API call with conversation history
     const apiService = getAPIService();
     if (apiService && typeof apiService.sendChatMessage === 'function') {
@@ -1078,13 +1174,15 @@
           content: m.content || m.text || ''
         }));
 
+        const isExplanationQuery = /\b(what is|what are|what does.*mean|what do you mean|what mean|definition|define|meaning of|meaning|explain|explanation|tell me about|describe|overview)\b|ವಿವರಣೆ|ವಿವರಿಸಿ|ಅರ್ಥ|ಏನು|समझाएं|स्पष्ट करें|परिभाषा|क्या है|क्या अर्थ|मतलब/i.test(query);
+
         const backendPayload = {
           message: query,
           question: query,
           language: lang,
           history: history,
           activeBarrier: _activeBarrier,
-          evidence: localResult || undefined
+          evidence: (!isExplanationQuery && localResult && localResult.status === "verified" && localResult.evidence && localResult.evidence.length > 0) ? localResult : undefined
         };
 
         const backendResp = await apiService.sendChatMessage(backendPayload);
@@ -1125,39 +1223,21 @@
     };
   }
 
-  function renderUserMessage(text) {
-    _messages.push({ role: 'user', content: text, sender: 'user', text: text });
-    const container = document.getElementById('bl-chat-messages');
-    if (!container) return;
-
-    const timeStr = formatTime();
-    const html = `
+  function buildUserBubbleHtml(text, timeStr) {
+    return `
       <div class="bl-message-row bl-user-row">
         <div class="bl-message-avatar bl-user-avatar" aria-hidden="true">U</div>
         <div class="bl-bubble-wrap">
           <div class="bl-message-bubble">${formatText(text)}</div>
-          <span class="bl-message-time">${timeStr}</span>
+          <span class="bl-message-time">${timeStr || formatTime()}</span>
         </div>
       </div>
     `;
-    container.insertAdjacentHTML('beforeend', html);
-    scrollToBottom();
   }
 
-  function renderAssistantResponse(res) {
-    _messages.push({ role: 'assistant', content: (res && res.answer) || '', sender: 'bot', text: (res && res.answer) || '' });
-    const container = document.getElementById('bl-chat-messages');
-    if (!container || !res) return;
-
-    const ctx = getContextManager();
-    if (res.activeBarrier) {
-      _activeBarrier = res.activeBarrier;
-    } else if (res.barrierContext && res.barrierContext.barrier) {
-      _activeBarrier = res.barrierContext.barrier;
-    }
-    updateActiveBarrierHeader();
-
-    const timeStr = formatTime();
+  function buildAssistantBubbleHtml(res, timeStr) {
+    if (!res) return '';
+    const answerText = typeof res === 'string' ? res : (res.answer || res.response || '');
     let structuredCardsHtml = '';
 
     // Live Dashboard Reactivity Trigger & State Auto-Search
@@ -1232,6 +1312,17 @@
       }
     }
 
+    // Render External Verified Solutions Card if solutions exist
+    if (res.solutions && Array.isArray(res.solutions) && res.solutions.length > 0) {
+      const solCard = getSolutionCard();
+      if (solCard && typeof solCard.render === 'function') {
+        const cardHtml = solCard.render(res, { activeLanguage: _currentLang });
+        if (cardHtml) {
+          structuredCardsHtml += `<div class="bl-solution-card-container" style="margin-top: 10px;">${cardHtml}</div>`;
+        }
+      }
+    }
+
     // Research Disclaimer / Limitation Note
     if (res.disclaimer || res.limitationNote) {
       const note = res.disclaimer || res.limitationNote;
@@ -1242,20 +1333,86 @@
       `;
     }
 
-    const html = `
+    return `
       <div class="bl-message-row bl-bot-row">
         <div class="bl-message-avatar bl-bot-avatar" aria-hidden="true">BL</div>
         <div class="bl-bubble-wrap">
           <div class="bl-message-bubble">
-            ${formatText(res.answer)}
+            ${formatText(answerText)}
             ${structuredCardsHtml}
           </div>
-          <span class="bl-message-time">${timeStr}</span>
+          <span class="bl-message-time">${timeStr || formatTime()}</span>
         </div>
       </div>
     `;
+  }
 
-    container.insertAdjacentHTML('beforeend', html);
+  function renderRestoredConversation(savedMessages) {
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    const count = savedMessages.length;
+    let html = `
+      <div class="bl-history-status-banner" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; margin-bottom: 12px; font-size: 0.75rem; color: #475569;">
+        <span>💾 <strong>Saved Chat History</strong> (${count} turn${count > 1 ? 's' : ''})</span>
+        <button id="bl-btn-new-conversation" style="background: #2563eb; color: #ffffff; border: none; padding: 3px 8px; border-radius: 5px; font-size: 0.72rem; font-weight: 600; cursor: pointer;">+ New Conversation</button>
+      </div>
+    `;
+
+    savedMessages.forEach(msg => {
+      if (msg.role === 'user' || msg.sender === 'user') {
+        html += buildUserBubbleHtml(msg.text || msg.content, msg.time);
+      } else {
+        const resObj = msg.res || { answer: msg.text || msg.content };
+        html += buildAssistantBubbleHtml(resObj, msg.time);
+      }
+    });
+
+    container.innerHTML = html;
+
+    const newBtn = container.querySelector('#bl-btn-new-conversation');
+    if (newBtn) {
+      newBtn.addEventListener('click', clearChat);
+    }
+
+    scrollToBottom();
+  }
+
+  function renderUserMessage(text) {
+    const timeStr = formatTime();
+    _messages.push({ role: 'user', content: text, sender: 'user', text: text, time: timeStr });
+    saveChatHistoryToStorage();
+
+    const container = document.getElementById('bl-chat-messages');
+    if (!container) return;
+
+    // Clear mode select screen if this is the first real message in the window
+    const modeScreen = container.querySelector('#bl-mode-screen-container') || container.querySelector('.bl-choose-mode-wrapper');
+    if (modeScreen && _messages.length === 1) {
+      container.innerHTML = '';
+    }
+
+    container.insertAdjacentHTML('beforeend', buildUserBubbleHtml(text, timeStr));
+    scrollToBottom();
+  }
+
+  function renderAssistantResponse(res) {
+    const timeStr = formatTime();
+    _messages.push({ role: 'assistant', content: (res && res.answer) || '', sender: 'bot', text: (res && res.answer) || '', res: res, time: timeStr });
+    saveChatHistoryToStorage();
+
+    const container = document.getElementById('bl-chat-messages');
+    if (!container || !res) return;
+
+    const ctx = getContextManager();
+    if (res.activeBarrier) {
+      _activeBarrier = res.activeBarrier;
+    } else if (res.barrierContext && res.barrierContext.barrier) {
+      _activeBarrier = res.barrierContext.barrier;
+    }
+    updateActiveBarrierHeader();
+
+    container.insertAdjacentHTML('beforeend', buildAssistantBubbleHtml(res, timeStr));
     scrollToBottom();
   }
 

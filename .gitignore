@@ -49,3 +49,7 @@ docs/data/dashboard/woman_level_master.csv
 *.env
 
 /docs
+
+# Runtime session cache
+*.server_sessions.json
+.server_sessions.json

@@ -92,19 +92,44 @@
           <span style="font-size: 0.8rem; font-weight: 600; color: #7e22ce;">${tSol.extSubtitle}</span>
         </div>
 
-        ${externalSolutions.map((ext, idx) => `
+        ${externalSolutions.map((ext, idx) => {
+          let extTitle = ext.recommendedSolution || ext.solution || ext.title || 'Policy Recommendation';
+          if (langKey === 'kn' && ext.title_kn) extTitle = `${ext.title} (${ext.title_kn})`;
+          else if (langKey === 'hi' && ext.title_hi) extTitle = `${ext.title} (${ext.title_hi})`;
+
+          const sourceLabel = ext.sourceTitle ? `${ext.sourceOrg || 'Source'} — ${ext.sourceTitle}` : (ext.source || ext.organization || 'WHO / MoHFW');
+          const sourceLink = ext.sourceUrl ? `<a href="${ext.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color: #7e22ce; text-decoration: underline; font-weight: 600;">${sourceLabel}</a>` : `<span style="color: #7e22ce; font-weight: 600;">${sourceLabel}</span>`;
+
+          let whyText = ext.whyItMayHelp || ext.why_it_may_help || ext.rationale || 'Supported by international public health evidence.';
+          if (langKey === 'kn' && ext.whyItMayHelp_kn) whyText = ext.whyItMayHelp_kn;
+          else if (langKey === 'hi' && ext.whyItMayHelp_hi) whyText = ext.whyItMayHelp_hi;
+
+          let caveatText = ext.caveat || null;
+          if (langKey === 'kn' && ext.caveat_kn) caveatText = ext.caveat_kn;
+          else if (langKey === 'hi' && ext.caveat_hi) caveatText = ext.caveat_hi;
+
+          const caveatLabel = langKey === 'kn' ? 'ಗಮನಿಸಿ:' : langKey === 'hi' ? 'टिप्पणी:' : 'Caveat:';
+
+          return `
           <div style="background: #ffffff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 10px; margin-bottom: ${idx === externalSolutions.length - 1 ? '0' : '8px'};">
             <div style="font-weight: 700; font-size: 0.875rem; color: #581c87; margin-bottom: 4px;">
-              ${tSol.recSolution} <span style="color: #0f172a;">${ext.recommendedSolution || ext.solution || ext.title || 'Policy Recommendation'}</span>
+              ${tSol.recSolution} <span style="color: #0f172a;">${extTitle}</span>
             </div>
             <div style="font-size: 0.8rem; color: #475569; margin-bottom: 4px;">
-              <strong>${tSol.source}</strong> <span style="color: #7e22ce; font-weight: 600;">${ext.source || ext.organization || 'WHO / MoHFW'}</span>
+              <strong>${tSol.source}</strong> ${sourceLink}
             </div>
-            <div style="font-size: 0.8rem; color: #334155; line-height: 1.4;">
-              <strong>${tSol.whyHelp}</strong> ${ext.whyItMayHelp || ext.why_it_may_help || ext.rationale || 'Supported by international public health evidence.'}
+            <div style="font-size: 0.8rem; color: #334155; line-height: 1.4; margin-bottom: ${caveatText ? '4px' : '0'};">
+              <strong>${tSol.whyHelp}</strong> ${whyText}
             </div>
+            ${caveatText ? `
+            <div style="font-size: 0.775rem; color: #64748b; line-height: 1.35; font-style: italic;">
+              <strong>${caveatLabel}</strong> ${caveatText}
+            </div>` : ''}
           </div>
-        `).join('')}
+        `}).join('')}
+        <div style="margin-top: 8px; font-size: 0.75rem; color: #6b21a8; font-style: italic; border-top: 1px dashed #e9d5ff; padding-top: 6px;">
+          ${solutionPayload.disclaimer || 'These solutions are external public health programmes and guidelines. BarrierLens does not evaluate programme effectiveness.'}
+        </div>
       </div>
     ` : '';
 

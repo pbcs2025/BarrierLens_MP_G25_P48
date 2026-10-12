@@ -89,6 +89,26 @@
       label: "National Overview & Study Limitations",
       url: "dashboard/pages/national_overview.html",
       relativeUrl: "pages/national_overview.html"
+    },
+    compound_solution: {
+      label: "State-Level Barrier Analysis & Solutions",
+      url: "dashboard/pages/state_analysis.html",
+      relativeUrl: "pages/state_analysis.html"
+    },
+    COMPOUND_SOLUTION: {
+      label: "State-Level Barrier Analysis & Solutions",
+      url: "dashboard/pages/state_analysis.html",
+      relativeUrl: "pages/state_analysis.html"
+    },
+    ask_solution: {
+      label: "National Overview & Interventions",
+      url: "dashboard/pages/national_overview.html",
+      relativeUrl: "pages/national_overview.html"
+    },
+    ask_barrier_ranking: {
+      label: "State-Level Barrier Analysis",
+      url: "dashboard/pages/state_analysis.html",
+      relativeUrl: "pages/state_analysis.html"
     }
   };
 
@@ -365,17 +385,27 @@
       }
     }
 
+    let SolutionsEngine = options.SolutionsEngine;
+    if (!SolutionsEngine) {
+      if (typeof window !== 'undefined' && window.BarrierLensSolutionsEngine) SolutionsEngine = window.BarrierLensSolutionsEngine;
+      else if (typeof require !== 'undefined') {
+        try { SolutionsEngine = require('./solutions-engine.js'); } catch (e) {}
+      }
+    }
+
     // 1. Load / Ensure Data Cache
     const basePath = options.basePath || '';
     const dataRegistry = options.dataRegistry || await DataModule.preloadChatbotData(basePath);
 
     const queryStr = (text || "").trim();
     const lowerQuery = queryStr.toLowerCase();
+    const normalized = IntentModule.normalizeQuery(text);
+    const entities = IntentModule.extractEntities(normalized);
 
-    // 2. Handle Mode 1 / Mode 2 / Greeting / Selection via Member 1 ContextManager
+    let ctx = null;
     if (ContextManager && BarrierSelector) {
       const sessionId = options.sessionId || "default-web-session";
-      const ctx = ContextManager.processUserQuery(text, language, options.barrierContext, sessionId, options);
+      ctx = ContextManager.processUserQuery(text, language, options.barrierContext, sessionId, options);
 
       // A. Greeting
       if (ctx.intent === "greeting") {
@@ -416,6 +446,137 @@
           evidence: [],
           calculations: []
         };
+      }
+
+      // Solutions & Compound Decomposition Layer (prioritized before barrier exploration or selection)
+      if (SolutionsEngine) {
+        // A. Unvetted Component Check ("no female healthcare provider")
+        if (SolutionsEngine.isNoFemaleProviderQuery(queryStr)) {
+          const unvetted = SolutionsEngine.retrieveExternalSolutions("facility", queryStr, dataRegistry, language);
+          return {
+            answer: unvetted.message,
+            response: unvetted.message,
+            language: language || "en",
+            intent: "ask_solution",
+            confidence: 1.0,
+            entities: entities,
+            source: [],
+            relatedPage: null,
+            status: "verified",
+            metrics: [],
+            evidence: [],
+            calculations: [],
+            disclaimer: unvetted.disclaimer,
+            solutions: []
+          };
+        }
+
+        // B. Compound Query Check (Ranking + Solutions)
+        if (SolutionsEngine.isCompoundQuery(queryStr) || (ctx && ctx.intent === "compound_solution")) {
+          const sessionId = options.sessionId || "default-web-session";
+          const session = ContextManager && ContextManager.getSession ? ContextManager.getSession(sessionId) : (options.session || null);
+          const compoundRes = SolutionsEngine.executeCompoundQuery(queryStr, entities, session, dataRegistry, language);
+          return {
+            answer: compoundRes.answer,
+            response: compoundRes.answer,
+            language: language || "en",
+            intent: "compound_solution",
+            confidence: 1.0,
+            entities: entities,
+            dominantBarrier: compoundRes.dominantBarrier,
+            rankingInfo: compoundRes.rankingInfo,
+            source: [compoundRes.rankingInfo.source],
+            relatedPage: INTENT_PAGE_MAP.COMPOUND_SOLUTION || INTENT_PAGE_MAP.STATE_ANALYSIS,
+            status: "verified",
+            metrics: compoundRes.rankingInfo.ranking.map(r => ({ label: r.name, value: r.rateStr, unit: "%", entity: compoundRes.rankingInfo.locationName })),
+            evidence: [],
+            calculations: [],
+            solutions: compoundRes.externalSolutions,
+            disclaimer: compoundRes.disclaimer
+          };
+        }
+
+        // C. Pure Barrier Ranking (without solutions)
+        if ((SolutionsEngine.hasRankingKeyword(queryStr) && !SolutionsEngine.hasSolutionKeyword(queryStr) && entities.states.length <= 1 && !/\b(compare|vs|versus)\b/i.test(queryStr) && !/\bwhich states\b/i.test(queryStr)) || (ctx && ctx.intent === "ask_barrier_ranking")) {
+          const sessionId = options.sessionId || "default-web-session";
+          const session = ContextManager && ContextManager.getSession ? ContextManager.getSession(sessionId) : (options.session || null);
+          const rankingRes = SolutionsEngine.executeRankingQueryOnly(queryStr, entities, session, dataRegistry, language);
+          return {
+            answer: rankingRes.answer,
+            response: rankingRes.answer,
+            language: language || "en",
+            intent: "ask_barrier_ranking",
+            confidence: 1.0,
+            entities: entities,
+            dominantBarrier: rankingRes.dominantBarrier,
+            rankingInfo: rankingRes.rankingInfo,
+            source: [rankingRes.rankingInfo.source],
+            relatedPage: INTENT_PAGE_MAP.ask_barrier_ranking || INTENT_PAGE_MAP.STATE_ANALYSIS,
+            status: "verified",
+            metrics: rankingRes.rankingInfo.ranking.map(r => ({ label: r.name, value: r.rateStr, unit: "%", entity: rankingRes.rankingInfo.locationName })),
+            evidence: [],
+            calculations: [],
+            solutions: []
+          };
+        }
+
+        // D. Addendum 3: Personal Problem Statements ("I can't reach the hospital", "can't afford", etc.)
+        if ((SolutionsEngine.isPersonalProblemQuery && SolutionsEngine.isPersonalProblemQuery(queryStr, language)) || (ctx && ctx.intent === "personal_barrier_help")) {
+          const sessionId = options.sessionId || "default-web-session";
+          const session = ContextManager && ContextManager.getSession ? ContextManager.getSession(sessionId) : (options.session || null);
+          const personalRes = SolutionsEngine.executePersonalProblemHelp(queryStr, entities, session, dataRegistry, language);
+          return {
+            answer: personalRes.answer,
+            response: personalRes.answer,
+            language: language || "en",
+            intent: "personal_barrier_help",
+            confidence: 1.0,
+            entities: entities,
+            barrier: personalRes.barrier,
+            component: personalRes.component,
+            suggestedBarrier: personalRes.suggestedBarrier,
+            source: ["dashboard/assets/data/solutions_registry.json"],
+            relatedPage: INTENT_PAGE_MAP.ask_solution || INTENT_PAGE_MAP.NATIONAL_OVERVIEW,
+            status: personalRes.status || "verified",
+            metrics: [],
+            evidence: [],
+            calculations: [],
+            solutions: personalRes.solutions || [],
+            isEmergency: personalRes.isEmergency,
+            disclaimer: personalRes.disclaimer
+          };
+        }
+
+        // E. Solutions-Only query ("what can be done", "solutions")
+        if (SolutionsEngine.hasSolutionKeyword(queryStr) || (ctx && ctx.intent === "ask_solution")) {
+          const detectedKey = (BarrierSelector && BarrierSelector.detectBarrierKeyFromText(queryStr)) || null;
+          let effectiveBarrier = detectedKey || (entities.barrierTypes && entities.barrierTypes[0]) || (ctx && ctx.activeBarrier) || options.barrierContext || "all";
+          if (typeof effectiveBarrier === 'object') {
+            effectiveBarrier = effectiveBarrier.key || effectiveBarrier.barrier || "all";
+          }
+          const sessionId = options.sessionId || "default-web-session";
+          const session = ContextManager && ContextManager.getSession ? ContextManager.getSession(sessionId) : (options.session || null);
+          const loc = SolutionsEngine.resolveLocation(queryStr, entities, session, options);
+          const externalSol = SolutionsEngine.retrieveExternalSolutions(effectiveBarrier, queryStr, dataRegistry, language);
+          const solFormatted = SolutionsEngine.formatSolutionsResponse(effectiveBarrier, externalSol, loc, language);
+          return {
+            answer: solFormatted.answer,
+            response: solFormatted.answer,
+            language: language || "en",
+            intent: "ask_solution",
+            confidence: 1.0,
+            entities: entities,
+            barrier: effectiveBarrier,
+            source: ["dashboard/assets/data/solutions_registry.json"],
+            relatedPage: INTENT_PAGE_MAP.ask_solution || INTENT_PAGE_MAP.NATIONAL_OVERVIEW,
+            status: "verified",
+            metrics: [],
+            evidence: solFormatted.barrierLensEvidence,
+            calculations: [],
+            solutions: externalSol.solutions,
+            disclaimer: solFormatted.disclaimer
+          };
+        }
       }
 
       // B. Mode 2 Entry: Explore Barriers
@@ -485,17 +646,15 @@
         };
       }
     }
-
     // 3. Build evidence payload for backend API call
-    const normalized = IntentModule.normalizeQuery(text);
-    const entities = IntentModule.extractEntities(normalized);
+
     const intentResult = IntentModule.detectIntent(normalized, entities);
     const retrieval = RetrievalModule.retrieveVerifiedEvidence(intentResult, entities, dataRegistry);
     const calculations = CalculationModule.calculateDerivedValues(retrieval);
     const evidencePayload = EvidenceModule.buildEvidencePayload(intentResult, entities, retrieval, calculations);
 
     // 4. Call Ollama backend API if available and not skipped, otherwise use deterministic fallback
-    if (!options.skipBackend && APIService && typeof APIService.sendChatMessage === 'function') {
+    if (!options.skipBackend && APIService && typeof APIService.sendChatMessage === 'function' && intentResult.intent !== "UNSUPPORTED") {
       try {
         // Prepare request payload for backend API
         const chatPayload = {
@@ -514,25 +673,29 @@
         // Call backend /api/chat endpoint
         const backendResponse = await APIService.sendChatMessage(chatPayload);
 
-        // If backend responds successfully, use Ollama-generated answer
+        // If backend responds successfully, use Ollama-generated answer with safety validation
         if (backendResponse && backendResponse.status === "success" && backendResponse.answer) {
-          return {
-            answer: backendResponse.answer,
-            language: backendResponse.language || language || "en",
-            intent: backendResponse.intent || intentResult.intent,
-            confidence: intentResult.confidence,
-            entities: entities,
-            source: backendResponse.source || evidencePayload.provenance.dataSourcesUsed || [],
-            relatedPage: backendResponse.relatedPage || INTENT_PAGE_MAP[intentResult.intent] || null,
-            status: backendResponse.status || evidencePayload.status,
-            metrics: backendResponse.metrics || evidencePayload.evidence.map(e => ({ label: e.label, value: e.value, unit: e.unit, entity: e.entity })),
-            evidence: backendResponse.evidence_used || evidencePayload.evidence,
-            calculations: evidencePayload.calculations,
-            methodologyNote: evidencePayload.methodologyNote,
-            limitationNote: evidencePayload.limitationNote,
-            disclaimer: backendResponse.disclaimer || (intentResult.intent === "LIMITATIONS" ? "Cross-sectional survey data; association does not establish clinical causality." : null),
-            claims: backendResponse.claims || []
-          };
+          if (SolutionsEngine && !SolutionsEngine.validateLlmSolutionsSafety(backendResponse.answer)) {
+            console.warn('[BarrierLensResponse] Backend Ollama response failed solutions safety validator. Discarding hallucinated response.');
+          } else {
+            return {
+              answer: backendResponse.answer,
+              language: backendResponse.language || language || "en",
+              intent: backendResponse.intent || intentResult.intent,
+              confidence: intentResult.confidence,
+              entities: entities,
+              source: backendResponse.source || evidencePayload.provenance.dataSourcesUsed || [],
+              relatedPage: backendResponse.relatedPage || INTENT_PAGE_MAP[intentResult.intent] || null,
+              status: backendResponse.status || evidencePayload.status,
+              metrics: backendResponse.metrics || evidencePayload.evidence.map(e => ({ label: e.label, value: e.value, unit: e.unit, entity: e.entity })),
+              evidence: backendResponse.evidence_used || evidencePayload.evidence,
+              calculations: evidencePayload.calculations,
+              methodologyNote: evidencePayload.methodologyNote,
+              limitationNote: evidencePayload.limitationNote,
+              disclaimer: backendResponse.disclaimer || (intentResult.intent === "LIMITATIONS" ? "Cross-sectional survey data; association does not establish clinical causality." : null),
+              claims: backendResponse.claims || []
+            };
+          }
         }
       } catch (error) {
         console.warn('[BarrierLensResponse] Backend API call failed, using deterministic fallback:', error.message || error);

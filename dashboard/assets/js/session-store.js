@@ -19,6 +19,38 @@
 
   // In-memory store for session states
   const sessions = new Map();
+  const STORAGE_KEY_SESSIONS = 'bl_sessions_store_map';
+  const STORAGE_KEY_ACTIVE_SESSION = 'bl_active_session_id';
+
+  function saveSessionsToStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const obj = {};
+        sessions.forEach((val, key) => { obj[key] = val; });
+        window.localStorage.setItem(STORAGE_KEY_SESSIONS, JSON.stringify(obj));
+      } catch (e) {}
+    }
+  }
+
+  function loadSessionsFromStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY_SESSIONS);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            Object.keys(parsed).forEach(k => {
+              if (!sessions.has(k)) {
+                sessions.set(k, parsed[k]);
+              }
+            });
+          }
+        }
+      } catch (e) {}
+    }
+  }
+
+  loadSessionsFromStorage();
 
   /**
    * Generate a unique default session ID if none is provided.
@@ -35,6 +67,7 @@
     return {
       sessionId: sessionId,
       activeBarrier: null,
+      activeState: null,
       barrierSource: null,
       activeLanguage: "English",
       activeMode: null,
@@ -52,19 +85,38 @@
    * Get an existing session by ID or create a new one.
    */
   function getSession(sessionId) {
+    loadSessionsFromStorage();
     if (!sessionId || typeof sessionId !== 'string') {
+      let activeId = null;
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try { activeId = window.localStorage.getItem(STORAGE_KEY_ACTIVE_SESSION); } catch (e) {}
+      }
+      if (activeId && sessions.has(activeId)) {
+        return sessions.get(activeId);
+      }
       const newId = generateSessionId();
       const newSession = createDefaultSession(newId);
       sessions.set(newId, newSession);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try { window.localStorage.setItem(STORAGE_KEY_ACTIVE_SESSION, newId); } catch (e) {}
+      }
+      saveSessionsToStorage();
       return newSession;
     }
 
     if (!sessions.has(sessionId)) {
       const newSession = createDefaultSession(sessionId);
       sessions.set(sessionId, newSession);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try { window.localStorage.setItem(STORAGE_KEY_ACTIVE_SESSION, sessionId); } catch (e) {}
+      }
+      saveSessionsToStorage();
       return newSession;
     }
 
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try { window.localStorage.setItem(STORAGE_KEY_ACTIVE_SESSION, sessionId); } catch (e) {}
+    }
     return sessions.get(sessionId);
   }
 
@@ -76,6 +128,9 @@
 
     if (updates.activeBarrier !== undefined) {
       session.activeBarrier = updates.activeBarrier;
+    }
+    if (updates.activeState !== undefined) {
+      session.activeState = updates.activeState;
     }
     if (updates.barrierSource !== undefined) {
       session.barrierSource = updates.barrierSource;
@@ -106,6 +161,7 @@
       session.guidedQuestionIndex = updates.guidedQuestionIndex;
     }
 
+    saveSessionsToStorage();
     return session;
   }
 
@@ -123,6 +179,7 @@
     session.barrierSource = "ml_prediction";
     session.activeMode = "identify";
 
+    saveSessionsToStorage();
     return session;
   }
 
@@ -133,6 +190,7 @@
     const session = getSession(sessionId);
     session.activeBarrier = barrier;
     session.barrierSource = source;
+    saveSessionsToStorage();
     return session;
   }
 
@@ -142,6 +200,7 @@
   function setMode(sessionId, mode) {
     const session = getSession(sessionId);
     session.activeMode = mode;
+    saveSessionsToStorage();
     return session;
   }
 
@@ -166,6 +225,7 @@
     };
 
     session.conversationHistory.push(turn);
+    saveSessionsToStorage();
     return session;
   }
 
@@ -176,6 +236,7 @@
     const session = getSession(sessionId);
     session.activeBarrier = null;
     session.barrierSource = null;
+    saveSessionsToStorage();
     return session;
   }
 
@@ -185,6 +246,7 @@
   function clearSession(sessionId) {
     if (sessionId && sessions.has(sessionId)) {
       sessions.delete(sessionId);
+      saveSessionsToStorage();
       return true;
     }
     return false;
@@ -195,6 +257,12 @@
    */
   function clearAllSessions() {
     sessions.clear();
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.removeItem(STORAGE_KEY_SESSIONS);
+        window.localStorage.removeItem(STORAGE_KEY_ACTIVE_SESSION);
+      } catch (e) {}
+    }
   }
 
   return {
