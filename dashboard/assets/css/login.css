@@ -1532,3 +1532,40 @@ html:has(> body.bl-login-body) {
     transition: opacity 0.2s linear;
   }
 }
+#bl-reg-username + .bl-label {
+  top: 50%;
+  left: 48px;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: var(--bl-text-muted, #94a3b8);
+  pointer-events: none;
+}
+
+#bl-reg-username:focus + .bl-label,
+#bl-reg-username:not(:placeholder-shown) + .bl-label {
+  top: -8px;
+  transform: none;
+  font-size: 0.72rem;
+}
+
+/* Fix registration email and role labels */
+#register-form #bl-reg-username ~ .bl-label {
+  position: absolute;
+  left: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: rgba(151, 162, 212, 0.95);
+}
+
+#register-form #bl-reg-username:focus ~ .bl-label,
+#register-form #bl-reg-username:not(:placeholder-shown) ~ .bl-label {
+  top: 8px;
+  transform: none;
+  font-size: 0.72rem;
+  color: #67e8f9;
+}
+
+#register-form #bl-reg-role ~ .bl-label {
+  display: none;
+}

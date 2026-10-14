@@ -318,31 +318,60 @@
               </div>
             </div>
 
-            <div class="bl-field">
-              <div class="bl-input-wrap">
-                <span class="bl-input-icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                </span>
-                <input id="bl-reg-username" name="username" type="email" class="bl-input" placeholder=" " required>
-                <label class="bl-label" for="bl-reg-username">Email / Username</label>
-              </div>
-            </div>
+         
 
-            <div class="bl-field">
-              <div class="bl-input-wrap">
-                <span class="bl-input-icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                </span>
-                <select id="bl-reg-role" name="role" class="bl-input bl-select" required>
-                  <option value="Research Lead">Research Lead</option>
-                  <option value="Team Member">Team Member</option>
-                  <option value="Data Analyst">Data Analyst</option>
-                  <option value="Policy Specialist">Policy Specialist</option>
-                  <option value="Healthcare Professional">Healthcare Professional</option>
-                </select>
-                <label class="bl-label bl-label-select" for="bl-reg-role">Role / Affiliation</label>
-              </div>
-            </div>
+<!-- EMAIL FIELD -->
+<div class="bl-field">
+  <div class="bl-input-wrap">
+    <span class="bl-input-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18"
+           fill="none" stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+        <path d="m3 7 9 6 9-6"></path>
+      </svg>
+    </span>
+
+    <input id="bl-reg-username"
+           name="username"
+           type="email"
+           class="bl-input"
+           placeholder=" "
+           required>
+
+    <label class="bl-label" for="bl-reg-username">Email</label>
+  </div>
+</div>
+
+<!-- ROLE FIELD -->
+<div class="bl-field">
+  <div class="bl-input-wrap">
+    <span class="bl-input-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18"
+           fill="none" stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="8" r="3"></circle>
+        <path d="M3 19v-2a6 6 0 0 1 12 0v2"></path>
+        <path d="M19 8v6M16 11h6"></path>
+      </svg>
+    </span>
+
+    <select id="bl-reg-role"
+            name="role"
+            class="bl-input bl-select"
+            required>
+      <option value="" disabled selected>Select your role</option>
+      <option value="Research Lead">Research Lead</option>
+      <option value="Team Member">Team Member</option>
+      <option value="Data Analyst">Data Analyst</option>
+      <option value="Policy Specialist">Policy Specialist</option>
+      <option value="Healthcare Professional">Healthcare Professional</option>
+    </select>
+
+    <label class="bl-label bl-label-select"
+           for="bl-reg-role">Role / Affiliation</label>
+  </div>
+</div>
 
             <div class="bl-field">
               <div class="bl-input-wrap">
@@ -396,7 +425,7 @@
             <span class="bl-member-id">1GA23CS114</span>
           </article>
           <article class="bl-member">
-            <span class="bl-member-avatar" aria-hidden="true">PB</span>
+            <span class="bl-member-avatar" aria-hidden="true">PC</span>
             <span class="bl-member-name">Prathibha B C</span>
             <span class="bl-member-id">1GA23CS125</span>
           </article>

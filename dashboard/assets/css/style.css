@@ -695,7 +695,7 @@ body {
 }
 
 .hero-sdg3 {
-  min-width: 0;
+  min-width: 100%;
   display: flex;
   justify-content: flex-end;
 }
