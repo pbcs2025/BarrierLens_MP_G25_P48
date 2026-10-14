@@ -26,6 +26,7 @@
   let _messages = [];
   let _domMounted = false;
   let _lastQueryText = '';
+  let _lastInputWasVoice = false;
 
   // Member 4 Context State
   let _activeBarrier = 'All Barriers';
@@ -978,15 +979,14 @@
         } else if (voice.getState() === voice.STATES.RESPONDING) {
           voice.stopSpeaking();
         } else {
+          _lastInputWasVoice = true;
           voice.startListening(_currentLang, {
+            mode: 'dictation',
             onTranscriptUpdate: (transcript, isFinal) => {
-              if (input) input.value = transcript;
-            },
-            onQuerySubmit: async (text, lang) => {
-              return await executeQuery(text, lang);
-            },
-            onResponse: (response) => {
-              renderAssistantResponse(response);
+              if (input) {
+                input.value = transcript;
+                input.focus();
+              }
             }
           });
         }
@@ -1122,6 +1122,12 @@
     const query = text.trim();
     _lastQueryText = query;
 
+    // Stop active voice recognition if listening
+    const voice = getVoice();
+    if (voice && voice.getState() === voice.STATES.LISTENING) {
+      voice.stopListening();
+    }
+
     const input = document.getElementById('bl-chat-input');
     if (input) input.value = '';
 
@@ -1134,9 +1140,16 @@
       hideTypingIndicator();
       _isProcessing = false;
       renderAssistantResponse(response);
+
+      // If user input came from voice, speak the assistant response aloud
+      if (_lastInputWasVoice && voice && response && (response.answer || response.response)) {
+        voice.readOutResponse(response.answer || response.response, _currentLang);
+      }
+      _lastInputWasVoice = false;
     } catch (err) {
       hideTypingIndicator();
       _isProcessing = false;
+      _lastInputWasVoice = false;
       console.error("Central Query Engine Error:", err);
       renderErrorMessage(t('errorMessage'));
     }

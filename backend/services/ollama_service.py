@@ -185,6 +185,7 @@ def call_ollama(
             messages=messages,
             stream=False,
             options=gen_options,
+            keep_alive=-1,
         )
         if isinstance(response, dict):
             return response.get("message", {}).get("content", "")
@@ -202,6 +203,7 @@ def call_ollama(
         "messages": messages,
         "stream": False,
         "options": gen_options,
+        "keep_alive": -1,
     }
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
@@ -243,7 +245,7 @@ def generate_llm_explanation(
     messages: list[dict[str, str]] = [{"role": "system", "content": system_prompt}]
 
     if history and isinstance(history, list):
-        for turn in history[-6:]:  # Keep recent 6 turns for optimal context
+        for turn in history[-2:]:  # Keep recent 2 turns for fast CPU prompt evaluation
             if not isinstance(turn, dict):
                 continue
             role = str(turn.get("role") or turn.get("speaker") or "user").lower()

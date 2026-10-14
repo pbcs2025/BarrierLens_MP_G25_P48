@@ -78,7 +78,36 @@ def create_app() -> Flask:
     return app
 
 
+def _prewarm_ollama() -> None:
+    """Pre-warm and pin Ollama model in RAM on backend startup to avoid first-request cold-load latency."""
+    try:
+        import json
+        import urllib.request
+        model_name = settings.OLLAMA_MODEL
+        url = f"{settings.OLLAMA_BASE_URL}/api/generate"
+        payload = {
+            "model": model_name,
+            "prompt": "hi",
+            "stream": False,
+            "options": {"num_predict": 1, "num_ctx": settings.NUM_CTX, "num_thread": settings.NUM_THREADS},
+            "keep_alive": -1,
+        }
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            logger.info("Ollama model '%s' successfully pre-warmed and pinned in RAM.", model_name)
+    except Exception as exc:
+        logger.debug("Ollama background pre-warm skipped or service offline: %s", exc)
+
+
 app = create_app()
+
+import threading
+threading.Thread(target=_prewarm_ollama, daemon=True).start()
 
 if __name__ == "__main__":
     logger.info("Starting BarrierLens Ollama Backend on %s:%d", settings.HOST, settings.PORT)

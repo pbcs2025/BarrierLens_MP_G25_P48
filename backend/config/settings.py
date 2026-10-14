@@ -28,10 +28,10 @@ class Settings:
 
     def __init__(self) -> None:
         self.OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434").strip().rstrip("/")
-        self._configured_model: str = os.getenv("OLLAMA_MODEL", "llama3.2:3b").strip()
+        self._configured_model: str = os.getenv("OLLAMA_MODEL", "auto").strip()
         self.OLLAMA_TIMEOUT: int = int(os.getenv("OLLAMA_TIMEOUT", "60"))
-        self.MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "160"))
-        self.NUM_CTX: int = int(os.getenv("NUM_CTX", "1024"))
+        self.MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "110"))
+        self.NUM_CTX: int = int(os.getenv("NUM_CTX", "768"))
         self.NUM_THREADS: int = int(os.getenv("NUM_THREADS", str(min(8, os.cpu_count() or 4))))
         self.PORT: int = int(os.getenv("PORT", "5000"))
         self.HOST: str = os.getenv("HOST", "0.0.0.0").strip()
@@ -40,28 +40,28 @@ class Settings:
 
     @property
     def OLLAMA_MODEL(self) -> str:
-        """Resolve model name dynamically: prefers llama3.2:3b model."""
+        """Resolve model name dynamically: prefers fast lightweight model (llama3.2:1b/3b)."""
         if self._configured_model and self._configured_model.lower() not in ("auto", ""):
             return self._configured_model
 
-        # Auto-detect best installed model
+        # Auto-detect best installed model: prefer llama3.2:1b for high-speed presentation, else 3b
         try:
             req = urllib.request.Request(f"{self.OLLAMA_BASE_URL}/api/tags", method="GET")
             with urllib.request.urlopen(req, timeout=2) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 models = [m.get("name", "") for m in data.get("models", [])]
                 for m in models:
-                    if "3b" in m:
+                    if "1b" in m:
                         return m
                 for m in models:
-                    if "1b" in m or "llama" in m:
+                    if "3b" in m or "llama" in m:
                         return m
                 if models:
                     return models[0]
         except Exception:
             pass
 
-        return "llama3.2:3b"
+        return "llama3.2:1b"
 
     @property
     def is_ollama_available(self) -> bool:

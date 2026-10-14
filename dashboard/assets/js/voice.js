@@ -197,6 +197,12 @@
       return;
     }
 
+    // In dictation mode (voice typing), fill input and return to IDLE without background submission
+    if (options.mode === 'dictation' || options.autoSubmit === false || !options.onQuerySubmit) {
+      transitionTo(STATES.IDLE, { transcript: text, language: lang });
+      return;
+    }
+
     transitionTo(STATES.PROCESSING, { transcript: text, language: lang });
 
     try {
